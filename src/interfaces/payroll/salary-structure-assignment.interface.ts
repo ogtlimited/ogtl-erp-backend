@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 export interface SalaryStructureAssignment {
-    _id: string;
     employee: string;
     department: string;
     salaryStructure: Number;

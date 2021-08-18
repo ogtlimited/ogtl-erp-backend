@@ -4,7 +4,7 @@ import { model, Schema, Document } from 'mongoose';
 
 const attendanceSchema: Schema = new Schema(
   {
-    employeeID: {
+    employee: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "Employee"

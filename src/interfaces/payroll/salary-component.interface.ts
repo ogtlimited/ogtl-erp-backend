@@ -6,10 +6,10 @@ export enum SalaryComponentType {
 
 export interface SalaryComponent {
     salaryComponent: string,
-    salaryComponent_abbr: string,
-    type: Array<SalaryComponentType>,
+    salaryComponentAbbr: string,
     description: string,
     isTaxApplicable: boolean,
-    amount: Number,
     dependsOnPaymentDays: boolean,
+    amount: Number,
+    type: Array<SalaryComponentType>,
 }
