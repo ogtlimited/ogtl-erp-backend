@@ -4,5 +4,11 @@
     "singleQuote": true,
     "trailingComma": "all",
     "semi": true,
-    "arrowParens": "avoid"
+    "arrowParens": "avoid",
+    "prettier/prettier": [
+        "error",
+        {
+          "endOfLine": "auto"
+        }
+    ]
 }

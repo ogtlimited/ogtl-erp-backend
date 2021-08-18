@@ -80,7 +80,22 @@ class App {
           description: 'Example docs',
         },
       },
-      apis: ['swagger.yaml'],
+      components: {
+        securitySchemes: {
+          jwt: {
+            type: 'http',
+            scheme: 'bearer',
+            in: 'header',
+            bearerFormat: 'JWT',
+          },
+        },
+      },
+      security: [
+        {
+          jwt: [],
+        },
+      ],
+      apis: ['swagger.yaml', 'employee.yaml'],
     };
 
     const specs = swaggerJSDoc(options);

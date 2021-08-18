@@ -92,6 +92,10 @@ paths:
         in: path
         description: user Id
         required: true
+        schema:
+          type: string
+      security:
+        - jwt: []
       responses:
         200:
           description: 'OK'

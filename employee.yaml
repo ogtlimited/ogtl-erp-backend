@@ -1,0 +1,222 @@
+tags:
+- name: employees
+  description: Employees API
+
+paths:
+# [GET] employees
+  /employees:
+    get:
+      tags:
+      - employees
+      summary: Find All employees
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] employees
+    post:
+      tags:
+      - employees
+      summary: Add employee
+      parameters:
+      - name: body
+        in: body
+        description: employee Data
+        required: true
+        schema:
+          $ref: '#/definitions/employees'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] employees/id
+  /employees/{id}:
+    get:
+      tags:
+      - employees
+      summary: Find employee By Id
+      parameters:
+      - name: id
+        in: path
+        description: employee Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PUT] employees/id
+    put:
+      tags:
+      - employees
+      summary: Update employee By Id
+      parameters:
+      - name: id
+        in: path
+        description: employee Id
+        required: true
+      - name: body
+        in: body
+        description: employee Data
+        required: true
+        schema:
+          $ref: '#/definitions/employees'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] employees/id
+    delete:
+      tags:
+      - employees
+      summary: Delete employee By Id
+      parameters:
+      - name: id
+        in: path
+        description: employee Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  employees:
+    type: object
+    required:
+        - company_email
+        - employee_name
+        - first_name
+        - last_name
+    properties:
+      bank_ac_no:
+        type: string
+      bank_name:
+        type: string
+      blood_group:
+        type: string
+      cell_number:
+        type: string
+      company:
+        type: string
+      company_email:
+        type: string
+      create_user_permission:
+        type: number
+      creation:
+        type: string
+      current_accommodation_type:
+        type: string
+      current_address:
+        type: string
+      date_of_birth:
+        type: string
+      date_of_joining:
+        type: string
+      date_of_retirement:
+        type: string
+      default_shift:
+        type: string
+      department:
+        type: string
+      designation:
+        type: string
+      docstatus:
+        type: number
+      doctype:
+        type: string
+      education:
+        type: string
+      emergency_phone_number:
+        type: string
+      employee:
+        type: string
+      employee_name:
+        type: string
+      employee_number:
+        type: string
+      external_work_history:
+        type: string
+      first_name:
+        type: string
+      gender:
+        type: string
+      idx:
+        type: number
+      image:
+        type: string
+      internal_work_history:
+        type: string
+      last_name:
+        type: string
+      leave_approver:
+        type: string
+      leave_encashed:
+        type: string
+      lft:
+        type: number
+      marital_status:
+        type: string
+      middle_name:
+        type: string
+      modified:
+        type: string
+      modified_by:
+        type: string
+      name:
+        type: string
+      naming_series:
+        type: string
+      notice_number_of_days:
+        type: number
+      old_parent:
+        type: string
+      owner:
+        type: string
+      permanent_accommodation_type:
+        type: string
+      permanent_address:
+        type: string
+      person_to_be_contacted:
+        type: string
+      prefered_contact_email:
+        type: string
+      prefered_email:
+        type: string
+      reason_for_resignation:
+        type: string
+      reports_to:
+        type: string
+      rgt:
+        type: number
+      salary_mode:
+        type: string
+      status:
+        type: string
+      unsubscribed:
+        type: string
+
+schemes:
+ - https
+ - http
