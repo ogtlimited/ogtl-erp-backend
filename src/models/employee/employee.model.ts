@@ -68,7 +68,7 @@ const employeeSchema: Schema = new Schema(
     employment_type_id: {
       type: Schema.Types.ObjectId,
       // required: true,
-      ref: 'Employment_type',
+      ref: 'EmploymentType',
       default: null,
     },
     health_insurance_id: {
