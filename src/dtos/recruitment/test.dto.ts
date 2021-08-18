@@ -1,7 +1,10 @@
 import { IsString, IsDate, IsEnum, IsOptional } from 'class-validator';
-import { TestStatus } from '@interfaces/recruitment/test.interface';
+import { TestStatus, TestType } from '@interfaces/recruitment/test.interface';
 
 export class CreateTestDto {
+  @IsEnum(TestType)
+  public test_type: TestType;
+
   @IsString()
   public job_applicant_id: string;
 

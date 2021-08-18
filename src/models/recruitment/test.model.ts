@@ -1,7 +1,12 @@
 import {model,Schema,Document} from "mongoose"
-import { Test,TestStatus } from '@interfaces/recruitment/test.interface';
+import { Test, TestStatus, TestType } from '@interfaces/recruitment/test.interface';
 
 const testSchema: Schema = new Schema({
+  test_type:{
+    type:String,
+    enum:TestType,
+    required: true
+  },
   job_applicant_id: {
     type: Schema.Types.ObjectId,
     required: true,
