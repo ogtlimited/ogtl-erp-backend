@@ -1,25 +1,24 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import { IsString, IsDate } from 'class-validator';
+import { IsString, IsDate, IsNumber } from 'class-validator';
 
 export class CreateAttendanceDto {  
   @IsString()
   public _id: string;
 
   @IsString()
-  public employeeID: string;
+  public employee: string;
+
+  @IsNumber()
+  public incentiveAmount: Number;
 
   @IsString()
-  public shift: string;
+  public salaryComponent: string;
 
   @IsString()
-  public status: string;
+  public additionalSalary: string;
 
   @IsDate()
-  public startTime: Date;
-
-  @IsDate()
-  public endTime: Date;
-
+  public payrollDate: Date;
 }

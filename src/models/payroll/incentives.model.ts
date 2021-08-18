@@ -18,6 +18,11 @@ const incentiveSchema: Schema = new Schema(
       required: true,
       ref: "SalaryComponent"
     },
+    status: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "Status"
+    },
     payrollDate: {
       type: Date
     },

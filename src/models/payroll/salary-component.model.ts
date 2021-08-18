@@ -9,6 +9,11 @@ const salaryComponentSchema: Schema = new Schema(
       required: true,
       ref: "SalaryComponent"
     },
+    status: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "Status"
+    },
     salaryComponentAbbr: {
       type: String,
       required: true,
