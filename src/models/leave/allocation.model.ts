@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Allocation } from '@/interfaces/leave-interface/allocation.interface';
 import mongoose from 'mongoose';
 import { model, Schema, Document } from 'mongoose';

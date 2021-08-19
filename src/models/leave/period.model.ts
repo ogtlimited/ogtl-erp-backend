@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Period } from '@/interfaces/leave-interface/period.interface';
 import mongoose from 'mongoose';
 import { model, Schema, Document } from 'mongoose';

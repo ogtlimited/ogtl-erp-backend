@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export interface ShiftType {
   _id: string;
   shift_name: string;

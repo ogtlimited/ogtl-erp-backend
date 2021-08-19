@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {Branch} from '@interfaces/employee-interface/branch.interface';
 import { model, Schema, Document } from 'mongoose';
 

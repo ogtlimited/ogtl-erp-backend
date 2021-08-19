@@ -1,24 +1,24 @@
 tags:
-- name: leave
-  description: leave API
+- name: shiftType
+  description: shiftType API
 
 paths:
-# [GET] leave
-  /leave:
+# [GET] shiftType
+  /shiftType:
     get:
       tags:
-      - leave
-      summary: Find All leave
+      - shiftType
+      summary: Find All shiftType
       responses:
         200:
           description: 'OK'
         500:
           description: 'Server Error'
 
-# [POST] leave
+# [POST] shiftType
     post:
       tags:
-      - leave
+      - shiftType
       summary: Add User
       parameters:
       - name: body
@@ -26,7 +26,7 @@ paths:
         description: user Data
         required: true
         schema:
-          $ref: '#/definitions/leave'
+          $ref: '#/definitions/shiftType'
       responses:
         201:
           description: 'Created'
@@ -37,11 +37,11 @@ paths:
         500:
           description: 'Server Error'
 
-# [GET] leave/id
-  /leave/{id}:
+# [GET] shiftType/id
+  /shiftType/{id}:
     get:
       tags:
-      - leave
+      - shiftType
       summary: Find User By Id
       parameters:
       - name: id
@@ -56,10 +56,10 @@ paths:
         500:
           description: 'Server Error'
 
-# [PUT] leave/id
+# [PUT] shiftType/id
     put:
       tags:
-      - leave
+      - shiftType
       summary: Update User By Id
       parameters:
       - name: id
@@ -71,7 +71,7 @@ paths:
         description: user Data
         required: true
         schema:
-          $ref: '#/definitions/leave'
+          $ref: '#/definitions/shiftType'
       responses:
         200:
           description: 'OK'
@@ -82,10 +82,10 @@ paths:
         500:
           description: 'Server Error'
 
-# [DELETE] leave/id
+# [DELETE] shiftType/id
     delete:
       tags:
-      - leave
+      - shiftType
       summary: Delete User By Id
       parameters:
       - name: id
@@ -106,20 +106,24 @@ paths:
 
 # definitions
 definitions:
-  leave:
+  shiftType:
     type: object
     required:
-        - email
-        - password
+        - shift_name
+        - start_time
+        - end_time
     properties:
       id:
-        description: leave Id
-      leave:
+        description: shiftType Id
+      shift_name:
         type: string
-        description: leave Email
-      leave_type:
+        description: shift name
+      start_time:
         type: string
-        description: leave type
+        description: start time
+      end_time:
+        type: string
+        description: end time
 
 schemes:
  - https

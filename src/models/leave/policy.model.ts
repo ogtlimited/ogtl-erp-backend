@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Policy } from '@/interfaces/leave-interface/policy.interface';
 import mongoose from 'mongoose';
 import { model, Schema, Document } from 'mongoose';

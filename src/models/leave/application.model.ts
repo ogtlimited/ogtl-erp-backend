@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Application } from '@/interfaces/leave-interface/application.interface';
 import mongoose from 'mongoose';
 import { model, Schema, Document } from 'mongoose';

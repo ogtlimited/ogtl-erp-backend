@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { LeaveType } from '@/interfaces/leave-interface/leave-type.interface';
 import mongoose from 'mongoose';
 import { model, Schema, Document } from 'mongoose';
