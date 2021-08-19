@@ -1,0 +1,11 @@
+export interface Application{
+    _id: string;
+    employee_id: string;
+    leave_type_id: string;
+    from_date: Date;
+    to_date : Date;
+    leave_approver: string;
+    posting_date: Date;
+    reason: string;
+    status: string;
+}
