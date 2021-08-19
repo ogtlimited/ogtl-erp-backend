@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {model,Schema,Document} from "mongoose"
 import { Test, TestStatus, TestType } from '@interfaces/recruitment/test.interface';
 

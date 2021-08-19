@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {model,Schema,Document} from "mongoose"
 import { JobApplicant,JobApplicantStatus } from '@interfaces/recruitment/job_applicant.interface';
 
