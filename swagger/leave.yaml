@@ -1,0 +1,126 @@
+tags:
+- name: leave
+  description: leave API
+
+paths:
+# [GET] leave
+  /leave:
+    get:
+      tags:
+      - leave
+      summary: Find All leave
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] leave
+    post:
+      tags:
+      - leave
+      summary: Add User
+      parameters:
+      - name: body
+        in: body
+        description: user Data
+        required: true
+        schema:
+          $ref: '#/definitions/leave'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] leave/id
+  /leave/{id}:
+    get:
+      tags:
+      - leave
+      summary: Find User By Id
+      parameters:
+      - name: id
+        in: path
+        description: User Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PUT] leave/id
+    put:
+      tags:
+      - leave
+      summary: Update User By Id
+      parameters:
+      - name: id
+        in: path
+        description: user Id
+        required: true
+      - name: body
+        in: body
+        description: user Data
+        required: true
+        schema:
+          $ref: '#/definitions/leave'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] leave/id
+    delete:
+      tags:
+      - leave
+      summary: Delete User By Id
+      parameters:
+      - name: id
+        in: path
+        description: user Id
+        required: true
+        schema:
+          type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  leave:
+    type: object
+    required:
+        - email
+        - password
+    properties:
+      id:
+        description: leave Id
+      leave:
+        type: string
+        description: leave Email
+      leave_type:
+        type: string
+        description: leave type
+
+schemes:
+ - https
+ - http

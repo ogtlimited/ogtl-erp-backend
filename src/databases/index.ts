@@ -1,5 +1,6 @@
 import config from 'config';
 import { dbConfig } from '@interfaces/db.interface';
+import { models } from 'mongoose';
 
 const { host, port, database }: dbConfig = config.get('dbConfig');
 
