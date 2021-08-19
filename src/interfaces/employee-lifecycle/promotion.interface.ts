@@ -2,8 +2,8 @@
 export interface Promotion {
     employee: string;
     status: string;
-    branch: string;  
     department: string;
+    branch: string;  
     promotionDetails: string;
     promotionDate: Date;
   }
