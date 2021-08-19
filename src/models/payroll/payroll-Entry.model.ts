@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { PayRollEntry } from '@/interfaces/payroll/payroll-entry.interface';
+import { PayRollEntry } from '@interfaces/payroll/payroll-entry.interface';
 import { model, Schema, Document } from 'mongoose';
 
 const payRollEntrySchema: Schema = new Schema(

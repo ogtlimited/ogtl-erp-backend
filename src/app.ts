@@ -95,7 +95,7 @@ class App {
           jwt: [],
         },
       ],
-      apis: ['swagger.yaml', 'employee.yaml'],
+      apis: ['swagger.yaml', 'swagger/employee.yaml', 'swagger/shiftType.yaml'],
     };
 
     const specs = swaggerJSDoc(options);

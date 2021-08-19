@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { ShiftType } from '@interfaces/shift-interface/shift_type.interface';
 import { model, Schema, Document } from 'mongoose';
 

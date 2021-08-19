@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { ShiftAssignment } from '@interfaces/shift-interface/shift_assignment.interface';
 import { model, Schema, Document } from 'mongoose';
 

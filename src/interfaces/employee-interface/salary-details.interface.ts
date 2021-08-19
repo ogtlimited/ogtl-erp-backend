@@ -1,0 +1,8 @@
+export interface SalaryDetails{
+    _id: string;
+    employee_id: string;
+    salary_mode: string;
+    bank_name: string;
+    bank_code: string;
+    bank_account_number: string;
+}

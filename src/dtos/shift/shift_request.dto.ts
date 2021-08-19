@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { IsString,IsDate } from 'class-validator';
 
 export class CreateShiftRequestDto {

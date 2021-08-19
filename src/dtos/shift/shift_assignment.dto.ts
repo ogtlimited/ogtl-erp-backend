@@ -1,4 +1,5 @@
-import { IsString,IsDate } from 'class-validator';
+/* eslint-disable prettier/prettier */
+import { IsString, IsDate } from 'class-validator';
 
 export class CreateShiftRequestDto {
   @IsString()
@@ -9,6 +10,4 @@ export class CreateShiftRequestDto {
 
   @IsDate()
   public assignment_date: Date;
-
-
 }
