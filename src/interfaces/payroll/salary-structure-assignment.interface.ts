@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-export interface SalaryStructureAssignment {
+export interface ISalaryStructureAssignment {
     employee: string;
     department: string;
     incomeTaxSlab: string;
