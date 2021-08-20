@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-export interface Incentives {
+export interface IIncentives {
   employee: string;
   incentiveAmount: Number;
   payrollDate: Date;

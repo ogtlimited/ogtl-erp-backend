@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import { IsString, IsDate, IsBoolean, IsNumber, IsArray } from 'class-validator';
+import {IsString, IsDate, IsNumber, IsArray } from 'class-validator';
 
 export class CreateSalarySlipDto {  
 

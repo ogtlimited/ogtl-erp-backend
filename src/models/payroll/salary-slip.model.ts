@@ -19,6 +19,16 @@ const salaryComponentSchema: Schema = new Schema(
       required: true,
       ref: "SalaryDeduction"
     },
+    designation: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "Designation"
+    },
+    department: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "Department"
+    },
     branch: {
       type: Schema.Types.ObjectId,
       required: true,
