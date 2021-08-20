@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Attendance } from '@interfaces/attendance-interface/attendance-interface';
+import { IAttendance } from '@interfaces/attendance-interface/attendance-interface';
 import { model, Schema, Document } from 'mongoose';
 
 const attendanceSchema: Schema = new Schema(
@@ -31,5 +31,5 @@ const attendanceSchema: Schema = new Schema(
   },
 );
 
-const attendanceModel = model<Attendance & Document>('Attendance', attendanceSchema);
+const attendanceModel = model<IAttendance & Document>('Attendance', attendanceSchema);
 export default attendanceModel;
