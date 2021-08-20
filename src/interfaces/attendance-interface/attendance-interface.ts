@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-export interface Attendance {
+export interface IAttendance {
     startTime: Date;
     endTime: Date;
     employeeID: string;
