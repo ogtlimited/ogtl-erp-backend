@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import { ILeavePolicy } from '@/interfaces/leave-interface/policy.interface';
+import { Policy } from '@/interfaces/leave-interface/policy.interface';
 import mongoose from 'mongoose';
 import { model, Schema, Document } from 'mongoose';
 
@@ -25,6 +25,6 @@ const policySchema : Schema = new Schema (
     
 );
 
-const leavePolicyModel = model<ILeavePolicy & Document>('Policy', policySchema);
+const userModel = model<Policy & Document>('Policy', policySchema);
 
-export default leavePolicyModel;
+export default userModel;

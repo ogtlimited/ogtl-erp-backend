@@ -5,7 +5,7 @@ import { CreateEmployeeDto } from '@dtos/employee/employee.dto';
 import { CreateUserDto } from '@dtos/users.dto';
 import { Routes } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
-import EmployeesController from '@/controllers/employee.controller';
+import EmployeesController from '@/controllers/employee/employee.controller';
 
 class EmployeesRoute implements Routes {
   public path = '/employees';

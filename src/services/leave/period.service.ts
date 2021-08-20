@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { ILeavePeriod } from '@/interfaces/leave-interface/period.interface';
+import { Period } from '@/interfaces/leave-interface/period.interface';
 
 import mongoose from 'mongoose';
 import { model, Schema, Document } from 'mongoose';
@@ -29,6 +29,6 @@ const periodSchema : Schema = new Schema (
     
 );
 
-const periodModel = model<ILeavePeriod & Document>('LeavePeriod', periodSchema);
+const userModel = model<Period & Document>('period', periodSchema);
 
-export default periodModel;
+export default userModel;

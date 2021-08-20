@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import { ILeaveApplication } from '@/interfaces/leave-interface/application.interface';
+import { Application } from '@/interfaces/leave-interface/application.interface';
 import mongoose from 'mongoose';
 import { model, Schema, Document } from 'mongoose';
 
@@ -57,6 +57,6 @@ const applicationSchema : Schema = new Schema (
     
 );
 
-const applicationModel = model<ILeaveApplication & Document>('LeaveApplication', applicationSchema);
+const userModel = model<Application & Document>('Application', applicationSchema);
 
-export default applicationModel;
+export default userModel;

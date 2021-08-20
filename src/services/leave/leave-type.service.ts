@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import { ILeaveType } from '@/interfaces/leave-interface/leave-type.interface';
+import { LeaveType } from '@/interfaces/leave-interface/leave-type.interface';
 import mongoose from 'mongoose';
 import { model, Schema, Document } from 'mongoose';
 
@@ -63,6 +63,6 @@ const leaveTypeSchema : Schema = new Schema (
     
 );
 
-const leaveTypeModel = model<ILeaveType & Document>('LeaveType', leaveTypeSchema);
+const userModel = model<LeaveType & Document>('LeaveType', leaveTypeSchema);
 
-export default leaveTypeModel;
+export default userModel;
