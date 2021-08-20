@@ -1,7 +1,8 @@
-import { IsString,IsDate,IsEnum ,IsOptional} from 'class-validator';
+import { IsString,IsDate,IsEnum ,IsOptional,IsNotEmpty} from 'class-validator';
 import { JobOfferStatus } from '@interfaces/recruitment/job_offer.interface';
 
 export class CreateJobOfferDto {
+  @IsNotEmpty()
   @IsString()
   public job_applicant_id: string;
 

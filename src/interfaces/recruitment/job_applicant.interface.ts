@@ -6,7 +6,8 @@ export enum JobApplicantStatus {
   ACCEPTED
 }
 
-export interface JobApplicant {
+export interface IJobApplicant {
+  _id: string;
   applicant_name: string;
   email_address: string;
   job_opening_id: string;

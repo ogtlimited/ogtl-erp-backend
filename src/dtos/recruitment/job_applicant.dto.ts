@@ -1,13 +1,16 @@
-import { IsString,IsEnum ,IsOptional} from 'class-validator';
+import { IsString,IsEnum ,IsOptional,IsNotEmpty} from 'class-validator';
 import { JobApplicantStatus } from '@interfaces/recruitment/job_applicant.interface';
 
 export class CreateJobApplicantDto {
+  @IsNotEmpty()
   @IsString()
   public applicant_name: string;
 
+  @IsNotEmpty()
   @IsString()
   public email_address: string;
 
+  @IsNotEmpty()
   @IsString()
   public job_opening_id: string;
 
@@ -18,6 +21,7 @@ export class CreateJobApplicantDto {
   @IsEnum(JobApplicantStatus)
   public status: JobApplicantStatus;
 
+  @IsNotEmpty()
   @IsString()
   public resume_attachment: string;
 

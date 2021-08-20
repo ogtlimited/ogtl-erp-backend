@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { ShiftAssignment } from '@interfaces/shift-interface/shift_assignment.interface';
+import { IShiftAssignment } from '@interfaces/shift-interface/shift_assignment.interface';
 import { model, Schema, Document } from 'mongoose';
 
 const shiftAssignmentSchema: Schema = new Schema(
@@ -24,6 +24,6 @@ const shiftAssignmentSchema: Schema = new Schema(
   },
 )
 
-const shiftAssignmentModel = model<ShiftAssignment & Document>('ShiftAssignment', shiftAssignmentSchema);
+const shiftAssignmentModel = model<IShiftAssignment & Document>('ShiftAssignment', shiftAssignmentSchema);
 
 export default shiftAssignmentModel;

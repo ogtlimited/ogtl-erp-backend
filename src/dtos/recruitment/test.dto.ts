@@ -1,7 +1,8 @@
-import { IsString, IsDate, IsEnum, IsOptional } from 'class-validator';
+import { IsString, IsDate, IsEnum, IsOptional,IsNotEmpty } from 'class-validator';
 import { TestStatus, TestType } from '@interfaces/recruitment/test.interface';
 
 export class CreateTestDto {
+  @IsNotEmpty()
   @IsEnum(TestType)
   public test_type: TestType;
 

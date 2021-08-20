@@ -1,0 +1,142 @@
+tags:
+  - name: jobOffer
+    description: jobOffer API
+
+paths:
+  # [GET] jobOffer
+  /jobOffer:
+    get:
+      tags:
+        - jobOffer
+      summary: Find All jobOffers
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+    # [POST] jobOffer
+    post:
+      tags:
+        - jobOffer
+      summary: Add job offer
+      parameters:
+        - name: body
+          in: body
+          description: job offer Data
+          required: true
+          schema:
+            $ref: '#/definitions/jobOffer'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  # [GET] jobOffer/id
+  /jobOffer/{id}:
+    get:
+      tags:
+        - jobOffer
+      summary: Find job offer By Id
+      parameters:
+        - name: id
+          in: path
+          description: job offer Id
+          required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [PATCH] jobOffer/id
+    patch:
+      tags:
+        - jobOffer
+      summary: Update job offer By Id
+      parameters:
+        - name: id
+          in: path
+          description: job offer Id
+          required: true
+        - name: body
+          in: body
+          description: job offer Data
+          required: true
+          schema:
+            $ref: '#/definitions/jobOffer'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [DELETE] jobOffer/id
+    delete:
+      tags:
+        - jobOffer
+      summary: Delete job offer By Id
+      parameters:
+        - name: id
+          in: path
+          description: job offer Id
+          required: true
+          schema:
+            type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  jobOffer:
+    type: object
+    required:
+      - job_applicant_id
+      - status
+      - offer_date
+      - designation_id
+      - job_offer_terms
+      - terms_and_conditions
+    properties:
+      id:
+        description: job Offer Id
+      job_applicant_id:
+        type: string
+        description: Applicant id
+      designation_id:
+        type: string
+        description: designation id
+      offer_date:
+        type: Date
+        description: offer date
+      status:
+        type: string
+        description: status of job opening
+      job_offer_terms:
+        type: string[]
+        description: Job offer terms
+      terms_and_condtions:
+        type: string
+        description: Terms and conditions
+
+schemes:
+  - https
+  - http
