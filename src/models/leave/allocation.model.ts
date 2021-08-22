@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Allocation } from '@/interfaces/leave-interface/allocation.interface';
+import { ILeaveAllocation } from '@/interfaces/leave-interface/allocation.interface';
 import mongoose from 'mongoose';
 import { model, Schema, Document } from 'mongoose';
 
@@ -44,6 +44,6 @@ const allocationSchema : Schema = new Schema (
     
 );
 
-const userModel = model<Allocation & Document>('Allocation', allocationSchema);
+const allocationModel = model<ILeaveAllocation & Document>('LeaveAllocation', allocationSchema);
 
-export default userModel;
+export default allocationModel;

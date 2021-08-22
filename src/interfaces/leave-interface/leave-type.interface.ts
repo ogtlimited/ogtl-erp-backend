@@ -1,4 +1,5 @@
-export interface LeaveType{
+/* eslint-disable prettier/prettier */
+export interface ILeaveType{
     _id: string;
     leave_name : string;
     max_leaves :  string;

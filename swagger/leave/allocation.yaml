@@ -1,32 +1,32 @@
 tags:
-- name: users
-  description: users API
+- name: Leave Allocation
+  description: Leave allocation API
 
 paths:
-# [GET] users
-  /api/users:
+# [GET] allocation
+  /api/allocation:
     get:
       tags:
-      - users
-      summary: Find All Users
+      - allocation
+      summary: Find All allocation
       responses:
         200:
           description: 'OK'
         500:
           description: 'Server Error'
 
-# [POST] users
+# [POST] allocation
     post:
       tags:
-      - users
-      summary: Add User
+      - allocation
+      summary: Add leave allocation
       parameters:
       - name: body
         in: body
-        description: user Data
+        description: leave allocation Data
         required: true
         schema:
-          $ref: '#/definitions/users'
+          $ref: '#/definitions/allocation'
       responses:
         201:
           description: 'Created'
@@ -37,16 +37,16 @@ paths:
         500:
           description: 'Server Error'
 
-# [GET] users/id
-  /api/users/{id}:
+# [GET] allocation/id
+  /api/allocation/{id}:
     get:
       tags:
-      - users
-      summary: Find User By Id
+      - allocation
+      summary: Find leave allocation By Id
       parameters:
       - name: id
         in: path
-        description: User Id
+        description: leave allocation Id
         required: true
       responses:
         200:
@@ -56,22 +56,22 @@ paths:
         500:
           description: 'Server Error'
 
-# [PUT] users/id
+# [PUT] allocation/id
     put:
       tags:
-      - users
-      summary: Update User By Id
+      - allocation
+      summary: Update leave allocation By Id
       parameters:
       - name: id
         in: path
-        description: user Id
+        description: leave allocation Id
         required: true
       - name: body
         in: body
-        description: user Data
+        description: leave allocation Data
         required: true
         schema:
-          $ref: '#/definitions/users'
+          $ref: '#/definitions/allocation'
       responses:
         200:
           description: 'OK'
@@ -82,15 +82,15 @@ paths:
         500:
           description: 'Server Error'
 
-# [DELETE] users/id
+# [DELETE] allocation/id
     delete:
       tags:
-      - users
-      summary: Delete User By Id
+      - allocation
+      summary: Delete leave allocation By Id
       parameters:
       - name: id
         in: path
-        description: user Id
+        description: leave allocation Id
         required: true
         schema:
           type: string
@@ -106,20 +106,31 @@ paths:
 
 # definitions
 definitions:
-  users:
+  allocation:
     type: object
     required:
-        - email
-        - password
+        - from_date
+        - start_time
+        - to_date
     properties:
       id:
-        description: user Id
-      email:
         type: string
-        description: user Email
-      password:
+        description: allocation Id
+      employee_id:
         type: string
-        description: user Password
+        description: employee id
+      from_date:
+        type: date
+        description: start time
+      to_date:
+        type: date
+        description: end time
+      new_leaves_allocation:
+        type: date
+        description: leaves allocation
+      add_unused_leaves:
+        type: string
+        description: unused leaves
 
 schemes:
  - https

@@ -95,16 +95,7 @@ class App {
           jwt: [],
         },
       ],
-      apis: ['swagger.yaml',
-        'swagger/employee.yaml',
-        'swagger/shiftType.yaml',
-        'swagger/shiftAssignment.yaml',
-        'swagger/shiftRequest.yaml',
-        'swagger/jobOpening.yaml',
-        'swagger/jobOffer.yaml',
-        'swagger/jobApplicant.yaml',
-        'swagger/test.yaml'
-      ],
+      apis: ['swagger.yaml', 'swagger/employee.yaml', 'swagger/shiftType.yaml'],
     };
 
     const specs = swaggerJSDoc(options);

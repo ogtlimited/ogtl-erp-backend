@@ -1,4 +1,5 @@
-export interface Allocation{
+/* eslint-disable prettier/prettier */
+export interface ILeaveAllocation{
     _id: string;
     employee_id: string;
     from_date: Date;

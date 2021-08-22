@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { OnBoarding } from '@interfaces/employee-lifecycle/onboarding.interface';
+import { IOnBoarding } from '@interfaces/employee-lifecycle/onboarding.interface';
 import { model, Schema, Document } from 'mongoose';
 
 const onBoardingSchema: Schema = new Schema(
@@ -59,5 +59,5 @@ const onBoardingSchema: Schema = new Schema(
   },
 );
 
-const onBoardingModel = model<OnBoarding & Document>('OnBoarding', onBoardingSchema);
+const onBoardingModel = model<IOnBoarding & Document>('OnBoarding', onBoardingSchema);
 export default onBoardingModel;
