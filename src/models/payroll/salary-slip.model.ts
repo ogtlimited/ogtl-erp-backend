@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { SalaryComponent } from '@interfaces/payroll/salary-component.interface';
+import { ISalarySlip} from '@interfaces/payroll/salary-slip.interface';
 import { model, Schema, Document } from 'mongoose';
 
-const salaryComponentSchema: Schema = new Schema(
+const salarySlipSchema: Schema = new Schema(
   {
     employee: {
       type: Schema.Types.ObjectId,
@@ -44,6 +44,10 @@ const salaryComponentSchema: Schema = new Schema(
       required: true,
       ref: "Loans"
     },
+    deductions: [{
+      type: Schema.Types.ObjectId,
+      ref: "Deduction"
+    }],
     totalInWords: {
       type: String,
       required: true,
@@ -81,12 +85,21 @@ const salaryComponentSchema: Schema = new Schema(
             type: Schema.Types.ObjectId,
             ref: "Deduction"
         }
-    ]
+    ],
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'Employee',
+    },
+    updatedBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'Employee',
+    },
   },
+  
   {
     timestamps: true,
   },
 );
 
-const salaryComponentModel = model<SalaryComponent & Document>('SalaryComponent', salaryComponentSchema);
-export default salaryComponentModel;
+const salarySlipModel = model<ISalarySlip & Document>('salarySlipModel', salarySlipSchema);
+export default salarySlipModel;

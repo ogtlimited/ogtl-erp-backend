@@ -1,29 +1,29 @@
 /* eslint-disable prettier/prettier */
-import { IAttendance } from '@interfaces/attendance-interface/attendance-interface';
+// import { IAttendance } from '@interfaces/attendance-interface/attendance-interface';
 import { model, Schema, Document } from 'mongoose';
 
 const attendanceSchema: Schema = new Schema(
   {
-    employee: {
+    employeeId: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "Employee"
     },
-    shift: {
+    shiftTypeId: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "Shift"
+      ref: "ShiftType"
     },
-    status: {
+    statusId: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "Status"
     },
     startTime: {
-      type: Date
+      type: String
     },
-    end_name: {
-      type: Date
+    endName: {
+      type: String
     }
   },
   {
@@ -31,5 +31,5 @@ const attendanceSchema: Schema = new Schema(
   },
 );
 
-const attendanceModel = model<IAttendance & Document>('Attendance', attendanceSchema);
+const attendanceModel = model('Attendance', attendanceSchema);
 export default attendanceModel;

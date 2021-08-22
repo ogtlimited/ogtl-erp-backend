@@ -1,0 +1,44 @@
+/* eslint-disable prettier/prettier */
+import { CreateSalarySlipDto } from '@dtos/payroll/salary-slip.dto';
+import { HttpException } from '@exceptions/HttpException';
+import { ISalarySlip } from '@/interfaces/payroll/salary-slip.interface';
+import salarySlipModel  from '@models/payroll/salary-slip.model';
+import { isEmpty } from '@utils/util';
+// import omit from 'lodash/omit'
+
+class SalarySlipService {
+  public salarySlipModel = salarySlipModel;
+
+  public async findAll(): Promise<ISalarySlip[]> {
+    const RESULTS = await this.salarySlipModel.find();
+    return RESULTS;
+  }
+
+  public async findById(id: string): Promise<ISalarySlip> {
+    if (isEmpty(id)) throw new HttpException(400, "provide Id");
+
+    const findDemoType: ISalarySlip = await this.salarySlipModel.findOne({ _id: id });
+    if (!findDemoType) throw new HttpException(404, "no record found");
+
+    return findDemoType;
+  }
+
+  public async create(data: CreateSalarySlipDto): Promise<ISalarySlip> {
+
+    if (isEmpty(data)) throw new HttpException(400, "Bad request");
+    const createdata = await this.salarySlipModel.create(data);
+    // const response: ISalarySlip =  omit(createdata.toObject(), [])
+    return createdata;
+  }
+
+//   public async updateIncentiveType(data: DTO): Promise<ISalarySlip> {
+
+//     if (isEmpty(data)) throw new HttpException(400, "Bad request");
+//     const createdata = await this.salarySlipModel.create(data);
+//     const response: ISalarySlip =  omit(createdata.toObject(), ["employeeId"])
+//     return response;
+//   }
+
+}
+
+export default SalarySlipService;

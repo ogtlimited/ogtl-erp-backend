@@ -1,18 +1,23 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import { IsString, IsDate, IsNumber } from 'class-validator';
+import { IsString, IsNumber, IsArray, IsOptional } from 'class-validator';
 
-export class CreateSalaryStructureAssignmentDto {  
+export class CreateSalaryStructureDto {  
  
     @IsString()
-    public payroll_frequency: string;
+    public payrollFrequency: string;
 
-    @IsString()
+    @IsArray()
     public salaryDeductions: string;
     
-    @IsString()
-    public currency: string;
+    // @IsString()
+    // @IsOptional()
+    // public currency: string;
+
+    // @IsString()
+    // @IsOptional()
+    // public base: string;
     
     @IsString()
     public status: string;
