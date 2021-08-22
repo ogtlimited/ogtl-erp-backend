@@ -3,7 +3,7 @@ import jobOfferModel from '@models/recruitment/job_offer.model';
 import { IJobOffer } from '@interfaces/recruitment/job_offer.interface';
 import { isEmpty } from '@utils/util';
 import { HttpException } from '@exceptions/HttpException';
-import { CreateJobOfferDto } from '@dtos/recruitment/job_offer.dto';
+import { CreateJobOfferDto, UpdateJobOfferDto } from '@dtos/recruitment/job_offer.dto';
 
 class JobOfferService {
   public jobOffer = jobOfferModel;
@@ -30,21 +30,21 @@ class JobOfferService {
     //check if no job offer data is empty
     if (isEmpty(jobOfferData)) throw new HttpException(400, "Bad request");
     //find job offer using the job applicant id provided
-    const jobOffer: IJobOffer = await this.jobOffer.findOne({ job_applicant_id: jobOfferData.job_applicant_id });
-    //throw error if job offer does exist
-    if (jobOffer) throw new HttpException(409, `${jobOffer.job_applicant_id} already exists`);
+    // const jobOffer: IJobOffer = await this.jobOffer.findOne({ job_applicant_id: jobOfferData.job_applicant_id });
+    // //throw error if job offer does exist
+    // if (jobOffer) throw new HttpException(409, `${jobOffer.job_applicant_id} already exists`);
     // return created job offer
     return await this.jobOffer.create(jobOfferData);
   }
 
   //Method for updating job offer
-  public async updateJobOffer(jobOfferId: string,jobOfferData: CreateJobOfferDto):Promise<IJobOffer>{
+  public async updateJobOffer(jobOfferId: string,jobOfferData: UpdateJobOfferDto):Promise<IJobOffer>{
     //check if no job offer data is empty
     if (isEmpty(jobOfferData)) throw new HttpException(400, "Bad request");
-    if(jobOfferData.job_applicant_id){
-      //find job offer using the job_applicant_id provided
-      const findJobOffer: IJobOffer = await this.jobOffer.findOne({ job_applicant_id: jobOfferData.job_applicant_id  });
-      if(findJobOffer && findJobOffer._id != jobOfferId) throw new HttpException(409, `${jobOfferData.job_applicant_id } already exist`);
+    if(jobOfferData._id){
+      //find job offer using the id provided
+      const findJobOffer: IJobOffer = await this.jobOffer.findOne({ _id: jobOfferData._id  });
+      if(findJobOffer && findJobOffer._id != jobOfferId) throw new HttpException(409, `${jobOfferData._id } already exist`);
     }
     //find job offer using the id provided and update it
     const updateJobOfferById:IJobOffer = await this.jobOffer.findByIdAndUpdate(jobOfferId,{jobOfferData})

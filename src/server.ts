@@ -15,6 +15,11 @@ import JobOpeningRoute from '@routes/recruitment/jobOpening.route';
 import JobOfferRoute from '@routes/recruitment/jobOffer.route';
 import JobApplicantRoute from '@routes/recruitment/jobApplicant.route';
 import TestRoute from '@routes/recruitment/test.route';
+import LeaveAllocationRoute from '@routes/leave/allocation.route';
+import LeaveApplicationRoute from '@routes/leave/application.route';
+import LeaveTypeRoutes from '@routes/leave/leave-type.route';
+import LeavePeriodRoute from '@routes/leave/period.route';
+import LeavePolicyRoutes from '@routes/leave/policy.route';
 
 validateEnv();
 
@@ -28,7 +33,12 @@ const app = new App([new IndexRoute(),
   new JobOpeningRoute(),
   new JobOfferRoute(),
   new JobApplicantRoute(),
-  new TestRoute()
+  new TestRoute(),
+  new LeaveAllocationRoute(),
+  new LeaveApplicationRoute(),
+  new LeaveTypeRoutes(),
+  new LeavePeriodRoute(),
+  new LeavePolicyRoutes()
 ]);
 
 app.listen();

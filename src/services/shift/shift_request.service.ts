@@ -2,7 +2,7 @@ import shiftRequestModel from '@models/shift/shift_request.model';
 import { IShiftRequest } from '@interfaces/shift-interface/shift_request.interface';
 import { isEmpty } from '@utils/util';
 import { HttpException } from '@exceptions/HttpException';
-import { CreateShiftRequestDto } from '@dtos/shift/shift_request.dto';
+import { CreateShiftRequestDto, UpdateShiftRequestDto } from '@dtos/shift/shift_request.dto';
 
 class ShiftRequestService {
   public shiftRequest = shiftRequestModel;
@@ -37,12 +37,12 @@ class ShiftRequestService {
   }
 
   //Method for updating shift Request
-  public async updateShiftRequest(shiftRequestId: string,shiftRequestData: CreateShiftRequestDto):Promise<IShiftRequest>{
+  public async updateShiftRequest(shiftRequestId: string,shiftRequestData: UpdateShiftRequestDto):Promise<IShiftRequest>{
     //check if no shift Request data is empty
     if (isEmpty(shiftRequestData)) throw new HttpException(400, "Bad request");
-    if(shiftRequestData.employee_id){
+    if(shiftRequestData._id){
       //find shift Request using the employee id provided
-      const findShitRequest: IShiftRequest = await this.shiftRequest.findOne({ employee_id: shiftRequestData.employee_id });
+      const findShitRequest: IShiftRequest = await this.shiftRequest.findOne({ _id: shiftRequestData._id });
       if(findShitRequest && findShitRequest._id != shiftRequestId) throw new HttpException(409, `${shiftRequestData.employee_id} already exists`);
     }
     //find shift Request using the id provided and update it

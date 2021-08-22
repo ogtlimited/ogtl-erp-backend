@@ -3,7 +3,7 @@ import jobApplicantModel from '@models/recruitment/job_applicant.model';
 import { IJobApplicant } from '@interfaces/recruitment/job_applicant.interface';
 import { isEmpty } from '@utils/util';
 import { HttpException } from '@exceptions/HttpException';
-import { CreateJobApplicantDto } from '@dtos/recruitment/job_applicant.dto';
+import { CreateJobApplicantDto, UpdateJobApplicantDto } from '@dtos/recruitment/job_applicant.dto';
 
 class JobApplicantService {
   public jobApplicant = jobApplicantModel;
@@ -29,22 +29,18 @@ class JobApplicantService {
   public async createJobApplicant(jobApplicantData: CreateJobApplicantDto): Promise<IJobApplicant>{
     //check if no job applicant data is empty
     if (isEmpty(jobApplicantData)) throw new HttpException(400, "Bad request");
-    //find job Applicant using the job applicant email provided
-    const jobApplicant: IJobApplicant = await this.jobApplicant.findOne({ email_address: jobApplicantData.email_address });
-    //throw error if job Applicant does exist
-    if (jobApplicant) throw new HttpException(409, `${jobApplicant.email_address} already exists`);
     // return created job Applicant
     return await this.jobApplicant.create(jobApplicantData);
   }
 
   //Method for updating job Applicant
-  public async updateJobApplicant(jobApplicantId: string,jobApplicantData: CreateJobApplicantDto):Promise<IJobApplicant>{
+  public async updateJobApplicant(jobApplicantId: string,jobApplicantData: UpdateJobApplicantDto):Promise<IJobApplicant>{
     //check if no job Applicant data is empty
     if (isEmpty(jobApplicantData)) throw new HttpException(400, "Bad request");
-    if(jobApplicantData.email_address){
+    if(jobApplicantData._id){
       //find job Applicant using the job_applicant_id provided
-      const findJobApplicant: IJobApplicant = await this.jobApplicant.findOne({ email_address: jobApplicantData.email_address });
-      if(findJobApplicant && findJobApplicant._id != jobApplicantId) throw new HttpException(409, `${jobApplicantData.email_address } already exist`);
+      const findJobApplicant: IJobApplicant = await this.jobApplicant.findOne({ _id: jobApplicantData._id });
+      if(findJobApplicant && findJobApplicant._id != jobApplicantId) throw new HttpException(409, `${jobApplicantData._id } already exist`);
     }
     //find job Applicant using the id provided and update it
     const updateJobApplicantById:IJobApplicant = await this.jobApplicant.findByIdAndUpdate(jobApplicantId,{jobApplicantData})

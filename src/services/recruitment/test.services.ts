@@ -3,7 +3,7 @@ import testModel from '@models/recruitment/test.model';
 import { ITest } from '@interfaces/recruitment/test.interface';
 import { isEmpty } from '@utils/util';
 import { HttpException } from '@exceptions/HttpException';
-import { CreateTestDto } from '@dtos/recruitment/test.dto';
+import { CreateTestDto, UpdateTestDto } from '@dtos/recruitment/test.dto';
 
 class TestServices {
   public test = testModel;
@@ -29,22 +29,18 @@ class TestServices {
   public async createTest(testData: CreateTestDto): Promise<ITest>{
     //check if no Test data is empty
     if (isEmpty(testData)) throw new HttpException(400, "Bad request");
-    //find test using both test type and applicant id to know if applicant already took the test
-    const testType: ITest = await this.test.findOne({ test_type: testData.test_type });
-    const applicant: ITest = await this.test.findOne({ job_applicant_id: testData.job_applicant_id });
-    //throw error if Test does exist
-    if (testType && applicant) throw new HttpException(409, `${testData.job_applicant_id} already took the ${testData.test_type} test`);
+
     // return created Test
     return await this.test.create(testData);
   }
 
   //Method for updating Test
-  public async updateTest(testId: string,testData: CreateTestDto):Promise<ITest>{
+  public async updateTest(testId: string,testData: UpdateTestDto):Promise<ITest>{
     //check if no Test data is empty
     if (isEmpty(testData)) throw new HttpException(400, "Bad request");
-    if(testData.test_type){
+    if(testData._id){
       //find Test using the test type provided
-      const findTest: ITest = await this.test.findOne({ test_type: testData.test_type });
+      const findTest: ITest = await this.test.findOne({ _id: testData._id });
       if(findTest && findTest._id != testId) throw new HttpException(409, `${testData.test_type } already exist`);
     }
     //find Test using the id provided and update it

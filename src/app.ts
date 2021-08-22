@@ -97,13 +97,18 @@ class App {
       ],
       apis: ['swagger.yaml',
         'swagger/employee.yaml',
-        'swagger/shiftType.yaml',
-        'swagger/shiftAssignment.yaml',
-        'swagger/shiftRequest.yaml',
-        'swagger/jobOpening.yaml',
-        'swagger/jobOffer.yaml',
-        'swagger/jobApplicant.yaml',
-        'swagger/test.yaml'
+        'swagger/shift/shiftType.yaml',
+        'swagger/shift/shiftAssignment.yaml',
+        'swagger/shift/shiftRequest.yaml',
+        'swagger/recruitment/jobOpening.yaml',
+        'swagger/recruitment/jobOffer.yaml',
+        'swagger/recruitment/jobApplicant.yaml',
+        'swagger/recruitment/test.yaml',
+        'swagger/leave/allocation.yaml',
+        'swagger/leave/application.yaml',
+        'swagger/leave/leave-type.yaml',
+        'swagger/leave/period.yaml',
+        'swagger/leave/policy.yaml'
       ],
     };
 

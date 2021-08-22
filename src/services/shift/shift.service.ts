@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { CreateShiftTypeDto } from '@dtos/shift/shift_type.dto';
+import { CreateShiftTypeDto, UpdateShiftTypeDto } from '@dtos/shift/shift_type.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { IShiftType } from '@interfaces/shift-interface/shift_type.interface';
 import shiftTypeModel from '@models/shift/shift_type.model';
@@ -24,29 +24,29 @@ class shiftTypeService {
   public async createshiftType(shiftTypeData: CreateShiftTypeDto): Promise<IShiftType> {
     if (isEmpty(shiftTypeData)) throw new HttpException(400, "Bad request");
 
-    const findshiftType: IShiftType = await this.shiftTypes.findOne({ shift_name: shiftTypeData.shift_name });
-    if (findshiftType) throw new HttpException(409, `${shiftTypeData.shift_name} already exists`);
+    const findShiftType: IShiftType = await this.shiftTypes.findOne({ shift_name: shiftTypeData.shift_name });
+    if (findShiftType) throw new HttpException(409, `${shiftTypeData.shift_name} already exists`);
     return await this.shiftTypes.create(shiftTypeData);
   }
 
-  public async updateshiftType(shiftTypeId: string, shiftTypeData: CreateShiftTypeDto): Promise<IShiftType> {
+  public async updateshiftType(shiftTypeId: string, shiftTypeData: UpdateShiftTypeDto): Promise<IShiftType> {
     if (isEmpty(shiftTypeData)) throw new HttpException(400, "Bad request");
 
-    if (shiftTypeData.shift_name) {
-      const findshiftType: IShiftType = await this.shiftTypes.findOne({ shift_name: shiftTypeData.shift_name });
-      if (findshiftType && findshiftType._id != shiftTypeId) throw new HttpException(409, `${shiftTypeData.shift_name} already exists`);
+    if (shiftTypeData._id) {
+      const findShiftType: IShiftType = await this.shiftTypes.findOne({ _id: shiftTypeData._id });
+      if (findShiftType && findShiftType._id != shiftTypeId) throw new HttpException(409, `${shiftTypeData.shift_name} already exists`);
     }
-    const updateshiftTypeById: IShiftType = await this.shiftTypes.findByIdAndUpdate(shiftTypeId, { shiftTypeData });
-    if (!updateshiftTypeById) throw new HttpException(409, "shift does not exist");
+    const updateShiftTypeById: IShiftType = await this.shiftTypes.findByIdAndUpdate(shiftTypeId, { shiftTypeData });
+    if (!updateShiftTypeById) throw new HttpException(409, "shift does not exist");
 
-    return updateshiftTypeById;
+    return updateShiftTypeById;
   }
 
   public async deleteshiftType(shiftTypeId: string): Promise<IShiftType> {
-    const deleteshiftTypeById: IShiftType = await this.shiftTypes.findByIdAndDelete(shiftTypeId);
-    if (!deleteshiftTypeById) throw new HttpException(409, "shift does not exist");
+    const deleteShiftTypeById: IShiftType = await this.shiftTypes.findByIdAndDelete(shiftTypeId);
+    if (!deleteShiftTypeById) throw new HttpException(409, "shift does not exist");
 
-    return deleteshiftTypeById;
+    return deleteShiftTypeById;
   }
 }
 
