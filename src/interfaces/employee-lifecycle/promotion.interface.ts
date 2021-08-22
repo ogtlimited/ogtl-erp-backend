@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
-export interface Promotion {
+export interface IPromotion {
     employee: string;
     status: string;
-    branch: string;  
     department: string;
+    branch: string;  
     promotionDetails: string;
     promotionDate: Date;
   }

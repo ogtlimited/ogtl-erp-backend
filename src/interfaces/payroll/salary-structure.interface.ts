@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-export interface SalaryStructure {
+export interface ISalaryStructure {
     payroll_frequency: string;
     salaryDeductions: string;
     currency: string;

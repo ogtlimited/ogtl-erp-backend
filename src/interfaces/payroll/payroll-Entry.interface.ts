@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-export interface PayRollEntry{
+export interface IPayRollEntry{
     branch: string;
     department: string;
     status: string;

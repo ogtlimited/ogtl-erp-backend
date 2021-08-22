@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-export enum SalaryComponentType {
+export enum ISalaryComponentType {
     Earning, 
     Deduction
   }
