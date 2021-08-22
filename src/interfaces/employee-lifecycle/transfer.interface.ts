@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-export interface Transfer {
+export interface ITransfer {
     employee: string;
     status: string;
     branch: string;  

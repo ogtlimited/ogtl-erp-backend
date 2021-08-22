@@ -10,17 +10,17 @@ class SalarySlipService {
   public salarySlipModel = salarySlipModel;
 
   public async findAll(): Promise<ISalarySlip[]> {
-    const RESULTS = await this.salarySlipModel.find();
-    return RESULTS;
+    const results = await this.salarySlipModel.find();
+    return results;
   }
 
   public async findById(id: string): Promise<ISalarySlip> {
     if (isEmpty(id)) throw new HttpException(400, "provide Id");
 
-    const findDemoType: ISalarySlip = await this.salarySlipModel.findOne({ _id: id });
-    if (!findDemoType) throw new HttpException(404, "no record found");
+    const salarySlip: ISalarySlip = await this.salarySlipModel.findOne({ _id: id });
+    if (!salarySlip) throw new HttpException(404, "no record found");
 
-    return findDemoType;
+    return salarySlip;
   }
 
   public async create(data: CreateSalarySlipDto): Promise<ISalarySlip> {

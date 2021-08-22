@@ -15,6 +15,9 @@ import SalaryStructureAssignmentRoute from './routes/payroll/salary-structure-as
 import SalaryComponentRoute from './routes/payroll/salary-component.route';
 import PayRollEntryRoute from './routes/payroll/payroll-entry.route';
 import SalarySlipRoute from './routes/payroll/salary-slip.route';
+import OnBoardingRoute from './routes/employee-lifecycle/onboarding.route';
+import PromotionRoute from './routes/employee-lifecycle/promotion.route';
+import TransferRoute from './routes/employee-lifecycle/transfers.route';
 
 validateEnv();
 
@@ -31,6 +34,9 @@ const app = new App([
   new SalaryComponentRoute(),
   new PayRollEntryRoute(),
   new SalarySlipRoute(),
+  new OnBoardingRoute(),
+  new PromotionRoute(),
+  new TransferRoute(),
 ]);
 
 app.listen();

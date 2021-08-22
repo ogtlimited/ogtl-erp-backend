@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-export interface OnBoarding {
+export interface IOnBoarding {
     jobApplicant: string;
     employee: string;
     status: string;
