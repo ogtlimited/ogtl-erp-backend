@@ -4,6 +4,7 @@
 import { IsEmail, IsString } from 'class-validator';
 
 export class CreateEmployeeDto {
+  
   @IsString()
   public ogId: string;
 

@@ -1,32 +1,32 @@
 tags:
-- name: shiftType
-  description: shiftType API
+- name: Leave Type
+  description: Leave Type API
 
 paths:
-# [GET] shiftType
-  /api/shiftType:
+# [GET] Leave Type
+  /api/leave-Type:
     get:
       tags:
-      - shiftType
-      summary: Find All shiftType
+      - Leave Type
+      summary: Find All Leave Type
       responses:
         200:
           description: 'OK'
         500:
           description: 'Server Error'
 
-# [POST] shiftType
+# [POST] Leave Type
     post:
       tags:
-      - shiftType
-      summary: Add User
+      - Leave Type
+      summary: Add leave Leave Type
       parameters:
       - name: body
         in: body
-        description: user Data
+        description: leave Leave Type Data
         required: true
         schema:
-          $ref: '#/definitions/shiftType'
+          $ref: '#/definitions/Leave Type'
       responses:
         201:
           description: 'Created'
@@ -37,16 +37,16 @@ paths:
         500:
           description: 'Server Error'
 
-# [GET] shiftType/id
-  /api/shiftType/{id}:
+# [GET] Leave Type/id
+  /api/leave-type/{id}:
     get:
       tags:
-      - shiftType
-      summary: Find User By Id
+      - Leave Type
+      summary: Find leave Leave Type By Id
       parameters:
       - name: id
         in: path
-        description: User Id
+        description: leave Leave Type Id
         required: true
       responses:
         200:
@@ -56,22 +56,22 @@ paths:
         500:
           description: 'Server Error'
 
-# [PUT] shiftType/id
+# [PUT] Leave Type/id
     put:
       tags:
-      - shiftType
-      summary: Update User By Id
+      - Leave Type
+      summary: Update leave Leave Type By Id
       parameters:
       - name: id
         in: path
-        description: user Id
+        description: leave Leave Type Id
         required: true
       - name: body
         in: body
-        description: user Data
+        description: leave Leave Type Data
         required: true
         schema:
-          $ref: '#/definitions/shiftType'
+          $ref: '#/definitions/Leave Type'
       responses:
         200:
           description: 'OK'
@@ -82,15 +82,15 @@ paths:
         500:
           description: 'Server Error'
 
-# [DELETE] shiftType/id
+# [DELETE] leave-type/id
     delete:
       tags:
-      - shiftType
-      summary: Delete User By Id
+      - Leave Type
+      summary: Delete leave Leave Type By Id
       parameters:
       - name: id
         in: path
-        description: user Id
+        description: leave Leave Type Id
         required: true
         schema:
           type: string
@@ -106,24 +106,43 @@ paths:
 
 # definitions
 definitions:
-  shiftType:
+  Leave Type:
     type: object
     required:
-        - shift_name
+        - from_date
         - start_time
-        - end_time
+        - to_date
     properties:
       id:
-        description: shiftType Id
-      shift_name:
         type: string
-        description: shift name
-      start_time:
+        description: Leave Type Id
+      leave_name:
         type: string
-        description: start time
-      end_time:
+        description: leave name
+       max_leaves :
         type: string
-        description: end time
+        description: Max leave
+      applicable_after:
+        type: string
+        description: Applicable after
+      max_continous_days:
+        type: string
+        description: Maximum number day to continue
+      is_carry_forward:
+        type: boolean
+        description: carried over from prev leave
+      is_without_pay:
+        type: boolean
+        description: Leave without pay
+      is_optional:
+        type: boolean
+        description: Leave is optional
+      allow_negative_balance:
+        type: boolean
+      include_holiday_leaves:
+        type: boolean
+      is_compensatory:
+        type: boolean
 
 schemes:
  - https

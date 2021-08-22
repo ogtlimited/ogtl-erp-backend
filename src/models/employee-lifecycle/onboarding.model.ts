@@ -59,5 +59,6 @@ const onBoardingSchema: Schema = new Schema(
   },
 );
 
+
 const onBoardingModel = model<IOnBoarding & Document>('OnBoarding', onBoardingSchema);
 export default onBoardingModel;

@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import { IsString, IsNumber, IsArray, IsOptional } from 'class-validator';
 
+import { IsString, IsNumber, IsArray, IsOptional } from 'class-validator';
 export class CreateSalaryStructureDto {  
  
     @IsString()

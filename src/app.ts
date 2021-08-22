@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 process.env['NODE_CONFIG_DIR'] = __dirname + '/configs';
 
 import compression from 'compression';
@@ -67,7 +68,7 @@ class App {
 
   private initializeRoutes(routes: Routes[]) {
     routes.forEach(route => {
-      this.app.use('/', route.router);
+      this.app.use('/api', route.router);
     });
   }
 
@@ -95,7 +96,9 @@ class App {
           jwt: [],
         },
       ],
-      apis: ['swagger.yaml', 'swagger/employee.yaml', 'swagger/shiftType.yaml'],
+      apis: ['swagger.yaml', 'swagger/employee.yaml', 'swagger/shiftType.yaml',
+      'swagger/leave/allocation.yaml','swagger/leave/application.yaml','swagger/leave/leave-type.yaml', 'swagger/leave/period.yaml','swagger/leave/policy.yaml'
+    ],
     };
 
     const specs = swaggerJSDoc(options);

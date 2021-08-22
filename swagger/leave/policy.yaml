@@ -1,32 +1,32 @@
 tags:
-- name: users
-  description: users API
+- name: Leave Policy
+  description: Leave policy API
 
 paths:
-# [GET] users
-  /api/users:
+# [GET] policy
+  /api/leave-policy:
     get:
       tags:
-      - users
-      summary: Find All Users
+      - policy
+      summary: Find All policy
       responses:
         200:
           description: 'OK'
         500:
           description: 'Server Error'
 
-# [POST] users
+# [POST] policy
     post:
       tags:
-      - users
-      summary: Add User
+      - leave-policy
+      summary: Add leave policy
       parameters:
       - name: body
         in: body
-        description: user Data
+        description: leave policy Data
         required: true
         schema:
-          $ref: '#/definitions/users'
+          $ref: '#/definitions/policy'
       responses:
         201:
           description: 'Created'
@@ -37,16 +37,16 @@ paths:
         500:
           description: 'Server Error'
 
-# [GET] users/id
-  /api/users/{id}:
+# [GET] leave-policy/id
+  /api/leavepolicy/{id}:
     get:
       tags:
-      - users
-      summary: Find User By Id
+      - policy
+      summary: Find leave policy By Id
       parameters:
       - name: id
         in: path
-        description: User Id
+        description: leave policy Id
         required: true
       responses:
         200:
@@ -56,22 +56,22 @@ paths:
         500:
           description: 'Server Error'
 
-# [PUT] users/id
+# [PUT] leave-policy/id
     put:
       tags:
-      - users
-      summary: Update User By Id
+      - policy
+      summary: Update leave policy By Id
       parameters:
       - name: id
         in: path
-        description: user Id
+        description: leave policy Id
         required: true
       - name: body
         in: body
-        description: user Data
+        description: leave policy Data
         required: true
         schema:
-          $ref: '#/definitions/users'
+          $ref: '#/definitions/policy'
       responses:
         200:
           description: 'OK'
@@ -82,15 +82,15 @@ paths:
         500:
           description: 'Server Error'
 
-# [DELETE] users/id
+# [DELETE] leave-policy/id
     delete:
       tags:
-      - users
-      summary: Delete User By Id
+      - policy
+      summary: Delete leave policy By Id
       parameters:
       - name: id
         in: path
-        description: user Id
+        description: leave policy Id
         required: true
         schema:
           type: string
@@ -106,20 +106,21 @@ paths:
 
 # definitions
 definitions:
-  users:
+  policy:
     type: object
     required:
-        - email
-        - password
+        - leave_type_id
+        - annual_allocation
     properties:
       id:
-        description: user Id
-      email:
         type: string
-        description: user Email
-      password:
+        description: policy Id
+      leave_type_id:
         type: string
-        description: user Password
+        description: leave type
+      annual_allocation:
+        type: string
+        description: Annual leave allocation
 
 schemes:
  - https

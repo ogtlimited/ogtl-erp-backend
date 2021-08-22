@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+
 process.env['NODE_CONFIG_DIR'] = __dirname + '/configs';
 
 import 'dotenv/config';
@@ -18,6 +20,12 @@ import SalarySlipRoute from './routes/payroll/salary-slip.route';
 import OnBoardingRoute from './routes/employee-lifecycle/onboarding.route';
 import PromotionRoute from './routes/employee-lifecycle/promotion.route';
 import TransferRoute from './routes/employee-lifecycle/transfers.route';
+import LeaveAllocationRoute from './routes/leave/allocation.route';
+import LeaveApplicationRoute from './routes/leave/application.route';
+import LeaveTypeRoutes from './routes/leave/leave-type.route';
+import LeavePeriodRoute from './routes/leave/period.route';
+import LeavePolicyRoutes from './routes/leave/policy.route';
+
 
 validateEnv();
 
@@ -37,6 +45,11 @@ const app = new App([
   new OnBoardingRoute(),
   new PromotionRoute(),
   new TransferRoute(),
+  new LeaveAllocationRoute(),
+  new LeaveApplicationRoute(),
+  new LeaveTypeRoutes(),
+  new LeavePeriodRoute(),
+  new LeavePolicyRoutes()
 ]);
 
 app.listen();

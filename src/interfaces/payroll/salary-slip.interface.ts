@@ -6,6 +6,8 @@ ask if the followinf fields are needed.
 */
 export interface ISalarySlip{
     employee: string;
+    designation: string;
+    department: string;
     branch: string;
     status: string;
     payrollEntry: string;
