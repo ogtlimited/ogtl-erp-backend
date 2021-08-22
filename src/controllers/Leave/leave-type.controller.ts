@@ -1,35 +1,69 @@
 /* eslint-disable prettier/prettier */
-import { IsNotEmpty, IsBoolean } from "class-validator";
 
-export class LeaveType{
-    @IsNotEmpty()
-    public leave_name : string;
+import { CreateLeaveTypeDto, UpdateLeaveTypeDto } from '@/dtos/Leave/leave-type.dto';
+import { ILeaveType } from '@/interfaces/leave-interface/leave-type.interface';
+import { NextFunction, Request, Response } from 'express';
+import LeaveTypeService from '@/services/leave/leave-type.service';
 
-    @IsNotEmpty()
-    public max_leaves :  string;
 
-    @IsNotEmpty()
-    public applicable_after : string;
 
-    @IsNotEmpty()
-    public max_continous_days : string;
+class LeaveTypeController {
+  public LeaveTypeService = new LeaveTypeService();
 
-    @IsBoolean()
-    public is_carry_forward : boolean;
+  public getLeaveTypes = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const findAllLeaveTypesData: ILeaveType[] = await this.LeaveTypeService.findAllLeaveType();
 
-    @IsBoolean()
-    public is_without_pay: boolean;
+      res.status(200).json({ data: findAllLeaveTypesData, message: 'findAll' });
+    } catch (error) {
+      next(error);
+    }
+  };
 
-    @IsBoolean()
-    public is_optional: boolean;
+  public getLeaveTypeById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const LeaveTypeId: string = req.params.id;
+      const findOneLeaveTypeData: ILeaveType = await this.LeaveTypeService.findLeaveTypeById(LeaveTypeId);
 
-    @IsBoolean()
-    public allow_negative_balance : boolean;
+      res.status(200).json({ data: findOneLeaveTypeData, message: 'findOne' });
+    } catch (error) {
+      next(error);
+    }
+  };
 
-    @IsBoolean()
-    public include_holiday_leaves : boolean;
+  public createLeaveType = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const LeaveTypeData: CreateLeaveTypeDto = req.body;
+      const createLeaveTypeData: ILeaveType = await this.LeaveTypeService.createLeaveType(LeaveTypeData);
 
-    @IsBoolean()
-    public is_compensatory : boolean
+      res.status(201).json({ data: createLeaveTypeData, message: 'created' });
+    } catch (error) {
+      next(error);
+    }
+  };
 
+  public updateLeaveType = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const LeaveTypeId: string = req.params.id;
+      const LeaveTypeData: UpdateLeaveTypeDto = req.body;
+      const updateLeaveTypeData: ILeaveType = await this.LeaveTypeService.updateLeaveType(LeaveTypeId, LeaveTypeData);
+
+      res.status(200).json({ data: updateLeaveTypeData, message: 'updated' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public deleteLeaveType = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const LeaveTypeId: string = req.params.id;
+      const deleteLeaveTypeData: ILeaveType = await this.LeaveTypeService.deleteLeaveType(LeaveTypeId);
+
+      res.status(200).json({ data: deleteLeaveTypeData, message: 'deleted' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
+
+export default LeaveTypeController;

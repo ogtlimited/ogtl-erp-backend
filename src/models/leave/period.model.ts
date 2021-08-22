@@ -29,6 +29,6 @@ const periodSchema : Schema = new Schema (
     
 );
 
-const periodModel = model<ILeavePeriod & Document>('LeavePeriod', periodSchema);
+const LeavePeriodModel = model<ILeavePeriod & Document>('LeavePeriod', periodSchema);
 
-export default periodModel;
+export default LeavePeriodModel;

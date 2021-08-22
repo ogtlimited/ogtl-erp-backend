@@ -1,12 +1,12 @@
 /* eslint-disable prettier/prettier */
-import { CreateLeaveApplicationDTO } from './../../dtos/Leave/application.dto';
+
 import allocationModel from '@/models/leave/allocation.model';
 import { ILeaveAllocation } from '@/interfaces/leave-interface/allocation.interface';
 import { HttpException } from '@exceptions/HttpException';
 
 
 import { isEmpty } from '@utils/util';
-import { CreateLeaveAllocationDto } from '@/dtos/Leave/allocation.dto';
+import { CreateLeaveAllocationDto, UpdateLeaveAllocationDto } from '@/dtos/Leave/allocation.dto';
 
 class LeaveAllocationService {
   public allocation = allocationModel;
@@ -20,7 +20,7 @@ class LeaveAllocationService {
     if (isEmpty(LeaveAllocationId)) throw new HttpException(400, "You're not LeaveAllocationId");
 
     const findLeaveAllocation: ILeaveAllocation = await this.allocation.findOne({ _id: LeaveAllocationId });
-    if (!findLeaveAllocation) throw new HttpException(409, "You're not LeaveAllocation");
+    if (!findLeaveAllocation) throw new HttpException(409, "Leave Allocation not found");
 
     return findLeaveAllocation;
   }
@@ -28,21 +28,19 @@ class LeaveAllocationService {
   public async createLeaveAllocation(LeaveAllocationData: CreateLeaveAllocationDto): Promise<ILeaveAllocation> {
     if (isEmpty(LeaveAllocationData)) throw new HttpException(400, "Bad request");
 
-    const findLeaveAllocation: ILeaveAllocation = await this.allocation.findOne({ employee_id: LeaveAllocationData.employee_id });
-    if (findLeaveAllocation) throw new HttpException(409, `${LeaveAllocationData.employee_id} already exists`);
-
-    ;
+    // const findLeaveAllocation: ILeaveAllocation = await this.allocation.findOne({ employee_id: LeaveAllocationData.employee_id });
+    // if (findLeaveAllocation) throw new HttpException(409, `${LeaveAllocationData.employee_id} already exists`);
     const createLeaveAllocationData: ILeaveAllocation = await this.allocation.create(LeaveAllocationData);
 
     return createLeaveAllocationData;
   }
 
-  public async updateLeaveAllocation(LeaveAllocationId: string, LeaveAllocationData: CreateLeaveApplicationDTO): Promise<ILeaveAllocation> {
+  public async updateLeaveAllocation(LeaveAllocationId: string, LeaveAllocationData: UpdateLeaveAllocationDto): Promise<ILeaveAllocation> {
     if (isEmpty(LeaveAllocationData)) throw new HttpException(400, "Bad request");
 
-    if (LeaveAllocationData.leave_type_id ) {
-      const findLeaveAllocation: ILeaveAllocation = await this.allocation.findOne({ leave_type_id : LeaveAllocationData.leave_type_id  });
-      if (findLeaveAllocation && findLeaveAllocation._id != LeaveAllocationId) throw new HttpException(409, `${LeaveAllocationData.leave_type_id } already exists`);
+    if (LeaveAllocationData._id ) {
+      const findLeaveAllocation: ILeaveAllocation = await this.allocation.findOne({ _id : LeaveAllocationData._id  });
+      if (findLeaveAllocation && findLeaveAllocation._id != LeaveAllocationId) throw new HttpException(409, `${LeaveAllocationData._id } already exists`);
     }
     const updateLeaveAllocationById: ILeaveAllocation = await this.allocation.findByIdAndUpdate(LeaveAllocationId, { LeaveAllocationData });
     if (!updateLeaveAllocationById) throw new HttpException(409, "shift does not exist");

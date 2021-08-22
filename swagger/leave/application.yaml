@@ -1,32 +1,32 @@
 tags:
-- name: users
-  description: users API
+- name: Leave Application
+  description: Leave application API
 
 paths:
-# [GET] users
-  /api/users:
+# [GET] Application
+  /api/application:
     get:
       tags:
-      - users
-      summary: Find All Users
+      - Application
+      summary: Find All Application
       responses:
         200:
           description: 'OK'
         500:
           description: 'Server Error'
 
-# [POST] users
+# [POST] application
     post:
       tags:
-      - users
-      summary: Add User
+      - Application
+      summary: Add leave Application
       parameters:
       - name: body
         in: body
-        description: user Data
+        description: leave Application Data
         required: true
         schema:
-          $ref: '#/definitions/users'
+          $ref: '#/definitions/Application'
       responses:
         201:
           description: 'Created'
@@ -37,16 +37,16 @@ paths:
         500:
           description: 'Server Error'
 
-# [GET] users/id
-  /api/users/{id}:
+# [GET] Application/id
+  /api/application/{id}:
     get:
       tags:
-      - users
-      summary: Find User By Id
+      - Application
+      summary: Find leave Application By Id
       parameters:
       - name: id
         in: path
-        description: User Id
+        description: leave Application Id
         required: true
       responses:
         200:
@@ -56,22 +56,22 @@ paths:
         500:
           description: 'Server Error'
 
-# [PUT] users/id
+# [PUT] application/id
     put:
       tags:
-      - users
-      summary: Update User By Id
+      - Application
+      summary: Update leave Application By Id
       parameters:
       - name: id
         in: path
-        description: user Id
+        description: leave Application Id
         required: true
       - name: body
         in: body
-        description: user Data
+        description: leave Application Data
         required: true
         schema:
-          $ref: '#/definitions/users'
+          $ref: '#/definitions/Application'
       responses:
         200:
           description: 'OK'
@@ -82,15 +82,15 @@ paths:
         500:
           description: 'Server Error'
 
-# [DELETE] users/id
+# [DELETE] Application/id
     delete:
       tags:
-      - users
-      summary: Delete User By Id
+      - Application
+      summary: Delete leave Application By Id
       parameters:
       - name: id
         in: path
-        description: user Id
+        description: leave Application Id
         required: true
         schema:
           type: string
@@ -106,20 +106,40 @@ paths:
 
 # definitions
 definitions:
-  users:
+  Application:
     type: object
     required:
-        - email
-        - password
+        - from_date
+        - start_time
+        - to_date
     properties:
       id:
-        description: user Id
-      email:
         type: string
-        description: user Email
-      password:
+        description: Application Id
+      employee_id:
         type: string
-        description: user Password
+        description: employee id
+      leave_type_id:
+        type: string
+        description: leave type
+      from_date:
+        type: date
+        description: start time
+      to_date:
+        type: date
+        description: end time
+      posting_date:
+        type: date
+        description: date posted
+      leave_approver:
+        type: date
+        description: Who approves leave
+      reason:
+        type: string
+        description: reason for leave
+      status:
+        type: string
+        description: leave status
 
 schemes:
  - https

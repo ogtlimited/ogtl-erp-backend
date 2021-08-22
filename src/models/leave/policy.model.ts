@@ -25,6 +25,6 @@ const policySchema : Schema = new Schema (
     
 );
 
-const leavePolicyModel = model<ILeavePolicy & Document>('Policy', policySchema);
+const LeavePolicyModel = model<ILeavePolicy & Document>('Policy', policySchema);
 
-export default leavePolicyModel;
+export default LeavePolicyModel;
