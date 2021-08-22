@@ -1,4 +1,4 @@
-import { SalaryDetails } from "@/interfaces/employee-interface/salary-details.interface";
+import { SalaryDetail } from "@/interfaces/employee-interface/salary-details.interface";
 import mongoose from 'mongoose';
 import { model, Schema, Document } from 'mongoose';
 
@@ -30,6 +30,6 @@ const salaryDetailsSchema: Schema = new Schema(
     }
 );
 
-const userModel = model<SalaryDetails & Document>('SalaryDetails', salaryDetailsSchema);
+const userModel = model<SalaryDetail & Document>('SalaryDetails', salaryDetailsSchema);
 
 export default userModel;

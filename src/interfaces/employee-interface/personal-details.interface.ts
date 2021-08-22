@@ -1,4 +1,4 @@
-export interface PersonalDetails {
+export interface PersonalDetail {
     _id: string;
     employee_id: string;
     passport_number: string;
