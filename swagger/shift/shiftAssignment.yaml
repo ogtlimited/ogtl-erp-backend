@@ -1,0 +1,130 @@
+tags:
+  - name: shiftAssignment
+    description: shiftAssignment API
+
+paths:
+  # [GET] shiftAssignment
+  /shiftAssignment:
+    get:
+      tags:
+        - shiftAssignment
+      summary: Find All shiftAssignment
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+    # [POST] shiftAssignment
+    post:
+      tags:
+        - shiftAssignment
+      summary: Add shift assignment
+      parameters:
+        - name: body
+          in: body
+          description: shift assignment Data
+          required: true
+          schema:
+            $ref: '#/definitions/shiftAssignment'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  # [GET] shiftAssignment/id
+  /shiftAssignment/{id}:
+    get:
+      tags:
+        - shiftAssignment
+      summary: Find shift Assignment By Id
+      parameters:
+        - name: id
+          in: path
+          description: shift Assignment Id
+          required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [PATCH] shiftAssignment/id
+    patch:
+      tags:
+        - shiftAssignment
+      summary: Update shift Assignment By Id
+      parameters:
+        - name: id
+          in: path
+          description: shift Assignment Id
+          required: true
+        - name: body
+          in: body
+          description: shift Assignment Data
+          required: true
+          schema:
+            $ref: '#/definitions/shiftAssignment'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [DELETE] shiftAssignment/id
+    delete:
+      tags:
+        - shiftAssignment
+      summary: Delete shift Assignment By Id
+      parameters:
+        - name: id
+          in: path
+          description: shift Assignment Id
+          required: true
+          schema:
+            type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  shiftAssignment:
+    type: object
+    required:
+      - employee_id
+      - shift_type_id
+      - assignment_date
+    properties:
+      id:
+        description: shiftAssignment Id
+      employee_id:
+        type: string
+        description: Employee id
+      shift_type_id:
+        type: string
+        description: type of shift
+      assignment_date:
+        type: Date
+        description: assignmnt time
+
+schemes:
+  - https
+  - http

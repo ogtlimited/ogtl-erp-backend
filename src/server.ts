@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+import ShiftAssignmentRoute from '@routes/shift/shiftAssignment';
 
 process.env['NODE_CONFIG_DIR'] = __dirname + '/configs';
 
@@ -27,6 +27,12 @@ import HistoryRoute from './routes/employee/history.route';
 import PersonalDetailsRoute from './routes/employee/personal-details.route';
 import SalaryDetailsRoute from './routes/employee/salary-details.route';
 import WorkExperienceRoute from './routes/employee/work-experience.route';
+import ShiftRequestRoute from '@routes/shift/shiftRequest';
+import JobOpeningRoute from '@routes/recruitment/jobOpening.route';
+import JobOfferRoute from '@routes/recruitment/jobOffer.route';
+import JobApplicantRoute from '@routes/recruitment/jobApplicant.route';
+import TestRoute from '@routes/recruitment/test.route';
+
 
 validateEnv();
 
@@ -50,7 +56,14 @@ const app = new App([
     new HistoryRoute(),
     new PersonalDetailsRoute(),
     new SalaryDetailsRoute(),
-    new WorkExperienceRoute()
+    new WorkExperienceRoute(),
+    new ShiftRequestRoute(),
+    new JobOpeningRoute(),
+    new JobOfferRoute(),
+    new JobApplicantRoute(),
+    new TestRoute(),
+    new ShiftAssignmentRoute(),
+
 
 ]);
 

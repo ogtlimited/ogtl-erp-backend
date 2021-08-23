@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 process.env['NODE_CONFIG_DIR'] = __dirname + '/configs';
 
 import compression from 'compression';
@@ -68,7 +67,7 @@ class App {
 
   private initializeRoutes(routes: Routes[]) {
     routes.forEach(route => {
-      this.app.use('/api', route.router);
+      this.app.use('/', route.router);
     });
   }
 
@@ -96,9 +95,21 @@ class App {
           jwt: [],
         },
       ],
-      apis: ['swagger.yaml', 'swagger/employee.yaml', 'swagger/shiftType.yaml',
-      'swagger/leave/allocation.yaml','swagger/leave/application.yaml','swagger/leave/leave-type.yaml', 'swagger/leave/period.yaml','swagger/leave/policy.yaml'
-    ],
+      apis: ['swagger.yaml',
+        'swagger/employee.yaml',
+        'swagger/shift/shiftType.yaml',
+        'swagger/shift/shiftAssignment.yaml',
+        'swagger/shift/shiftRequest.yaml',
+        'swagger/recruitment/jobOpening.yaml',
+        'swagger/recruitment/jobOffer.yaml',
+        'swagger/recruitment/jobApplicant.yaml',
+        'swagger/recruitment/test.yaml',
+        'swagger/leave/allocation.yaml',
+        'swagger/leave/application.yaml',
+        'swagger/leave/leave-type.yaml',
+        'swagger/leave/period.yaml',
+        'swagger/leave/policy.yaml'
+      ],
     };
 
     const specs = swaggerJSDoc(options);

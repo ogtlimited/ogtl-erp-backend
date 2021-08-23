@@ -11,7 +11,8 @@ export enum TestType{
   FORMAL_WRITING,
   SOFT_SKILLS
 }
-export interface Test {
+export interface ITest {
+  _id: string;
   test_type:TestType;
   job_applicant_id: string;
   status: TestStatus;

@@ -1,4 +1,4 @@
-export interface ShiftAssignment {
+export interface IShiftAssignment {
   _id:string;
   employee_id:string;
   shift_type_id: string;
