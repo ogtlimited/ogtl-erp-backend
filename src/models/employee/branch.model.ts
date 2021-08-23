@@ -9,7 +9,6 @@ const branchSchema: Schema = new Schema(
             required: true,
             unique: true,
           },
-         
     },
     {
         timestamps: true,

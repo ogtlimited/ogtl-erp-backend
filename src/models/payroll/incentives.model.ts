@@ -1,17 +1,17 @@
 /* eslint-disable prettier/prettier */
-import { Incentives } from '@interfaces/payroll/incentives.interface';
-import { model, Schema, Document } from 'mongoose';
+// import { Incentives } from '@interfaces/payroll/incentives.interface';
+import { model, Schema} from 'mongoose';
 
 const incentiveSchema: Schema = new Schema(
   {
-    employee: {
+    employeeId: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "Employee"
     },
     additionalSalary: {
       type: Schema.Types.ObjectId,
-      ref: "Additional Salary"
+      ref: "AdditionalSalary"
     },
     salaryComponent: {
       type: Schema.Types.ObjectId,
@@ -22,6 +22,14 @@ const incentiveSchema: Schema = new Schema(
       type: Schema.Types.ObjectId,
       required: true,
       ref: "Status"
+    },
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: "Employee"
+    },
+    updatedBy: {
+      type: Schema.Types.ObjectId,
+      ref: "Employee"
     },
     payrollDate: {
       type: Date
@@ -35,5 +43,5 @@ const incentiveSchema: Schema = new Schema(
   },
 );
 
-const incentiveModel = model<Incentives & Document>('Incentive', incentiveSchema);
+const incentiveModel = model('Incentive', incentiveSchema);
 export default incentiveModel;

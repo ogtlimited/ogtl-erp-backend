@@ -1,4 +1,4 @@
-export interface SalaryDetails{
+export interface SalaryDetail{
     _id: string;
     employee_id: string;
     salary_mode: string;

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Grade } from "@/interfaces/employee-interface/grade.interface";
 import { model, Schema, Document } from 'mongoose';
 

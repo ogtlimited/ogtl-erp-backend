@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Exit } from "@/interfaces/employee-interface/exit.interface";
 import { model, Schema, Document }  from 'mongoose';
 import mongoose from 'mongoose';

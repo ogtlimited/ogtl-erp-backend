@@ -1,4 +1,5 @@
-import { PersonalDetails } from "@/interfaces/employee-interface/personal-details.interface";
+/* eslint-disable prettier/prettier */
+import { PersonalDetail } from "@/interfaces/employee-interface/personal-details.interface";
 import mongoose from 'mongoose';
 import { model, Schema, Document } from 'mongoose';
 
@@ -39,6 +40,6 @@ const personalDetailsSchema: Schema = new Schema(
     
     );
 
-const userModel = model<PersonalDetails & Document>('PersonalDetails', personalDetailsSchema);
+const userModel = model<PersonalDetail & Document>('PersonalDetails', personalDetailsSchema);
 
 export default userModel;

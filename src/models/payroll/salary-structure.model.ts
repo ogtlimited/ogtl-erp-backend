@@ -1,28 +1,37 @@
 /* eslint-disable prettier/prettier */
-import { SalaryStructure } from '@interfaces/payroll/salary-structure.interface';
-import { model, Schema, Document } from 'mongoose';
+// import { ISalaryStructure } from '@interfaces/payroll/salary-structure.interface';
+import { ISalaryStructure } from '@/interfaces/payroll/salary-structure.interface';
+import { model, Schema } from 'mongoose';
 
 const salaryStructureSchema: Schema = new Schema(
   {
     payrollFrequency: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "PayrollFrequency"
+      ref: 'PayrollFrequency',
     },
-    salaryDeductions: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "SalaryDeduction"
-    },
+    salaryDeductions: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'SalaryDeduction',
+      },
+    ],
     status: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "Status"
+      ref: 'Status',
     },
-    currency: {
+    // currency: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: 'Currency',
+    // },
+    createdBy: {
       type: Schema.Types.ObjectId,
-      required: true,
-      ref: "Currency"
+      ref: 'Employee',
+    },
+    updatedBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'Employee',
     },
     hourRate: {
       type: Number,
@@ -42,5 +51,5 @@ const salaryStructureSchema: Schema = new Schema(
   },
 );
 
-const salaryStructureModel = model<SalaryStructure & Document>('SalaryStructure', salaryStructureSchema);
+const salaryStructureModel = model<ISalaryStructure & Document>('SalaryStructure', salaryStructureSchema);
 export default salaryStructureModel;

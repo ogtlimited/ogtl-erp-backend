@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { History } from '@/interfaces/employee-interface/history.interface';
 import mongoose from 'mongoose';
 import { model, Schema, Document } from 'mongoose';

@@ -1,4 +1,5 @@
-import { ContactDetails } from "@/interfaces/employee-interface/contact-details.interface";
+/* eslint-disable prettier/prettier */
+import { ContactDetail} from "@/interfaces/employee-interface/contact-details.interface";
 import { model, Schema, Document} from 'mongoose';
 import mongoose from "mongoose";
 
@@ -43,6 +44,6 @@ const contactDetailsSchema: Schema = new Schema (
       },
     );
 
-    const userModel = model<ContactDetails & Document>('ContactDetails',contactDetailsSchema );
+    const userModel = model<ContactDetail & Document>('ContactDetails',contactDetailsSchema );
 
     export default userModel;
