@@ -11,35 +11,61 @@ import UsersRoute from '@routes/users.route';
 import validateEnv from '@utils/validateEnv';
 import EmployeesRoute from '@routes/employee/employee.route';
 import ShiftTypeRoute from './routes/shift/shiftType';
+import LeaveAllocationRoute from './routes/leave/allocation.route';
+import LeaveApplicationRoute from './routes/leave/application.route';
+import LeaveTypeRoutes from './routes/leave/leave-type.route';
+import LeavePeriodRoute from './routes/leave/period.route';
+import LeavePolicyRoutes from './routes/leave/policy.route';
+import BranchRoute from './routes/employee/branch.route';
+import ContactDetailsRoute from './routes/employee/contact-details.route';
+import DesignationRoute from './routes/employee/designation.route';
+import EducationRoute from './routes/employee/education.route';
+import EmergencyContactRoute from './routes/employee/emergency-contact.route';
+import EmployeeTypeRoute from './routes/employee/employee-type.route';
+import ExitRoute from './routes/employee/exit.route';
+import GradeRoute from './routes/employee/grade.route';
+import HistoryRoute from './routes/employee/history.route';
+import PersonalDetailsRoute from './routes/employee/personal-details.route';
+import SalaryDetailsRoute from './routes/employee/salary-details.route';
+import WorkExperienceRoute from './routes/employee/work-experience.route';
 import ShiftRequestRoute from '@routes/shift/shiftRequest';
 import JobOpeningRoute from '@routes/recruitment/jobOpening.route';
 import JobOfferRoute from '@routes/recruitment/jobOffer.route';
 import JobApplicantRoute from '@routes/recruitment/jobApplicant.route';
 import TestRoute from '@routes/recruitment/test.route';
-import LeaveAllocationRoute from '@routes/leave/allocation.route';
-import LeaveApplicationRoute from '@routes/leave/application.route';
-import LeaveTypeRoutes from '@routes/leave/leave-type.route';
-import LeavePeriodRoute from '@routes/leave/period.route';
-import LeavePolicyRoutes from '@routes/leave/policy.route';
+
 
 validateEnv();
 
-const app = new App([new IndexRoute(),
-  new UsersRoute(),
-  new AuthRoute(),
-  new EmployeesRoute(),
-  new ShiftTypeRoute(),
-  new ShiftAssignmentRoute(),
-  new ShiftRequestRoute(),
-  new JobOpeningRoute(),
-  new JobOfferRoute(),
-  new JobApplicantRoute(),
-  new TestRoute(),
-  new LeaveAllocationRoute(),
-  new LeaveApplicationRoute(),
-  new LeaveTypeRoutes(),
-  new LeavePeriodRoute(),
-  new LeavePolicyRoutes()
+const app = new App([
+    new IndexRoute(), new UsersRoute(),
+    new AuthRoute(), new EmployeesRoute(),
+    new ShiftTypeRoute(),
+    new LeaveAllocationRoute(),
+    new LeaveApplicationRoute(),
+    new LeaveTypeRoutes(),
+    new LeavePeriodRoute(),
+    new LeavePolicyRoutes(),
+    new BranchRoute(),
+    new ContactDetailsRoute(),
+    new DesignationRoute(),
+    new EducationRoute(),
+    new EmployeeTypeRoute(),
+    new EmergencyContactRoute(),
+    new ExitRoute(),
+    new GradeRoute(),
+    new HistoryRoute(),
+    new PersonalDetailsRoute(),
+    new SalaryDetailsRoute(),
+    new WorkExperienceRoute(),
+    new ShiftRequestRoute(),
+    new JobOpeningRoute(),
+    new JobOfferRoute(),
+    new JobApplicantRoute(),
+    new TestRoute(),
+    new ShiftAssignmentRoute(),
+
+
 ]);
 
 app.listen();
