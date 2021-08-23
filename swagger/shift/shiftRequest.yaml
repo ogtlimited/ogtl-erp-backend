@@ -1,0 +1,134 @@
+tags:
+  - name: shiftRequest
+    description: shiftRequest API
+
+paths:
+  # [GET] shiftRequest
+  /shiftRequest:
+    get:
+      tags:
+        - shiftRequest
+      summary: Find All shiftRequest
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+    # [POST] shiftRequest
+    post:
+      tags:
+        - shiftRequest
+      summary: Add shift Request
+      parameters:
+        - name: body
+          in: body
+          description: shift request Data
+          required: true
+          schema:
+            $ref: '#/definitions/shiftRequest'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  # [GET] shiftRequest/id
+  /shiftRequest/{id}:
+    get:
+      tags:
+        - shiftRequest
+      summary: Find shift Request By Id
+      parameters:
+        - name: id
+          in: path
+          description: shift Request Id
+          required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [PATCH] shiftRequest/id
+    patch:
+      tags:
+        - shiftRequest
+      summary: Update shift Request By Id
+      parameters:
+        - name: id
+          in: path
+          description: shift Request Id
+          required: true
+        - name: body
+          in: body
+          description: shift Request Data
+          required: true
+          schema:
+            $ref: '#/definitions/shiftRequest'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [DELETE] shiftRequest/id
+    delete:
+      tags:
+        - shiftRequest
+      summary: Delete shift Request By Id
+      parameters:
+        - name: id
+          in: path
+          description: shift Request Id
+          required: true
+          schema:
+            type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  shiftRequest:
+    type: object
+    required:
+      - employee_id
+      - shift_type_id
+      - from_date
+      - to_date
+    properties:
+      id:
+        description: shiftRequest Id
+      employee_id:
+        type: string
+        description: Employee id
+      shift_type_id:
+        type: string
+        description: type of shift
+      from_date:
+        type: Date
+        description: from time
+      to_date:
+        type: Date
+        description: to time
+
+schemes:
+  - https
+  - http

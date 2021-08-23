@@ -1,5 +1,5 @@
 import {model,Schema,Document} from "mongoose"
-import { JobOpening, Status } from '@interfaces/recruitment/job_opening.interface';
+import { IJobOpening, Status } from '@interfaces/recruitment/job_opening.interface';
 
 const jobOpeningSchema: Schema = new Schema({
   job_title: {
@@ -29,6 +29,6 @@ const jobOpeningSchema: Schema = new Schema({
   }
 })
 
-const jobOpeningModel = model<JobOpening & Document>('JobOpening',jobOpeningSchema)
+const jobOpeningModel = model<IJobOpening & Document>('JobOpening',jobOpeningSchema)
 
 export default jobOpeningModel

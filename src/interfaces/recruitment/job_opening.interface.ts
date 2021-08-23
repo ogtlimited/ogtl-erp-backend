@@ -1,6 +1,6 @@
 export enum Status { CLOSED,OPEN}
 
-export interface JobOpening {
+export interface IJobOpening {
   _id: string;
   job_title: string;
   designation_id: string;

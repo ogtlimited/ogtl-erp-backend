@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import {model,Schema,Document} from "mongoose"
-import { Test, TestStatus, TestType } from '@interfaces/recruitment/test.interface';
+import { ITest, TestStatus, TestType } from '@interfaces/recruitment/test.interface';
 
 const testSchema: Schema = new Schema({
   test_type:{
@@ -42,6 +42,6 @@ const testSchema: Schema = new Schema({
   }
 })
 
-const testModel = model<Test & Document>('Test',testSchema)
+const testModel = model<ITest & Document>('Test',testSchema)
 
 export default testModel

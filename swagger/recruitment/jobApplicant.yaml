@@ -1,0 +1,147 @@
+tags:
+  - name: jobApplicant
+    description: jobApplicant API
+
+paths:
+  # [GET] jobApplicant
+  /jobApplicant:
+    get:
+      tags:
+        - jobApplicant
+      summary: Find All jobApplicants
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+    # [POST] jobApplicant
+    post:
+      tags:
+        - jobApplicant
+      summary: Add job applicant
+      parameters:
+        - name: body
+          in: body
+          description: job applicant Data
+          required: true
+          schema:
+            $ref: '#/definitions/jobApplicant'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  # [GET] jobApplicant/id
+  /jobApplicant/{id}:
+    get:
+      tags:
+        - jobApplicant
+      summary: Find job applicant By Id
+      parameters:
+        - name: id
+          in: path
+          description: job applicant Id
+          required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [PATCH] jobApplicant/id
+    patch:
+      tags:
+        - jobApplicant
+      summary: Update job applicant By Id
+      parameters:
+        - name: id
+          in: path
+          description: job applicant Id
+          required: true
+        - name: body
+          in: body
+          description: job applicant Data
+          required: true
+          schema:
+            $ref: '#/definitions/jobApplicant'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [DELETE] jobApplicant/id
+    delete:
+      tags:
+        - jobApplicant
+      summary: Delete job applicant By Id
+      parameters:
+        - name: id
+          in: path
+          description: job applicant Id
+          required: true
+          schema:
+            type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  jobApplicant:
+    type: object
+    required:
+      - applicant_name
+      - email_address
+      - job_opening_id
+      - status
+      - resume_attachment
+    properties:
+      id:
+        description: job Offer Id
+      applicant_name:
+        type: string
+        description: Applicant name
+      email_address:
+        type: string
+        description: email address
+      job_opening_id:
+        type: string
+        description: job opening Id
+      status:
+        type: string
+        description: status of job applicant
+      resume_attachment:
+        type: string
+        description: applicant's resume
+      application_source:
+        type: string
+        description: applicantion source
+      cover_letter:
+        type: string
+        description: cover letter
+      video_attachment:
+        type: string
+        description: video attachment
+
+schemes:
+  - https
+  - http
