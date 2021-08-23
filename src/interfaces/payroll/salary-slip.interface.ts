@@ -1,5 +1,9 @@
 /* eslint-disable prettier/prettier */
-
+/*
+ask if the followinf fields are needed.
+// designation: string;
+// department: string,;
+*/
 export interface ISalarySlip{
     employee: string;
     designation: string;

@@ -5,21 +5,18 @@ import { IsString, IsDate } from 'class-validator';
 
 export class CreateIncentiveDto {  
   @IsString()
-  public _id: string;
+  public employeeId: string;
 
   @IsString()
-  public employee: string;
+  public additionalSalary: string;
 
   @IsString()
-  public shift: string;
+  public salaryComponent: string;
 
   @IsString()
   public status: string;
 
-  @IsDate()
-  public startTime: Date;
-
-  @IsDate()
-  public endTime: Date;
+  @IsString()
+  public payrollDate: Date;
 
 }

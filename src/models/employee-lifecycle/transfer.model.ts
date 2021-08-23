@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Transfer } from '@interfaces/employee-lifecycle/transfer.interface';
+import { ITransfer } from '@interfaces/employee-lifecycle/transfer.interface';
 import { model, Schema, Document } from 'mongoose';
 
 const transferSchema: Schema = new Schema(
@@ -44,5 +44,5 @@ const transferSchema: Schema = new Schema(
   },
 );
 
-const transferModel = model<Transfer & Document>('Transfer', transferSchema);
+const transferModel = model<ITransfer & Document>('Transfer', transferSchema);
 export default transferModel;
