@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import ShiftAssignmentRoute from '@routes/shift/shiftAssignment';
 
 process.env['NODE_CONFIG_DIR'] = __dirname + '/configs';

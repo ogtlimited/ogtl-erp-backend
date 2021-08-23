@@ -33,10 +33,10 @@ const WRITE = 2; // 001
 const UPDATE = 3; // 001
 const DELETE = 4; // 001
 
-class userPermissions{
+export class userPermissions{
     permission: any;
-    constructor(permission = 0){
-        this.permission = permission
+    constructor(perm = 0){
+        this.permission = perm
     }
     getAllPermissions(){
         return {
@@ -46,15 +46,16 @@ class userPermissions{
             Delete: !!(this.permission & DELETE),
         }
     }
-    addPermissions(){
-        return {
-            
-        }
+    addPermissions(perm){
+      this.permission = this.permission | perm
+    }
+    removePermissions(perm){
+      this.permission = this.permission | perm
     }
 }
 
 
-const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+const permissionMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
   try {
     const Authorization = req.cookies['Authorization'] || req.header('Authorization').split('Bearer ')[1] || null;
 
@@ -63,7 +64,24 @@ const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFun
       const verificationResponse = (await jwt.verify(Authorization, secretKey)) as DataStoredInToken;
       const userId = verificationResponse._id;
       const findUser = await userModel.findById(userId);
+      const permission = new userPermissions(findUser.permissionLevel).getAllPermissions()
+      if(req.method === 'get'){
+        if(permission.Read === true){
+          req.user = findUser;
+          next();
+        }else{
+          next(new HttpException(401, 'You have insufficient authorization level'));
+        }
 
+      }else if(req.method === 'post'){
+        if(permission.Write === true){
+          req.user = findUser;
+          next();
+        }else{
+          next(new HttpException(401, 'You have insufficient authorization level'));
+        }
+
+      }
       if (findUser) {
         req.user = findUser;
         next();
@@ -78,5 +96,5 @@ const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFun
   }
 };
 
-export default authMiddleware;
+export default permissionMiddleware;
 
