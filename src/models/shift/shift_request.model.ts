@@ -1,4 +1,4 @@
-import { ShiftRequest } from '@interfaces/shift-interface/shift_request.interface';
+import { IShiftRequest } from '@interfaces/shift-interface/shift_request.interface';
 import { model, Schema, Document } from 'mongoose';
 
 const shiftRequestSchema: Schema = new Schema(
@@ -27,6 +27,6 @@ const shiftRequestSchema: Schema = new Schema(
   },
 )
 
-const shiftRequestModel = model<ShiftRequest & Document>('ShiftRequest', shiftRequestSchema);
+const shiftRequestModel = model<IShiftRequest & Document>('ShiftRequest', shiftRequestSchema);
 
 export default shiftRequestModel;

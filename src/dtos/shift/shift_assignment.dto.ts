@@ -1,10 +1,28 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsDate } from 'class-validator';
+import { IsString, IsDate ,IsNotEmpty} from 'class-validator';
 
-export class CreateShiftRequestDto {
+export class CreateShiftAssignmentDto {
+  @IsNotEmpty()
   @IsString()
   public shift_type_id: string;
 
+  @IsNotEmpty()
+  @IsString()
+  public employee_id: string;
+
+  @IsDate()
+  public assignment_date: Date;
+}
+
+export class UpdateShiftAssignmentDto {
+  @IsString()
+  public _id: string;
+
+  @IsNotEmpty()
+  @IsString()
+  public shift_type_id: string;
+
+  @IsNotEmpty()
   @IsString()
   public employee_id: string;
 

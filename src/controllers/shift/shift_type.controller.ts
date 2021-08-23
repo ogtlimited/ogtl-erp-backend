@@ -1,10 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { NextFunction, Request, Response } from 'express';
 import { CreateShiftTypeDto } from '@dtos/shift/shift_type.dto';
-import { ShiftType } from '@interfaces/shift-interface/shift_type.interface';
-
-
-
+import { IShiftType } from '@interfaces/shift-interface/shift_type.interface';
 import shiftTypeService from '@/services/shift/shift.service';
 
 class ShiftTypeController {
@@ -12,7 +9,7 @@ class ShiftTypeController {
 
   public getShifts = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const findAllshiftsData: ShiftType[] = await this.shiftService.findAllshiftType();
+      const findAllshiftsData: IShiftType[] = await this.shiftService.findAllshiftType();
 
       res.status(200).json({ data: findAllshiftsData, message: 'findAll' });
     } catch (error) {
@@ -23,7 +20,7 @@ class ShiftTypeController {
   public getShiftById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const shiftId: string = req.params.id;
-      const findOneshiftData: ShiftType = await this.shiftService.findshiftTypeById(shiftId);
+      const findOneshiftData: IShiftType = await this.shiftService.findshiftTypeById(shiftId);
 
       res.status(200).json({ data: findOneshiftData, message: 'findOne' });
     } catch (error) {
@@ -34,7 +31,7 @@ class ShiftTypeController {
   public createShift = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const shiftData: CreateShiftTypeDto = req.body;
-      const createshiftData: ShiftType = await this.shiftService.createshiftType(shiftData);
+      const createshiftData: IShiftType = await this.shiftService.createshiftType(shiftData);
 
       res.status(201).json({ data: createshiftData, message: 'created' });
     } catch (error) {
@@ -46,7 +43,7 @@ class ShiftTypeController {
     try {
       const shiftId: string = req.params.id;
       const shiftData: CreateShiftTypeDto = req.body;
-      const updateshiftData: ShiftType = await this.shiftService.updateshiftType(shiftId, shiftData);
+      const updateshiftData: IShiftType = await this.shiftService.updateshiftType(shiftId, shiftData);
 
       res.status(200).json({ data: updateshiftData, message: 'updated' });
     } catch (error) {
@@ -57,7 +54,7 @@ class ShiftTypeController {
   public deleteShift = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const shiftId: string = req.params.id;
-      const deleteshiftData = await this.shiftService.deleteshiftType;(shiftId);
+      const deleteshiftData = await this.shiftService.deleteshiftType(shiftId);
 
       res.status(200).json({ data: deleteshiftData, message: 'deleted' });
     } catch (error) {

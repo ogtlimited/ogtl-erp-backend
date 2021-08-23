@@ -1,0 +1,138 @@
+tags:
+  - name: jobOpening
+    description: jobOpening API
+
+paths:
+  # [GET] jobOpening
+  /jobOpening:
+    get:
+      tags:
+        - jobOpening
+      summary: Find All jobOpening
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+    # [POST] jobOpening
+    post:
+      tags:
+        - jobOpening
+      summary: Add job Opening
+      parameters:
+        - name: body
+          in: body
+          description: job Opening Data
+          required: true
+          schema:
+            $ref: '#/definitions/jobOpening'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  # [GET] jobOpening/id
+  /jobOpening/{id}:
+    get:
+      tags:
+        - jobOpening
+      summary: Find job Opening By Id
+      parameters:
+        - name: id
+          in: path
+          description: job Opening Id
+          required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [PATCH] jobOpening/id
+    patch:
+      tags:
+        - jobOpening
+      summary: Update job Opening By Id
+      parameters:
+        - name: id
+          in: path
+          description: job Opening Id
+          required: true
+        - name: body
+          in: body
+          description: job Opening Data
+          required: true
+          schema:
+            $ref: '#/definitions/jobOpening'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [DELETE] jobOpening/id
+    delete:
+      tags:
+        - jobOpening
+      summary: Delete job Opening By Id
+      parameters:
+        - name: id
+          in: path
+          description: job Opening Id
+          required: true
+          schema:
+            type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  jobOpening:
+    type: object
+    required:
+      - job_title
+      - designation_id
+      - campaign_id
+      - status
+      - description
+    properties:
+      id:
+        description: job Opening Id
+      job_title:
+        type: string
+        description: Employee id
+      designation_id:
+        type: string
+        description: designation id
+      campaign_id:
+        type: string
+        description: campaign id
+      status:
+        type: string
+        description: status of job opening
+      description:
+        type: string
+        description: description of job opening
+
+schemes:
+  - https
+  - http

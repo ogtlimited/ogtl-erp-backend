@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-export interface ShiftType {
+export interface IShiftType {
   _id: string;
   shift_name: string;
   start_time: string;
