@@ -15,6 +15,18 @@ import LeaveApplicationRoute from './routes/leave/application.route';
 import LeaveTypeRoutes from './routes/leave/leave-type.route';
 import LeavePeriodRoute from './routes/leave/period.route';
 import LeavePolicyRoutes from './routes/leave/policy.route';
+import BranchRoute from './routes/employee/branch.route';
+import ContactDetailsRoute from './routes/employee/contact-details.route';
+import DesignationRoute from './routes/employee/designation.route';
+import EducationRoute from './routes/employee/education.route';
+import EmergencyContactRoute from './routes/employee/emergency-contact.route';
+import EmployeeTypeRoute from './routes/employee/employee-type.route';
+import ExitRoute from './routes/employee/exit.route';
+import GradeRoute from './routes/employee/grade.route';
+import HistoryRoute from './routes/employee/history.route';
+import PersonalDetailsRoute from './routes/employee/personal-details.route';
+import SalaryDetailsRoute from './routes/employee/salary-details.route';
+import WorkExperienceRoute from './routes/employee/work-experience.route';
 
 validateEnv();
 
@@ -26,7 +38,19 @@ const app = new App([
     new LeaveApplicationRoute(),
     new LeaveTypeRoutes(),
     new LeavePeriodRoute(),
-    new LeavePolicyRoutes()
+    new LeavePolicyRoutes(),
+    new BranchRoute(),
+    new ContactDetailsRoute(),
+    new DesignationRoute(),
+    new EducationRoute(),
+    new EmployeeTypeRoute(),
+    new EmergencyContactRoute(),
+    new ExitRoute(),
+    new GradeRoute(),
+    new HistoryRoute(),
+    new PersonalDetailsRoute(),
+    new SalaryDetailsRoute(),
+    new WorkExperienceRoute()
 
 ]);
 

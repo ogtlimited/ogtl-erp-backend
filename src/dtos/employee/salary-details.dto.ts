@@ -1,9 +1,10 @@
-import {IsDate, IsString } from 'class-validator';
+import {IsDate, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateSalaryDetailsDto{
      @IsString()
         public _id: string;
-     
+    
+    @IsNotEmpty()
     @IsString()
         public employee_id: string;
 
@@ -18,6 +19,29 @@ export class CreateSalaryDetailsDto{
     
     @IsString()
         public bank_account_number: string;
+
+
+}
+
+export class UpdateSalaryDetailsDto{
+    @IsString()
+       public _id: string;
+    
+   @IsNotEmpty()
+   @IsString()
+       public employee_id: string;
+
+   @IsString()
+       public salary_mode: string;
+   
+   @IsString()
+       public bank_name: string;
+   
+   @IsString()
+      public bank_code: string;
+   
+   @IsString()
+       public bank_account_number: string;
 
 
 }
