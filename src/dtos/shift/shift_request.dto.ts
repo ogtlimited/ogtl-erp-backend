@@ -2,6 +2,7 @@
 import { IsString,IsDate } from 'class-validator';
 
 export class CreateShiftRequestDto {
+  
   @IsString()
   public shift_type_id: string;
 

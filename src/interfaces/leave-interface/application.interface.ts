@@ -1,4 +1,5 @@
-export interface Application{
+/* eslint-disable prettier/prettier */
+export interface ILeaveApplication{
     _id: string;
     employee_id: string;
     leave_type_id: string;

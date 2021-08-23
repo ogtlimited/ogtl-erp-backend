@@ -1,32 +1,32 @@
 tags:
-- name: users
-  description: users API
+- name: Leave Period
+  description: Leave period API
 
 paths:
-# [GET] users
-  /api/users:
+# [GET] Period
+  /api/period:
     get:
       tags:
-      - users
-      summary: Find All Users
+      - Period
+      summary: Find All Period
       responses:
         200:
           description: 'OK'
         500:
           description: 'Server Error'
 
-# [POST] users
+# [POST] Period
     post:
       tags:
-      - users
-      summary: Add User
+      - Period
+      summary: Add leave Period
       parameters:
       - name: body
         in: body
-        description: user Data
+        description: leave Period Data
         required: true
         schema:
-          $ref: '#/definitions/users'
+          $ref: '#/definitions/Period'
       responses:
         201:
           description: 'Created'
@@ -37,16 +37,16 @@ paths:
         500:
           description: 'Server Error'
 
-# [GET] users/id
-  /api/users/{id}:
+# [GET] Period/id
+  /api/period/{id}:
     get:
       tags:
-      - users
-      summary: Find User By Id
+      - Period
+      summary: Find leave Period By Id
       parameters:
       - name: id
         in: path
-        description: User Id
+        description: leave Period Id
         required: true
       responses:
         200:
@@ -56,22 +56,22 @@ paths:
         500:
           description: 'Server Error'
 
-# [PUT] users/id
+# [PUT] Period/id
     put:
       tags:
-      - users
-      summary: Update User By Id
+      - Period
+      summary: Update leave Period By Id
       parameters:
       - name: id
         in: path
-        description: user Id
+        description: leave Period Id
         required: true
       - name: body
         in: body
-        description: user Data
+        description: leave Period Data
         required: true
         schema:
-          $ref: '#/definitions/users'
+          $ref: '#/definitions/Period'
       responses:
         200:
           description: 'OK'
@@ -82,15 +82,15 @@ paths:
         500:
           description: 'Server Error'
 
-# [DELETE] users/id
+# [DELETE] Period/id
     delete:
       tags:
-      - users
-      summary: Delete User By Id
+      - Period
+      summary: Delete leave Period By Id
       parameters:
       - name: id
         in: path
-        description: user Id
+        description: leave Period Id
         required: true
         schema:
           type: string
@@ -106,20 +106,24 @@ paths:
 
 # definitions
 definitions:
-  users:
+  Period:
     type: object
     required:
-        - email
-        - password
+        - from_date
+        - to_date
     properties:
       id:
-        description: user Id
-      email:
         type: string
-        description: user Email
-      password:
-        type: string
-        description: user Password
+        description: Period Id
+      from_date:
+        type: date
+        description: start date
+      to_date:
+        type: date
+        description: end date
+      is_active:
+        type: boolean
+        description: leave is active
 
 schemes:
  - https
