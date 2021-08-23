@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 export interface ITransfer {
-    employee: string;
-    newEmployeeID: string;
+    employeeId: string;
     status: string;
     branch: string;  
     department: string;

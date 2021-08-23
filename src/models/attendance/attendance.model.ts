@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 // import { IAttendance } from '@interfaces/attendance-interface/attendance-interface';
-import { model, Schema, Document } from 'mongoose';
+import { model, Schema } from 'mongoose';
 
 const attendanceSchema: Schema = new Schema(
   {
@@ -22,7 +22,7 @@ const attendanceSchema: Schema = new Schema(
     startTime: {
       type: String
     },
-    endName: {
+    endTime: {
       type: String
     }
   },

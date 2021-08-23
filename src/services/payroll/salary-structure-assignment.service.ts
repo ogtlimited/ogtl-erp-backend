@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { CreateSalaryStructureAssignmentDto } from '@dtos/payroll/salary-structure-assigment.dto';
+import { CreateSalaryStructureAssignmentDto } from '@/dtos/payroll/salary-structure-assignment.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { ISalaryStructureAssignment } from '@/interfaces/payroll/salary-structure-assignment.interface';
-import salaryStructureAssignmentModel  from '@models/payroll/salary-structure-assigment.model';
+import salaryStructureAssignmentModel  from '@/models/payroll/salary-structure-assignment.model';
 import { isEmpty } from '@utils/util';
 // import omit from 'lodash/omit'
 
