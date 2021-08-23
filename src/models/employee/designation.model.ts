@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Designation } from '@/interfaces/employee-interface/designation.interface';
 import { model, Schema, Document} from 'mongoose';
 import mongoose from "mongoose";

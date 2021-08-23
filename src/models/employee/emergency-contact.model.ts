@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { EmergencyContact } from '@/interfaces/employee-interface/emergency-contact.interface';
 import { model, Schema, Document} from 'mongoose';
 import mongoose from "mongoose";
@@ -23,11 +24,9 @@ const emergencyContactSchema: Schema = new Schema(
       },
 
     },
-    
     {
         timestamps: true,
     },
-    
 );
 
 const userModel = model<EmergencyContact & Document>('EmergencyContact', emergencyContactSchema);

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { ContactDetail} from "@/interfaces/employee-interface/contact-details.interface";
 import { model, Schema, Document} from 'mongoose';
 import mongoose from "mongoose";

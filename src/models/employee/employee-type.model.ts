@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { EmployeeType } from '@/interfaces/employee-interface/employee-type.interface';
 import { model, Schema, Document} from 'mongoose';
 import mongoose from "mongoose";
