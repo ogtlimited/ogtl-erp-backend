@@ -4,7 +4,7 @@ tags:
 
 paths:
 # [GET] allocation
-  /api/allocation:
+  /api/leave-allocation:
     get:
       tags:
       - allocation
@@ -38,7 +38,7 @@ paths:
           description: 'Server Error'
 
 # [GET] allocation/id
-  /api/allocation/{id}:
+  /api/leave-allocation/{id}:
     get:
       tags:
       - allocation
@@ -106,7 +106,7 @@ paths:
 
 # definitions
 definitions:
-  allocation:
+  Leave allocation:
     type: object
     required:
         - from_date

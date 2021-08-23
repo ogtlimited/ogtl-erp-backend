@@ -1,4 +1,4 @@
-export interface ContactDetails {
+export interface ContactDetail {
     _id: string;
     employee_id: string;
     mobile: string;

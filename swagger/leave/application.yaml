@@ -4,7 +4,7 @@ tags:
 
 paths:
 # [GET] Application
-  /api/application:
+  /api/leave-application:
     get:
       tags:
       - Application
@@ -38,7 +38,7 @@ paths:
           description: 'Server Error'
 
 # [GET] Application/id
-  /api/application/{id}:
+  /api/leave-application/{id}:
     get:
       tags:
       - Application
@@ -106,7 +106,7 @@ paths:
 
 # definitions
 definitions:
-  Application:
+  Leave Application:
     type: object
     required:
         - from_date

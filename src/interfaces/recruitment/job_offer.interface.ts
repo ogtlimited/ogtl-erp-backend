@@ -3,7 +3,8 @@ export enum JobOfferStatus {
   ACCEPTED,
   REJECTED
 }
-export interface JobOffer {
+export interface IJobOffer {
+  _id: string;
   job_applicant_id: string;
   status: JobOfferStatus;
   offer_date: Date;

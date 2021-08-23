@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { ShiftType } from '@interfaces/shift-interface/shift_type.interface';
+import { IShiftType } from '@interfaces/shift-interface/shift_type.interface';
 import { model, Schema, Document } from 'mongoose';
 
 const shiftTypeSchema: Schema = new Schema(
@@ -22,6 +22,6 @@ const shiftTypeSchema: Schema = new Schema(
   },
 )
 
-const shiftTypeModel = model<ShiftType & Document>('ShiftType', shiftTypeSchema);
+const shiftTypeModel = model<IShiftType & Document>('ShiftType', shiftTypeSchema);
 
 export default shiftTypeModel;

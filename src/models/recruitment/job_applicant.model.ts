@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import {model,Schema,Document} from "mongoose"
-import { JobApplicant,JobApplicantStatus } from '@interfaces/recruitment/job_applicant.interface';
+import { IJobApplicant,JobApplicantStatus } from '@interfaces/recruitment/job_applicant.interface';
 
 const jobApplicantSchema: Schema = new Schema({
   applicant_name: {
@@ -40,6 +40,6 @@ const jobApplicantSchema: Schema = new Schema({
   }
 })
 
-const jobApplicantModel = model<JobApplicant & Document>('JobApplicant',jobApplicantSchema)
+const jobApplicantModel = model<IJobApplicant & Document>('JobApplicant',jobApplicantSchema)
 
 export default jobApplicantModel

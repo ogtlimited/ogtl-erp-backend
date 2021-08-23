@@ -1,5 +1,5 @@
 tags:
-- name: Leave Policy
+- name: Policy
   description: Leave policy API
 
 paths:
@@ -106,7 +106,7 @@ paths:
 
 # definitions
 definitions:
-  policy:
+  Leave policy:
     type: object
     required:
         - leave_type_id

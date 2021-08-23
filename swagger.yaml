@@ -113,6 +113,7 @@ definitions:
         - password
     properties:
       id:
+        type: string
         description: user Id
       email:
         type: string
