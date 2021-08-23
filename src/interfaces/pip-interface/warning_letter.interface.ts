@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export enum Reasons {
   WORK_ABSENCE,
   DISRESPECT,
@@ -17,5 +18,7 @@ export interface IWarningLetter {
   details: string;
   actions:string;
   date_issued: Date;
+  warningCount: number;
+  isInPip: boolean
 
 }
