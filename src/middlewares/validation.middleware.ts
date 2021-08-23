@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { plainToClass } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
 import { RequestHandler } from 'express';

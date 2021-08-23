@@ -1,8 +1,15 @@
 /* eslint-disable prettier/prettier */
 export interface IAttendance {
-    startTime: Date;
-    endTime: Date;
-    employeeID: string;
-    shift: string;
-    status: string;
+    startTime: String;
+    endTime: String;
+    employeeId: string | Object | Array<Object>;
+    shiftTypeId: string;
+    statusId: string;
+}
+
+export interface IAttendanceCreatedResponse {
+    startTime: String;
+    endTime: String;
+    shiftTypeId: string;
+    statusId: string;
 }

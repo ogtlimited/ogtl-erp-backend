@@ -4,7 +4,7 @@ export enum ISalaryComponentType {
     Deduction
   }
 
-export interface SalaryComponent {
+export interface ISalaryComponent {
     salaryComponent: string;
     status: string;
     salaryComponentAbbr: string;
@@ -12,5 +12,5 @@ export interface SalaryComponent {
     isTaxApplicable: boolean;
     dependsOnPaymentDays: boolean;
     amount: Number;
-    type: Array<string>;
+    type: ISalaryComponentType;
 }

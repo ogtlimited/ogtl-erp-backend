@@ -4,9 +4,7 @@
 import { IsString, IsDate, IsBoolean, IsNumber } from 'class-validator';
 
 export class CreatePayrollDto {  
-  @IsString()
-  public _id: string;
-
+  
   @IsString()
   public branch: string;
 
@@ -14,14 +12,14 @@ export class CreatePayrollDto {
   public department: string;
 
   @IsString()
-  public status: string;
-
-  @IsString()
-  public payrollFrequency: string;
-
-  @IsString()
   public paymentAccount: string;
 
+  @IsString()
+  public status: string;
+  
+  @IsString()
+  public payrollFrequency: string;
+  
   @IsDate()
   public startDate: Date;
   
@@ -32,23 +30,18 @@ export class CreatePayrollDto {
   public salarySlipsCreated: Date;
 
   @IsBoolean()
-  public validateAttendance: Date;
+  public validateAttendance: Boolean;
   
   @IsBoolean()
-  public salarySlipsSubmitted: Date;
+  public salarySlipsSubmitted: Boolean;
   
   @IsBoolean()
-  public deductTaxForUnsubmittedTaxExemptionProof: Date;
+  public deductTaxForUnsubmittedTaxExemptionProof: Boolean;
   
   @IsBoolean()
-  public deductTaxForUnclaimedEmployeeBenefits: Date;
+  public deductTaxForUnclaimedEmployeeBenefits: Boolean;
   
   @IsNumber()
   public numberOfEmployees: Number;
-  
-//   @IsArray()
-//   public endTime: Date;
-
-  
 
 }
