@@ -114,6 +114,7 @@ definitions:
         - end_time
     properties:
       id:
+        type: string
         description: shiftType Id
       shift_name:
         type: string

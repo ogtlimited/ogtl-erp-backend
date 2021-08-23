@@ -33,10 +33,10 @@ const WRITE = 2; // 001
 const UPDATE = 3; // 001
 const DELETE = 4; // 001
 
-class userPermissions{
+export class userPermissions{
     permission: any;
-    constructor(permission = 0){
-        this.permission = permission
+    constructor(perm = 0){
+        this.permission = perm
     }
     getAllPermissions(){
         return {
@@ -46,15 +46,16 @@ class userPermissions{
             Delete: !!(this.permission & DELETE),
         }
     }
-    addPermissions(){
-        return {
-            
-        }
+    addPermissions(perm){
+      this.permission = this.permission | perm
+    }
+    removePermissions(perm){
+      this.permission = this.permission | perm
     }
 }
 
 
-const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+const permissionMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
   try {
     const Authorization = req.cookies['Authorization'] || req.header('Authorization').split('Bearer ')[1] || null;
 
@@ -63,7 +64,10 @@ const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFun
       const verificationResponse = (await jwt.verify(Authorization, secretKey)) as DataStoredInToken;
       const userId = verificationResponse._id;
       const findUser = await userModel.findById(userId);
+      if(req.method === 'get'){
+        const permission = new userPermissions(findUser.permissionLevel)
 
+      }
       if (findUser) {
         req.user = findUser;
         next();

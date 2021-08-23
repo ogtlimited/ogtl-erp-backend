@@ -11,6 +11,10 @@ const userSchema: Schema = new Schema({
     type: String,
     required: true,
   },
+  permissionLevel: {
+    type: String,
+    required: true,
+  },
 });
 
 const userModel = model<User & Document>('User', userSchema);

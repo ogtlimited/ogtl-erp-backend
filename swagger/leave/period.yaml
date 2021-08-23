@@ -4,7 +4,7 @@ tags:
 
 paths:
 # [GET] Period
-  /api/period:
+  /api/leave-period:
     get:
       tags:
       - Period
@@ -38,7 +38,7 @@ paths:
           description: 'Server Error'
 
 # [GET] Period/id
-  /api/period/{id}:
+  /api/leave-period/{id}:
     get:
       tags:
       - Period
@@ -106,7 +106,7 @@ paths:
 
 # definitions
 definitions:
-  Period:
+  Leave Period:
     type: object
     required:
         - from_date
