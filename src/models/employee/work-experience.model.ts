@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { WorkExperience } from "@/interfaces/employee-interface/work-experience.interface";
 import mongoose from 'mongoose';
 import { model, Schema, Document } from 'mongoose';

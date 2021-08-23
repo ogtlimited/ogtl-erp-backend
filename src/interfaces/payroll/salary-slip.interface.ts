@@ -4,8 +4,10 @@ ask if the followinf fields are needed.
 // designation: string;
 // department: string,;
 */
-export interface SalarySlip{
+export interface ISalarySlip{
     employee: string;
+    designation: string;
+    department: string;
     branch: string;
     status: string;
     payrollEntry: string;

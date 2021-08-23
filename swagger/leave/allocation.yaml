@@ -1,0 +1,137 @@
+tags:
+- name: Leave Allocation
+  description: Leave allocation API
+
+paths:
+# [GET] allocation
+  /api/leave-allocation:
+    get:
+      tags:
+      - allocation
+      summary: Find All allocation
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] allocation
+    post:
+      tags:
+      - allocation
+      summary: Add leave allocation
+      parameters:
+      - name: body
+        in: body
+        description: leave allocation Data
+        required: true
+        schema:
+          $ref: '#/definitions/allocation'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] allocation/id
+  /api/leave-allocation/{id}:
+    get:
+      tags:
+      - allocation
+      summary: Find leave allocation By Id
+      parameters:
+      - name: id
+        in: path
+        description: leave allocation Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PUT] allocation/id
+    put:
+      tags:
+      - allocation
+      summary: Update leave allocation By Id
+      parameters:
+      - name: id
+        in: path
+        description: leave allocation Id
+        required: true
+      - name: body
+        in: body
+        description: leave allocation Data
+        required: true
+        schema:
+          $ref: '#/definitions/allocation'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] allocation/id
+    delete:
+      tags:
+      - allocation
+      summary: Delete leave allocation By Id
+      parameters:
+      - name: id
+        in: path
+        description: leave allocation Id
+        required: true
+        schema:
+          type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  Leave allocation:
+    type: object
+    required:
+        - from_date
+        - start_time
+        - to_date
+    properties:
+      id:
+        type: string
+        description: allocation Id
+      employee_id:
+        type: string
+        description: employee id
+      from_date:
+        type: date
+        description: start time
+      to_date:
+        type: date
+        description: end time
+      new_leaves_allocation:
+        type: date
+        description: leaves allocation
+      add_unused_leaves:
+        type: string
+        description: unused leaves
+
+schemes:
+ - https
+ - http

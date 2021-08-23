@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {Education} from '@interfaces/employee-interface/education.interface';
 import { model, Schema, Document } from 'mongoose';
 const mongoose = require("mongoose");

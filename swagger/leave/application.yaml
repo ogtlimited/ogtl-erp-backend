@@ -1,32 +1,32 @@
 tags:
-- name: shiftType
-  description: shiftType API
+- name: Leave Application
+  description: Leave application API
 
 paths:
-# [GET] shiftType
-  /shiftType:
+# [GET] Application
+  /api/leave-application:
     get:
       tags:
-      - shiftType
-      summary: Find All shiftType
+      - Application
+      summary: Find All Application
       responses:
         200:
           description: 'OK'
         500:
           description: 'Server Error'
 
-# [POST] shiftType
+# [POST] application
     post:
       tags:
-      - shiftType
-      summary: Add User
+      - Application
+      summary: Add leave Application
       parameters:
       - name: body
         in: body
-        description: user Data
+        description: leave Application Data
         required: true
         schema:
-          $ref: '#/definitions/shiftType'
+          $ref: '#/definitions/Application'
       responses:
         201:
           description: 'Created'
@@ -37,16 +37,16 @@ paths:
         500:
           description: 'Server Error'
 
-# [GET] shiftType/id
-  /shiftType/{id}:
+# [GET] Application/id
+  /api/leave-application/{id}:
     get:
       tags:
-      - shiftType
-      summary: Find User By Id
+      - Application
+      summary: Find leave Application By Id
       parameters:
       - name: id
         in: path
-        description: User Id
+        description: leave Application Id
         required: true
       responses:
         200:
@@ -56,22 +56,22 @@ paths:
         500:
           description: 'Server Error'
 
-# [PUT] shiftType/id
+# [PUT] application/id
     put:
       tags:
-      - shiftType
-      summary: Update User By Id
+      - Application
+      summary: Update leave Application By Id
       parameters:
       - name: id
         in: path
-        description: user Id
+        description: leave Application Id
         required: true
       - name: body
         in: body
-        description: user Data
+        description: leave Application Data
         required: true
         schema:
-          $ref: '#/definitions/shiftType'
+          $ref: '#/definitions/Application'
       responses:
         200:
           description: 'OK'
@@ -82,15 +82,15 @@ paths:
         500:
           description: 'Server Error'
 
-# [DELETE] shiftType/id
+# [DELETE] Application/id
     delete:
       tags:
-      - shiftType
-      summary: Delete User By Id
+      - Application
+      summary: Delete leave Application By Id
       parameters:
       - name: id
         in: path
-        description: user Id
+        description: leave Application Id
         required: true
         schema:
           type: string
@@ -106,24 +106,40 @@ paths:
 
 # definitions
 definitions:
-  shiftType:
+  Leave Application:
     type: object
     required:
-        - shift_name
+        - from_date
         - start_time
-        - end_time
+        - to_date
     properties:
       id:
-        description: shiftType Id
-      shift_name:
         type: string
-        description: shift name
-      start_time:
+        description: Application Id
+      employee_id:
         type: string
+        description: employee id
+      leave_type_id:
+        type: string
+        description: leave type
+      from_date:
+        type: date
         description: start time
-      end_time:
-        type: string
+      to_date:
+        type: date
         description: end time
+      posting_date:
+        type: date
+        description: date posted
+      leave_approver:
+        type: date
+        description: Who approves leave
+      reason:
+        type: string
+        description: reason for leave
+      status:
+        type: string
+        description: leave status
 
 schemes:
  - https

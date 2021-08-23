@@ -1,7 +1,11 @@
 /* eslint-disable prettier/prettier */
-import { PayRollEntry } from '@interfaces/payroll/payroll-entry.interface';
-import { model, Schema, Document } from 'mongoose';
+import { IPayRollEntry } from '@/interfaces/payroll/payroll-Entry.interface';
+import { model, Schema } from 'mongoose';
 
+/*
+ Reconsider having an array field: employees
+
+*/
 const payRollEntrySchema: Schema = new Schema(
   {
     branch: {
@@ -27,7 +31,7 @@ const payRollEntrySchema: Schema = new Schema(
     paymentAccount: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "paymentAccount"
+      ref: "PaymentAccount"
     },
     startDate: {
       type: Date,
@@ -57,7 +61,12 @@ const payRollEntrySchema: Schema = new Schema(
       type: Boolean,
       required:true
     },
-    numberOfEmployees: [ 
+    numberOfEmployees: 
+      {
+          type: Number,
+          required: true
+      },
+    employees:[ 
       {
           type: Schema.Types.ObjectId,
           ref: "Employee"
@@ -69,5 +78,5 @@ const payRollEntrySchema: Schema = new Schema(
   },
 );
 
-const payRollEntryModel = model<PayRollEntry & Document>('PayRollEntry', payRollEntrySchema);
+const payRollEntryModel = model<IPayRollEntry & Document>('PayRollEntry', payRollEntrySchema);
 export default payRollEntryModel;

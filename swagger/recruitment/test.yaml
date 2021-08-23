@@ -1,0 +1,148 @@
+tags:
+  - name: test
+    description: test API
+
+paths:
+  # [GET] test
+  /test:
+    get:
+      tags:
+        - test
+      summary: Find All tests
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+    # [POST] test
+    post:
+      tags:
+        - test
+      summary: Add test
+      parameters:
+        - name: body
+          in: body
+          description: test Data
+          required: true
+          schema:
+            $ref: '#/definitions/test'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  # [GET] test/id
+  /test/{id}:
+    get:
+      tags:
+        - test
+      summary: Find test By Id
+      parameters:
+        - name: id
+          in: path
+          description: test Id
+          required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [PATCH] test/id
+    patch:
+      tags:
+        - test
+      summary: Update test By Id
+      parameters:
+        - name: id
+          in: path
+          description: test Id
+          required: true
+        - name: body
+          in: body
+          description: test Data
+          required: true
+          schema:
+            $ref: '#/definitions/test'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [DELETE] test/id
+    delete:
+      tags:
+        - test
+      summary: Delete test By Id
+      parameters:
+        - name: id
+          in: path
+          description: test Id
+          required: true
+          schema:
+            type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  test:
+    type: object
+    required:
+      - test_type
+      - job_applicant_id
+      - status
+      - hr_user
+      - score
+      - interview_date
+      - phone_number
+      - notes
+    properties:
+      id:
+        description: test Id
+      test_type:
+        type: string
+        description: test type
+      status:
+        type: string
+        description: status of test
+      hr_user:
+        type: string
+        description: hr employee who conducted the test
+      score:
+        type: string
+        description: score of the test
+      interview_date:
+        type: date
+        description: interview date of applicant
+      phone_number:
+        type: string
+        description: phone number of applicant
+      notes:
+        type: string
+        description: Feedback from hr user
+
+
+schemes:
+  - https
+  - http
