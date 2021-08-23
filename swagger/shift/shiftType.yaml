@@ -4,7 +4,7 @@ tags:
 
 paths:
 # [GET] shiftType
-  /api/shiftType:
+  /shiftType:
     get:
       tags:
       - shiftType
@@ -38,7 +38,7 @@ paths:
           description: 'Server Error'
 
 # [GET] shiftType/id
-  /api/shiftType/{id}:
+  /shiftType/{id}:
     get:
       tags:
       - shiftType

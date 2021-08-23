@@ -1,4 +1,4 @@
-import { IsEnum, IsString ,IsDate, IsNotEmpty} from 'class-validator';
+import { IsEnum, IsString ,IsDate, IsNotEmpty,IsNumber,IsBoolean} from 'class-validator';
 import { Reasons } from '@interfaces/pip-interface/warning_letter.interface';
 
 export class CreateWarningLetterDto {
@@ -8,7 +8,7 @@ export class CreateWarningLetterDto {
 
   @IsNotEmpty()
   @IsString()
-  public supervisor_id: string;
+  public hr_user_id: string;
 
   @IsNotEmpty()
   @IsEnum(Reasons)
@@ -26,5 +26,10 @@ export class CreateWarningLetterDto {
   @IsDate()
   public date_issued: Date;
 
+  @IsNumber()
+  public warningCount: number;
+
+  @IsBoolean()
+  public isInPip: boolean;
 
 }

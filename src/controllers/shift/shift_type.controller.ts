@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { NextFunction, Request, Response } from 'express';
-import { CreateShiftTypeDto } from '@dtos/shift/shift_type.dto';
+import { CreateShiftTypeDto, UpdateShiftTypeDto } from '@dtos/shift/shift_type.dto';
 import { IShiftType } from '@interfaces/shift-interface/shift_type.interface';
 import shiftTypeService from '@/services/shift/shift.service';
 
@@ -42,7 +42,7 @@ class ShiftTypeController {
   public updateShift = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const shiftId: string = req.params.id;
-      const shiftData: CreateShiftTypeDto = req.body;
+      const shiftData: UpdateShiftTypeDto = req.body;
       const updateshiftData: IShiftType = await this.shiftService.updateshiftType(shiftId, shiftData);
 
       res.status(200).json({ data: updateshiftData, message: 'updated' });

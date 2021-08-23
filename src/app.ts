@@ -108,7 +108,8 @@ class App {
         'swagger/leave/application.yaml',
         'swagger/leave/leave-type.yaml',
         'swagger/leave/period.yaml',
-        'swagger/leave/policy.yaml'
+        'swagger/leave/policy.yaml',
+        'swagger/pip/warningLetter.yaml'
       ],
     };
 

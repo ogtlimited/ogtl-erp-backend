@@ -2,7 +2,7 @@
 import TestServices from '@services/recruitment/test.services';
 import { NextFunction, Request, Response } from 'express';
 import { ITest } from '@interfaces/recruitment/test.interface';
-import { CreateTestDto } from '@dtos/recruitment/test.dto';
+import { CreateTestDto, UpdateTestDto } from '@dtos/recruitment/test.dto';
 
 class TestController {
   public testService = new TestServices();
@@ -45,7 +45,7 @@ class TestController {
   public updateTest = async (req:Request, res:Response, next:NextFunction) =>{
     try {
       const testId:string = req.body.id;
-      const testData:CreateTestDto = req.body;
+      const testData:UpdateTestDto = req.body;
       const updatedTestData: ITest = await this.testService.updateTest(testId,testData);
       res.status(200).json({ data: updatedTestData, message: 'Test updated.' });
     }

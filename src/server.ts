@@ -20,6 +20,7 @@ import LeaveApplicationRoute from '@routes/leave/application.route';
 import LeaveTypeRoutes from '@routes/leave/leave-type.route';
 import LeavePeriodRoute from '@routes/leave/period.route';
 import LeavePolicyRoutes from '@routes/leave/policy.route';
+import WarningLetterRoute from '@routes/pip/warningLetter.route';
 
 validateEnv();
 
@@ -38,7 +39,8 @@ const app = new App([new IndexRoute(),
   new LeaveApplicationRoute(),
   new LeaveTypeRoutes(),
   new LeavePeriodRoute(),
-  new LeavePolicyRoutes()
+  new LeavePolicyRoutes(),
+  new WarningLetterRoute()
 ]);
 
 app.listen();
