@@ -1,0 +1,133 @@
+tags:
+-name: Branch
+ description: Branch API
+
+paths:
+#[GET] Branch
+  /api/branch:
+    get:
+     tags:
+     -Branch
+     summary: Get all branches
+     responses:
+       200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+#[POST] Branch
+   post:
+    tags:
+     -Branch
+    summary: Add new Branch
+    parameters:
+      -name: body
+       in: body
+       description: Branch data
+       required: true
+       schema: 
+        $ref: '#/definitions/branch'
+    responses:
+        responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+
+#[GET] branch/id
+api/branch/{id}:
+  get:
+    tags:
+     -Branch
+    summary: Find Branch by Id
+    parameters:
+      -name: id
+       in: path
+       description: Branch Id
+       required: true
+    responses:
+      200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+
+#[PUT] branch/id
+    put:
+      tags:
+      - Branch
+      summary: Update Branch By Id
+      parameters:
+      - name: id
+        in: path
+        description: Branch Id
+        required: true
+      - name: body
+        in: body
+        description: Branch Data
+        required: true
+        schema:
+          $ref: '#/definitions/branch'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] branch/id
+    delete:
+      tags:
+      - Branch
+      summary: Delete branch By Id
+      parameters:
+      - name: id
+        in: path
+        description: Branch Id
+        required: true
+        schema:
+          type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+   
+
+#definitions
+definitions: 
+  Branch:
+   type: object
+   required:
+     -branch
+  properties:
+    id:
+      description: Branch Id
+    branch:
+      type: string
+      description: Branch name
+
+schemes:
+  - https
+  - http
+
+       
+
+  
+
+
+      
