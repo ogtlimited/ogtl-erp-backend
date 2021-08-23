@@ -64,8 +64,22 @@ const permissionMiddleware = async (req: RequestWithUser, res: Response, next: N
       const verificationResponse = (await jwt.verify(Authorization, secretKey)) as DataStoredInToken;
       const userId = verificationResponse._id;
       const findUser = await userModel.findById(userId);
+      const permission = new userPermissions(findUser.permissionLevel).getAllPermissions()
       if(req.method === 'get'){
-        const permission = new userPermissions(findUser.permissionLevel)
+        if(permission.Read === true){
+          req.user = findUser;
+          next();
+        }else{
+          next(new HttpException(401, 'You have insufficient authorization level'));
+        }
+
+      }else if(req.method === 'post'){
+        if(permission.Write === true){
+          req.user = findUser;
+          next();
+        }else{
+          next(new HttpException(401, 'You have insufficient authorization level'));
+        }
 
       }
       if (findUser) {
@@ -82,5 +96,5 @@ const permissionMiddleware = async (req: RequestWithUser, res: Response, next: N
   }
 };
 
-export default authMiddleware;
+export default permissionMiddleware;
 
