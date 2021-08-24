@@ -51,7 +51,6 @@ const salarySlipSchema: Schema = new Schema(
     },
     loans: {
       type: Schema.Types.ObjectId,
-      required: true,
       ref: "Loans"
     },
     deductions: [{

@@ -1,0 +1,90 @@
+tags:
+- name: salary-structure
+  description: salary-structure API
+
+paths:
+  /api/salary-structure:
+# [GET] salary-structure
+    get:
+      tags:
+      - salary-structure
+      summary: Find All salary-structure
+      responses:
+        200:
+          description: 'OK'
+        404:
+          description: 'Not Found'
+        500:
+          description: 'Server Error'
+
+# [POST] salary-structure
+    post:
+      tags:
+      - salary-structure
+      summary: Add salary-structure
+      parameters:
+      - name: body
+        in: body
+        description: salary-structure Data
+        required: true
+        schema:
+          $ref: '#/definitions/salary-structure'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] salary-structure/id
+  /salary-structure/{id}:
+    get:
+      tags:
+      - salary-structure
+      summary: Find salary-structure By Id
+      parameters:
+      - name: id
+        in: path
+        description: salary-structure Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        404:
+          description: 'Not found'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  salary-structure:
+    type: object
+    required:
+        - payrollFrequency
+        - salaryDeductions
+        - hourRate
+        - earning
+        - netPay
+    properties:
+      payrollFrequency:
+        employee: string
+        description: payroll frequency Id
+      salaryDeductions:
+        type: array
+        description: an array of salary deduction Ids
+      hourRate:
+        type: Number
+        description: 
+      earning:
+        type: Number
+        description: 
+      netPay:
+        type: Number
+        description: 
+      
+schemes:
+ - https
+ - http

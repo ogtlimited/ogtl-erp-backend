@@ -1,0 +1,111 @@
+tags:
+- name: payroll-entry
+  description: payroll-entry API
+
+paths:
+  /api/payroll-entry:
+# [GET] payroll-entry
+    get:
+      tags:
+      - payroll-entry
+      summary: Find All payroll-entry
+      responses:
+        200:
+          description: 'OK'
+        404:
+          description: 'Not Found'
+        500:
+          description: 'Server Error'
+
+# [POST] payroll-entry
+    post:
+      tags:
+      - payroll-entry
+      summary: Add payroll-entry
+      parameters:
+      - name: body
+        in: body
+        description: payroll-entry Data
+        required: true
+        schema:
+          $ref: '#/definitions/payroll-entry'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] payroll-entry/id
+  /payroll-entry/{id}:
+    get:
+      tags:
+      - payroll-entry
+      summary: Find payroll-entry By Id
+      parameters:
+      - name: id
+        in: path
+        description: payroll-entry Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        404:
+          description: 'Not found'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  payroll-entry:
+    type: object
+    required:
+        - branch
+        - department
+        - payrollFrequency
+        - paymentAccount
+        - startDate
+        - endDate
+        - salarySlipsCreated
+        - validateAttendance
+        - salarySlipsSubmitted
+        - numberOfEmployees
+        - employees
+    properties:
+      title:
+        branch: string
+        description: branch Id
+      department:
+        type: string
+        description: department Id
+      payrollFrequency:
+        type: string
+        description: payrollFrequency Id
+      paymentAccount:
+        type: Number
+        description: paymentAccount Id
+      startDate:
+        type: string
+        description: yy-mm-dd
+      endDate:
+        type: string
+        description: yy-mm-dd
+      salarySlipsCreated:
+        type: Boolean
+        description: 
+      validateAttendance:
+        type: Boolean
+        description: 
+      salarySlipsSubmitted:
+        type: Boolean
+        description: 
+      numberOfEmployees:
+        type: Number
+        description: total number of employees
+
+schemes:
+ - https
+ - http

@@ -3,7 +3,7 @@ import { Routes } from '@interfaces/routes.interface';
 import { Router } from 'express';
 import ShiftAssignmentController from '@controllers/shift/shift_assignment.controller';
 import validationMiddleware from '@middlewares/validation.middleware';
-import { CreateShiftAssignmentDto } from '@dtos/shift/shift_assignment.dto';
+import { CreateShiftAssignmentDto, UpdateShiftAssignmentDto } from '@dtos/shift/shift_assignment.dto';
 
 class ShiftAssignmentRoute implements Routes{
   public path = "/shiftAssignment";
@@ -18,7 +18,7 @@ class ShiftAssignmentRoute implements Routes{
     this.router.get(`${this.path}`,this.shiftAssignmentController.getShiftAssignments);
     this.router.get(`${this.path}/:id`,this.shiftAssignmentController.getShiftAssignmentById);
     this.router.post(`${this.path}`,validationMiddleware(CreateShiftAssignmentDto,'body'),this.shiftAssignmentController.createShiftAssignment);
-    this.router.patch(`${this.path}/:id`, validationMiddleware(CreateShiftAssignmentDto, 'body'), this.shiftAssignmentController.updateShiftAssignment);
+    this.router.patch(`${this.path}/:id`, validationMiddleware(UpdateShiftAssignmentDto, 'body'), this.shiftAssignmentController.updateShiftAssignment);
     this.router.delete(`${this.path}/:id`,this.shiftAssignmentController.deleteShiftAssignment);
 
   }

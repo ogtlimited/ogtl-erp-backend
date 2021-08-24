@@ -15,7 +15,7 @@ class ShiftRequestService {
   //Method for finding a single shift Request
   public async findShiftRequestById(shiftRequestId: string): Promise<IShiftRequest>{
     //check if no shift Request id is empty
-    if(isEmpty(shiftRequestId)) throw new HttpException(400,`Shift request with Id:${shiftRequestId}, does not exist`);
+    if(isEmpty(shiftRequestId)) throw new HttpException(400,`Shift request Id must be provided`);
     //find shift Request using the id provided
     const findShiftRequest:IShiftRequest = await this.shiftRequest.findOne({_id:shiftRequestId});
     //throw error if shift Request does not exist

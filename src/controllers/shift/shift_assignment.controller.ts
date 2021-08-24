@@ -2,7 +2,7 @@
 import { NextFunction, Request, Response } from 'express';
 import ShiftAssignmentService from '@services/shift/shift_assignment.service';
 import { IShiftAssignment } from '@interfaces/shift-interface/shift_assignment.interface';
-import { CreateShiftAssignmentDto } from '@dtos/shift/shift_assignment.dto';
+import { CreateShiftAssignmentDto, UpdateShiftAssignmentDto } from '@dtos/shift/shift_assignment.dto';
 
 class ShiftAssignmentController {
   public shiftAssignmentService = new ShiftAssignmentService();
@@ -45,7 +45,7 @@ class ShiftAssignmentController {
   public updateShiftAssignment = async (req:Request, res:Response, next:NextFunction) =>{
     try {
       const shiftAssignmentId:string = req.body.id;
-      const shiftAssignmentData:CreateShiftAssignmentDto = req.body;
+      const shiftAssignmentData:UpdateShiftAssignmentDto = req.body;
       const updateShiftAssignmentData: IShiftAssignment = await this.shiftAssignmentService.updateShiftAssignment(shiftAssignmentId,shiftAssignmentData);
       res.status(200).json({ data: updateShiftAssignmentData, message: 'Shift assignment updated.' });
     }

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Promotion } from '@interfaces/employee-lifecycle/promotion.interface';
+import { IPromotion } from '@interfaces/employee-lifecycle/promotion.interface';
 import { model, Schema, Document } from 'mongoose';
 
 const promotionSchema: Schema = new Schema(
@@ -39,5 +39,5 @@ const promotionSchema: Schema = new Schema(
   },
 );
 
-const promotionModel = model<Promotion & Document>('Promotion', promotionSchema);
+const promotionModel = model<IPromotion & Document>('Promotion', promotionSchema);
 export default promotionModel;

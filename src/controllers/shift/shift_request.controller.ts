@@ -1,7 +1,7 @@
 import ShiftRequestService from '@services/shift/shift_request.service';
 import { NextFunction, Request, Response } from 'express';
 import { IShiftRequest } from '@interfaces/shift-interface/shift_request.interface';
-import { CreateShiftRequestDto } from '@dtos/shift/shift_request.dto';
+import { CreateShiftRequestDto, UpdateShiftRequestDto } from '@dtos/shift/shift_request.dto';
 
 class ShiftRequestController {
   public shiftRequestService = new ShiftRequestService();
@@ -44,7 +44,7 @@ class ShiftRequestController {
   public updateShiftRequest = async (req:Request, res:Response, next:NextFunction) =>{
     try {
       const shiftRequestId:string = req.body.id;
-      const shiftRequestData:CreateShiftRequestDto = req.body;
+      const shiftRequestData:UpdateShiftRequestDto = req.body;
       const updateShiftRequestData: IShiftRequest = await this.shiftRequestService.updateShiftRequest(shiftRequestId,shiftRequestData);
       res.status(200).json({ data: updateShiftRequestData, message: 'Shift request updated.' });
     }

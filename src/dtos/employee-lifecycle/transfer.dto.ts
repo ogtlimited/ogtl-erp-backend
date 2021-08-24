@@ -4,12 +4,9 @@
 import { IsDate,  IsString } from 'class-validator';
 
 export class CreateTransferDto {
-  
-    @IsString()
-    public employee: string;
 
     @IsString()
-    public newEmployeeID: string;
+    public employeeId: string;
     
     @IsString()
     public status: string;

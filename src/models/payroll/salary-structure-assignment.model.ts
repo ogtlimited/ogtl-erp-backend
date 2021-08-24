@@ -19,11 +19,6 @@ const salaryStructureAssignmentSchema: Schema = new Schema(
       required: true,
       ref: "SalaryStructure"
     },
-    incomeTaxSlab: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "IncomeTaxSlab"
-    },
     status: {
       type: Schema.Types.ObjectId,
       required: true,

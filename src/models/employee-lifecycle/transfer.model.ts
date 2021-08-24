@@ -4,12 +4,7 @@ import { model, Schema, Document } from 'mongoose';
 
 const transferSchema: Schema = new Schema(
   {
-    employee: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "Employee"
-    },
-    employeeID: {
+    employeeId: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "Employee"
@@ -34,7 +29,7 @@ const transferSchema: Schema = new Schema(
       required: true,
       ref: "TransferDetails"
     },
-    dateOfJoining: {
+    transferDate: {
       type: Date,
       required: true
     },

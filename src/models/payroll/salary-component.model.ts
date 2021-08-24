@@ -4,17 +4,15 @@ import { model, Schema, Document } from 'mongoose';
 
 const salaryComponentSchema: Schema = new Schema(
   {
-    salaryComponent: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "SalaryComponent"
-    },
     status: {
       type: Schema.Types.ObjectId,
-      required: true,
       ref: "Status"
     },
     salaryComponentAbbr: {
+      type: String,
+      required: true,
+    },
+    title: {
       type: String,
       required: true,
     },
@@ -34,7 +32,7 @@ const salaryComponentSchema: Schema = new Schema(
       default: false
     },
     type:{
-        enum: ["deduction", "earning"]
+        enum: ["deduction", "earning"],
     },
     createdBy: {
       type: Schema.Types.ObjectId,

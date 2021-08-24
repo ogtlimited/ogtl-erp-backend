@@ -2,7 +2,7 @@ import { Routes } from '@interfaces/routes.interface';
 import { Router } from 'express';
 import TestController from '@controllers/recruitment/test.controller';
 import validationMiddleware from '@middlewares/validation.middleware';
-import { CreateTestDto } from '@dtos/recruitment/test.dto';
+import { CreateTestDto, UpdateTestDto } from '@dtos/recruitment/test.dto';
 
 class TestRoute implements Routes{
   public path = "/test";
@@ -17,7 +17,7 @@ class TestRoute implements Routes{
     this.router.get(`${this.path}`,this.testController.getTests);
     this.router.get(`${this.path}/:id`,this.testController.getTestById);
     this.router.post(`${this.path}`,validationMiddleware(CreateTestDto,'body'),this.testController.createTest);
-    this.router.patch(`${this.path}/:id`, validationMiddleware(CreateTestDto, 'body'), this.testController.updateTest);
+    this.router.patch(`${this.path}/:id`, validationMiddleware(UpdateTestDto, 'body'), this.testController.updateTest);
     this.router.delete(`${this.path}/:id`,this.testController.deleteTest);
 
   }

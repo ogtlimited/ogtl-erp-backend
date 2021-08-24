@@ -109,7 +109,18 @@ class App {
         'swagger/leave/application.yaml',
         'swagger/leave/leave-type.yaml',
         'swagger/leave/period.yaml',
-        'swagger/leave/policy.yaml'
+        'swagger/leave/policy.yaml',
+        'swagger/attendance/attendance.yaml',
+        'swagger/payroll/incentives.yaml',
+        'swagger/payroll/payroll-entry.yaml',
+        'swagger/payroll/salary-component.yaml',
+        'swagger/payroll/salary-slip.yaml',
+        'swagger/payroll/salary-structure-assignment.yaml',
+        'swagger/payroll/salary-structure.yaml',
+        'swagger/employee-lifecycle/onboarding.yaml',
+        'swagger/employee-lifecycle/promotion.yaml',
+        'swagger/employee-lifecycle/transfer.yaml',
+        'swagger/pip/warningLetter.yaml'
       ],
     };
 
