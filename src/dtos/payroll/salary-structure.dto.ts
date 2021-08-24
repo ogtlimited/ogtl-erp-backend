@@ -19,9 +19,6 @@ export class CreateSalaryStructureDto {
     // @IsOptional()
     // public base: string;
     
-    @IsString()
-    public status: string;
-    
     @IsNumber()
     public hourRate: Number;
     

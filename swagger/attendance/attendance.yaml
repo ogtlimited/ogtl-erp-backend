@@ -1,0 +1,88 @@
+tags:
+- name: Attendance
+  description: attendance API
+
+paths:
+  /api/attendance:
+# [GET] attendance
+    get:
+      tags:
+      - attendance
+      summary: Find All attendance
+      responses:
+        200:
+          description: 'OK'
+        404:
+          description: 'Not Found'
+        500:
+          description: 'Server Error'
+
+# [POST] attendance
+    post:
+      tags:
+      - attendance
+      summary: Add attendance
+      parameters:
+      - name: body
+        in: body
+        description: user Data
+        required: true
+        schema:
+          $ref: '#/definitions/attendance'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] attendance/id
+  /attendance/{id}:
+    get:
+      tags:
+      - attendance
+      summary: Find attendance By Id
+      parameters:
+      - name: id
+        in: path
+        description: attendance Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        404:
+          description: 'Not found'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  attendance:
+    type: object
+    required:
+        - employeeId
+        - startTime
+        - endTime
+        - shiftTypeId
+    properties:
+      employeeId:
+        description: employee Id
+      shiftTypeId:
+        type: string
+        description: shift
+      statusId:
+        type: string
+        description: status
+      startTime:
+        type: string
+        description: start time
+      endTime:
+        type: string
+        description: end time
+
+schemes:
+ - https
+ - http

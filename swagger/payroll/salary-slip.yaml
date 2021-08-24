@@ -1,0 +1,135 @@
+tags:
+- name: salary-slip
+  description: salary-slip API
+
+paths:
+  /api/salary-slip:
+# [GET] salary-slip
+    get:
+      tags:
+      - salary-slip
+      summary: Find All salary-slip
+      responses:
+        200:
+          description: 'OK'
+        404:
+          description: 'Not Found'
+        500:
+          description: 'Server Error'
+
+# [POST] salary-slip
+    post:
+      tags:
+      - salary-slip
+      summary: Add salary-slip
+      parameters:
+      - name: body
+        in: body
+        description: salary-slip Data
+        required: true
+        schema:
+          $ref: '#/definitions/salary-slip'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] salary-slip/id
+  /salary-slip/{id}:
+    get:
+      tags:
+      - salary-slip
+      summary: Find salary-slip By Id
+      parameters:
+      - name: id
+        in: path
+        description: salary-slip Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        404:
+          description: 'Not found'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  salary-slip:
+    type: object
+    required:
+        - employee
+        - salaryStructure
+        - salaryDeduction
+        - designation
+        - department
+        - branch
+        - payRollEntry
+        - bank
+        - totalInWords
+        - totalWorkingDays
+        - paymentDays
+        - totalWorkingHours
+        - totalDeduction
+        - netPay
+        - startDate
+        - endDate
+    properties:
+      employee:
+        employee: string
+        description: employee Id
+      salaryStructure:
+        type: string
+        description: salaryStructure Id
+      salaryDeduction:
+        type: string
+        description: salaryDeduction Id
+      designation:
+        type: string
+        description: designation Id
+      department:
+        type: string
+        description: department Id
+      branch:
+        type: string
+        description: branch Id
+      payRollEntry:
+        type: string
+        description: payRollEntry Id
+      bank:
+        type: string
+        description: bank Id
+      totalInWords:
+        type: string
+        description: total amount in words
+      totalWorkingDays:
+        type: Number
+        description:
+      paymentDays:
+        type: Number
+        description:
+      totalWorkingHours:
+        type: Number
+        description:
+      totalDeduction:
+        type: Number
+        description:
+      netPay:
+        type: Number
+        description:
+      startDate:
+        type: string
+        description: yy-mm-dd
+      endDate:
+        type: string
+        description: yy-mm-dd
+      
+
+schemes:
+ - https
+ - http

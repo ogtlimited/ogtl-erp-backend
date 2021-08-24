@@ -1,32 +1,34 @@
 tags:
-- name: attendanceType
-  description: attendanceType API
+- name: incentives
+  description: incentives API
 
 paths:
-  /api/attendance:
-# [GET] attendanceType
+  /api/incentives:
+# [GET] incentives
     get:
       tags:
-      - attendanceType
-      summary: Find All attendanceType
+      - incentives
+      summary: Find All incentives
       responses:
         200:
           description: 'OK'
+        404:
+          description: 'Not Found'
         500:
           description: 'Server Error'
 
-# [POST] attendanceType
+# [POST] incentives
     post:
       tags:
-      - attendanceType
-      summary: Add attendance
+      - incentives
+      summary: Add incentives
       parameters:
       - name: body
         in: body
-        description: user Data
+        description: incentives Data
         required: true
         schema:
-          $ref: '#/definitions/attendanceType'
+          $ref: '#/definitions/incentives'
       responses:
         201:
           description: 'Created'
@@ -37,45 +39,42 @@ paths:
         500:
           description: 'Server Error'
 
-# [GET] attendanceType/id
-  /attendanceType/{id}:
+# [GET] incentives/id
+  /incentives/{id}:
     get:
       tags:
-      - attendanceType
-      summary: Find User By Id
+      - incentives
+      summary: Find incentives By Id
       parameters:
       - name: id
         in: path
-        description: User Id
+        description: incentives Id
         required: true
       responses:
         200:
           description: 'OK'
-        409:
-          description: 'Conflict'
+        404:
+          description: 'Not found'
         500:
           description: 'Server Error'
 
 # definitions
 definitions:
-  attendanceType:
+  incentives:
     type: object
     required:
-        - shift_name
-        - start_time
-        - end_time
+        - employeeId
+        - additionalSalary
+        - salaryComponent
     properties:
-      id:
-        description: attendanceType Id
-      shift_name:
+      employeeId:
+        description: employee Id
+      additionalSalary:
         type: string
-        description: shift name
-      start_time:
+        description: additional Salary Id
+      salaryComponent:
         type: string
-        description: start time
-      end_time:
-        type: string
-        description: end time
+        description: salary component Id
 
 schemes:
  - https

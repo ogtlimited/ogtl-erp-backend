@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { CreateSalaryStructureAssignmentDto } from '../../dtos/payroll/salary-structure-assigment.dto';
+import { CreateSalaryStructureAssignmentDto } from '../../dtos/payroll/salary-structure-assignment.dto';
 import SalaryStructureAssignmentController from '@/controllers/payroll/salaryStructureAssignment.controller';
 import { Routes } from '@/interfaces/routes.interface';
 import validationMiddleware from '@/middlewares/validation.middleware';
