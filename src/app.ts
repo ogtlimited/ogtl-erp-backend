@@ -120,6 +120,7 @@ class App {
         'swagger/employee-lifecycle/onboarding.yaml',
         'swagger/employee-lifecycle/promotion.yaml',
         'swagger/employee-lifecycle/transfer.yaml',
+        'swagger/pip/warningLetter.yaml'
       ],
     };
 

@@ -3,7 +3,7 @@ import { Routes } from '@interfaces/routes.interface';
 import { Router } from 'express';
 import JobOpeningController from '@controllers/recruitment/job_opening.controller';
 import validationMiddleware from '@middlewares/validation.middleware';
-import { CreateJobOpeningDto } from '@dtos/recruitment/job_opening.dto';
+import { CreateJobOpeningDto, UpdateJobOpeningDto } from '@dtos/recruitment/job_opening.dto';
 
 class JobOpeningRoute implements Routes{
   public path ="/jobOpening";
@@ -18,7 +18,7 @@ class JobOpeningRoute implements Routes{
     this.router.get(`${this.path}`,this.jobOpeningController.getJobOpenings);
     this.router.get(`${this.path}/:id`,this.jobOpeningController.getJobOpeningById);
     this.router.post(`${this.path}`,validationMiddleware(CreateJobOpeningDto,'body'),this.jobOpeningController.createJobOpening);
-    this.router.patch(`${this.path}/:id`, validationMiddleware(CreateJobOpeningDto, 'body'), this.jobOpeningController.updateJobOpening);
+    this.router.patch(`${this.path}/:id`, validationMiddleware(UpdateJobOpeningDto, 'body'), this.jobOpeningController.updateJobOpening);
     this.router.delete(`${this.path}/:id`,this.jobOpeningController.deleteJobOpening);
 
   }

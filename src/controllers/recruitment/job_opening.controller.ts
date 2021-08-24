@@ -1,7 +1,7 @@
 import JobOpeningService from '@services/recruitment/job_opening.service';
 import { NextFunction, Request, Response } from 'express';
 import { IJobOpening } from '@interfaces/recruitment/job_opening.interface';
-import { CreateJobOpeningDto } from '@dtos/recruitment/job_opening.dto';
+import { CreateJobOpeningDto, UpdateJobOpeningDto } from '@dtos/recruitment/job_opening.dto';
 
 class JobOpeningController {
   public jobOpeningService = new JobOpeningService();
@@ -44,7 +44,7 @@ class JobOpeningController {
   public updateJobOpening = async (req:Request, res:Response, next:NextFunction) =>{
     try {
       const jobOpeningId:string = req.body.id;
-      const jobOpeningData:CreateJobOpeningDto = req.body;
+      const jobOpeningData:UpdateJobOpeningDto = req.body;
       const updateJobOpeningData: IJobOpening = await this.jobOpeningService.updateJobOpening(jobOpeningId,jobOpeningData);
       res.status(200).json({ data: updateJobOpeningData, message: 'Job opening updated.' });
     }

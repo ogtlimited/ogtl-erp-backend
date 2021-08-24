@@ -16,7 +16,7 @@ class ShiftAssignmentService {
   //Method for finding a single shift assignment
   public async findShiftAssignmentById(shiftAssignmentId: string): Promise<IShiftAssignment>{
     //check if no shift assignment id is empty
-    if(isEmpty(shiftAssignmentId)) throw new HttpException(400,`Shift assignment with Id:${shiftAssignmentId}, does not exist`);
+    if(isEmpty(shiftAssignmentId)) throw new HttpException(400,`Shift assignment not provided`);
     //find shift assignment using the id provided
     const findShiftAssignment:IShiftAssignment = await this.shiftAssignment.findOne({_id:shiftAssignmentId});
     //throw error if shift assignment does not exist
@@ -27,7 +27,7 @@ class ShiftAssignmentService {
 
   //Method for creating shift assignment
   public async createShiftAssignment(shiftAssignmentData: CreateShiftAssignmentDto): Promise<IShiftAssignment>{
-    //check if no shift assignment data is empty
+    //check if shift assignment data is empty
     if (isEmpty(shiftAssignmentData)) throw new HttpException(400, "Bad request");
     //find shift assignment using the employee id provided
     const findShitAssignment: IShiftAssignment = await this.shiftAssignment.findOne({ employee_id: shiftAssignmentData.employee_id });

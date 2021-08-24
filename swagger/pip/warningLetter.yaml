@@ -1,0 +1,122 @@
+tags:
+  - name: warningLetter
+    description: warningLetter API
+
+paths:
+  # [GET] warningLetter
+  /warningLetter:
+    get:
+      tags:
+        - warningLetter
+      summary: Find All warningLetter
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+    # [POST] warningLetter
+    post:
+      tags:
+        - warningLetter
+      summary: Add warning letter
+      parameters:
+        - name: body
+          in: body
+          description: warning letter Data
+          required: true
+          schema:
+            $ref: '#/definitions/warningLetter'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  # [GET] warningLetter/id
+  /warningLetter/{id}:
+    get:
+      tags:
+        - warningLetter
+      summary: Find warning letter By Id
+      parameters:
+        - name: id
+          in: path
+          description: warning letter Id
+          required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [DELETE] warningLetter/id
+    delete:
+      tags:
+        - warningLetter
+      summary: Delete warning letter By Id
+      parameters:
+        - name: id
+          in: path
+          description: warning letter Id
+          required: true
+          schema:
+            type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  warningLetter:
+    type: object
+    required:
+      - employee_id
+      - hr_user_id
+      - reason
+      - details
+      - actions
+      - date_issued
+    properties:
+      id:
+        description: warningLetter Id
+      employee_id:
+        type: string
+        description: Employee id
+      hr_user_id:
+        type: string
+        description: Hr employee id
+      reason:
+        type: string
+        description: reasons for warning letter
+      details:
+        type: string
+        description: details of warning letter
+      actions:
+        type: string
+        description: actions that will be taken
+      date_issued:
+        type: Date
+        description: date of warning letter issued
+      warningCount:
+        type: number
+        description: how many waring letter an employee has received
+      isInPip:
+        type: boolean
+        description: to know if employee is in PIP or not
+
+schemes:
+  - https
+  - http

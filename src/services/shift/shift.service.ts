@@ -13,7 +13,7 @@ class shiftTypeService {
   }
 
   public async findshiftTypeById(shiftTypeId: string): Promise<IShiftType> {
-    if (isEmpty(shiftTypeId)) throw new HttpException(400, "You're not shiftTypeId");
+    if (isEmpty(shiftTypeId)) throw new HttpException(400, "No shift type Id provided");
 
     const findShiftType: IShiftType = await this.shiftTypes.findOne({ _id: shiftTypeId });
     if (!findShiftType) throw new HttpException(409, "You're not shiftType");

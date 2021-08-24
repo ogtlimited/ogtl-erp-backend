@@ -43,6 +43,7 @@ import JobOpeningRoute from '@routes/recruitment/jobOpening.route';
 import JobOfferRoute from '@routes/recruitment/jobOffer.route';
 import JobApplicantRoute from '@routes/recruitment/jobApplicant.route';
 import TestRoute from '@routes/recruitment/test.route';
+import WarningLetterRoute from '@routes/pip/warningLetter.route';
 
 
 
@@ -68,7 +69,7 @@ const app = new App([
   new LeaveApplicationRoute(),
   new LeaveTypeRoutes(),
   new LeavePeriodRoute(),
-  new LeavePolicyRoutes(),  
+  new LeavePolicyRoutes(),
   new BranchRoute(),
   new ContactDetailsRoute(),
   new DesignationRoute(),
@@ -87,6 +88,8 @@ const app = new App([
   new JobApplicantRoute(),
   new TestRoute(),
   new ShiftAssignmentRoute(),
+  new WarningLetterRoute(),
+
 ]);
 
 app.listen();
