@@ -1,0 +1,106 @@
+tags:
+- name: onboarding
+  description: onboarding API
+
+paths:
+  /api/onboarding:
+# [GET] onboarding
+    get:
+      tags:
+      - onboarding
+      summary: Find All onboarding
+      responses:
+        200:
+          description: 'OK'
+        404:
+          description: 'Not Found'
+        500:
+          description: 'Server Error'
+
+# [POST] onboarding
+    post:
+      tags:
+      - onboarding
+      summary: Add onboarding
+      parameters:
+      - name: body
+        in: body
+        description: onboarding Data
+        required: true
+        schema:
+          $ref: '#/definitions/onboarding'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] onboarding/id
+  /onboarding/{id}:
+    get:
+      tags:
+      - onboarding
+      summary: Find onboarding By Id
+      parameters:
+      - name: id
+        in: path
+        description: onboarding Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        404:
+          description: 'Not found'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  onboarding:
+    type: object
+    required:
+        - employee
+        - jobApplicant
+        - employeeOnboardingTemplate
+        - department
+        - designation
+        - branch
+        - campaign
+        - employeeGrade
+        - dateOfJoining
+    properties:
+      employee:
+        employee: string
+        description: employee Id
+      jobApplicant:
+        type: string
+        description: jobApplicant Id
+      employeeOnboardingTemplate:
+        type: string
+        description: employee Onboarding Template Id
+      designation:
+        type: string
+        description: designation Id
+      department:
+        type: string
+        description: department Id
+      branch:
+        type: string
+        description: branch Id
+      campaign:
+        type: string
+        description: campaign Id
+      employeeGrade:
+        type: string
+        description: employee Grade Id
+      dateOfJoining:
+        type: string
+        description: yy-mm-dd
+      
+schemes:
+ - https
+ - http

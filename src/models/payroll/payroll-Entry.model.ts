@@ -53,14 +53,6 @@ const payRollEntrySchema: Schema = new Schema(
       type: Boolean,
       required:true
     },
-    deductTaxForUnsubmittedTaxExemptionProof: {
-      type: Boolean,
-      required:true
-    },
-    deductTaxForUnclaimedEmployeeBenefits: {
-      type: Boolean,
-      required:true
-    },
     numberOfEmployees: 
       {
           type: Number,

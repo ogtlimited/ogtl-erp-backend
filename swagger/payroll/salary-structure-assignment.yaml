@@ -1,0 +1,87 @@
+tags:
+- name: salary-structure-assignment
+  description: salary-structure-assignment API
+
+paths:
+  /api/salary-structure-assignment:
+# [GET] salary-structure-assignment
+    get:
+      tags:
+      - salary-structure-assignment
+      summary: Find All salary-structure-assignment
+      responses:
+        200:
+          description: 'OK'
+        404:
+          description: 'Not Found'
+        500:
+          description: 'Server Error'
+
+# [POST] salary-structure-assignment
+    post:
+      tags:
+      - salary-structure-assignment
+      summary: Add salary-structure-assignment
+      parameters:
+      - name: body
+        in: body
+        description: salary-structure-assignment Data
+        required: true
+        schema:
+          $ref: '#/definitions/salary-structure-assignment'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] salary-structure-assignment/id
+  /salary-structure-assignment/{id}:
+    get:
+      tags:
+      - salary-structure-assignment
+      summary: Find salary-structure-assignment By Id
+      parameters:
+      - name: id
+        in: path
+        description: salary-structure-assignment Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        404:
+          description: 'Not found'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  salary-structure-assignment:
+    type: object
+    required:
+        - employee
+        - department
+        - salaryStructure
+        - fromDate
+    properties:
+      employee:
+        employee: string
+        description: employee Id
+      salaryStructure:
+        type: string
+        description: salaryStructure Id
+      designation:
+        type: string
+        description: designation Id
+      fromDate:
+        type: string
+        description: date format yy-mm-dd
+      
+
+schemes:
+ - https
+ - http

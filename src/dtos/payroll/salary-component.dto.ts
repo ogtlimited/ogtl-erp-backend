@@ -4,12 +4,9 @@
 import { IsString, IsBoolean, IsNumber, IsArray } from 'class-validator';
 
 export class CreateSalaryComponentDto {  
- 
-    @IsString()
-    public salaryComponent: string;
 
     @IsString()
-    public status: string;
+    public title: string;
 
     @IsString()
     salaryComponentAbbr: string;
@@ -26,7 +23,10 @@ export class CreateSalaryComponentDto {
     @IsNumber()
     amount: Number;
 
+    @IsNumber()
+    incentiveAmount: Number;
+
     @IsArray()
-    type: Array<string>;
+    type: string;
 
 }

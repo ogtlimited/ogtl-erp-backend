@@ -87,8 +87,6 @@ const app = new App([
   new JobApplicantRoute(),
   new TestRoute(),
   new ShiftAssignmentRoute(),
-
-
 ]);
 
 app.listen();

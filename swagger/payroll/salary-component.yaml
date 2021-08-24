@@ -1,0 +1,96 @@
+tags:
+- name: salary-component
+  description: salary-component API
+
+paths:
+  /api/salary-component:
+# [GET] salary-component
+    get:
+      tags:
+      - salary-component
+      summary: Find All salary-component
+      responses:
+        200:
+          description: 'OK'
+        404:
+          description: 'Not Found'
+        500:
+          description: 'Server Error'
+
+# [POST] salary-component
+    post:
+      tags:
+      - salary-component
+      summary: Add salary-component
+      parameters:
+      - name: body
+        in: body
+        description: salary-component Data
+        required: true
+        schema:
+          $ref: '#/definitions/salary-component'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] salary-component/id
+  /salary-component/{id}:
+    get:
+      tags:
+      - salary-component
+      summary: Find salary-component By Id
+      parameters:
+      - name: id
+        in: path
+        description: salary-component Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        404:
+          description: 'Not found'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  salary-component:
+    type: object
+    required:
+        - salaryComponentAbbr
+        - status
+        - isTaxApplicable
+        - type
+        - title
+    properties:
+      title:
+        type: string
+        description: salary component title
+      salaryComponentAbbr:
+        type: string
+        description: salary component abbreviation
+      description:
+        type: string
+        description: salary component description
+      incentiveAmount:
+        type: Number
+        description: incentive amount
+      isTaxApplicable:
+        type: Boolean
+        description: tax applicability
+      dependsOnPaymentDays:
+        type: Boolean
+        description: depends On Payment Days
+      type:
+        type: enum
+        description: ["deduction", "earning"]
+
+schemes:
+ - https
+ - http
