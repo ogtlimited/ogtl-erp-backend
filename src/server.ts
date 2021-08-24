@@ -90,7 +90,6 @@ const app = new App([
   new ShiftAssignmentRoute(),
   new WarningLetterRoute(),
 
-
 ]);
 
 app.listen();
