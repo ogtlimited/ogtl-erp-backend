@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { IsEnum, IsString ,IsDate, IsNotEmpty} from 'class-validator';
 import { Reasons } from '@interfaces/pip-interface/warning_letter.interface';
 

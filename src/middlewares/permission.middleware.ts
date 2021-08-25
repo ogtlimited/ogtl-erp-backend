@@ -50,7 +50,9 @@ export class userPermissions{
       this.permission = this.permission | perm
     }
     removePermissions(perm){
-      this.permission = this.permission | perm
+      if(this.getAllPermissions()[perm]){
+        this.permission = this.permission ^ perm
+      }
     }
 }
 
@@ -64,6 +66,7 @@ const permissionMiddleware = async (req: RequestWithUser, res: Response, next: N
       const verificationResponse = (await jwt.verify(Authorization, secretKey)) as DataStoredInToken;
       const userId = verificationResponse._id;
       const findUser = await userModel.findById(userId);
+      console.log(findUser);
       const permission = new userPermissions(findUser.permissionLevel).getAllPermissions()
       if(req.method === 'get'){
         if(permission.Read === true){
@@ -75,6 +78,21 @@ const permissionMiddleware = async (req: RequestWithUser, res: Response, next: N
 
       }else if(req.method === 'post'){
         if(permission.Write === true){
+          req.user = findUser;
+          next();
+        }else{
+          next(new HttpException(401, 'You have insufficient authorization level'));
+        }
+      }else if(req.method === 'put'){
+        if(permission.Update === true){
+          req.user = findUser;
+          next();
+        }else{
+          next(new HttpException(401, 'You have insufficient authorization level'));
+        }
+
+      }else if(req.method === 'delete'){
+        if(permission.Delete === true){
           req.user = findUser;
           next();
         }else{
