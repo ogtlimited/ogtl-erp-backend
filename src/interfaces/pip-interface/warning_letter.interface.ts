@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 
 export interface IWarningLetter {
   _id:string;
