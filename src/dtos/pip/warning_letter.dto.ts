@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsEnum, IsString ,IsDate, IsNotEmpty,IsNumber,IsBoolean} from 'class-validator';
+import { IsString, IsDate, IsNotEmpty, IsNumber, IsBoolean } from 'class-validator';
 
 export class CreateWarningLetterDto {
   @IsNotEmpty()
@@ -9,6 +9,10 @@ export class CreateWarningLetterDto {
   @IsNotEmpty()
   @IsString()
   public hr_user_id: string;
+
+  @IsNotEmpty()
+  @IsString()
+  public reason: string;
 
   @IsNotEmpty()
   @IsString()
@@ -27,5 +31,4 @@ export class CreateWarningLetterDto {
 
   @IsBoolean()
   public isInPip: boolean;
-
 }

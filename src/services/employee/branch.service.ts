@@ -1,4 +1,4 @@
-import { CreateBranchDto } from '@/dtos/employee/branch.dto';
+import { CreateBranchDto,UpdateBranchDto } from '@/dtos/employee/branch.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { Branch } from '@/interfaces/employee-interface/branch.interface';
 import BranchModel from '@models/employee/branch.model';
@@ -54,7 +54,7 @@ class BranchService {
      *Updates existing branch 
      */
 
-     public async updateBranch(BranchId:string,BranchData: CreateBranchDto)  : Promise<Branch>{
+     public async updateBranch(BranchId:string,BranchData: UpdateBranchDto)  : Promise<Branch>{
 
         //Check if data is empty
         if (isEmpty(BranchData)) throw new HttpException(400, "No data provided");

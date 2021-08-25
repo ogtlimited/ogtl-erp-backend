@@ -7,7 +7,7 @@ import DesignationController from '@/controllers/employee/designation.controller
 
 
 class DesignationRoute implements Routes {
-    public path = '/Designation';
+    public path = '/designation';
     public router = Router();
     public DesignationController = new DesignationController();
   

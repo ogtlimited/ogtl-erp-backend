@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { CreateBranchDto } from '@/dtos/employee/branch.dto';
+import { CreateBranchDto,UpdateBranchDto } from '@/dtos/employee/branch.dto';
 import { Branch } from '@/interfaces/employee-interface/branch.interface';
 import BranchService from '@/services/employee/branch.service';
 
@@ -46,7 +46,7 @@ class BranchesController{
   public updateBranch = async  (req: Request, res: Response, next: NextFunction) => {
     try{
         const BranchId: string = req.params.id;
-        const BranchData: CreateBranchDto = req.body;
+        const BranchData: UpdateBranchDto = req.body;
         const updateBranchData: Branch = await this.BranchService.updateBranch(BranchId,BranchData);
         res.status(200).json({data:updateBranchData, message:"Branch Updated"});
     }

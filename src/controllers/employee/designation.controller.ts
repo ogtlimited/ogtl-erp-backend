@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { CreateDesignationDto } from '@/dtos/employee/designation.dto';
+import { CreateDesignationDto,UpdateDesignationDto } from '@/dtos/employee/designation.dto';
 import { Designation } from '@/interfaces/employee-interface/designation.interface';
 import DesignationService from '@/services/employee/designation.service';
 
@@ -48,7 +48,7 @@ class DesignationController{
   public updateDesignation = async  (req: Request, res: Response, next: NextFunction) => {
     try{
         const DesignationId: string = req.params.id;
-        const DesignationData: CreateDesignationDto = req.body;
+        const DesignationData: UpdateDesignationDto = req.body;
         const updateDesignationData: Designation = await this.DesignationService.updateDesignation(DesignationId,DesignationData);
         res.status(200).json({data:updateDesignationData, message:"Designation Updated"});
     }

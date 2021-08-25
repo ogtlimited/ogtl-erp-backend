@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { Education } from '@/interfaces/employee-interface/education.interface';
-import { CreateEducationDto } from '@/dtos/employee/education.dto';
+import { CreateEducationDto , UpdateEducationDto} from '@/dtos/employee/education.dto';
 import EducationService from '@/services/employee/education.service';
 
 
@@ -51,7 +51,7 @@ class EducationController{
 public updateEducation = async  (req: Request, res: Response, next: NextFunction) => {
     try{
         const EducationsId: string = req.params.id;
-        const EducationsData: CreateEducationDto = req.body;
+        const EducationsData: UpdateEducationDto = req.body;
         const updateEducationsData: Education = await this.EducationService.updateEducation(EducationsId,EducationsData);
         res.status(200).json({data:updateEducationsData, message:"Educations Updated"});
     }

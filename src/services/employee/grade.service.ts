@@ -1,7 +1,7 @@
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { Grade } from '@/interfaces/employee-interface/grade.interface';
-import { CreateGradeDto } from '@/dtos/employee/grade.dto';
+import { CreateGradeDto,UpdateGradeDto } from '@/dtos/employee/grade.dto';
 import GradeModel from '@/models/employee/grade.model';
 
 
@@ -59,7 +59,7 @@ class GradeService{
      *Updates existing Grade 
      */
 
-     public async updateGrade(GradeId:string,GradeData: CreateGradeDto)  : Promise<Grade>{
+     public async updateGrade(GradeId:string,GradeData: UpdateGradeDto)  : Promise<Grade>{
 
         //Check if data is empty
         if (isEmpty(GradeData)) throw new HttpException(400, "No data provided");
