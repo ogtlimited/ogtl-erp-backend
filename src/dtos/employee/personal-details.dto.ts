@@ -1,4 +1,4 @@
-import {IsDate, IsNotEmpty, IsString } from 'class-validator';
+import {IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreatePersonalDetailsDto{
     @IsString()
@@ -8,7 +8,7 @@ export class CreatePersonalDetailsDto{
     @IsString()
         public employee_id: string;
 
-    @IsString()
+    @IsNumber()
         public passport_number: string;
 
     @IsDate()
@@ -35,7 +35,7 @@ export class UpdatePersonalDetailsDto{
     @IsString()
         public employee_id: string;
 
-    @IsString()
+    @IsNumber()
         public passport_number: string;
 
     @IsDate()

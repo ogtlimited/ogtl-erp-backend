@@ -1,7 +1,7 @@
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { EmployeeType } from '@/interfaces/employee-interface/employee-type.interface';
-import { CreateEmployeeTypeDto } from '@/dtos/employee/employee-type.dto';
+import { CreateEmployeeTypeDto,UpdateEmployeeTypeDto } from '@/dtos/employee/employee-type.dto';
 import EmployeeTypeModel from '@models/employee/employee-type.model';
 
 
@@ -57,7 +57,7 @@ class EmployeeTypeService{
      *Updates existing EmployeeType 
      */
 
-     public async updateEmployeeType(EmployeeTypeId:string,EmployeeTypeData: CreateEmployeeTypeDto)  : Promise<EmployeeType>{
+     public async updateEmployeeType(EmployeeTypeId:string,EmployeeTypeData: UpdateEmployeeTypeDto)  : Promise<EmployeeType>{
 
         //Check if data is empty
         if (isEmpty(EmployeeTypeData)) throw new HttpException(400, "No data provided");

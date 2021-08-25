@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { CreateEmergencyContactDto } from '@/dtos/employee/emergency-contact.dto';
+import { CreateEmergencyContactDto,UpdateEmergencyContactDto } from '@/dtos/employee/emergency-contact.dto';
 import { EmergencyContact } from '@/interfaces/employee-interface/emergency-contact.interface';
 import EmergencyContactService from '@/services/employee/emergency-contact.service';
 
@@ -50,7 +50,7 @@ class EmergencyContactController{
     public updateEmergencyContacts = async  (req: Request, res: Response, next: NextFunction) => {
         try{
             const EmergencyContactsId: string = req.params.id;
-            const EmergencyContactsData: CreateEmergencyContactDto = req.body;
+            const EmergencyContactsData: UpdateEmergencyContactDto = req.body;
             const updateEmergencyContactsData: EmergencyContact = await this.EmergencyContactService.updateEmergencyContact(EmergencyContactsId,EmergencyContactsData);
             res.status(200).json({data:updateEmergencyContactsData, message:"EmergencyContacts Updated"});
         }

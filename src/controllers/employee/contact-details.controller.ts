@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { CreateContactDetailsDto } from '@/dtos/employee/contact-details.dto';
+import { CreateContactDetailsDto,UpdateContactDetailsDto } from '@/dtos/employee/contact-details.dto';
 import { ContactDetail } from '@/interfaces/employee-interface/contact-details.interface';
 import ContactDetailsService from '@/services/employee/contact-details.service';
 
@@ -52,7 +52,7 @@ class ContactDetailsController{
 public updateContactDetails = async  (req: Request, res: Response, next: NextFunction) => {
     try{
         const ContactDetailsId: string = req.params.id;
-        const ContactDetailsData: CreateContactDetailsDto = req.body;
+        const ContactDetailsData: UpdateContactDetailsDto = req.body;
         const updateContactDetailsData: ContactDetail = await this.ContactDetailsService.updateContactDetails(ContactDetailsId,ContactDetailsData);
         res.status(200).json({data:updateContactDetailsData, message:"ContactDetails Updated"});
     }

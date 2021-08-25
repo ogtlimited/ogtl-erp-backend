@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { NextFunction, Request, Response } from 'express';
-import { CreateEmployeeDto } from '@dtos/employee/employee.dto';
+import { CreateEmployeeDto,UpdateEmployeeDto } from '@dtos/employee/employee.dto';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
 import EmployeeService from '@services/employee.service';
 
@@ -42,7 +42,7 @@ class EmployeesController {
   public updateEmployee = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const EmployeeId: string = req.params.id;
-      const EmployeeData: CreateEmployeeDto = req.body;
+      const EmployeeData: UpdateEmployeeDto = req.body;
       const updateEmployeeData: Employee = await this.EmployeeService.updateEmployee(EmployeeId, EmployeeData);
 
       res.status(200).json({ data: updateEmployeeData, message: 'updated' });

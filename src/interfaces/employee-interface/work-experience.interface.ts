@@ -3,6 +3,6 @@ export interface WorkExperience{
     employee_id: string;
     company: string;
     designation: string;
-    salary: string;
+    salary: Number;
     address: string;
 }

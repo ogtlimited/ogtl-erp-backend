@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { Grade } from '@/interfaces/employee-interface/grade.interface';
-import { CreateGradeDto } from '@/dtos/employee/grade.dto';
+import { CreateGradeDto,UpdateGradeDto } from '@/dtos/employee/grade.dto';
 import GradeService from '@/services/employee/grade.service';
 
 
@@ -49,7 +49,7 @@ class GradeController{
    public updateGrade = async  (req: Request, res: Response, next: NextFunction) => {
     try{
         const GradeId: string = req.params.id;
-        const GradeData: CreateGradeDto = req.body;
+        const GradeData: UpdateGradeDto = req.body;
         const updateGradeData: Grade = await this.GradeService.updateGrade(GradeId,GradeData);
         res.status(200).json({data:updateGradeData, message:"Grade Updated"});
     }

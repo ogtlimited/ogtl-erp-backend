@@ -1,4 +1,4 @@
-import {IsDate, IsNotEmpty, IsString } from 'class-validator';
+import {IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateSalaryDetailsDto{
      @IsString()
@@ -17,7 +17,7 @@ export class CreateSalaryDetailsDto{
     @IsString()
        public bank_code: string;
     
-    @IsString()
+    @IsNumber()
         public bank_account_number: string;
 
 
@@ -40,7 +40,7 @@ export class UpdateSalaryDetailsDto{
    @IsString()
       public bank_code: string;
    
-   @IsString()
+    @IsNumber()
        public bank_account_number: string;
 
 

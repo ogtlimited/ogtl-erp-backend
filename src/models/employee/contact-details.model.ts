@@ -11,7 +11,7 @@ const contactDetailsSchema: Schema = new Schema (
             ref: "Employee",
           },
           mobile: {
-            type: String,
+            type: Number,
             required: true,
           },
       
