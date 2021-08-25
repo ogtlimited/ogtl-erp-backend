@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { NextFunction, Request, Response } from 'express';
-import { CreateSalaryStructureAssignmentDto } from '@dtos/payroll/salary-structure-assigment.dto';
+import { CreateSalaryStructureAssignmentDto } from '@/dtos/payroll/salary-structure-assignment.dto';
 import { ISalaryStructureAssignment } from '@/interfaces/payroll/salary-structure-assignment.interface';
 import SalaryStructureAssignmentService from '@/services/payroll/salary-structure-assignment.service';
 

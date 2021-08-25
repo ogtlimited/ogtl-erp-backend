@@ -2,7 +2,7 @@
 import JobOfferService from '@services/recruitment/job_offer.service';
 import { NextFunction, Request, Response } from 'express';
 import { IJobOffer } from '@interfaces/recruitment/job_offer.interface';
-import { CreateJobOfferDto } from '@dtos/recruitment/job_offer.dto';
+import { CreateJobOfferDto, UpdateJobOfferDto } from '@dtos/recruitment/job_offer.dto';
 
 class JobOfferController {
   public jobOfferService = new JobOfferService();
@@ -45,7 +45,7 @@ class JobOfferController {
   public updateJobOffer = async (req:Request, res:Response, next:NextFunction) =>{
     try {
       const jobOfferId:string = req.body.id;
-      const jobOfferData:CreateJobOfferDto = req.body;
+      const jobOfferData:UpdateJobOfferDto = req.body;
       const updateJobOfferData: IJobOffer = await this.jobOfferService.updateJobOffer(jobOfferId,jobOfferData);
       res.status(200).json({ data: updateJobOfferData, message: 'Job offer updated.' });
     }

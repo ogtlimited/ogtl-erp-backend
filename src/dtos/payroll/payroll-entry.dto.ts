@@ -35,12 +35,6 @@ export class CreatePayrollDto {
   @IsBoolean()
   public salarySlipsSubmitted: Boolean;
   
-  @IsBoolean()
-  public deductTaxForUnsubmittedTaxExemptionProof: Boolean;
-  
-  @IsBoolean()
-  public deductTaxForUnclaimedEmployeeBenefits: Boolean;
-  
   @IsNumber()
   public numberOfEmployees: Number;
 

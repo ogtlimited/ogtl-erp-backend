@@ -1,0 +1,90 @@
+tags:
+- name: promotion
+  description: promotion API
+
+paths:
+  /api/promotion:
+# [GET] promotion
+    get:
+      tags:
+      - promotion
+      summary: Find All promotions
+      responses:
+        200:
+          description: 'OK'
+        404:
+          description: 'Not Found'
+        500:
+          description: 'Server Error'
+
+# [POST] promotion
+    post:
+      tags:
+      - promotion
+      summary: Add promotion
+      parameters:
+      - name: body
+        in: body
+        description: promotion Data
+        required: true
+        schema:
+          $ref: '#/definitions/promotion'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] promotion/id
+  /promotion/{id}:
+    get:
+      tags:
+      - promotion
+      summary: Find promotion By Id
+      parameters:
+      - name: id
+        in: path
+        description: promotion Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        404:
+          description: 'Not found'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  promotion:
+    type: object
+    required:
+        - employee
+        - department
+        - promotionDetails
+        - branch
+        - promotionDate
+    properties:
+      employee:
+        employee: string
+        description: employee Id
+      promotionDetails:
+        type: string
+        description: promotion Details Id
+      department:
+        type: string
+        description: department Id
+      branch:
+        type: string
+        description: branch Id
+      promotionDate:
+        type: string
+        description: yy-mm-dd
+      
+schemes:
+ - https
+ - http

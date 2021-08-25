@@ -10,9 +10,6 @@ export class CreateSalaryStructureAssignmentDto {
 
     @IsString()
     public department: string;
-
-    @IsString()
-    public incomeTaxSlab: string;
    
     @IsString()
     public status: string;
