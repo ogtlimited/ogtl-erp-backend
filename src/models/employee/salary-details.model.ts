@@ -21,7 +21,7 @@ const salaryDetailsSchema: Schema = new Schema(
             type: String,
         },
         bank_account_number: {
-            type: String,
+            type: Number,
         },
 
     },

@@ -1,34 +1,33 @@
 tags:
--name: Designation
- description: Designation API
+- name: Designation
+  description: Designation API
 
 paths:
-#[GET] Designation
+# [GET] designation
   /api/designation:
     get:
-     tags:
-     -Designation
-     summary: Get all Designation
-     responses:
-       200:
+      tags:
+      - designation
+      summary: Find All designation
+      responses:
+        200:
           description: 'OK'
         500:
           description: 'Server Error'
 
-#[POST] Designation
-   post:
-    tags:
-     -Designation
-    summary: Add new Designation
-    parameters:
-      -name: body
-       in: body
-       description: Designation data
-       required: true
-       schema: 
-        $ref: '#/definitions/designation'
-    responses:
-        responses:
+# [POST] designation
+    post:
+      tags:
+      - designation
+      summary: Add designation
+      parameters:
+      - name: body
+        in: body
+        description: designation Data
+        required: true
+        schema:
+          $ref: '#/definitions/designation'
+      responses:
         201:
           description: 'Created'
         400:
@@ -38,31 +37,29 @@ paths:
         500:
           description: 'Server Error'
 
-
-#[GET] Designation/id
-api/designation/{id}:
-  get:
-    tags:
-     -Designation
-    summary: Find Designation by Id
-    parameters:
-      -name: id
-       in: path
-       description: Designation Id
-       required: true
-    responses:
-      200:
+# [GET] designation/id
+  /api/designation/{id}:
+    get:
+      tags:
+      - designation
+      summary: Find designation By Id
+      parameters:
+      - name: id
+        in: path
+        description: designation Id
+        required: true
+      responses:
+        200:
           description: 'OK'
         409:
           description: 'Conflict'
         500:
           description: 'Server Error'
 
-
-#[PUT] Designation/id
+# [PUT] designation/id
     put:
       tags:
-      - Designation
+      - designation
       summary: Update Designation By Id
       parameters:
       - name: id
@@ -85,10 +82,10 @@ api/designation/{id}:
         500:
           description: 'Server Error'
 
-# [DELETE] Designation/id
+# [DELETE] designation/id
     delete:
       tags:
-      - Designation
+      - designation
       summary: Delete Designation By Id
       parameters:
       - name: id
@@ -110,15 +107,15 @@ api/designation/{id}:
 #definitions
 definitions: 
   Designation:
-   type: object
-   required:
-     -designation
-  properties:
-    id:
-      description: Designation Id
-    designation:
-      type: string
-      description: Designation name
+    type: object
+    required:
+      - designation
+    properties:
+      id:
+        description: Designation Id
+      designation:
+        type: string
+        description: Designation name
 
 schemes:
   - https

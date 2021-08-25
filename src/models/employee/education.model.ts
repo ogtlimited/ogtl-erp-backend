@@ -25,7 +25,7 @@ const educationSchema : Schema = new Schema({
    },
 
    year_of_passing: {
-        type: String,
+        type: Number,
   },
 },
 

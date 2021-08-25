@@ -1,34 +1,33 @@
 tags:
--name: Branch
- description: Branch API
+- name: Leave Allocation
+  description: Leave allocation API
 
 paths:
-#[GET] Branch
-  /api/branch:
+# [GET] allocation
+  /api/leave-allocation:
     get:
-     tags:
-     -Branch
-     summary: Get all branches
-     responses:
-       200:
+      tags:
+      - allocation
+      summary: Find All allocation
+      responses:
+        200:
           description: 'OK'
         500:
           description: 'Server Error'
 
-#[POST] Branch
-   post:
-    tags:
-     -Branch
-    summary: Add new Branch
-    parameters:
-      -name: body
-       in: body
-       description: Branch data
-       required: true
-       schema: 
-        $ref: '#/definitions/branch'
-    responses:
-        responses:
+# [POST] allocation
+    post:
+      tags:
+      - allocation
+      summary: Add leave allocation
+      parameters:
+      - name: body
+        in: body
+        description: leave allocation Data
+        required: true
+        schema:
+          $ref: '#/definitions/allocation'
+      responses:
         201:
           description: 'Created'
         400:
@@ -38,43 +37,41 @@ paths:
         500:
           description: 'Server Error'
 
-
-#[GET] branch/id
-api/branch/{id}:
-  get:
-    tags:
-     -Branch
-    summary: Find Branch by Id
-    parameters:
-      -name: id
-       in: path
-       description: Branch Id
-       required: true
-    responses:
-      200:
+# [GET] allocation/id
+  /api/leave-allocation/{id}:
+    get:
+      tags:
+      - allocation
+      summary: Find leave allocation By Id
+      parameters:
+      - name: id
+        in: path
+        description: leave allocation Id
+        required: true
+      responses:
+        200:
           description: 'OK'
         409:
           description: 'Conflict'
         500:
           description: 'Server Error'
 
-
-#[PUT] branch/id
+# [PUT] allocation/id
     put:
       tags:
-      - Branch
-      summary: Update Branch By Id
+      - allocation
+      summary: Update leave allocation By Id
       parameters:
       - name: id
         in: path
-        description: Branch Id
+        description: leave allocation Id
         required: true
       - name: body
         in: body
-        description: Branch Data
+        description: leave allocation Data
         required: true
         schema:
-          $ref: '#/definitions/branch'
+          $ref: '#/definitions/allocation'
       responses:
         200:
           description: 'OK'
@@ -85,15 +82,15 @@ api/branch/{id}:
         500:
           description: 'Server Error'
 
-# [DELETE] branch/id
+# [DELETE] allocation/id
     delete:
       tags:
-      - Branch
-      summary: Delete branch By Id
+      - allocation
+      summary: Delete leave allocation By Id
       parameters:
       - name: id
         in: path
-        description: Branch Id
+        description: leave allocation Id
         required: true
         schema:
           type: string
@@ -106,20 +103,20 @@ api/branch/{id}:
           description: 'Conflict'
         500:
           description: 'Server Error'
-   
+
 
 #definitions
 definitions: 
   Branch:
-   type: object
-   required:
-     -branch
-  properties:
-    id:
-      description: Branch Id
-    branch:
-      type: string
-      description: Branch name
+    type: object
+    required:
+      - branch
+    properties:
+      id:
+        description: Branch Id
+      branch:
+        type: string
+        description: Branch name
 
 schemes:
   - https

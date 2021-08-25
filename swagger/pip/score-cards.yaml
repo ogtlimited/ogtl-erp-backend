@@ -1,32 +1,32 @@
 tags:
-- name: WorkExperience
-  description: WorkExperience API
+- name: scoreCard
+  description: scoreCard API
 
 paths:
-# [GET] WorkExperience
-  /api/WorkExperience:
+# [GET] scoreCard
+  /api/scoreCard:
     get:
       tags:
-      - WorkExperience
-      summary: Find All WorkExperiences
+      - scoreCard
+      summary: Find All score Cards
       responses:
         200:
           description: 'OK'
         500:
           description: 'Server Error'
 
-# [POST] WorkExperience
+# [POST] scoreCard
     post:
       tags:
-      - WorkExperience
-      summary: Add WorkExperience
+      - scoreCard
+      summary: Add score Card
       parameters:
       - name: body
         in: body
-        description: WorkExperience Data
+        description: scoreCard Data
         required: true
         schema:
-          $ref: '#/definitions/WorkExperience'
+          $ref: '#/definitions/scoreCard'
       responses:
         201:
           description: 'Created'
@@ -37,16 +37,16 @@ paths:
         500:
           description: 'Server Error'
 
-# [GET] WorkExperience/id
-  /api/WorkExperience/{id}:
+# [GET] scoreCard/id
+  /api/scoreCard/{id}:
     get:
       tags:
-      - WorkExperience
-      summary: Find WorkExperience By Id
+      - scoreCard
+      summary: Find scoreCard By Id
       parameters:
       - name: id
         in: path
-        description: WorkExperience Id
+        description: scoreCard Id
         required: true
       responses:
         200:
@@ -56,22 +56,22 @@ paths:
         500:
           description: 'Server Error'
 
-# [PUT] WorkExperience/id
+# [PUT] scoreCard/id
     put:
       tags:
-      - WorkExperience
-      summary: Update WorkExperience By Id
+      - scoreCard
+      summary: Update scoreCard By Id
       parameters:
       - name: id
         in: path
-        description: WorkExperience Id
+        description: scoreCard Id
         required: true
       - name: body
         in: body
-        description: WorkExperience Data
+        description: scoreCard Data
         required: true
         schema:
-          $ref: '#/definitions/WorkExperience'
+          $ref: '#/definitions/scoreCard'
       responses:
         200:
           description: 'OK'
@@ -82,15 +82,15 @@ paths:
         500:
           description: 'Server Error'
 
-# [DELETE] WorkExperience/id
+# [DELETE] scoreCard/id
     delete:
       tags:
-      - WorkExperience
-      summary: Delete WorkExperience By Id
+      - scoreCard
+      summary: Delete scoreCard By Id
       parameters:
       - name: id
         in: path
-        description: WorkExperience Id
+        description: scoreCard Id
         required: true
         schema:
           type: string
@@ -105,35 +105,30 @@ paths:
           description: 'Server Error'
 
 
-#definitions
-definitions: 
-  WorkExperience:
+definitions:
+  Score Card:
     type: object
     required:
-     - employee_id
+        - employee_id
+        - performance_score
+        - company_values_score
     properties:
       id:
-        description: WorkExperience Id
+         type: string
+         description: allocation Id
       employee_id:
-        type: string
-        description: Employee Id
-      company:
          type: string
-         description: company where employee worked
-      designation:
-         type: string
-         description: designation of employee
-      salary:
+         description: employee id
+      performance_score:
          type: number
-         description: salary of employee
-      address:
-         type: string
-         description: current address of company
+         description: Employees performance score
+      company_values_score:
+         type: number
+         description: Employees company values score
       
-      
-      
+
 
 
 schemes:
-  - https
-  - http
+ - https
+ - http

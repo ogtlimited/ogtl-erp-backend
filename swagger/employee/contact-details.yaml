@@ -1,62 +1,62 @@
 tags:
--name: ContactDetails
- description: ContactDetails API
+- name: ContactDetails
+  description: ContactDetails API
 
 paths:
 #[GET] ContactDetails
   /api/ContactDetails:
     get:
      tags:
-     -ContactDetails
+     - ContactDetails
      summary: Get all ContactDetails
      responses:
        200:
           description: 'OK'
-        500:
+       500:
           description: 'Server Error'
 
 #[POST] ContactDetails
-   post:
-    tags:
-     -ContactDetails
-    summary: Add new ContactDetails
-    parameters:
-      -name: body
-       in: body
-       description: ContactDetails data
-       required: true
-       schema: 
-        $ref: '#/definitions/ContactDetails'
-    responses:
-        responses:
-        201:
-          description: 'Created'
-        400:
-          description: 'Bad Request'
-        409:
-          description: 'Conflict'
-        500:
-          description: 'Server Error'
+    post:
+      tags:
+      - ContactDetails
+      summary: Add new ContactDetails
+      parameters:
+      - name: body
+        in: body
+        description: ContactDetails data
+        required: true
+        schema: 
+          $ref: '#/definitions/ContactDetails'
+      responses:
+          responses:
+          201:
+            description: 'Created'
+          400:
+            description: 'Bad Request'
+          409:
+            description: 'Conflict'
+          500:
+            description: 'Server Error'
 
 
 #[GET] ContactDetails/id
-api/ContactDetails/{id}:
-  get:
-    tags:
-     -ContactDetails
-    summary: Find ContactDetails by Id
-    parameters:
-      -name: id
-       in: path
-       description: ContactDetails Id
-       required: true
-    responses:
-      200:
-          description: 'OK'
+  api/ContactDetails/{id}:
+    get:
+      tags:
+      - ContactDetails
+      summary: Find ContactDetails by Id
+      parameters:
+      - name: id
+        in: path
+        description: ContactDetails Id
+        required: true
+      responses:
+        200:
+            description: 'OK'
         409:
-          description: 'Conflict'
+            description: 'Conflict'
         500:
-          description: 'Server Error'
+            description: 'Server Error'
 
 
 #[PUT] ContactDetails/id
@@ -113,9 +113,9 @@ definitions:
   ContactDetails:
     type: object
     required:
-     -employee_id
-     -mobile
-     -personal_email
+     - employee_id
+     - mobile
+     - personal_email
     properties:
       id:
         description: ContactDetails Id
@@ -123,7 +123,7 @@ definitions:
         type: string
         description: Employee Id
       mobile:
-         type: string
+         type: number
          description: Mobile number of employee
       personal_email:
          type: string
@@ -143,9 +143,7 @@ definitions:
          type: string
          description: current address of employee
       
-      
-      
-
+  
 
 schemes:
   - https

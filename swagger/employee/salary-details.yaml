@@ -1,34 +1,33 @@
 tags:
--name: SalaryDetails
- description: SalaryDetails API
+- name: SalaryDetails
+  description: SalaryDetails API
 
 paths:
-#[GET] SalaryDetails
+# [GET] SalaryDetails
   /api/SalaryDetails:
     get:
-     tags:
-     -SalaryDetails
-     summary: Get all SalaryDetails
-     responses:
-       200:
+      tags:
+      - SalaryDetails
+      summary: Find All SalaryDetailss
+      responses:
+        200:
           description: 'OK'
         500:
           description: 'Server Error'
 
-#[POST] SalaryDetails
-   post:
-    tags:
-     -SalaryDetails
-    summary: Add new SalaryDetails
-    parameters:
-      -name: body
-       in: body
-       description: SalaryDetails data
-       required: true
-       schema: 
-        $ref: '#/definitions/SalaryDetails'
-    responses:
-        responses:
+# [POST] SalaryDetails
+    post:
+      tags:
+      - SalaryDetails
+      summary: Add SalaryDetails
+      parameters:
+      - name: body
+        in: body
+        description: SalaryDetails Data
+        required: true
+        schema:
+          $ref: '#/definitions/SalaryDetails'
+      responses:
         201:
           description: 'Created'
         400:
@@ -38,28 +37,26 @@ paths:
         500:
           description: 'Server Error'
 
-
-#[GET] SalaryDetails/id
-api/SalaryDetails/{id}:
-  get:
-    tags:
-     -SalaryDetails
-    summary: Find SalaryDetails by Id
-    parameters:
-      -name: id
-       in: path
-       description: SalaryDetails Id
-       required: true
-    responses:
-      200:
+# [GET] SalaryDetails/id
+  /api/SalaryDetails/{id}:
+    get:
+      tags:
+      - SalaryDetails
+      summary: Find SalaryDetails By Id
+      parameters:
+      - name: id
+        in: path
+        description: SalaryDetails Id
+        required: true
+      responses:
+        200:
           description: 'OK'
         409:
           description: 'Conflict'
         500:
           description: 'Server Error'
 
-
-#[PUT] SalaryDetails/id
+# [PUT] SalaryDetails/id
     put:
       tags:
       - SalaryDetails
@@ -113,8 +110,7 @@ definitions:
   SalaryDetails:
     type: object
     required:
-     -employee_id
-     
+     - employee_id
     properties:
       id:
         description: SalaryDetails Id
@@ -122,7 +118,7 @@ definitions:
         type: string
         description: Employee Id
       bank_account_number:
-         type: string
+         type: number
          description: Account number of employee
       bank_name:
          type: string

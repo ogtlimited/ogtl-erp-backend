@@ -12,7 +12,7 @@ const personalDetailsSchema: Schema = new Schema(
                 ref: "Employee",
             },
         passport_number: {
-            type: String,
+            type: Number,
         },
         date_of_issue: {
             type: Date,

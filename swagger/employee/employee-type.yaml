@@ -1,34 +1,33 @@
 tags:
--name: EmployeeType
- description: EmployeeType API
+- name: EmployeeType
+  description: EmployeeType API
 
 paths:
-#[GET] EmployeeType
+# [GET] EmployeeType
   /api/EmployeeType:
     get:
-     tags:
-     -EmployeeType
-     summary: Get all Employee Types
-     responses:
-       200:
+      tags:
+      - EmployeeType
+      summary: Find All Employee Types
+      responses:
+        200:
           description: 'OK'
         500:
           description: 'Server Error'
 
-#[POST] EmployeeType
-   post:
-    tags:
-     -EmployeeType
-    summary: Add new EmployeeType
-    parameters:
-      -name: body
-       in: body
-       description: EmployeeType data
-       required: true
-       schema: 
-        $ref: '#/definitions/EmployeeType'
-    responses:
-        responses:
+# [POST] EmployeeType
+    post:
+      tags:
+      - EmployeeType
+      summary: Add Employee Type
+      parameters:
+      - name: body
+        in: body
+        description: Employee Type Data
+        required: true
+        schema:
+          $ref: '#/definitions/EmployeeType'
+      responses:
         201:
           description: 'Created'
         400:
@@ -38,28 +37,26 @@ paths:
         500:
           description: 'Server Error'
 
-
-#[GET] EmployeeType/id
-api/EmployeeType/{id}:
-  get:
-    tags:
-     -EmployeeType
-    summary: Find EmployeeType by Id
-    parameters:
-      -name: id
-       in: path
-       description: EmployeeType Id
-       required: true
-    responses:
-      200:
+# [GET] EmployeeType/id
+  /api/EmployeeType/{id}:
+    get:
+      tags:
+      - EmployeeType
+      summary: Find Employee Type By Id
+      parameters:
+      - name: id
+        in: path
+        description: Employee Type Id
+        required: true
+      responses:
+        200:
           description: 'OK'
         409:
           description: 'Conflict'
         500:
           description: 'Server Error'
 
-
-#[PUT] EmployeeType/id
+# [PUT] EmployeeType/id
     put:
       tags:
       - EmployeeType
@@ -108,12 +105,13 @@ api/EmployeeType/{id}:
           description: 'Server Error'
 
 
+
 #definitions
 definitions: 
   EmployeeType:
     type: object
     required:
-     -type
+     - type
     properties:
       id:
         description: EmployeeType Id

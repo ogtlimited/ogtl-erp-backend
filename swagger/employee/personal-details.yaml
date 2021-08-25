@@ -1,34 +1,33 @@
 tags:
--name: PersonalDetails
- description: PersonalDetails API
+- name: PersonalDetails
+  description: PersonalDetails API
 
 paths:
-#[GET] PersonalDetails
+# [GET] PersonalDetails
   /api/PersonalDetails:
     get:
-     tags:
-     -PersonalDetails
-     summary: Get all PersonalDetails
-     responses:
-       200:
+      tags:
+      - PersonalDetails
+      summary: Find All PersonalDetailss
+      responses:
+        200:
           description: 'OK'
         500:
           description: 'Server Error'
 
-#[POST] PersonalDetails
-   post:
-    tags:
-     -PersonalDetails
-    summary: Add new PersonalDetails
-    parameters:
-      -name: body
-       in: body
-       description: PersonalDetails data
-       required: true
-       schema: 
-        $ref: '#/definitions/PersonalDetails'
-    responses:
-        responses:
+# [POST] PersonalDetails
+    post:
+      tags:
+      - PersonalDetails
+      summary: Add PersonalDetails
+      parameters:
+      - name: body
+        in: body
+        description: PersonalDetails Data
+        required: true
+        schema:
+          $ref: '#/definitions/PersonalDetails'
+      responses:
         201:
           description: 'Created'
         400:
@@ -38,28 +37,26 @@ paths:
         500:
           description: 'Server Error'
 
-
-#[GET] PersonalDetails/id
-api/PersonalDetails/{id}:
-  get:
-    tags:
-     -PersonalDetails
-    summary: Find PersonalDetails by Id
-    parameters:
-      -name: id
-       in: path
-       description: PersonalDetails Id
-       required: true
-    responses:
-      200:
+# [GET] PersonalDetails/id
+  /api/PersonalDetails/{id}:
+    get:
+      tags:
+      - PersonalDetails
+      summary: Find PersonalDetails By Id
+      parameters:
+      - name: id
+        in: path
+        description: PersonalDetails Id
+        required: true
+      responses:
+        200:
           description: 'OK'
         409:
           description: 'Conflict'
         500:
           description: 'Server Error'
 
-
-#[PUT] PersonalDetails/id
+# [PUT] PersonalDetails/id
     put:
       tags:
       - PersonalDetails
@@ -113,8 +110,7 @@ definitions:
   PersonalDetails:
     type: object
     required:
-     -employee_id
-     
+     - employee_id
     properties:
       id:
         description: PersonalDetails Id
@@ -122,7 +118,7 @@ definitions:
         type: string
         description: Employee Id
       passport_number:
-         type: string
+         type: number
          description: passport number of employee
       date_of_issue:
          type: date

@@ -1,34 +1,33 @@
 tags:
--name: Exit
- description: Exit API
+- name: Exit
+  description: Exit API
 
 paths:
-#[GET] Exit
+# [GET] Exit
   /api/Exit:
     get:
-     tags:
-     -Exit
-     summary: Get all Exits
-     responses:
-       200:
+      tags:
+      - Exit
+      summary: Find All Exits
+      responses:
+        200:
           description: 'OK'
         500:
           description: 'Server Error'
 
-#[POST] Exit
-   post:
-    tags:
-     -Exit
-    summary: Add new Exit
-    parameters:
-      -name: body
-       in: body
-       description: Exit data
-       required: true
-       schema: 
-        $ref: '#/definitions/Exit'
-    responses:
-        responses:
+# [POST] Exit
+    post:
+      tags:
+      - Exit
+      summary: Add Exit
+      parameters:
+      - name: body
+        in: body
+        description: Exit Data
+        required: true
+        schema:
+          $ref: '#/definitions/Exit'
+      responses:
         201:
           description: 'Created'
         400:
@@ -38,28 +37,26 @@ paths:
         500:
           description: 'Server Error'
 
-
-#[GET] Exit/id
-api/Exit/{id}:
-  get:
-    tags:
-     -Exit
-    summary: Find Exit by Id
-    parameters:
-      -name: id
-       in: path
-       description: Exit Id
-       required: true
-    responses:
-      200:
+# [GET] Exit/id
+  /api/Exit/{id}:
+    get:
+      tags:
+      - Exit
+      summary: Find Exit By Id
+      parameters:
+      - name: id
+        in: path
+        description: Exit Id
+        required: true
+      responses:
+        200:
           description: 'OK'
         409:
           description: 'Conflict'
         500:
           description: 'Server Error'
 
-
-#[PUT] Exit/id
+# [PUT] Exit/id
     put:
       tags:
       - Exit
@@ -108,13 +105,13 @@ api/Exit/{id}:
           description: 'Server Error'
 
 
+
 #definitions
 definitions: 
   Exit:
     type: object
     required:
-     -employee_id
-     
+     - employee_id
     properties:
       id:
         description: Exit Id

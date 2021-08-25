@@ -1,34 +1,33 @@
 tags:
--name: History
- description: History API
+- name: History
+  description: History API
 
 paths:
-#[GET] History
+# [GET] History
   /api/History:
     get:
-     tags:
-     -History
-     summary: Get all Historys
-     responses:
-       200:
+      tags:
+      - History
+      summary: Find All Exits
+      responses:
+        200:
           description: 'OK'
         500:
           description: 'Server Error'
 
-#[POST] History
-   post:
-    tags:
-     -History
-    summary: Add new History
-    parameters:
-      -name: body
-       in: body
-       description: History data
-       required: true
-       schema: 
-        $ref: '#/definitions/History'
-    responses:
-        responses:
+# [POST] History
+    post:
+      tags:
+      - History
+      summary: Add History
+      parameters:
+      - name: body
+        in: body
+        description: History Data
+        required: true
+        schema:
+          $ref: '#/definitions/History'
+      responses:
         201:
           description: 'Created'
         400:
@@ -38,28 +37,26 @@ paths:
         500:
           description: 'Server Error'
 
-
-#[GET] History/id
-api/History/{id}:
-  get:
-    tags:
-     -History
-    summary: Find History by Id
-    parameters:
-      -name: id
-       in: path
-       description: History Id
-       required: true
-    responses:
-      200:
+# [GET] History/id
+  /api/History/{id}:
+    get:
+      tags:
+      - History
+      summary: Find History By Id
+      parameters:
+      - name: id
+        in: path
+        description: History Id
+        required: true
+      responses:
+        200:
           description: 'OK'
         409:
           description: 'Conflict'
         500:
           description: 'Server Error'
 
-
-#[PUT] History/id
+# [PUT] History/id
     put:
       tags:
       - History
@@ -113,7 +110,7 @@ definitions:
   History:
     type: object
     required:
-     -employee_id
+     - employee_id
      
     properties:
       id:

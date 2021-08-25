@@ -1,34 +1,33 @@
 tags:
--name: Grade
- description: Grade API
+- name: Grade
+  description: Grade API
 
 paths:
-#[GET] Grade
+# [GET] Grade
   /api/grade:
     get:
-     tags:
-     -Grade
-     summary: Get all Gradees
-     responses:
-       200:
+      tags:
+      - Grade
+      summary: Find All Grades
+      responses:
+        200:
           description: 'OK'
         500:
           description: 'Server Error'
 
-#[POST] Grade
-   post:
-    tags:
-     -Grade
-    summary: Add new Grade
-    parameters:
-      -name: body
-       in: body
-       description: Grade data
-       required: true
-       schema: 
-        $ref: '#/definitions/Grade'
-    responses:
-        responses:
+# [POST] Grade
+    post:
+      tags:
+      - Grade
+      summary: Add Grade
+      parameters:
+      - name: body
+        in: body
+        description: Grade Data
+        required: true
+        schema:
+          $ref: '#/definitions/Grade'
+      responses:
         201:
           description: 'Created'
         400:
@@ -38,28 +37,26 @@ paths:
         500:
           description: 'Server Error'
 
-
-#[GET] Grade/id
-api/grade/{id}:
-  get:
-    tags:
-     -Grade
-    summary: Find Grade by Id
-    parameters:
-      -name: id
-       in: path
-       description: Grade Id
-       required: true
-    responses:
-      200:
+# [GET] Grade/id
+  /api/grade/{id}:
+    get:
+      tags:
+      - Grade
+      summary: Find Grade By Id
+      parameters:
+      - name: id
+        in: path
+        description: Grade Id
+        required: true
+      responses:
+        200:
           description: 'OK'
         409:
           description: 'Conflict'
         500:
           description: 'Server Error'
 
-
-#[PUT] Grade/id
+# [PUT] Grade/id
     put:
       tags:
       - Grade
@@ -111,15 +108,15 @@ api/grade/{id}:
 #definitions
 definitions: 
   Grade:
-   type: object
-   required:
-     -Grade
-  properties:
-    id:
-      description: Grade Id
-    Grade:
-      type: string
-      description: Grade name
+    type: object
+    required:
+      - grade
+    properties:
+      id:
+        description: Grade Id
+      Grade:
+        type: string
+        description: Grade name
 
 schemes:
   - https
