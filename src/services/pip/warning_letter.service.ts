@@ -31,11 +31,23 @@ class WarningLetterService {
     //Find warning letter using employee id;
     const findWarningLetterByEmployeeId: IWarningLetter = await this.warningLetter.findOne({employee_id:warningLetterData.employee_id});
     //1) check if warning count of employee is greater than 2 and terminate employee
+    if(findWarningLetterByEmployeeId.warningCount > 2 ){
+      //set employee active to false
+      findWarningLetterByEmployeeId.warningCount+= 1
+      // findWarningLetterByEmployeeId.employee_id
+    }
     //2) check if warning count of employee is greater than 1
     //   i: increment warning count
     //  ii: change inPipStatus to true
+    else if(findWarningLetterByEmployeeId.warningCount > 1 ){
+      findWarningLetterByEmployeeId.warningCount+= 1
+      findWarningLetterByEmployeeId.isInPip = true
+    }
     //3) check if warning count ===0
     //  i: increment warning count to 1
+      else{
+        findWarningLetterByEmployeeId.warningCount = 1
+    }
     // return warning letter
     return await this.warningLetter.create(warningLetterData);
   }

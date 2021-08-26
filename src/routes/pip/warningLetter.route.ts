@@ -5,7 +5,7 @@ import validationMiddleware from '@middlewares/validation.middleware';
 import { CreateWarningLetterDto } from '@dtos/pip/warning_letter.dto';
 
 class WarningLetterRoute implements Routes{
-  public path = "/shiftAssignment";
+  public path = "/warningLetter";
   public router = Router();
   public warningLetterController = new WarningLetterController();
 

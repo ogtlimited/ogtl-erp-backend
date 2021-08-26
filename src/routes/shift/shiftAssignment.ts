@@ -5,6 +5,7 @@ import ShiftAssignmentController from '@controllers/shift/shift_assignment.contr
 import validationMiddleware from '@middlewares/validation.middleware';
 import { CreateShiftAssignmentDto, UpdateShiftAssignmentDto } from '@dtos/shift/shift_assignment.dto';
 
+
 class ShiftAssignmentRoute implements Routes{
   public path = "/shiftAssignment";
   public router = Router();
