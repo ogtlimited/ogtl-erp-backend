@@ -34,6 +34,10 @@ const warningLetterSchema: Schema = new Schema(
       type: Number,
       default:0,
     },
+    Deparment_id:{
+      type: String,
+      // required: true
+    },
     isInPip:{
       type: Boolean,
       default: false,

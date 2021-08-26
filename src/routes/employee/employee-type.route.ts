@@ -4,6 +4,7 @@ import validationMiddleware from '@middlewares/validation.middleware';
 import { CreateEmployeeTypeDto, UpdateEmployeeTypeDto } from '@/dtos/employee/employee-type.dto';
 
 import EmployeeTypeController from '@/controllers/employee/employee-type.controller';
+import authMiddleware from '@/middlewares/auth.middleware';
 
 
 
@@ -18,11 +19,11 @@ class EmployeeTypeRoute implements Routes {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}`, this.EmployeeTypeController.getEmployeeType);
-        this.router.get(`${this.path}/:id`, this.EmployeeTypeController.getEmployeeTypeById);
-        this.router.post(`${this.path}`, validationMiddleware(CreateEmployeeTypeDto, 'body'), this.EmployeeTypeController.CreateEmployeeType);
-        this.router.put(`${this.path}/:id`, validationMiddleware(UpdateEmployeeTypeDto, 'body', true), this.EmployeeTypeController.updateEmployeeType);
-        this.router.delete(`${this.path}/:id`, this.EmployeeTypeController.deleteEmployeeType);
+        this.router.get(`${this.path}`,authMiddleware, this.EmployeeTypeController.getEmployeeType);
+        this.router.get(`${this.path}/:id`, authMiddleware,this.EmployeeTypeController.getEmployeeTypeById);
+        this.router.post(`${this.path}`,authMiddleware, validationMiddleware(CreateEmployeeTypeDto, 'body'), this.EmployeeTypeController.CreateEmployeeType);
+        this.router.put(`${this.path}/:id`,authMiddleware, validationMiddleware(UpdateEmployeeTypeDto, 'body', true), this.EmployeeTypeController.updateEmployeeType);
+        this.router.delete(`${this.path}/:id`, authMiddleware,this.EmployeeTypeController.deleteEmployeeType);
       }
     }
 

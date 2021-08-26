@@ -38,7 +38,7 @@ class HistoryService{
 
         if(findHistory) throw new HttpException(409, `Employee ${HistoryData.employee_id} already provided details`);
 
-        const createHistoryData = await this.Historys.create({HistoryData});
+        const createHistoryData = await this.Historys.create(HistoryData);
 
         return createHistoryData;
     }

@@ -4,7 +4,8 @@
 import { IsEmail, IsString } from 'class-validator';
 
 export class CreateEmployeeDto {
-  
+
+    
   @IsString()
   public ogId: string;
 
@@ -69,7 +70,7 @@ export class CreateEmployeeDto {
 export class UpdateEmployeeDto {
   
   @IsString()
-  public ogId: string;
+  public _id: string;
 
   @IsString()
   public fingerprint_details: string;

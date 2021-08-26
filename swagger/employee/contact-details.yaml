@@ -4,7 +4,7 @@ tags:
 
 paths:
 #[GET] ContactDetails
-  /api/ContactDetails:
+  /ContactDetails:
     get:
      tags:
      - ContactDetails
@@ -40,7 +40,7 @@ paths:
 
 
 #[GET] ContactDetails/id
-  api/ContactDetails/{id}:
+  /ContactDetails/{id}:
     get:
       tags:
       - ContactDetails

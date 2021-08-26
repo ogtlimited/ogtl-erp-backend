@@ -46,7 +46,7 @@ class BranchService {
        const findBranch: Branch = await this.Branches.findOne({branch: BranchData.branch});
        if(findBranch) throw new HttpException(409, `Branch ${BranchData.branch} already exists`);
 
-       const createBranchData: Branch = await this.Branches.create({BranchData});
+       const createBranchData: Branch = await this.Branches.create(BranchData);
        return createBranchData;
      }
 

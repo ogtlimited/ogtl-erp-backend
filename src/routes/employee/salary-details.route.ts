@@ -3,6 +3,7 @@ import { Routes } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
 import { CreateSalaryDetailsDto, UpdateSalaryDetailsDto } from '@/dtos/employee/salary-details.dto';
 import SalaryDetailsController from '@/controllers/employee/salary-details.controller';
+import authMiddleware from '@/middlewares/auth.middleware';
 
 
 class SalaryDetailsRoute implements Routes {
@@ -15,11 +16,11 @@ class SalaryDetailsRoute implements Routes {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}`, this.SalaryDetailsController.getSalaryDetails);
-        this.router.get(`${this.path}/:id`, this.SalaryDetailsController.getSalaryDetailsById);
-        this.router.post(`${this.path}`, validationMiddleware(CreateSalaryDetailsDto, 'body'), this.SalaryDetailsController.CreateSalaryDetails);
-        this.router.put(`${this.path}/:id`, validationMiddleware(UpdateSalaryDetailsDto, 'body', true), this.SalaryDetailsController.updateSalaryDetails);
-        this.router.delete(`${this.path}/:id`, this.SalaryDetailsController.deleteSalaryDetails);
+        this.router.get(`${this.path}`,authMiddleware, this.SalaryDetailsController.getSalaryDetails);
+        this.router.get(`${this.path}/:id`,authMiddleware, this.SalaryDetailsController.getSalaryDetailsById);
+        this.router.post(`${this.path}`,authMiddleware, validationMiddleware(CreateSalaryDetailsDto, 'body'), this.SalaryDetailsController.CreateSalaryDetails);
+        this.router.put(`${this.path}/:id`, authMiddleware,validationMiddleware(UpdateSalaryDetailsDto, 'body', true), this.SalaryDetailsController.updateSalaryDetails);
+        this.router.delete(`${this.path}/:id`,authMiddleware, this.SalaryDetailsController.deleteSalaryDetails);
       }
     }
 
