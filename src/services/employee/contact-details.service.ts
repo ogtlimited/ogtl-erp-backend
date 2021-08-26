@@ -1,4 +1,4 @@
-import { CreateContactDetailsDto } from "@/dtos/employee/contact-details.dto";
+import { CreateContactDetailsDto,UpdateContactDetailsDto } from "@/dtos/employee/contact-details.dto";
 import { ContactDetail } from "@/interfaces/employee-interface/contact-details.interface";
 import ContactDetailsModel from "@models/employee/contact-details.model"
 import { HttpException } from '@exceptions/HttpException';
@@ -58,7 +58,7 @@ class ContactDetailsService{
      * Updates ContactDetails
      */
 
-    public async updateContactDetails(ContactDetailsId:string,ContactDetailData:CreateContactDetailsDto):Promise<ContactDetail>{
+    public async updateContactDetails(ContactDetailsId:string,ContactDetailData:UpdateContactDetailsDto):Promise<ContactDetail>{
         if (isEmpty(ContactDetailData)) throw new HttpException(400, "No data provided");
 
         if(ContactDetailData.employee_id){

@@ -1,7 +1,7 @@
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { Education } from '@/interfaces/employee-interface/education.interface';
-import { CreateEducationDto } from '@/dtos/employee/education.dto';
+import { CreateEducationDto,UpdateEducationDto } from '@/dtos/employee/education.dto';
 import EducationModel from '@models/employee/education.model';
 
 class EducationService{
@@ -47,7 +47,7 @@ class EducationService{
 
     //Updates Education Details
 
-    public async updateEducation(EducationId:string,EducationData:CreateEducationDto):Promise<Education>{
+    public async updateEducation(EducationId:string,EducationData:UpdateEducationDto):Promise<Education>{
         if (isEmpty(EducationData)) throw new HttpException(400, "No data provided");
 
         if(EducationData.employee_id){

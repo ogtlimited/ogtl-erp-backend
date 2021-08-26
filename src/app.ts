@@ -121,10 +121,23 @@ class App {
         'swagger/employee-lifecycle/promotion.yaml',
         'swagger/employee-lifecycle/transfer.yaml',
         'swagger/pip/warningLetter.yaml',
+        'swagger/employee/branch.yaml',
+        'swagger/employee/contact-details.yaml',
+        'swagger/employee/designation.yaml',
+        'swagger/employee/education.yaml',
+        'swagger/employee/emergency-contact.yaml',
+        'swagger/employee/employee-type.yaml',
+        'swagger/employee/exit.yaml',
+        'swagger/employee/grade.yaml',
+        'swagger/employee/history.yaml',
+        'swagger/employee/personal-details.yaml',
+        'swagger/employee/salary-details.yaml',
+        'swagger/employee/work-experience.yaml',
+        'swagger/pip/score-cards.yaml',
         'swagger/loan/loan.yaml',
         'swagger/loan/loan-type.yaml',
         'swagger/loan/loan-application.yaml'
-      ],
+              ],
     };
 
     const specs = swaggerJSDoc(options);

@@ -9,7 +9,7 @@ import GradeController from '@/controllers/employee/grade.controller';
 
 
 class GradeRoute implements Routes {
-    public path = '/Grade';
+    public path = '/grade';
     public router = Router();
     public GradeController = new GradeController();
   

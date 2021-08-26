@@ -44,6 +44,7 @@ import JobOfferRoute from '@routes/recruitment/jobOffer.route';
 import JobApplicantRoute from '@routes/recruitment/jobApplicant.route';
 import TestRoute from '@routes/recruitment/test.route';
 import WarningLetterRoute from '@routes/pip/warningLetter.route';
+import scoreCardRoute from '@routes/pip/score-cards.route';
 import LoanRoute from '@routes/loan/loan.route';
 import LoanTypeRoute from '@routes/loan/loan-type.route';
 import LoanApplicationRoute from '@routes/loan/loan-application.route';
@@ -92,6 +93,7 @@ const app = new App([
   new TestRoute(),
   new ShiftAssignmentRoute(),
   new WarningLetterRoute(),
+  new scoreCardRoute()
   new LoanRoute(),
   new LoanTypeRoute(),
   // new LoanApplicationRoute(),

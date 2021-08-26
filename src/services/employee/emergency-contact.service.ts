@@ -1,7 +1,7 @@
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { EmergencyContact } from '@/interfaces/employee-interface/emergency-contact.interface';
-import { CreateEmergencyContactDto } from '@/dtos/employee/emergency-contact.dto';
+import { CreateEmergencyContactDto,UpdateEmergencyContactDto } from '@/dtos/employee/emergency-contact.dto';
 import EmergencyContactModel from '@models/employee/emergency-contact.model'
 
 
@@ -50,7 +50,7 @@ class EmergencyContactService{
 
     //Updates EmergencyContact Details
 
-    public async updateEmergencyContact(EmergencyContactId:string,EmergencyContactData:CreateEmergencyContactDto):Promise<EmergencyContact>{
+    public async updateEmergencyContact(EmergencyContactId:string,EmergencyContactData:UpdateEmergencyContactDto):Promise<EmergencyContact>{
         if (isEmpty(EmergencyContactData)) throw new HttpException(400, "No data provided");
 
         if(EmergencyContactData.employee_id){

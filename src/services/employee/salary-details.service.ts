@@ -1,7 +1,7 @@
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { SalaryDetail } from '@/interfaces/employee-interface/salary-details.interface';
-import { CreateSalaryDetailsDto } from '@/dtos/employee/salary-details.dto';
+import { CreateSalaryDetailsDto, UpdateSalaryDetailsDto } from '@/dtos/employee/salary-details.dto';
 import SalaryDetailsModel from '@models/employee/salary-details.model';
 
 class SalaryDetailsService{
@@ -59,7 +59,7 @@ class SalaryDetailsService{
      * Updates SalaryDetails
      */
 
-     public async updateSalaryDetails(SalaryDetailsId:string,SalaryDetailData:CreateSalaryDetailsDto):Promise<SalaryDetail>{
+     public async updateSalaryDetails(SalaryDetailsId:string,SalaryDetailData:UpdateSalaryDetailsDto):Promise<SalaryDetail>{
         if (isEmpty(SalaryDetailData)) throw new HttpException(400, "No data provided");
 
         if(SalaryDetailData.employee_id){

@@ -23,7 +23,7 @@ class AuthService {
     return createUserData;
   }
 
-  public async login(userData: CreateUserDto): Promise<{ cookie: string; findUser: User }> {
+  public async login(userData: CreateUserDto): Promise<{ token: any; findUser: User }> {
     if (isEmpty(userData)) throw new HttpException(400, "You're not userData");
 
     const findUser: User = await this.users.findOne({ email: userData.email });
@@ -34,8 +34,8 @@ class AuthService {
 
     const tokenData = this.createToken(findUser);
     const cookie = this.createCookie(tokenData);
-
-    return { cookie, findUser };
+    console.log(tokenData);
+    return { token: tokenData, findUser };
   }
 
   public async logout(userData: User): Promise<User> {
@@ -51,7 +51,7 @@ class AuthService {
     const dataStoredInToken: DataStoredInToken = { _id: user._id };
     const secretKey: string = config.get('secretKey');
     const expiresIn: number = 60 * 60;
-
+    console.log(dataStoredInToken);
     return { expiresIn, token: jwt.sign(dataStoredInToken, secretKey, { expiresIn }) };
   }
 

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import WarningLetterService from '@services/pip/warning_letter.service';
 import { NextFunction, Request, Response } from 'express';
 import { IWarningLetter } from '@interfaces/pip-interface/warning_letter.interface';

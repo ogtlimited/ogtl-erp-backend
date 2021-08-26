@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { CreateEmployeeTypeDto } from '@/dtos/employee/employee-type.dto';
+import { CreateEmployeeTypeDto,UpdateEmployeeTypeDto } from '@/dtos/employee/employee-type.dto';
 import { EmployeeType } from '@/interfaces/employee-interface/employee-type.interface';
 import EmployeeTypeService from '@/services/employee/employee-type.service';
 
@@ -48,7 +48,7 @@ class EmployeeTypeController{
 public updateEmployeeType = async  (req: Request, res: Response, next: NextFunction) => {
  try{
      const EmployeeTypeId: string = req.params.id;
-     const EmployeeTypeData: CreateEmployeeTypeDto = req.body;
+     const EmployeeTypeData: UpdateEmployeeTypeDto = req.body;
      const updateEmployeeTypeData: EmployeeType = await this.EmployeeTypeService.updateEmployeeType(EmployeeTypeId,EmployeeTypeData);
      res.status(200).json({data:updateEmployeeTypeData, message:"EmployeeType Updated"});
  }

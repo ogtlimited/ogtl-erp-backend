@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { CreateExitDto } from '@/dtos/employee/exit.dto';
+import { CreateExitDto,UpdateExitDto } from '@/dtos/employee/exit.dto';
 import { Exit } from '@/interfaces/employee-interface/exit.interface';
 import ExitService from '@/services/employee/exit.service';
 
@@ -49,7 +49,7 @@ class ExitController{
    public updateExit = async  (req: Request, res: Response, next: NextFunction) => {
     try{
         const ExitId: string = req.params.id;
-        const ExitData: CreateExitDto = req.body;
+        const ExitData: UpdateExitDto = req.body;
         const updateExitData: Exit = await this.ExitService.updateExit(ExitId,ExitData);
         res.status(200).json({data:updateExitData, message:"Exit Updated"});
     }

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { CreateHistoryDto } from '@/dtos/employee/history.dto';
+import { CreateHistoryDto, UpdateHistoryDto } from '@/dtos/employee/history.dto';
 import { History } from '@/interfaces/employee-interface/history.interface';
 import HistoryService from '@/services/employee/history.service';
 
@@ -49,7 +49,7 @@ class HistoryController{
    public updateHistory = async  (req: Request, res: Response, next: NextFunction) => {
     try{
         const HistoryId: string = req.params.id;
-        const HistoryData: CreateHistoryDto = req.body;
+        const HistoryData: UpdateHistoryDto = req.body;
         const updateHistoryData: History = await this.HistoryService.updateHistory(HistoryId,HistoryData);
         res.status(200).json({data:updateHistoryData, message:"History Updated"});
     }

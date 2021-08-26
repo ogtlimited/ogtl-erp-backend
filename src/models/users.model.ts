@@ -12,7 +12,7 @@ const userSchema: Schema = new Schema({
     required: true,
   },
   permissionLevel: {
-    type: String,
+    type: Number,
     required: true,
   },
 });
