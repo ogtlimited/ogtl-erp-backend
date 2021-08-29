@@ -4,15 +4,11 @@ import validationMiddleware from '@middlewares/validation.middleware';
 import { CreateGradeDto, UpdateGradeDto } from '@/dtos/employee/grade.dto';
 import GradeController from '@/controllers/employee/grade.controller';
 
-
-
-
-
 class GradeRoute implements Routes {
     public path = '/grade';
     public router = Router();
     public GradeController = new GradeController();
-  
+
     constructor() {
       this.initializeRoutes();
     }

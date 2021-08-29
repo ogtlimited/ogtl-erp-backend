@@ -4,12 +4,12 @@ import { Router } from 'express';
 import ShiftAssignmentController from '@controllers/shift/shift_assignment.controller';
 import validationMiddleware from '@middlewares/validation.middleware';
 import { CreateShiftAssignmentDto, UpdateShiftAssignmentDto } from '@dtos/shift/shift_assignment.dto';
-
+import authMiddleware from '@middlewares/auth.middleware';
 
 class ShiftAssignmentRoute implements Routes{
   public path = "/shiftAssignment";
   public router = Router();
-  public shiftAssignmentController = new ShiftAssignmentController()
+  public shiftAssignmentController = new ShiftAssignmentController();
 
   constructor() {
     this.initializeRoutes();

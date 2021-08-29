@@ -22,7 +22,7 @@ class GradeService{
      */
 
     public async findGradeById(GradeId:string) : Promise<Grade>{
-   
+
     //Check if Id is empty
     if (isEmpty(GradeId)) throw new HttpException(400, "No Id provided");
 
@@ -33,17 +33,17 @@ class GradeService{
 
     return findGrade;
 
-   
+
     }
 
 
     /**
-     *Creates a new Grade 
+     *Creates a new Grade
      */
 
 
      public async createGrade(GradeData: CreateGradeDto) : Promise<Grade>{
-        
+
         //Check if data is empty
        if (isEmpty(GradeData)) throw new HttpException(400, "No data provided");
 
@@ -56,7 +56,7 @@ class GradeService{
 
 
       /**
-     *Updates existing Grade 
+     *Updates existing Grade
      */
 
      public async updateGrade(GradeId:string,GradeData: UpdateGradeDto)  : Promise<Grade>{
@@ -67,7 +67,7 @@ class GradeService{
         const updateGradeById: Grade = await this.Grades.findByIdAndUpdate(GradeId,{GradeData});
         if(!updateGradeById) throw new HttpException(409, "Grade doesn't exist");
          return updateGradeById;
-   } 
+   }
 
 
 

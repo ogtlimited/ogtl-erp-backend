@@ -3,6 +3,7 @@ import { Router } from 'express';
 import WarningLetterController from '@controllers/pip/warningLetter.controller';
 import validationMiddleware from '@middlewares/validation.middleware';
 import { CreateWarningLetterDto } from '@dtos/pip/warning_letter.dto';
+import authMiddleware from '@middlewares/auth.middleware';
 
 class WarningLetterRoute implements Routes{
   public path = "/warningLetter";
@@ -14,10 +15,10 @@ class WarningLetterRoute implements Routes{
   }
 
   private initializeRoutes(){
-    this.router.get(`${this.path}`,this.warningLetterController.getWarningLetters);
-    this.router.get(`${this.path}/:id`,this.warningLetterController.getWarningLetterById);
-    this.router.post(`${this.path}`,validationMiddleware(CreateWarningLetterDto,'body'),this.warningLetterController.createWarningLetter);
-    this.router.delete(`${this.path}/:id`,this.warningLetterController.deleteWarningLetter);
+    this.router.get(`${this.path}`,authMiddleware,this.warningLetterController.getWarningLetters);
+    this.router.get(`${this.path}/:id`,authMiddleware,this.warningLetterController.getWarningLetterById);
+    this.router.post(`${this.path}`,authMiddleware,validationMiddleware(CreateWarningLetterDto,'body'),this.warningLetterController.createWarningLetter);
+    this.router.delete(`${this.path}/:id`,authMiddleware,this.warningLetterController.deleteWarningLetter);
 
   }
 }

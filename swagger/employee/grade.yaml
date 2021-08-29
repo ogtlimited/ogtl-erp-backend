@@ -1,32 +1,32 @@
 tags:
-- name: Grade
-  description: Grade API
+- name: grade
+  description: grade API
 
 paths:
-# [GET] Grade
-  /api/grade:
+# [GET] grade
+  /grade:
     get:
       tags:
-      - Grade
-      summary: Find All Grades
+      - grade
+      summary: Find All grades
       responses:
         200:
           description: 'OK'
         500:
           description: 'Server Error'
 
-# [POST] Grade
+    # [POST] grade
     post:
       tags:
-      - Grade
-      summary: Add Grade
+        - grade
+      summary: Add grade
       parameters:
-      - name: body
-        in: body
-        description: Grade Data
-        required: true
-        schema:
-          $ref: '#/definitions/Grade'
+        - name: body
+          in: body
+          description: grade Data
+          required: true
+          schema:
+            $ref: '#/definitions/grade'
       responses:
         201:
           description: 'Created'
@@ -37,16 +37,16 @@ paths:
         500:
           description: 'Server Error'
 
-# [GET] Grade/id
-  /api/grade/{id}:
+# [GET] grade/id
+  /grade/{id}:
     get:
       tags:
-      - Grade
-      summary: Find Grade By Id
+      - grade
+      summary: Find grade By Id
       parameters:
       - name: id
         in: path
-        description: Grade Id
+        description: grade Id
         required: true
       responses:
         200:
@@ -56,22 +56,22 @@ paths:
         500:
           description: 'Server Error'
 
-# [PUT] Grade/id
+# [PUT] grade/id
     put:
       tags:
-      - Grade
-      summary: Update Grade By Id
+      - grade
+      summary: Update grade By Id
       parameters:
       - name: id
         in: path
-        description: Grade Id
+        description: grade Id
         required: true
       - name: body
         in: body
-        description: Grade Data
+        description: grade Data
         required: true
         schema:
-          $ref: '#/definitions/Grade'
+          $ref: '#/definitions/grade'
       responses:
         200:
           description: 'OK'
@@ -82,15 +82,15 @@ paths:
         500:
           description: 'Server Error'
 
-# [DELETE] Grade/id
+# [DELETE] grade/id
     delete:
       tags:
-      - Grade
-      summary: Delete Grade By Id
+      - grade
+      summary: Delete grade By Id
       parameters:
       - name: id
         in: path
-        description: Grade Id
+        description: grade Id
         required: true
         schema:
           type: string
@@ -103,28 +103,28 @@ paths:
           description: 'Conflict'
         500:
           description: 'Server Error'
-   
+
 
 #definitions
-definitions: 
-  Grade:
+definitions:
+  grade:
     type: object
     required:
       - grade
     properties:
       id:
-        description: Grade Id
-      Grade:
+        description: grade Id
+      grade:
         type: string
-        description: Grade name
+        description: grade name
 
 schemes:
   - https
   - http
 
-       
-
-  
 
 
-      
+
+
+
+
