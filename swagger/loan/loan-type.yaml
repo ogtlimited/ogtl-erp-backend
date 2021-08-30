@@ -1,0 +1,135 @@
+tags:
+- name: LoanType
+  description: LoanType API
+
+paths:
+# [GET] loan type
+  /api/loan-type:
+    get:
+      tags:
+      - loan type
+      summary: Find All Loans Types
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] loan
+    post:
+      tags:
+      - loan type
+      summary: Add loan type
+      parameters:
+      - name: body
+        in: body
+        description: loan type Data
+        required: true
+        schema:
+          $ref: '#/definitions/loanType'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] loan/loanId
+  /api/loan-type/{loanTypeId}:
+    get:
+      tags:
+      - loan type
+      summary: Find loan type By Id
+      parameters:
+      - name: loanTypeId
+        in: path
+        description: loan type Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PUT] loan/loanId
+    put:
+      tags:
+      - loan type
+      summary: Update loan type By Id
+      parameters:
+      - name: id
+        in: path
+        description: loan type Id
+        required: true
+      - name: body
+        in: body
+        description: loan type Data
+        required: true
+        schema:
+          $ref: '#/definitions/loanType'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] allocation/id
+    delete:
+      tags:
+      - loan type
+      summary: Delete loan type By Id
+      parameters:
+      - name: id
+        in: path
+        description: loan type Id
+        required: true
+        schema:
+          type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  loanType:
+    type: object
+    required:
+        - loan_name
+        - maximum_loan_amount
+        - rate_of_interest
+        - disabled
+    properties:
+      loan_name:
+        type: string
+        description: loan name
+      maximum_loan_amount:
+        type: string
+        description: maximum loan amount
+      rate_of_interest:
+        type: number
+        description: interest rate on loan type
+      description:
+        type: string
+        description: loan type description
+      disabled:
+        type: boolean
+        description: default true
+
+schemes:
+ - https
+ - http

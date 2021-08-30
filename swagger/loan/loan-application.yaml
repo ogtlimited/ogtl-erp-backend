@@ -1,0 +1,138 @@
+tags:
+- name: LoanApplication
+  description: Loan Application API
+
+paths:
+# [GET] loan type
+  /api/loan-application:
+    get:
+      tags:
+      - loan application
+      summary: Find All Loans Applications
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] loan
+    post:
+      tags:
+      - loan application
+      summary: Add loan application
+      parameters:
+      - name: body
+        in: body
+        description: loan application Data
+        required: true
+        schema:
+          $ref: '#/definitions/loanApplication'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] loan/loanId
+  /api/loan-application/{loanApplicationId}:
+    get:
+      tags:
+      - loan application
+      summary: Find loan application By Id
+      parameters:
+      - name: loanApplicationId
+        in: path
+        description: loan application Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PUT] loan/loanId
+    put:
+      tags:
+      - loan application
+      summary: Update loan application By Id
+      parameters:
+      - name: id
+        in: path
+        description: loan application Id
+        required: true
+      - name: body
+        in: body
+        description: loan application Data
+        required: true
+        schema:
+          $ref: '#/definitions/loanApplication'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] allocation/id
+    delete:
+      tags:
+      - loan application
+      summary: Delete loan application By Id
+      parameters:
+      - name: id
+        in: path
+        description: loan application Id
+        required: true
+        schema:
+          type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  loanApplication:
+    type: object
+    required:
+        - applicant_name_id
+        - loan_type_id
+        - loan_amount
+        - repayment_method
+    properties:
+      applicant_name_id:
+        type: string
+        description: employee id
+      loan_type_id:
+        type: string
+        description: loan type id
+      loan_amount:
+        type: string
+        description: loan amount
+      status:
+        type: string
+        description: loan application status
+      reason:
+        type: string
+        description: reason for loan
+      repayment_method:
+        type: string
+        description: repayment method
+
+schemes:
+ - https
+ - http

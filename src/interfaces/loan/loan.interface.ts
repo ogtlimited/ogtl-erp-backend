@@ -6,7 +6,7 @@ export interface Loan {
     loan_application_id: string;
     repay_from_salary: Boolean;
     loan_amount: Number;
-    repayment_start_date: Date;
+    repayment_start_date: String;
     repayment_method: String;
     mode_of_payment_id: string;
     loan_account_id: string;

@@ -133,7 +133,10 @@ class App {
         'swagger/employee/personal-details.yaml',
         'swagger/employee/salary-details.yaml',
         'swagger/employee/work-experience.yaml',
-        'swagger/pip/score-cards.yaml'
+        'swagger/pip/score-cards.yaml',
+        'swagger/loan/loan.yaml',
+        'swagger/loan/loan-type.yaml',
+        'swagger/loan/loan-application.yaml'
               ],
     };
 
