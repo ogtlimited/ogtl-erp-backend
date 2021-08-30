@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export interface ContactDetail {
     _id: string;
     employee_id: string;

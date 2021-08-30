@@ -1,0 +1,170 @@
+tags:
+- name: Loan
+  description: Loan API
+
+paths:
+# [GET] loan
+  /api/loan:
+    get:
+      tags:
+      - loan
+      summary: Find All Loans
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] loan
+    post:
+      tags:
+      - loan
+      summary: Add loan 
+      parameters:
+      - name: body
+        in: body
+        description: loan Data
+        required: true
+        schema:
+          $ref: '#/definitions/loan'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] loan/loanId
+  /api/loan/{loanId}:
+    get:
+      tags:
+      - loan
+      summary: Find loan By Id
+      parameters:
+      - name: loanId
+        in: path
+        description: loan Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PUT] loan/loanId
+    put:
+      tags:
+      - loan
+      summary: Update loan By Id
+      parameters:
+      - name: id
+        in: path
+        description: loan Id
+        required: true
+      - name: body
+        in: body
+        description: loan Data
+        required: true
+        schema:
+          $ref: '#/definitions/loan'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] allocation/id
+    delete:
+      tags:
+      - loan
+      summary: Delete loan By Id
+      parameters:
+      - name: id
+        in: path
+        description: loan Id
+        required: true
+        schema:
+          type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  loan:
+    type: object
+    required:
+        - applicant_type_id
+        - applicant_id
+        - loan_type_id
+        - loan_application_id
+        - repay_from_salary
+        - loan_amount
+        - repayment_start_date
+        - repayment_method
+        - mode_of_payment_id
+        - loan_account_id
+        - payment_account_id
+        - loan_account_id
+        - interest_income_account_id
+        - status_id
+    properties:
+      applicant_type_id:
+        type: string
+        description: employee type id
+      applicant_id:
+        type: string
+        description: employee id
+      loan_type_id:
+        type: string
+        description: loan type id
+      loan_application_id:
+        type: string
+        description: loan application id
+      repay_from_salary:
+        type: boolean
+        description: default true
+      loan_amount:
+        type: number
+        description: loan amount
+      repayment_start_date:
+        type: string
+        description: repayment start date
+      repayment_method:
+        type: string
+        description: repayment method
+      mode_of_payment_id:
+        type: string
+        description: mode of payment id
+      loan_account_id:
+        type: string
+        description: loan account id
+      payment_account_id:
+        type: string
+        description: payment account id
+      interest_income_account_id:
+        type: string
+        description: interest income account id
+      status_id:
+        type: string
+        description: status id
+      
+
+schemes:
+ - https
+ - http

@@ -33,7 +33,7 @@ const loanSchema: Schema = new Schema(
         required: true
     },
     repayment_start_date: {
-        type: Date,
+        type: String,
         required: true
     },
     repayment_method: {

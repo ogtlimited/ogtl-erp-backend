@@ -4,6 +4,8 @@ import OnBoardingController from '@/controllers/employee-lifecycle/onboarding.co
 import { Routes } from '@/interfaces/routes.interface';
 import validationMiddleware from '@/middlewares/validation.middleware';
 import { Router } from 'express';
+import authMiddleware from '../../middlewares/auth.middleware'
+
 
 class OnBoardingRoute implements Routes {
     public path = '/api/onboarding';
@@ -15,9 +17,9 @@ class OnBoardingRoute implements Routes {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}`, this.onBoardingController.findAll);
-        this.router.get(`${this.path}/:id`, this.onBoardingController.findById);
-        this.router.post(`${this.path}`, validationMiddleware(CreateOnBoardingDto, 'body'), this.onBoardingController.create);
+        this.router.get(`${this.path}`, [authMiddleware], this.onBoardingController.findAll);
+        this.router.get(`${this.path}/:id`, [authMiddleware], this.onBoardingController.findById);
+        this.router.post(`${this.path}`, [authMiddleware, validationMiddleware(CreateOnBoardingDto, 'body')], this.onBoardingController.create);
     }
   }
   export default OnBoardingRoute;
