@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {IsDate, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateExitDto{
@@ -29,7 +30,7 @@ export class CreateExitDto{
     @IsString()
         public new_work_place: string;
     
-    @IsString()    
+    @IsString()
         public feedback: string;
     
 }
@@ -38,7 +39,7 @@ export class UpdateExitDto{
         public _id: string;
 
     @IsNotEmpty()
-    @IsString()    
+    @IsString()
         public employee_id: string;
 
     @IsDate()
