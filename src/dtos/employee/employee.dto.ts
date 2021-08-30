@@ -3,19 +3,19 @@
 
 import { IsEmail, IsString } from 'class-validator';
 
-export class CreateEmployeeDto {
-  
-  @IsString()
-  public ogId: string;
+export class CreateEmployeeDto {  
 
   @IsString()
-  public fingerprint_details: string;
+  public ogid: string;
 
   @IsString()
-  public first_name: string;
+  public date_of_joining: string;
 
   @IsString()
-  public last_name: string;
+  public default_shift: string;
+
+  @IsString()
+  public department: string;
 
   @IsString()
   public password: string;
@@ -24,108 +24,87 @@ export class CreateEmployeeDto {
   public company_email: string;
 
   @IsString()
-  public dob: string;
+  public designation: string;
 
   @IsString()
-  public day_of_birth: string;
+  public first_name: string;
 
   @IsString()
-  public month_of_birth: string;
+  public employment_type: string;
 
   @IsString()
-  public campaign_id: string;
-
-  @IsString()
-  public branch_id: string;
-
-  @IsString()
-  public designation_id: string;
-
-  @IsString()
-  public employment_type_id: string;
-
-  @IsString()
-  public health_insurance_id: string;
-
-  @IsString()
-  public shift_type_id: string;
-
-  @IsString()
-  public is_admin: string;
+  public isAdmin: boolean;
 
   @IsString()
   public gender: string;
 
   @IsString()
-  public profile_pic: string;
+  public image: string;
 
   @IsString()
-  public password_reset_count: string;
+  public last_name: string;
 
   @IsString()
-  public active: string;
+  public middle_name: string;
+
+  @IsString()
+  public reports_to: string;
+
+  @IsString()
+  public status: string;
+
+
 }
 
 export class UpdateEmployeeDto {
-  
-  @IsString()
-  public ogId: string;
 
   @IsString()
-  public fingerprint_details: string;
+  public default_shift: string;
+
+  @IsString()
+  public department: string;
+
+  @IsString()
+  public password: string;
+
+  @IsString()
+  public designation: string;
 
   @IsString()
   public first_name: string;
 
   @IsString()
+  public employment_type: string;
+
+  @IsString()
+  public isAdmin: boolean;
+  gender: string;
+
+  @IsString()
+  public image: string;
+
+  @IsString()
   public last_name: string;
 
   @IsString()
-  public password: string;
-
-  @IsEmail()
-  public company_email: string;
+  public middle_name: string;
 
   @IsString()
-  public dob: string;
+  public reports_to: string;
 
   @IsString()
-  public day_of_birth: string;
+  public status: string;
 
   @IsString()
-  public month_of_birth: string;
+  public permissionLevel: string;
 
-  @IsString()
-  public campaign_id: string;
 
-  @IsString()
-  public branch_id: string;
-
-  @IsString()
-  public designation_id: string;
-
-  @IsString()
-  public employment_type_id: string;
-
-  @IsString()
-  public health_insurance_id: string;
-
-  @IsString()
-  public shift_type_id: string;
-
-  @IsString()
-  public is_admin: string;
-
-  @IsString()
-  public gender: string;
-
-  @IsString()
-  public profile_pic: string;
-
-  @IsString()
-  public password_reset_count: string;
-
-  @IsString()
-  public active: string;
 }
 
+export class EmployeeLoginDto {
+  @IsString()
+  public ogid: string;
+
+  @IsString()
+  public password: string;
+}

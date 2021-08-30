@@ -4,6 +4,8 @@ import AttendanceController from '@/controllers/attendance/attendance.controller
 import { Routes } from '@/interfaces/routes.interface';
 import validationMiddleware from '@/middlewares/validation.middleware';
 import { Router } from 'express';
+import authMiddleware from '../../middlewares/auth.middleware'
+
 
 class AttendanceRoute implements Routes {
     public path = '/api/attendance';
@@ -15,9 +17,9 @@ class AttendanceRoute implements Routes {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}`, this.AttendanceController.getAttendances);
-        this.router.get(`${this.path}/:id`, this.AttendanceController.getAttendanceById);
-        this.router.post(`${this.path}`, validationMiddleware(CreateAttendanceDto, 'body'), this.AttendanceController.createAttendance);
+        this.router.get(`${this.path}`, [authMiddleware], this.AttendanceController.getAttendances);
+        this.router.get(`${this.path}/:id`, [authMiddleware], this.AttendanceController.getAttendanceById);
+        this.router.post(`${this.path}`, [authMiddleware, validationMiddleware(CreateAttendanceDto, 'body')], this.AttendanceController.createAttendance);
     }
   }
   export default AttendanceRoute;
