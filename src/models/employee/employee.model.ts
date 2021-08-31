@@ -53,6 +53,12 @@ const employeeSchema: Schema = new Schema(
       ref: 'Campaign',
       default: null,
     },
+    department_id: {
+      type: Schema.Types.ObjectId,
+      // required: true,
+      ref: 'Department',
+      default: null,
+    },
     branch_id: {
       type: Schema.Types.ObjectId,
       // required: true,
@@ -122,6 +128,6 @@ employeeSchema.virtual('full_name').get(function () {
 // });
 
 
-const userModel = model<Employee & Document>('Employee', employeeSchema);
+const userModel = model('Employee', employeeSchema);
 
 export default userModel;
