@@ -44,6 +44,6 @@ const exitSchema: Schema = new Schema(
 
 );
 
-const userModel = model<Exit & Document>('Exit', exitSchema);
+const exitModel = model<Exit & Document>('Exit', exitSchema);
 
-export default userModel;
+export default exitModel;

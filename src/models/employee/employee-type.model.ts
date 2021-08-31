@@ -18,6 +18,6 @@ const employeeTypeSchema : Schema = new Schema(
 
 );
 
-const userModel = model<EmployeeType & Document>('EmployeeType', employeeTypeSchema);
+const employeeTypeModel = model<EmployeeType & Document>('EmployeeType', employeeTypeSchema);
 
-export default userModel;
+export default employeeTypeModel;

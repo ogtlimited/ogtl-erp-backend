@@ -44,6 +44,6 @@ const contactDetailsSchema: Schema = new Schema (
       },
     );
 
-    const userModel = model<ContactDetail & Document>('ContactDetails',contactDetailsSchema );
+    const contactDetailsModel = model<ContactDetail & Document>('ContactDetails',contactDetailsSchema );
 
-    export default userModel;
+    export default contactDetailsModel;
