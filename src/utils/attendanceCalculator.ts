@@ -7,6 +7,8 @@ const calculateLateness = (clock_in_time, resumption_time) => {
     const mins = str.split(':')[1];
     return hrs * 3600 + mins * 60;
   };
+  // console.log(clock_in_time, resumption_time);
+
   const clock_in = formatDate(clock_in_time);
   const resume = formatDate(resumption_time);
   if (clock_in > resume) {
@@ -22,10 +24,12 @@ const calculateLateness = (clock_in_time, resumption_time) => {
   }
 };
 
-const getWorkTime = (userStartTime: Date, userEndTime: Date, resumptionTime?) => {
+const getWorkTime = (userStartTime: any, userEndTime: any, resumptionTime?) => {
   const result = {};
   const startTime = moment(userStartTime);
   const endTime = moment(userEndTime);
+  console.log(startTime, endTime);
+
   const timeDifference = moment.duration(moment(endTime).diff(startTime));
   const { hours, minutes } = timeDifference._data;
   result.hoursWorked = hours;
@@ -37,6 +41,4 @@ const getWorkTime = (userStartTime: Date, userEndTime: Date, resumptionTime?) =>
   return result;
 };
 
-
-
-export {getWorkTime, calculateLateness} 
+export { getWorkTime, calculateLateness };

@@ -15,9 +15,6 @@ export class CreateAttendanceDto {
 
   @IsString()
   public clockInTime: string;
-
-  @IsString()
-  public clockOutTime: string;
 }
 
 export class UpdateAttendanceDto {  

@@ -1,19 +1,20 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import { IsString, IsDate, IsNumber } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsNotEmpty } from 'class-validator';
 
-export class CreateDeductionTypesDto {  
+export class CreateDeductionTypeDto {  
   @IsString()
   public title: string;
 
   @IsString()
-  public department: string;
+  @IsNotEmpty()
+  public departmentId: string;
 
   @IsNumber()
   public amount: string;
 
   @IsString()
+  @IsOptional()
   public status: string;
-
 }

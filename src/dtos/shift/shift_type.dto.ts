@@ -13,6 +13,10 @@ export class CreateShiftTypeDto {
   @IsNotEmpty()
   @IsString()
   public end_time: string;
+
+  @IsNotEmpty()
+  @IsString()
+  public deductionTypeId: string;
 }
 
 export class UpdateShiftTypeDto {
