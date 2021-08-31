@@ -1,8 +1,8 @@
 import {IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateEmployeeTypeDto{
-    @IsString()
-        public _id: string;
+    
+       
     
     @IsNotEmpty()
     @IsString()
@@ -10,8 +10,9 @@ export class CreateEmployeeTypeDto{
 }
 
 export class UpdateEmployeeTypeDto{
+    
     @IsString()
-        public _id: string;
+    public _id: string;
     
     @IsNotEmpty()
     @IsString()

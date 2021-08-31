@@ -1,8 +1,7 @@
 import {IsDate, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateHistoryDto{
-    @IsString()
-        public _id: string;
+   
 
     @IsNotEmpty()
     @IsString()

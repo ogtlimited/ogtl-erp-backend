@@ -31,4 +31,8 @@ export class CreateWarningLetterDto {
 
   @IsBoolean()
   public isInPip: boolean;
+    
+  //@IsNotEmpty()
+  @IsString()
+  public Department_id : string;
 }

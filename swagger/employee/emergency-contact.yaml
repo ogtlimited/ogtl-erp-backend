@@ -4,7 +4,7 @@ tags:
 
 paths:
 # [GET] EmergencyContact
-  /api/EmergencyContact:
+  /EmergencyContact:
     get:
       tags:
       - EmergencyContact
@@ -38,7 +38,7 @@ paths:
           description: 'Server Error'
 
 # [GET] EmergencyContact/id
-  /api/EmergencyContact/{id}:
+  /EmergencyContact/{id}:
     get:
       tags:
       - EmergencyContact

@@ -4,7 +4,7 @@ tags:
 
 paths:
 # [GET] PersonalDetails
-  /api/PersonalDetails:
+  /PersonalDetails:
     get:
       tags:
       - PersonalDetails
@@ -38,7 +38,7 @@ paths:
           description: 'Server Error'
 
 # [GET] PersonalDetails/id
-  /api/PersonalDetails/{id}:
+  /PersonalDetails/{id}:
     get:
       tags:
       - PersonalDetails

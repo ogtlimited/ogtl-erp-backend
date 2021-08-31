@@ -4,7 +4,7 @@ tags:
 
 paths:
 # [GET] History
-  /api/History:
+  /History:
     get:
       tags:
       - History
@@ -38,7 +38,7 @@ paths:
           description: 'Server Error'
 
 # [GET] History/id
-  /api/History/{id}:
+  /History/{id}:
     get:
       tags:
       - History

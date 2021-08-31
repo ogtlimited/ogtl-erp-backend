@@ -5,6 +5,7 @@ import validationMiddleware from '@middlewares/validation.middleware';
 import { CreateEducationDto, UpdateEducationDto } from '@/dtos/employee/education.dto';
 
 import EducationController from '@/controllers/employee/education.controller';
+import authMiddleware from '@/middlewares/auth.middleware';
 
 
 class EducationRoute implements Routes {
@@ -17,11 +18,11 @@ class EducationRoute implements Routes {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}`, this.EducationController.getEducation);
-        this.router.get(`${this.path}/:id`, this.EducationController.getEducationsById);
-        this.router.post(`${this.path}`, validationMiddleware(CreateEducationDto, 'body'), this.EducationController.CreateEducation);
-        this.router.put(`${this.path}/:id`, validationMiddleware(UpdateEducationDto, 'body', true), this.EducationController.updateEducation);
-        this.router.delete(`${this.path}/:id`, this.EducationController.deleteEducation);
+        this.router.get(`${this.path}`,authMiddleware, this.EducationController.getEducation);
+        this.router.get(`${this.path}/:id`,authMiddleware, this.EducationController.getEducationsById);
+        this.router.post(`${this.path}`,authMiddleware, validationMiddleware(CreateEducationDto, 'body'), this.EducationController.CreateEducation);
+        this.router.put(`${this.path}/:id`,authMiddleware, validationMiddleware(UpdateEducationDto, 'body', true), this.EducationController.updateEducation);
+        this.router.delete(`${this.path}/:id`,authMiddleware, this.EducationController.deleteEducation);
       }
     }
 

@@ -31,7 +31,7 @@ class scoreCardService{
        //Check if data is empty
        if (isEmpty(scoreCardData)) throw new HttpException(400, "No data provided");
 
-       const createscoreCardData: IScoreCard = await this.scoreCard.create({scoreCardData});
+       const createscoreCardData: IScoreCard = await this.scoreCard.create(scoreCardData);
        return createscoreCardData;
 
     }

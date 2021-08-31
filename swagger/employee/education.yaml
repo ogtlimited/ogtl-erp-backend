@@ -4,7 +4,7 @@ tags:
 
 paths:
 # [GET] Education
-  /api/Education:
+  /Education:
     get:
       tags:
       - Education
@@ -38,7 +38,7 @@ paths:
           description: 'Server Error'
 
 # [GET] Education/id
-  /api/Education/{id}:
+  /Education/{id}:
     get:
       tags:
       - Education
