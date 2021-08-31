@@ -93,7 +93,7 @@ const app = new App([
   new TestRoute(),
   new ShiftAssignmentRoute(),
   new WarningLetterRoute(),
-  new scoreCardRoute()
+  new scoreCardRoute(),
   new LoanRoute(),
   new LoanTypeRoute(),
   // new LoanApplicationRoute(),
