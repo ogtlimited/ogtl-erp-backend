@@ -49,7 +49,7 @@ class ContactDetailsService{
 
         if(findContactDetails) throw new HttpException(409, `Employee ${ContactDetailData.employee_id} already provided details`);
 
-        const createContactDetailsData = await this.ContactDetails.create({ContactDetailData});
+        const createContactDetailsData = await this.ContactDetails.create(ContactDetailData);
 
         return createContactDetailsData;
     }

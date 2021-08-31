@@ -4,6 +4,7 @@ import TransferController from '@/controllers/employee-lifecycle/transfer.contro
 import { Routes } from '@/interfaces/routes.interface';
 import validationMiddleware from '@/middlewares/validation.middleware';
 import { Router } from 'express';
+import authMiddleware from '../../middlewares/auth.middleware'
 
 class TransferRoute implements Routes {
     public path = '/api/transfer';
@@ -15,9 +16,9 @@ class TransferRoute implements Routes {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}`, this.transferController.findAll);
-        this.router.get(`${this.path}/:id`, this.transferController.findById);
-        this.router.post(`${this.path}`, validationMiddleware(CreateTransferDto, 'body'), this.transferController.create);
+        this.router.get(`${this.path}`,[authMiddleware], this.transferController.findAll);
+        this.router.get(`${this.path}/:id`,[authMiddleware], this.transferController.findById);
+        this.router.post(`${this.path}`, [authMiddleware, validationMiddleware(CreateTransferDto, 'body')], this.transferController.create);
     }
   }
   export default TransferRoute;

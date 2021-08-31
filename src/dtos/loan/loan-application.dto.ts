@@ -13,7 +13,6 @@ export class LoanApplicationDto {
   @IsString()
   public loan_type_id: string;
 
-
   @IsString()
   public loan_amount: string;
 

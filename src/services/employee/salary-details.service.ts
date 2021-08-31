@@ -49,7 +49,7 @@ class SalaryDetailsService{
 
         if(findSalaryDetails) throw new HttpException(409, `Employee ${SalaryDetailData.employee_id} already provided details`);
 
-        const createSalaryDetailsData = await this.SalaryDetails.create({SalaryDetailData});
+        const createSalaryDetailsData = await this.SalaryDetails.create(SalaryDetailData);
 
         return createSalaryDetailsData;
     }

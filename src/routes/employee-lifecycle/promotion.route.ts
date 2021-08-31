@@ -4,6 +4,7 @@ import PromotionController from '@/controllers/employee-lifecycle/promotion.cont
 import { Routes } from '@/interfaces/routes.interface';
 import validationMiddleware from '@/middlewares/validation.middleware';
 import { Router } from 'express';
+import authMiddleware from '../../middlewares/auth.middleware';
 
 class PromotionRoute implements Routes {
     public path = '/api/promotion';
@@ -15,9 +16,9 @@ class PromotionRoute implements Routes {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}`, this.promotionController.findAll);
-        this.router.get(`${this.path}/:id`, this.promotionController.findById);
-        this.router.post(`${this.path}`, validationMiddleware(CreatePromotionDto, 'body'), this.promotionController.create);
+        this.router.get(`${this.path}`, [authMiddleware], this.promotionController.findAll);
+        this.router.get(`${this.path}/:id`, [authMiddleware], this.promotionController.findById);
+        this.router.post(`${this.path}`, [authMiddleware, validationMiddleware(CreatePromotionDto, 'body')], this.promotionController.create);
     }
   }
   export default PromotionRoute;

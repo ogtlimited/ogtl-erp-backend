@@ -32,41 +32,56 @@ class GradeService {
     if (!findGrade) throw new HttpException(409, 'Grade with that Id doesnt exist');
 
     return findGrade;
-  }
 
-  /**
-   *Creates a new Grade
-   */
+   
+    }
 
-  public async createGrade(GradeData: CreateGradeDto): Promise<Grade> {
-    //Check if data is empty
-    if (isEmpty(GradeData)) throw new HttpException(400, 'No data provided');
 
-    const findGrade: Grade = await this.Grades.findOne({ Grade: GradeData.grade });
-    if (findGrade) throw new HttpException(409, `Grade ${GradeData.grade} already exists`);
+    /**
+     *Creates a new Grade 
+     */
 
-    const createGradeData: Grade = await this.Grades.create({ GradeData });
-    return createGradeData;
-  }
 
-  /**
-   *Updates existing Grade
-   */
+     public async createGrade(GradeData: CreateGradeDto) : Promise<Grade>{
+        
+        //Check if data is empty
+       if (isEmpty(GradeData)) throw new HttpException(400, "No data provided");
 
-  public async updateGrade(GradeId: string, GradeData: UpdateGradeDto): Promise<Grade> {
-    //Check if data is empty
-    if (isEmpty(GradeData)) throw new HttpException(400, 'No data provided');
+       const findGrade: Grade = await this.Grades.findOne({grade: GradeData.grade});
+       if(findGrade) throw new HttpException(409, `Grade ${GradeData.grade} already exists`);
 
-    const updateGradeById: Grade = await this.Grades.findByIdAndUpdate(GradeId, { GradeData });
-    if (!updateGradeById) throw new HttpException(409, "Grade doesn't exist");
-    return updateGradeById;
-  }
+       const createGradeData: Grade = await this.Grades.create({GradeData});
+       return createGradeData;
+     }
 
-  //deletes exisiting Grade
-  public async deleteGrade(GradeId: string): Promise<Grade> {
-    const deleteGradeById: Grade = await this.Grades.findByIdAndDelete(GradeId);
-    if (!deleteGradeById) throw new HttpException(409, "Grade doesn't exist");
-    return deleteGradeById;
-  }
+
+      /**
+     *Updates existing Grade 
+     */
+
+     public async updateGrade(GradeId:string,GradeData: UpdateGradeDto)  : Promise<Grade>{
+
+        //Check if data is empty
+        if (isEmpty(GradeData)) throw new HttpException(400, "No data provided");
+
+        const updateGradeById: Grade = await this.Grades.findByIdAndUpdate(GradeId,{GradeData});
+        if(!updateGradeById) throw new HttpException(409, "Grade doesn't exist");
+         return updateGradeById;
+   } 
+
+
+
+     //deletes exisiting Grade
+     public async deleteGrade(GradeId:string) : Promise<Grade>{
+        const deleteGradeById : Grade = await this.Grades.findByIdAndDelete(GradeId);
+        if(!deleteGradeById) throw new HttpException(409, "Grade doesn't exist");
+        return deleteGradeById;
+    }
+
+
+
+
+
+
 }
 export default GradeService;

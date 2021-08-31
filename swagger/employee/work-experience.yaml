@@ -4,7 +4,7 @@ tags:
 
 paths:
 # [GET] WorkExperience
-  /api/WorkExperience:
+  /WorkExperience:
     get:
       tags:
       - WorkExperience
@@ -38,7 +38,7 @@ paths:
           description: 'Server Error'
 
 # [GET] WorkExperience/id
-  /api/WorkExperience/{id}:
+  /WorkExperience/{id}:
     get:
       tags:
       - WorkExperience

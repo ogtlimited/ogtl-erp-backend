@@ -4,7 +4,7 @@ tags:
 
 paths:
 # [GET] scoreCard
-  /api/scoreCard:
+  /scoreCard:
     get:
       tags:
       - scoreCard
@@ -38,7 +38,7 @@ paths:
           description: 'Server Error'
 
 # [GET] scoreCard/id
-  /api/scoreCard/{id}:
+  /scoreCard/{id}:
     get:
       tags:
       - scoreCard
