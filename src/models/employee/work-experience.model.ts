@@ -30,6 +30,6 @@ const workExperienceSchema: Schema = new Schema(
 
 );
 
-const workExperienceModel = model<WorkExperience & Document>('WorkExperience', workExperienceSchema);
+const SalaryDetailModel = model<WorkExperience & Document>('WorkExperience', workExperienceSchema);
 
-export default workExperienceModel;
+export default SalaryDetailModel;

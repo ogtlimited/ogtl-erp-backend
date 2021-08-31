@@ -36,6 +36,6 @@ const educationSchema : Schema = new Schema({
 
 );
 
-const educationModel = model<Education & Document>('Education', educationSchema);
+const EducationModel = model<Education & Document>('Education', educationSchema);
 
-export default educationModel;
+export default EducationModel;

@@ -31,6 +31,6 @@ const salaryDetailsSchema: Schema = new Schema(
     }
 );
 
-const SalaryDetailsModel = model<SalaryDetail & Document>('SalaryDetails', salaryDetailsSchema);
+const SalaryDetailModel = model<SalaryDetail & Document>('SalaryDetails', salaryDetailsSchema);
 
-export default SalaryDetailsModel;
+export default SalaryDetailModel;

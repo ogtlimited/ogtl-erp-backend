@@ -17,6 +17,6 @@ const designationSchema: Schema = new Schema(
     );
 
 
-const designationModel = model<Designation & Document>('Designation', designationSchema);
+const DesignationModel = model<Designation & Document>('Designation', designationSchema);
 
-export default designationModel;
+export default DesignationModel;

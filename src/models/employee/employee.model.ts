@@ -75,15 +75,13 @@ const employeeSchema: Schema = new Schema(
     },
     permissionLevel: {
       type: Number,
-    },
-  
-    timestamps: true,
-  },
+    }
+  }
 );
 
-employeeSchema.virtual('full_name').get(function () {
-  return this.first_name + ' ' + this.last_name;
-});
+// employeeSchema.virtual('full_name').get(function () {
+//   return this.first_name + ' ' + this.last_name;
+// });
 
 // employeeSchema.pre('save', function (this: Employee, next) {
 
@@ -93,6 +91,6 @@ employeeSchema.virtual('full_name').get(function () {
 // });
 
 
-const userModel = model<Employee & Document>('Employee', employeeSchema);
+const EmployeeModel = model<Employee & Document>('Employee', employeeSchema);
 
-export default userModel;
+export default EmployeeModel;

@@ -40,6 +40,6 @@ const personalDetailsSchema: Schema = new Schema(
     
     );
 
-const personalDetailsModel = model<PersonalDetail & Document>('PersonalDetails', personalDetailsSchema);
+const PersonalDetailModel = model<PersonalDetail & Document>('PersonalDetails', personalDetailsSchema);
 
-export default personalDetailsModel;
+export default PersonalDetailModel;
