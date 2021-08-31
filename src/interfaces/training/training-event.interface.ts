@@ -1,4 +1,4 @@
-export interface TrainingEvent {
+export interface ITrainingEvent {
     event_name:string;
     event_type:string;
     training_program_id: string;

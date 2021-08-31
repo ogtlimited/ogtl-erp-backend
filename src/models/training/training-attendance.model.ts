@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { TrainingAttendance } from '@interfaces/training/training-attendance.interface';
+import { ITrainingAttendance } from '@interfaces/training/training-attendance.interface';
 import { model, Schema, Document } from 'mongoose';
 
 const TrainingAttendanceSchema: Schema = new Schema(
@@ -24,5 +24,5 @@ const TrainingAttendanceSchema: Schema = new Schema(
   },
 );
 
-const TrainingAttendanceModel = model<TrainingAttendance & Document>('TrainingAttendance', TrainingAttendanceSchema);
+const TrainingAttendanceModel = model<ITrainingAttendance & Document>('TrainingAttendance', TrainingAttendanceSchema);
 export default TrainingAttendanceModel;

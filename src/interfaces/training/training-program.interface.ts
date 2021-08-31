@@ -1,4 +1,4 @@
-export interface TrainingProgram {
+export interface ITrainingProgram {
     program_name:string;
     company_id:string;
     status: string;
