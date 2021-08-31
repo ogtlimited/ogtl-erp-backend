@@ -49,7 +49,7 @@ class EmployeeTypeService{
        const findEmployeeType: EmployeeType = await this.EmployeeTypes.findOne({EmployeeType: EmployeeTypeData.type});
        if(findEmployeeType) throw new HttpException(409, `EmployeeType ${EmployeeTypeData.type} already exists`);
 
-       const createEmployeeTypeData: EmployeeType = await this.EmployeeTypes.create({EmployeeTypeData});
+       const createEmployeeTypeData: EmployeeType = await this.EmployeeTypes.create(EmployeeTypeData);
        return createEmployeeTypeData;
      }
 

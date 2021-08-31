@@ -4,7 +4,7 @@ tags:
 
 paths:
 # [GET] Exit
-  /api/Exit:
+  /Exit:
     get:
       tags:
       - Exit
@@ -38,7 +38,7 @@ paths:
           description: 'Server Error'
 
 # [GET] Exit/id
-  /api/Exit/{id}:
+  /Exit/{id}:
     get:
       tags:
       - Exit

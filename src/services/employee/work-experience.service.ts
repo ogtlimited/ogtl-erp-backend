@@ -38,7 +38,7 @@ class WorkExperienceService{
 
         if(findWorkExperience) throw new HttpException(409, `Employee ${WorkExperienceData.employee_id} already provided details`);
 
-        const createWorkExperienceData = await this.WorkExperiences.create({WorkExperienceData});
+        const createWorkExperienceData = await this.WorkExperiences.create(WorkExperienceData);
 
         return createWorkExperienceData;
     }

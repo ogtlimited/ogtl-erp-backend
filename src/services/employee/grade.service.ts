@@ -47,7 +47,7 @@ class GradeService{
         //Check if data is empty
        if (isEmpty(GradeData)) throw new HttpException(400, "No data provided");
 
-       const findGrade: Grade = await this.Grades.findOne({Grade: GradeData.grade});
+       const findGrade: Grade = await this.Grades.findOne({grade: GradeData.grade});
        if(findGrade) throw new HttpException(409, `Grade ${GradeData.grade} already exists`);
 
        const createGradeData: Grade = await this.Grades.create({GradeData});

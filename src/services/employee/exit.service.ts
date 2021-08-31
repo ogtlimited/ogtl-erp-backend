@@ -41,7 +41,7 @@ class ExitService{
 
         if(findExit) throw new HttpException(409, `Employee ${ExitData.employee_id} already provided details`);
 
-        const createExitData = await this.Exits.create({ExitData});
+        const createExitData = await this.Exits.create(ExitData);
 
         return createExitData;
     }

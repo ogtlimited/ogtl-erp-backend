@@ -39,7 +39,7 @@ class EducationService{
 
         if(findEducation) throw new HttpException(409, `Employee ${EducationData.employee_id} already provided details`);
 
-        const createEducationData = await this.Educations.create({EducationData});
+        const createEducationData = await this.Educations.create(EducationData);
 
         return createEducationData;
     }

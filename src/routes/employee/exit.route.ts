@@ -3,6 +3,7 @@ import { Routes } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
 import { CreateExitDto, UpdateExitDto } from '@/dtos/employee/exit.dto';
 import ExitController from '@/controllers/employee/exit.controller';
+import authMiddleware from '@/middlewares/auth.middleware';
 
 
 
@@ -17,11 +18,11 @@ class ExitRoute implements Routes {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}`, this.ExitController.getExits);
-        this.router.get(`${this.path}/:id`, this.ExitController.getExitById);
-        this.router.post(`${this.path}`, validationMiddleware(CreateExitDto, 'body'), this.ExitController.CreateExit);
-        this.router.put(`${this.path}/:id`, validationMiddleware(UpdateExitDto, 'body', true), this.ExitController.updateExit);
-        this.router.delete(`${this.path}/:id`, this.ExitController.deleteExit);
+        this.router.get(`${this.path}`,authMiddleware, this.ExitController.getExits);
+        this.router.get(`${this.path}/:id`,authMiddleware, this.ExitController.getExitById);
+        this.router.post(`${this.path}`, authMiddleware,validationMiddleware(CreateExitDto, 'body'), this.ExitController.CreateExit);
+        this.router.put(`${this.path}/:id`, authMiddleware,validationMiddleware(UpdateExitDto, 'body', true), this.ExitController.updateExit);
+        this.router.delete(`${this.path}/:id`,authMiddleware, this.ExitController.deleteExit);
       }
     }
 

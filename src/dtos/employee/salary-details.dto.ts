@@ -1,8 +1,7 @@
 import {IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateSalaryDetailsDto{
-     @IsString()
-        public _id: string;
+     
     
     @IsNotEmpty()
     @IsString()
