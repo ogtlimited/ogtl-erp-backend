@@ -23,9 +23,6 @@ import PromotionRoute from './routes/employee-lifecycle/promotion.route';
 import TransferRoute from './routes/employee-lifecycle/transfers.route';
 import LeaveAllocationRoute from './routes/leave/allocation.route';
 import LeaveApplicationRoute from './routes/leave/application.route';
-import LeaveTypeRoutes from './routes/leave/leave-type.route';
-import LeavePeriodRoute from './routes/leave/period.route';
-import LeavePolicyRoutes from './routes/leave/policy.route';
 import BranchRoute from './routes/employee/branch.route';
 import ContactDetailsRoute from './routes/employee/contact-details.route';
 import DesignationRoute from './routes/employee/designation.route';
@@ -47,6 +44,7 @@ import WarningLetterRoute from '@routes/pip/warningLetter.route';
 import scoreCardRoute from '@routes/pip/score-cards.route';
 import LoanRoute from '@routes/loan/loan.route';
 import LoanTypeRoute from '@routes/loan/loan-type.route';
+import CompanyRoute from './routes/company/company.route';
 import LoanApplicationRoute from '@routes/loan/loan-application.route';
 
 
@@ -71,9 +69,6 @@ const app = new App([
   new TransferRoute(),
   new LeaveAllocationRoute(),
   new LeaveApplicationRoute(),
-  new LeaveTypeRoutes(),
-  new LeavePeriodRoute(),
-  new LeavePolicyRoutes(),
   new BranchRoute(),
   new ContactDetailsRoute(),
   new DesignationRoute(),
@@ -96,6 +91,7 @@ const app = new App([
   new scoreCardRoute(),
   new LoanRoute(),
   new LoanTypeRoute(),
+  new CompanyRoute(),
   // new LoanApplicationRoute(),
 
 ]);
