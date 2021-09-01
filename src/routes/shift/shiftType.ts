@@ -7,7 +7,7 @@ import { CreateShiftTypeDto, UpdateShiftTypeDto } from '@dtos/shift/shift_type.d
 import authMiddleware from '@middlewares/auth.middleware';
 
 class ShiftTypeRoute implements Routes {
-    public path = '/shiftType';
+    public path = '/api/shiftType';
     public router = Router();
     public shiftTypeController = new ShiftTypeController();
 

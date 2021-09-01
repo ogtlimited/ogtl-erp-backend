@@ -56,8 +56,8 @@ validateEnv();
 const app = new App([
   new IndexRoute(),
   new UsersRoute(),
-  new AuthRoute(),
-  new EmployeesRoute(),
+  // new AuthRoute(),
+  // new EmployeesRoute(),
   new ShiftTypeRoute(),
   new AttendanceRoute(),
   new IncentiveRoute(),
@@ -93,7 +93,7 @@ const app = new App([
   new TestRoute(),
   new ShiftAssignmentRoute(),
   new WarningLetterRoute(),
-  new scoreCardRoute()
+  new scoreCardRoute(),
   new LoanRoute(),
   new LoanTypeRoute(),
   // new LoanApplicationRoute(),

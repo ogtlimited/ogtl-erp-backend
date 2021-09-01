@@ -6,7 +6,7 @@ import { CreateTestDto, UpdateTestDto } from '@dtos/recruitment/test.dto';
 import authMiddleware from '@middlewares/auth.middleware';
 
 class TestRoute implements Routes{
-  public path = "/test";
+  public path = "/api/test";
   public router = Router();
   public testController = new TestController();
 

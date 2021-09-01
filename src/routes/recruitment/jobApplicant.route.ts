@@ -6,7 +6,7 @@ import { CreateJobApplicantDto, UpdateJobApplicantDto } from '@dtos/recruitment/
 import authMiddleware from '@middlewares/auth.middleware';
 
 class JobApplicantRoute implements Routes{
-  public path = "/jobApplicant";
+  public path = "/api/jobApplicant";
   public router = Router();
   public jobApplicantController = new JobApplicantController();
 

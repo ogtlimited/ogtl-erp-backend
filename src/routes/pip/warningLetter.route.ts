@@ -6,7 +6,7 @@ import { CreateWarningLetterDto } from '@dtos/pip/warning_letter.dto';
 import authMiddleware from '@middlewares/auth.middleware';
 
 class WarningLetterRoute implements Routes{
-  public path = "/warningLetter";
+  public path = "/api/warningLetter";
   public router = Router();
   public warningLetterController = new WarningLetterController();
 

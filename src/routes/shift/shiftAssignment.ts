@@ -7,7 +7,7 @@ import { CreateShiftAssignmentDto, UpdateShiftAssignmentDto } from '@dtos/shift/
 import authMiddleware from '@middlewares/auth.middleware';
 
 class ShiftAssignmentRoute implements Routes{
-  public path = "/shiftAssignment";
+  public path = "/api/shiftAssignment";
   public router = Router();
   public shiftAssignmentController = new ShiftAssignmentController();
 

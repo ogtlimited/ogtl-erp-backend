@@ -4,7 +4,7 @@ tags:
 
 paths:
 # [GET] shiftType
-  /shiftType:
+  /api/shiftType:
     get:
       tags:
       - shiftType
@@ -26,7 +26,7 @@ paths:
         description: user Data
         required: true
         schema:
-          $ref: '#/definitions/shiftType'
+          $ref: '#/definitions/api/shiftType'
       responses:
         201:
           description: 'Created'
@@ -38,7 +38,7 @@ paths:
           description: 'Server Error'
 
 # [GET] shiftType/id
-  /shiftType/{id}:
+  /api/shiftType/{id}:
     get:
       tags:
       - shiftType
@@ -71,7 +71,7 @@ paths:
         description: shift Type Data
         required: true
         schema:
-          $ref: '#/definitions/shiftType'
+          $ref: '#/definitions/api/shiftType'
       responses:
         200:
           description: 'OK'

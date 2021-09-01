@@ -7,7 +7,7 @@ import { CreateShiftRequestDto, UpdateShiftRequestDto } from '@dtos/shift/shift_
 import authMiddleware from '@middlewares/auth.middleware';
 
 class ShiftRequestRoute implements Routes{
-  public path = '/shiftRequest';
+  public path = '/api/shiftRequest';
   public router = Router();
   public shiftRequestController = new ShiftRequestController();
 
