@@ -1,4 +1,5 @@
-import { CreateBranchDto,UpdateBranchDto } from '@/dtos/employee/branch.dto';
+/* eslint-disable prettier/prettier */
+import { CreateBranchDto, UpdateBranchDto } from '@/dtos/employee/branch.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { Branch } from '@/interfaces/employee-interface/branch.interface';
 import BranchModel from '@models/employee/branch.model';

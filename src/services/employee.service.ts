@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import bcrypt from 'bcrypt';
+import { UpdateEmployeeDto } from './../dtos/employee/employee.dto';
 import { CreateEmployeeDto } from '@dtos/employee/employee.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
@@ -36,7 +37,7 @@ class EmployeeService {
     return createEmployeeData;
   }
 
-  public async updateEmployee(EmployeeId: string, EmployeeData: CreateEmployeeDto): Promise<Employee> {
+  public async updateEmployee(EmployeeId: string, EmployeeData: UpdateEmployeeDto): Promise<Employee> {
     if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
 
     if (EmployeeData.company_email) {

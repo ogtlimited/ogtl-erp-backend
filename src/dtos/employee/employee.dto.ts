@@ -58,6 +58,9 @@ export class CreateEmployeeDto {
 
 export class UpdateEmployeeDto {
 
+  @IsEmail()
+  public company_email: string;
+
   @IsString()
   public default_shift: string;
 

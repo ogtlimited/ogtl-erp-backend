@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { CreateContactDetailsDto,UpdateContactDetailsDto } from "@/dtos/employee/contact-details.dto";
 import { ContactDetail } from "@/interfaces/employee-interface/contact-details.interface";
 import ContactDetailsModel from "@models/employee/contact-details.model"
