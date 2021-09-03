@@ -9,7 +9,7 @@ class BranchRoute implements Routes {
     public path = '/branch';
     public router = Router();
     public BranchController = new BranchesController();
-  
+
     constructor() {
       this.initializeRoutes();
     }

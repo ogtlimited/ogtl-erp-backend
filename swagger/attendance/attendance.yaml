@@ -2,22 +2,30 @@ tags:
 - name: Attendance
   description: attendance API
 
-paths:
-  /api/attendance:
+paths: 
 # [GET] attendance
+  /api/attendance/employee/{ogId}:
     get:
       tags:
       - attendance
-      summary: Find All attendance
+      summary: Find All employee attendance
+      parameters:
+      - in: query
+        name: departmentId
+        description: the department Id for the employee
+        required: true
+        schema:
+          type: 'string'
       responses:
         200:
-          description: 'OK'
+          description: 'an array of attendances'
         404:
           description: 'Not Found'
         500:
           description: 'Server Error'
 
 # [POST] attendance
+  /api/attendance:
     post:
       tags:
       - attendance
@@ -31,7 +39,34 @@ paths:
           $ref: '#/definitions/attendance'
       responses:
         201:
-          description: 'Created'
+          description: 'a data object with two fields. First is "attendance". Second is "allEmployeeAttendance" which is an array.'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PATCH] attendance
+    patch:
+      tags:
+      - attendance
+      summary: update attendance clockoutTime
+      parameters:
+      - name: body
+        in: body
+        description: user Data
+        required: true
+        properties:
+          attendanceId: 
+            type: string
+            example: '6131f66bcea0a50428a0b182'
+          clockOutTime: 
+            type: string
+            example: '2021-09-01T18:01'
+      responses:
+        200:
+          description: 'OK'
         400:
           description: 'Bad Request'
         409:
@@ -64,24 +99,26 @@ definitions:
     type: object
     required:
         - employeeId
-        - startTime
-        - endTime
+        - ogId
         - shiftTypeId
+        - departmentId
+        - clockInTime
     properties:
       employeeId:
         description: employee Id
       shiftTypeId:
         type: string
         description: shift
-      statusId:
+      ogId:
         type: string
-        description: status
-      startTime:
+        description: employee's ogId
+      clockInTime:
+        type: datetime
+        description: datetime of employee clock in.
+      departmentId:
         type: string
-        description: start time
-      endTime:
-        type: string
-        description: end time
+        description: department Id
+  
 
 schemes:
  - https

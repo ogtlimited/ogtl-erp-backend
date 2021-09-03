@@ -11,7 +11,7 @@ class GradeController{
    public getGrades = async  (req: Request, res: Response, next: NextFunction) => {
     try{
         const findAllGradesData: Grade[] = await this.GradeService.findAllGrades();
-         
+
         res.status(200).json({data:findAllGradesData,numGrades:findAllGradesData.length, message:"All Grades"});
     }
     catch(error){
@@ -25,7 +25,7 @@ class GradeController{
         try{
             const GradeData: CreateGradeDto = req.body;
             const createGradeData: Grade = await this.GradeService.createGrade(GradeData);
-            res.status(201).json({ data: createGradeData, message: 'Grade succesfully created' });
+            res.status(201).json({ data: createGradeData, message: 'Grade successfully created' });
         }
         catch(error){
         next(error);
@@ -67,7 +67,7 @@ class GradeController{
         catch(error){
          next(error);
         }
-   
+
 };
 
 }

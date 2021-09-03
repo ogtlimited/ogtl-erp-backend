@@ -12,7 +12,7 @@ class EmployeeService {
   public Employees = EmployeeModel;
 
   public async findAllEmployee(): Promise<Employee[]> {
-    const Employees: Employee[] = await this.Employees.find();
+    const Employees: Employee[] = await this.Employees.find().populate('designation');
     return Employees;
   }
 
@@ -32,7 +32,10 @@ class EmployeeService {
     if (findEmployee) throw new HttpException(409, `You're email ${EmployeeData.company_email} already exists`);
 
     const hashedPassword = await bcrypt.hash(EmployeeData.password, 10);
-    const createEmployeeData: Employee = await this.Employees.create({ ...EmployeeData, password: hashedPassword });
+    const newOgid = this.generateOGID();
+    console.log(newOgid)
+    console.log(EmployeeData)
+    const createEmployeeData: Employee = await this.Employees.create({ ...EmployeeData, password: hashedPassword, ogid: newOgid });
 
     return createEmployeeData;
   }
@@ -61,6 +64,9 @@ class EmployeeService {
     if (!deleteEmployeeById) throw new HttpException(409, "You're not Employee");
 
     return deleteEmployeeById;
+  }
+  private generateOGID(){
+    return "OG"+ Math.floor(1000 + Math.random() * 9000)
   }
 }
 

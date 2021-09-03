@@ -58,7 +58,7 @@ const payRollEntrySchema: Schema = new Schema(
           type: Number,
           required: true
       },
-    employees:[ 
+    employees:[
       {
           type: Schema.Types.ObjectId,
           ref: "Employee"

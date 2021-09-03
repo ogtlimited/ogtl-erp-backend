@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import config from 'config';
 import jwt from 'jsonwebtoken';
 import { CreateEmployeeDto, EmployeeLoginDto } from '@dtos/employee/employee.dto';
@@ -24,21 +25,21 @@ class AuthService {
     return createEmployeeData;
   }
 
-  public async login(EmployeeData: EmployeeLoginDto): Promise<{ token: any; findEmployee: Employee }> {
+  public async login(EmployeeData: EmployeeLoginDto): Promise<{ token: any; employee: Employee }> {
     if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
+    const employee: Employee = await this.Employees.findOne({ ogid: EmployeeData.ogid });
 
-    const findEmployee: Employee = await this.Employees.findOne({ ogid: EmployeeData.ogid });
+    if (!employee) throw new HttpException(409, `This ogid ${EmployeeData.ogid} does not exist`);
 
-    if (!findEmployee) throw new HttpException(409, `You're email ${EmployeeData.ogid} not found`);
-
-    const isPasswordMatching: boolean = await bcrypt.compare(EmployeeData.password, findEmployee.password);
+    const isPasswordMatching: boolean = await bcrypt.compare(EmployeeData.password, employee.password);
 
     if (!isPasswordMatching) throw new HttpException(409, "You're password not matching");
 
-    const tokenData = this.createToken(findEmployee);
+    const tokenData = this.createToken(employee);
     // const cookie = this.createCookie(tokenData);
-    console.log(tokenData);
-    return { token: tokenData, findEmployee };
+    // console.log(tokenData);
+    console.log(employee);
+    return { token: tokenData, employee };
   }
 
   public async logout(EmployeeData: Employee): Promise<Employee> {
