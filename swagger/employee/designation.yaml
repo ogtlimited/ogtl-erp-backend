@@ -1,13 +1,13 @@
 tags:
-- name: Designation
-  description: Designation API
+  - name: designation
+    description: designation API
 
 paths:
-# [GET] designation
-  /api/designation:
+  # [GET] designation
+  /designation:
     get:
       tags:
-      - designation
+        - designation
       summary: Find All designation
       responses:
         200:
@@ -15,18 +15,18 @@ paths:
         500:
           description: 'Server Error'
 
-# [POST] designation
+    # [POST] designation
     post:
       tags:
-      - designation
-      summary: Add designation
+        - designation
+      summary: Add Designation
       parameters:
-      - name: body
-        in: body
-        description: designation Data
-        required: true
-        schema:
-          $ref: '#/definitions/designation'
+        - name: body
+          in: body
+          description: Designation Data
+          required: true
+          schema:
+            $ref: '#/definitions/designation'
       responses:
         201:
           description: 'Created'
@@ -37,17 +37,17 @@ paths:
         500:
           description: 'Server Error'
 
-# [GET] designation/id
-  /api/designation/{id}:
+  # [GET] designation/id
+  /designation/{id}:
     get:
       tags:
-      - designation
-      summary: Find designation By Id
+        - designation
+      summary: Find Designation By Id
       parameters:
-      - name: id
-        in: path
-        description: designation Id
-        required: true
+        - name: id
+          in: path
+          description: Designation Id
+          required: true
       responses:
         200:
           description: 'OK'
@@ -56,44 +56,18 @@ paths:
         500:
           description: 'Server Error'
 
-# [PUT] designation/id
-    put:
-      tags:
-      - designation
-      summary: Update Designation By Id
-      parameters:
-      - name: id
-        in: path
-        description: Designation Id
-        required: true
-      - name: body
-        in: body
-        description: Designation Data
-        required: true
-        schema:
-          $ref: '#/definitions/designation'
-      responses:
-        200:
-          description: 'OK'
-        400:
-          description: 'Bad Request'
-        409:
-          description: 'Conflict'
-        500:
-          description: 'Server Error'
-
-# [DELETE] designation/id
+    # [DELETE] designation/id
     delete:
       tags:
-      - designation
+        - designation
       summary: Delete Designation By Id
       parameters:
-      - name: id
-        in: path
-        description: Designation Id
-        required: true
-        schema:
-          type: string
+        - name: id
+          in: path
+          description: Designation Id
+          required: true
+          schema:
+            type: string
       security:
         - jwt: []
       responses:

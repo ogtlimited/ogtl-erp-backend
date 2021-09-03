@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { CreateContactDetailsDto,UpdateContactDetailsDto } from "@/dtos/employee/contact-details.dto";
 import { ContactDetail } from "@/interfaces/employee-interface/contact-details.interface";
 import ContactDetailsModel from "@models/employee/contact-details.model"
@@ -48,7 +49,7 @@ class ContactDetailsService{
 
         if(findContactDetails) throw new HttpException(409, `Employee ${ContactDetailData.employee_id} already provided details`);
 
-        const createContactDetailsData = await this.ContactDetails.create({ContactDetailData});
+        const createContactDetailsData = await this.ContactDetails.create(ContactDetailData);
 
         return createContactDetailsData;
     }

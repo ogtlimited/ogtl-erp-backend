@@ -1,32 +1,32 @@
 tags:
-- name: Policy
-  description: Leave policy API
+- name: LoanApplication
+  description: Loan Application API
 
 paths:
-# [GET] policy
-  /api/leave-policy:
+# [GET] loan type
+  /api/loan-application:
     get:
       tags:
-      - policy
-      summary: Find All policy
+      - loan application
+      summary: Find All Loans Applications
       responses:
         200:
           description: 'OK'
         500:
           description: 'Server Error'
 
-# [POST] policy
+# [POST] loan
     post:
       tags:
-      - leave-policy
-      summary: Add leave policy
+      - loan application
+      summary: Add loan application
       parameters:
       - name: body
         in: body
-        description: leave policy Data
+        description: loan application Data
         required: true
         schema:
-          $ref: '#/definitions/policy'
+          $ref: '#/definitions/loanApplication'
       responses:
         201:
           description: 'Created'
@@ -37,16 +37,16 @@ paths:
         500:
           description: 'Server Error'
 
-# [GET] leave-policy/id
-  /api/leavepolicy/{id}:
+# [GET] loan/loanId
+  /api/loan-application/{loanApplicationId}:
     get:
       tags:
-      - policy
-      summary: Find leave policy By Id
+      - loan application
+      summary: Find loan application By Id
       parameters:
-      - name: id
+      - name: loanApplicationId
         in: path
-        description: leave policy Id
+        description: loan application Id
         required: true
       responses:
         200:
@@ -56,22 +56,22 @@ paths:
         500:
           description: 'Server Error'
 
-# [PUT] leave-policy/id
+# [PUT] loan/loanId
     put:
       tags:
-      - policy
-      summary: Update leave policy By Id
+      - loan application
+      summary: Update loan application By Id
       parameters:
       - name: id
         in: path
-        description: leave policy Id
+        description: loan application Id
         required: true
       - name: body
         in: body
-        description: leave policy Data
+        description: loan application Data
         required: true
         schema:
-          $ref: '#/definitions/policy'
+          $ref: '#/definitions/loanApplication'
       responses:
         200:
           description: 'OK'
@@ -82,15 +82,15 @@ paths:
         500:
           description: 'Server Error'
 
-# [DELETE] leave-policy/id
+# [DELETE] allocation/id
     delete:
       tags:
-      - policy
-      summary: Delete leave policy By Id
+      - loan application
+      summary: Delete loan application By Id
       parameters:
       - name: id
         in: path
-        description: leave policy Id
+        description: loan application Id
         required: true
         schema:
           type: string
@@ -106,21 +106,32 @@ paths:
 
 # definitions
 definitions:
-  Leave policy:
+  loanApplication:
     type: object
     required:
-        - leave_type_id
-        - annual_allocation
+        - applicant_name_id
+        - loan_type_id
+        - loan_amount
+        - repayment_method
     properties:
-      id:
+      applicant_name_id:
         type: string
-        description: policy Id
-      leave_type_id:
+        description: employee id
+      loan_type_id:
         type: string
-        description: leave type
-      annual_allocation:
+        description: loan type id
+      loan_amount:
         type: string
-        description: Annual leave allocation
+        description: loan amount
+      status:
+        type: string
+        description: loan application status
+      reason:
+        type: string
+        description: reason for loan
+      repayment_method:
+        type: string
+        description: repayment method
 
 schemes:
  - https

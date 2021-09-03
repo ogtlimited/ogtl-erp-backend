@@ -4,7 +4,7 @@ tags:
 
 paths:
   # [GET] jobApplicant
-  /jobApplicant:
+  /api/jobApplicant:
     get:
       tags:
         - jobApplicant
@@ -26,7 +26,7 @@ paths:
           description: job applicant Data
           required: true
           schema:
-            $ref: '#/definitions/jobApplicant'
+            $ref: '#/definitions/api/jobApplicant'
       responses:
         201:
           description: 'Created'
@@ -38,7 +38,7 @@ paths:
           description: 'Server Error'
 
   # [GET] jobApplicant/id
-  /jobApplicant/{id}:
+  /api/jobApplicant/{id}:
     get:
       tags:
         - jobApplicant
@@ -71,7 +71,7 @@ paths:
           description: job applicant Data
           required: true
           schema:
-            $ref: '#/definitions/jobApplicant'
+            $ref: '#/definitions/api/jobApplicant'
       responses:
         200:
           description: 'OK'

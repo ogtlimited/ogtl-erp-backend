@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { History } from '@/interfaces/employee-interface/history.interface';
@@ -38,7 +39,7 @@ class HistoryService{
 
         if(findHistory) throw new HttpException(409, `Employee ${HistoryData.employee_id} already provided details`);
 
-        const createHistoryData = await this.Historys.create({HistoryData});
+        const createHistoryData = await this.Historys.create(HistoryData);
 
         return createHistoryData;
     }

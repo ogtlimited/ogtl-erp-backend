@@ -111,9 +111,6 @@ class App {
         'swagger/recruitment/test.yaml',
         'swagger/leave/allocation.yaml',
         'swagger/leave/application.yaml',
-        'swagger/leave/leave-type.yaml',
-        'swagger/leave/period.yaml',
-        'swagger/leave/policy.yaml',
         'swagger/attendance/attendance.yaml',
         'swagger/payroll/incentives.yaml',
         'swagger/payroll/payroll-entry.yaml',
@@ -137,7 +134,11 @@ class App {
         'swagger/employee/personal-details.yaml',
         'swagger/employee/salary-details.yaml',
         'swagger/employee/work-experience.yaml',
-        'swagger/pip/score-cards.yaml'
+        'swagger/pip/score-cards.yaml',
+        'swagger/loan/loan.yaml',
+        'swagger/loan/loan-type.yaml',
+        'swagger/loan/loan-application.yaml',
+        'swagger/company/company.yaml'
               ],
     };
 

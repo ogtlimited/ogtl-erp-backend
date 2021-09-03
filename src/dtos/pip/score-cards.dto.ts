@@ -17,6 +17,9 @@ export class CreateScoreCardDto{
 }
 
 export class UpdateScoreCardDto{
+    @IsString()
+    public _id: string;
+
     @IsNotEmpty()
     @IsString()
     public employee_id: string;

@@ -4,6 +4,8 @@ import IncentiveController from '@/controllers/payroll/incentives.controller';
 import { Routes } from '@/interfaces/routes.interface';
 import validationMiddleware from '@/middlewares/validation.middleware';
 import { Router } from 'express';
+import authMiddleware from '../../middlewares/auth.middleware';
+
 
 class IncentiveRoute implements Routes {
     public path = '/api/incentive';
@@ -15,9 +17,9 @@ class IncentiveRoute implements Routes {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}`, this.incentiveController.getIncentives);
-        this.router.get(`${this.path}/:id`, this.incentiveController.getIncentiveById);
-        this.router.post(`${this.path}`, validationMiddleware(CreateIncentiveDto, 'body'), this.incentiveController.createIncentive);
+        this.router.get(`${this.path}`, [authMiddleware], this.incentiveController.getIncentives);
+        this.router.get(`${this.path}/:id`, [authMiddleware], this.incentiveController.getIncentiveById);
+        this.router.post(`${this.path}`, [authMiddleware, validationMiddleware(CreateIncentiveDto, 'body')], this.incentiveController.createIncentive);
         // this.router.patch(`${this.path}`, validationMiddleware(CreateIncentiveDto, 'body'), this.incentiveController.createIncentive);
     }
   }

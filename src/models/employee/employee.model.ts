@@ -4,53 +4,24 @@ import { model, Schema, Document } from 'mongoose';
 
 const employeeSchema: Schema = new Schema(
   {
-    ogId: {
+    ogid: {
       type: String,
       required: true,
       unique: true,
-    },
-    // admin_id: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "Employee",
-    //   default: null,
-    // },
-    fingerprint_details: {
-      finger_id: String,
-      date_created: Date,
-    },
-    first_name: {
-      type: String,
-      required: true,
-    },
-    last_name: {
-      type: String,
-      required: true,
-    },
-    password: {
-      type: String,
-      required: true,
     },
     company_email: {
       type: String,
       required: true,
       unique: true,
     },
-    dob: {
+    date_of_joining: {
       type: Date,
       required: true,
+      unique: true,
     },
-    day_of_birth: {
-      type: Number,
-      default: null,
-    },
-    month_of_birth: {
-      type: Number,
-      default: null,
-    },
-    campaign_id: {
+    default_shift: {
       type: Schema.Types.ObjectId,
-      // required: true,
-      ref: 'Campaign',
+      ref: 'Shift',
       default: null,
     },
     department_id: {
@@ -65,60 +36,61 @@ const employeeSchema: Schema = new Schema(
       ref: 'Branch',
       default: null,
     },
-    designation_id: {
+    password:  {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    designation: {
       type: Schema.Types.ObjectId,
-      // required: true,
       ref: 'Designation',
       default: null,
     },
-    employment_type_id: {
-      type: Schema.Types.ObjectId,
-      // required: true,
-      ref: 'EmploymentType',
-      default: null,
+    first_name: {
+      type: String,
+      required: true,
     },
-    health_insurance_id: {
-      type: Schema.Types.ObjectId,
-      // required: true,
-      ref: 'Health_Insurance',
-      default: null,
+    employment_type: {
+      type: String,
+      required: true,
+      unique: true,
     },
-    shift_type_id: {
-      type: Schema.Types.ObjectId,
-      // required: true,
-      ref: 'Shift_type',
-      default: null,
-    },
-    is_admin: {
+    isAdmin: {
       type: Boolean,
       required: true,
-      default: false,
     },
     gender: {
       type: String,
-      enum: ['male', 'female'],
+      enum: ["male", "female"],
     },
-    profile_pic: {
+    image: {
       type: String,
-      default: null,
+      
     },
-    password_reset_count: {
+    last_name: {
+      type: String,
+      required: true,
+    
+    },
+    middle_name: {
+      type: String,
+    },
+    reports_to: {
+      type: String,
+    },
+    status: {
+      type: String,
+      enum: ["active", "terminated", "left"]
+    },
+    permissionLevel: {
       type: Number,
-      default: 0,
-    },
-    active: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  {
-    timestamps: true,
-  },
+    }
+  }
 );
 
-employeeSchema.virtual('full_name').get(function () {
-  return this.first_name + ' ' + this.last_name;
-});
+// employeeSchema.virtual('full_name').get(function () {
+//   return this.first_name + ' ' + this.last_name;
+// });
 
 // employeeSchema.pre('save', function (this: Employee, next) {
 
@@ -128,6 +100,6 @@ employeeSchema.virtual('full_name').get(function () {
 // });
 
 
-const userModel = model('Employee', employeeSchema);
+const EmployeeModel = model<Employee & Document>('Employee', employeeSchema);
 
-export default userModel;
+export default EmployeeModel;

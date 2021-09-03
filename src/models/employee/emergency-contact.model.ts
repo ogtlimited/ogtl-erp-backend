@@ -29,6 +29,6 @@ const emergencyContactSchema: Schema = new Schema(
     },
 );
 
-const userModel = model<EmergencyContact & Document>('EmergencyContact', emergencyContactSchema);
+const EmergencyContactModel = model<EmergencyContact & Document>('EmergencyContact', emergencyContactSchema);
 
-export default userModel;
+export default EmergencyContactModel;

@@ -1,32 +1,32 @@
 tags:
-- name: Leave Period
-  description: Leave period API
+- name: LoanType
+  description: LoanType API
 
 paths:
-# [GET] Period
-  /api/leave-period:
+# [GET] loan type
+  /api/loan-type:
     get:
       tags:
-      - Period
-      summary: Find All Period
+      - loan type
+      summary: Find All Loans Types
       responses:
         200:
           description: 'OK'
         500:
           description: 'Server Error'
 
-# [POST] Period
+# [POST] loan
     post:
       tags:
-      - Period
-      summary: Add leave Period
+      - loan type
+      summary: Add loan type
       parameters:
       - name: body
         in: body
-        description: leave Period Data
+        description: loan type Data
         required: true
         schema:
-          $ref: '#/definitions/Period'
+          $ref: '#/definitions/loanType'
       responses:
         201:
           description: 'Created'
@@ -37,16 +37,16 @@ paths:
         500:
           description: 'Server Error'
 
-# [GET] Period/id
-  /api/leave-period/{id}:
+# [GET] loan/loanId
+  /api/loan-type/{loanTypeId}:
     get:
       tags:
-      - Period
-      summary: Find leave Period By Id
+      - loan type
+      summary: Find loan type By Id
       parameters:
-      - name: id
+      - name: loanTypeId
         in: path
-        description: leave Period Id
+        description: loan type Id
         required: true
       responses:
         200:
@@ -56,22 +56,22 @@ paths:
         500:
           description: 'Server Error'
 
-# [PUT] Period/id
+# [PUT] loan/loanId
     put:
       tags:
-      - Period
-      summary: Update leave Period By Id
+      - loan type
+      summary: Update loan type By Id
       parameters:
       - name: id
         in: path
-        description: leave Period Id
+        description: loan type Id
         required: true
       - name: body
         in: body
-        description: leave Period Data
+        description: loan type Data
         required: true
         schema:
-          $ref: '#/definitions/Period'
+          $ref: '#/definitions/loanType'
       responses:
         200:
           description: 'OK'
@@ -82,15 +82,15 @@ paths:
         500:
           description: 'Server Error'
 
-# [DELETE] Period/id
+# [DELETE] allocation/id
     delete:
       tags:
-      - Period
-      summary: Delete leave Period By Id
+      - loan type
+      summary: Delete loan type By Id
       parameters:
       - name: id
         in: path
-        description: leave Period Id
+        description: loan type Id
         required: true
         schema:
           type: string
@@ -106,24 +106,29 @@ paths:
 
 # definitions
 definitions:
-  Leave Period:
+  loanType:
     type: object
     required:
-        - from_date
-        - to_date
+        - loan_name
+        - maximum_loan_amount
+        - rate_of_interest
+        - disabled
     properties:
-      id:
+      loan_name:
         type: string
-        description: Period Id
-      from_date:
-        type: date
-        description: start date
-      to_date:
-        type: date
-        description: end date
-      is_active:
+        description: loan name
+      maximum_loan_amount:
+        type: string
+        description: maximum loan amount
+      rate_of_interest:
+        type: number
+        description: interest rate on loan type
+      description:
+        type: string
+        description: loan type description
+      disabled:
         type: boolean
-        description: leave is active
+        description: default true
 
 schemes:
  - https

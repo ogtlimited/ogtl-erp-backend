@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { Designation } from '@/interfaces/employee-interface/designation.interface';
@@ -49,7 +50,7 @@ public async findDesignationById(DesignationId:string) : Promise<Designation>{
        const findDesignation: Designation = await this.Designations.findOne({Designation: DesignationData.designation});
        if(findDesignation) throw new HttpException(409, `Designation ${DesignationData.designation} already exists`);
 
-       const createDesignationData: Designation = await this.Designations.create({DesignationData});
+       const createDesignationData: Designation = await this.Designations.create(DesignationData);
        return createDesignationData;
      }
 

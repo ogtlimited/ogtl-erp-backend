@@ -15,6 +15,6 @@ const branchSchema: Schema = new Schema(
     },
 );
 
-const userModel = model<Branch & Document>('Branch', branchSchema);
+const BranchModel = model<Branch & Document>('Branch', branchSchema);
 
-export default userModel;
+export default BranchModel;

@@ -4,7 +4,7 @@ tags:
 
 paths:
 # [GET] Grade
-  /api/grade:
+  /grade:
     get:
       tags:
       - Grade
@@ -38,7 +38,7 @@ paths:
           description: 'Server Error'
 
 # [GET] Grade/id
-  /api/grade/{id}:
+  /grade/{id}:
     get:
       tags:
       - Grade
@@ -107,14 +107,14 @@ paths:
 
 #definitions
 definitions: 
-  Grade:
+  grade:
     type: object
     required:
       - grade
     properties:
       id:
         description: Grade Id
-      Grade:
+      grade:
         type: string
         description: Grade name
 

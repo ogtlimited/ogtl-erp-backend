@@ -12,9 +12,9 @@ const allocationSchema : Schema = new Schema (
            },
 
         leave_type_id:{
-                type: mongoose.Schema.Types.ObjectId,
-                required: true,
-                ref: "LeaveType",
+            type: String,
+            enum:["Annual","Casual","Sick","Without Pay","Maternity"],
+            required: true,
            },
 
         from_date:{

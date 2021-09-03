@@ -1,9 +1,7 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateWorkExperienceDto{
-    @IsString()
-        public  _id: string;
-
+    
     @IsNotEmpty()
     @IsString()
         public employee_id: string;

@@ -4,6 +4,7 @@ import SalaryComponentController from '@/controllers/payroll/salary-component.co
 import { Routes } from '@/interfaces/routes.interface';
 import validationMiddleware from '@/middlewares/validation.middleware';
 import { Router } from 'express';
+import authMiddleware from '../../middlewares/auth.middleware';
 
 class SalaryComponentRoute implements Routes {
     public path = '/api/salary-component';
@@ -15,9 +16,9 @@ class SalaryComponentRoute implements Routes {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}`, this.salaryComponentController.findAll);
-        this.router.get(`${this.path}/:id`, this.salaryComponentController.findById);
-        this.router.post(`${this.path}`, validationMiddleware(CreateSalaryComponentDto, 'body'), this.salaryComponentController.create);
+        this.router.get(`${this.path}`, [authMiddleware],this.salaryComponentController.findAll);
+        this.router.get(`${this.path}/:id`,[authMiddleware], this.salaryComponentController.findById);
+        this.router.post(`${this.path}`, [authMiddleware, validationMiddleware(CreateSalaryComponentDto, 'body')], this.salaryComponentController.create);
         // this.router.patch(`${this.path}`, validationMiddleware(DTO, 'body'), this.salaryComponentController.createIncentive);
     }
   }

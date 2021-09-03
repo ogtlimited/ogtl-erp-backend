@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { Exit } from '@/interfaces/employee-interface/exit.interface';
@@ -41,7 +42,7 @@ class ExitService{
 
         if(findExit) throw new HttpException(409, `Employee ${ExitData.employee_id} already provided details`);
 
-        const createExitData = await this.Exits.create({ExitData});
+        const createExitData = await this.Exits.create(ExitData);
 
         return createExitData;
     }

@@ -2,8 +2,8 @@ import {IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateContactDetailsDto{
   
-    @IsString()
-        public _id: string;
+    
+        
     
     @IsNotEmpty()
     @IsString()
@@ -35,9 +35,9 @@ export class CreateContactDetailsDto{
 
 }
 export class UpdateContactDetailsDto{
-  
     @IsString()
-        public _id: string;
+    public _id: string;
+        
 
     @IsString()
         public employee_id: string;

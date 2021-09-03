@@ -4,7 +4,7 @@ tags:
 
 paths:
   # [GET] jobOffer
-  /jobOffer:
+  /api/jobOffer:
     get:
       tags:
         - jobOffer
@@ -26,7 +26,7 @@ paths:
           description: job offer Data
           required: true
           schema:
-            $ref: '#/definitions/jobOffer'
+            $ref: '#/definitions/api/jobOffer'
       responses:
         201:
           description: 'Created'
@@ -38,7 +38,7 @@ paths:
           description: 'Server Error'
 
   # [GET] jobOffer/id
-  /jobOffer/{id}:
+  /api/jobOffer/{id}:
     get:
       tags:
         - jobOffer
@@ -71,7 +71,7 @@ paths:
           description: job offer Data
           required: true
           schema:
-            $ref: '#/definitions/jobOffer'
+            $ref: '#/definitions/api/jobOffer'
       responses:
         200:
           description: 'OK'

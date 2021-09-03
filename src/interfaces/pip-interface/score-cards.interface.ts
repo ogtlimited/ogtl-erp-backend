@@ -3,4 +3,5 @@ export interface IScoreCard{
     employee_id: string;
     performance_score : number;
     company_values_score:number;
+    Department_id : string;
 }

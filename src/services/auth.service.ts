@@ -1,57 +1,64 @@
-import bcrypt from 'bcrypt';
 import config from 'config';
 import jwt from 'jsonwebtoken';
-import { CreateUserDto } from '@dtos/users.dto';
+import { CreateEmployeeDto, EmployeeLoginDto } from '@dtos/employee/employee.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
-import { User } from '@interfaces/users.interface';
-import userModel from '@models/users.model';
+import bcrypt from 'bcrypt';
+import { Employee } from '@interfaces/employee-interface/employee.interface';
+import EmployeeModel from '@models/employee/employee.model';
+
 import { isEmpty } from '@utils/util';
 
 class AuthService {
-  public users = userModel;
+  private Employees = EmployeeModel;
+  public async signup(EmployeeData: CreateEmployeeDto): Promise<Employee> {
+    if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
 
-  public async signup(userData: CreateUserDto): Promise<User> {
-    if (isEmpty(userData)) throw new HttpException(400, "You're not userData");
+    const findEmployee: Employee = await this.Employees.findOne({ company_email: EmployeeData.company_email });
 
-    const findUser: User = await this.users.findOne({ email: userData.email });
-    if (findUser) throw new HttpException(409, `You're email ${userData.email} already exists`);
+    if (findEmployee) throw new HttpException(409, `You're email ${EmployeeData.company_email} already exists`);
 
-    const hashedPassword = await bcrypt.hash(userData.password, 10);
-    const createUserData: User = await this.users.create({ ...userData, password: hashedPassword });
+    const hashedPassword = await bcrypt.hash(EmployeeData.password, 10);
 
-    return createUserData;
+    const createEmployeeData: Employee = await this.Employees.create({ ...EmployeeData, password: hashedPassword });
+    return createEmployeeData;
   }
 
-  public async login(userData: CreateUserDto): Promise<{ token: any; findUser: User }> {
-    if (isEmpty(userData)) throw new HttpException(400, "You're not userData");
+  public async login(EmployeeData: EmployeeLoginDto): Promise<{ token: any; employee: Employee }> {
+    if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
 
-    const findUser: User = await this.users.findOne({ email: userData.email });
-    if (!findUser) throw new HttpException(409, `You're email ${userData.email} not found`);
+    const employee: Employee = await this.Employees.findOne({ ogid: EmployeeData.ogid });
 
-    const isPasswordMatching: boolean = await bcrypt.compare(userData.password, findUser.password);
+    if (!employee) throw new HttpException(409, `This ogid ${EmployeeData.ogid} does not exist`);
+
+    const isPasswordMatching: boolean = await bcrypt.compare(EmployeeData.password, employee.password);
+
     if (!isPasswordMatching) throw new HttpException(409, "You're password not matching");
 
-    const tokenData = this.createToken(findUser);
-    const cookie = this.createCookie(tokenData);
-    console.log(tokenData);
-    return { token: tokenData, findUser };
+    const tokenData = this.createToken(employee);
+    // const cookie = this.createCookie(tokenData);
+    // console.log(tokenData);
+    console.log(employee);
+    return { token: tokenData, employee };
   }
 
-  public async logout(userData: User): Promise<User> {
-    if (isEmpty(userData)) throw new HttpException(400, "You're not userData");
+  public async logout(EmployeeData: Employee): Promise<Employee> {
+    if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
 
-    const findUser: User = await this.users.findOne({ email: userData.email, password: userData.password });
-    if (!findUser) throw new HttpException(409, `You're email ${userData.email} not found`);
+    const findEmployee: Employee = await this.Employees.findOne({ email: EmployeeData.company_email, password: EmployeeData.password });
 
-    return findUser;
+    if (!findEmployee) throw new HttpException(409, `You're email ${EmployeeData.company_email} not found`);
+
+    return findEmployee;
   }
+  public createToken(Employee: Employee): TokenData {
+    const dataStoredInToken: DataStoredInToken = { _id: Employee._id };
 
-  public createToken(user: User): TokenData {
-    const dataStoredInToken: DataStoredInToken = { _id: user._id };
     const secretKey: string = config.get('secretKey');
+
     const expiresIn: number = 60 * 60;
     console.log(dataStoredInToken);
+
     return { expiresIn, token: jwt.sign(dataStoredInToken, secretKey, { expiresIn }) };
   }
 

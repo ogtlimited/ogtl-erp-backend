@@ -1,8 +1,7 @@
 import {IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateGradeDto{
-    @IsString()
-      public _id: string;
+ 
     
     @IsNotEmpty()
     @IsString()
@@ -17,7 +16,7 @@ export class UpdateGradeDto{
   
   @IsNotEmpty()
   @IsString()
-    grade: string;
+    public grade: string;
 
 
 }

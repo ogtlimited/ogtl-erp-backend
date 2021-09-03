@@ -11,7 +11,7 @@ class EmployeesController {
     try {
       const findAllEmployeesData: Employee[] = await this.EmployeeService.findAllEmployee();
 
-      res.status(200).json({ data: findAllEmployeesData, message: 'findAll' });
+      res.status(200).json({ employees: findAllEmployeesData, message: 'all employees' });
     } catch (error) {
       next(error);
     }

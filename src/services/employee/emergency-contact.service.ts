@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { EmergencyContact } from '@/interfaces/employee-interface/emergency-contact.interface';
@@ -41,7 +42,7 @@ class EmergencyContactService{
 
         if(findEmergencyContact) throw new HttpException(409, `Employee ${EmergencyContactData.employee_id} already provided details`);
 
-        const createEmergencyContactData = await this.EmergencyContacts.create({EmergencyContactData});
+        const createEmergencyContactData = await this.EmergencyContacts.create(EmergencyContactData);
 
         return createEmergencyContactData;
     }
