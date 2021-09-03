@@ -10,10 +10,16 @@ const salaryStructureSchema: Schema = new Schema(
       required: true,
       ref: 'PayrollFrequency',
     },
-    salaryDeductions: [
+    deductions: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'SalaryDeduction',
+        ref: 'SalaryComponent',
+      },
+    ],
+    earnings: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'SalaryComponent',
       },
     ],
     status: {
@@ -32,14 +38,6 @@ const salaryStructureSchema: Schema = new Schema(
     updatedBy: {
       type: Schema.Types.ObjectId,
       ref: 'Employee',
-    },
-    hourRate: {
-      type: Number,
-      required: true,
-    },
-    earning: {
-      type: Number,
-      required: true,
     },
     netPay: {
       type: Number,

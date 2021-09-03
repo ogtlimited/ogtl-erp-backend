@@ -41,6 +41,8 @@ import JobOfferRoute from '@routes/recruitment/jobOffer.route';
 import JobApplicantRoute from '@routes/recruitment/jobApplicant.route';
 import TestRoute from '@routes/recruitment/test.route';
 import WarningLetterRoute from '@routes/pip/warningLetter.route';
+import DeductionRoute from '@routes/payroll/deduction.route'
+import DeductionTypeRoute from '@routes/payroll/deductionType.route'
 import scoreCardRoute from '@routes/pip/score-cards.route';
 import LoanRoute from '@routes/loan/loan.route';
 import LoanTypeRoute from '@routes/loan/loan-type.route';
@@ -89,6 +91,8 @@ const app = new App([
   new ShiftAssignmentRoute(),
   new WarningLetterRoute(),
   new scoreCardRoute(),
+  new DeductionTypeRoute(),
+  new DeductionRoute(),
   new LoanRoute(),
   new LoanTypeRoute(),
   new CompanyRoute(),
