@@ -101,9 +101,9 @@ class AttendanceTypeService {
     //     }
     //     return "done";
         if (isEmpty(attendanceTypeData)) throw new HttpException(400, "Bad request");
-        const createshiftTypeData = await this.attendanceTypes.create(attendanceTypeData);
+        const attendance = await this.attendanceTypes.create(attendanceTypeData);
         const allEmployeeAttendance = await this.findAllEmployeeAttendance(attendanceTypeData.ogId, {departmentId: attendanceTypeData.departmentId})
-        return {createshiftTypeData, allEmployeeAttendance};
+        return {attendance, allEmployeeAttendance};
       }  
       
   public async updateAttendance(attendanceData: UpdateAttendanceDto): Promise<any> {
