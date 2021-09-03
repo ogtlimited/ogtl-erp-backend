@@ -17,7 +17,6 @@ const employeeSchema: Schema = new Schema(
     date_of_joining: {
       type: Date,
       required: true,
-      unique: true,
     },
     default_shift: {
       type: Schema.Types.ObjectId,
@@ -30,7 +29,6 @@ const employeeSchema: Schema = new Schema(
     password:  {
       type: String,
       required: true,
-      unique: true,
     },
     designation: {
       type: Schema.Types.ObjectId,
@@ -49,7 +47,6 @@ const employeeSchema: Schema = new Schema(
     employment_type: {
       type: String,
       required: true,
-      unique: true,
     },
     isAdmin: {
       type: Boolean,
