@@ -26,7 +26,7 @@ const employeeSchema: Schema = new Schema(
     },
     department:  {
       type: String,
-     
+
     },
     password:  {
       type: String,
@@ -57,12 +57,12 @@ const employeeSchema: Schema = new Schema(
     },
     image: {
       type: String,
-      
+
     },
     last_name: {
       type: String,
       required: true,
-    
+
     },
     middle_name: {
       type: String,
