@@ -1,12 +1,10 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import { IsEmail, IsString } from 'class-validator';
+import { IsEmail, IsString,IsBoolean } from 'class-validator';
 
 export class CreateEmployeeDto {  
 
-  @IsString()
-  public ogid: string;
 
   @IsString()
   public date_of_joining: string;
@@ -32,7 +30,7 @@ export class CreateEmployeeDto {
   @IsString()
   public employment_type: string;
 
-  @IsString()
+  @IsBoolean()
   public isAdmin: boolean;
 
   @IsString()
@@ -79,7 +77,7 @@ export class UpdateEmployeeDto {
   @IsString()
   public employment_type: string;
 
-  @IsString()
+  @IsBoolean()
   public isAdmin: boolean;
   gender: string;
 

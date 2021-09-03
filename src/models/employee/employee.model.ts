@@ -34,7 +34,9 @@ const employeeSchema: Schema = new Schema(
       unique: true,
     },
     designation: {
-      type: String
+      type: Schema.Types.ObjectId,
+      ref: 'Designation',
+      default: null,
     },
     first_name: {
       type: String,
@@ -67,7 +69,6 @@ const employeeSchema: Schema = new Schema(
     },
     reports_to: {
       type: String,
-    
     },
     status: {
       type: String,
