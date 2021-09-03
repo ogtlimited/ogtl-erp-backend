@@ -25,8 +25,7 @@ const employeeSchema: Schema = new Schema(
       default: null,
     },
     department:  {
-      type: String,
-     
+      type: ["HR", "Account", "Operations", "Facilities", "IT"],
     },
     password:  {
       type: String,
@@ -36,6 +35,11 @@ const employeeSchema: Schema = new Schema(
     designation: {
       type: Schema.Types.ObjectId,
       ref: 'Designation',
+      default: null,
+    },
+    projectId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Project',
       default: null,
     },
     first_name: {
