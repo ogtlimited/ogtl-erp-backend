@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import config from 'config';
 import jwt from 'jsonwebtoken';
 import { CreateEmployeeDto, EmployeeLoginDto } from '@dtos/employee/employee.dto';
