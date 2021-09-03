@@ -22,7 +22,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref:'#/components/getEmployeeAttendance'
+                $ref:'#/definitions/attendance'
 
         404:
           description: 'Not Found'
@@ -94,13 +94,6 @@ definitions:
       endTime:
         type: string
         description: end time
-
-#components
-components:
-  getEmployeeAttendance:
-    type: object
-    properties:
-      data: array
 
 schemes:
  - https
