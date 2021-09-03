@@ -112,6 +112,7 @@ definitions:
         - from_date
         - start_time
         - to_date
+        - leave_type_id
     properties:
       id:
         type: string
@@ -119,6 +120,10 @@ definitions:
       employee_id:
         type: string
         description: employee id
+      leave_type_id:
+        type: string
+        description: leave type
+        enum: ["Annual","Casual","Sick","Without Pay","Maternity"]
       from_date:
         type: date
         description: start time
