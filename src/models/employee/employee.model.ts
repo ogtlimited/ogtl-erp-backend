@@ -17,33 +17,27 @@ const employeeSchema: Schema = new Schema(
     date_of_joining: {
       type: Date,
       required: true,
-      unique: true,
     },
     default_shift: {
       type: Schema.Types.ObjectId,
       ref: 'Shift',
       default: null,
     },
-    department_id: {
-      type: Schema.Types.ObjectId,
-      // required: true,
-      ref: 'Department',
-      default: null,
-    },
-    branch_id: {
-      type: Schema.Types.ObjectId,
-      // required: true,
-      ref: 'Branch',
-      default: null,
+    department:  {
+      type: ["HR", "Account", "Operations", "Facilities", "IT"],
     },
     password:  {
       type: String,
       required: true,
-      unique: true,
     },
     designation: {
       type: Schema.Types.ObjectId,
       ref: 'Designation',
+      default: null,
+    },
+    projectId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Project',
       default: null,
     },
     first_name: {
@@ -53,7 +47,6 @@ const employeeSchema: Schema = new Schema(
     employment_type: {
       type: String,
       required: true,
-      unique: true,
     },
     isAdmin: {
       type: Boolean,
