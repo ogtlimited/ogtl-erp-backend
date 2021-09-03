@@ -3,15 +3,27 @@ tags:
   description: attendance API
 
 paths:
-  /api/attendance:
+  /api/attendance/employee/{ogId}:
 # [GET] attendance
     get:
       tags:
       - attendance
-      summary: Find All attendance
+      summary: Find All employee attendance
+      parameters:
+      - in: query
+        name: departmentId
+        description: the department Id for the employee
+        required: true
+        schema:
+          type: 'string'
       responses:
         200:
           description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref:'#/components/getEmployeeAttendance'
+
         404:
           description: 'Not Found'
         500:
@@ -82,6 +94,13 @@ definitions:
       endTime:
         type: string
         description: end time
+
+#components
+components:
+  getEmployeeAttendance:
+    type: object
+    properties:
+      data: array
 
 schemes:
  - https

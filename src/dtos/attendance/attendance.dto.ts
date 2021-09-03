@@ -11,7 +11,10 @@ export class CreateAttendanceDto {
   public shiftTypeId: string;
 
   @IsString()
-  public ogID: string;
+  public ogId: string;
+
+  @IsString()
+  public departmentId: string;
 
   @IsString()
   public clockInTime: string;

@@ -26,7 +26,6 @@ class AuthService {
 
   public async login(EmployeeData: EmployeeLoginDto): Promise<{ token: any; employee: Employee }> {
     if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
-
     const employee: Employee = await this.Employees.findOne({ ogid: EmployeeData.ogid });
 
     if (!employee) throw new HttpException(409, `This ogid ${EmployeeData.ogid} does not exist`);

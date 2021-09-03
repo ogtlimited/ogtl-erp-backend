@@ -58,8 +58,10 @@ class AttendanceTypeService {
 
   public async findAllEmployeeAttendance(ogId: string, query): Promise<any> {
    
-    const {departmentId, clockInTime, clockOutTime} = query
-    const dbQuery = {ogId, departmentId, clockInTime:{$gte: clockInTime, $lte: clockOutTime}}
+    const {departmentId} = query
+    const startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
+    const endOfMonth   = moment().endOf('month').format('YYYY-MM-DD');
+    const dbQuery = {ogId, departmentId, createdAt:{$gte: startOfMonth, $lte: endOfMonth}}
     const attendanceTypes = await this.attendanceTypes.find(dbQuery);
     return attendanceTypes;
   }
@@ -72,35 +74,36 @@ class AttendanceTypeService {
   }
   
   public async createAttendanceType(attendanceTypeData: CreateAttendanceDto): Promise<any> {
-    let day = 1
-    let now = moment().format('MMM DD h:mm');
-    let formatter= 'YYYY-MM-DD[T]HH:mm';
-
-    for (let index = 0; index < 10; index++) {
-        console.log("here"+index);
-        const num = `${day}`
-        const date = new Date(`July ${num}, 2021 9:00`);
-        const data = {
-            employeeId: "612cead8fc13ae35b5000353",
-            shiftTypeId: "612ea6c4b870ac743823511c",
-            departmentId: "612ce924fc13ae5329000af8",
-            clockInTime: moment(date).format(formatter),
-            ogId: "850rho199",
-          }
+    
+    //seeding the attendance table
+    
+    // let day = 1
+    // let now = moment().format('MMM DD h:mm');
+    // let formatter= 'YYYY-MM-DD[T]HH:mm';
+    // for (let index = 0; index < 10; index++) {
+    //     console.log("here"+index);
+    //     const num = `${day}`
+    //     const date = new Date(`July ${num}, 2021 9:00`);
+    //     const data = {
+    //         employeeId: "612cead8fc13ae35b5000353",
+    //         shiftTypeId: "612ea6c4b870ac743823511c",
+    //         departmentId: "612ce924fc13ae5329000af8",
+    //         clockInTime: moment(date).format(formatter),
+    //         ogId: "850rho199",
+    //       }
         
-          // const result = await getWorkTime(data.clockInTime, data.clockOutTime);
-          // data.hoursWorked = result.hoursWorked
-          // data.minutesWorked = result.minutesWorked    
-          await this.attendanceTypes.create(data);
-          day ++;
+    //       // const result = await getWorkTime(data.clockInTime, data.clockOutTime);
+    //       // data.hoursWorked = result.hoursWorked
+    //       // data.minutesWorked = result.minutesWorked    
+    //       await this.attendanceTypes.create(data);
+    //       day ++;
         
-        }
-        return "done";
+    //     }
+    //     return "done";
         if (isEmpty(attendanceTypeData)) throw new HttpException(400, "Bad request");
         const createshiftTypeData = await this.attendanceTypes.create(attendanceTypeData);
-        const response: IAttendanceCreatedResponse =  omit(createshiftTypeData.toObject(), ["employeeId"])
-        return response;
-        
+        const allEmployeeAttendance = await this.findAllEmployeeAttendance(attendanceTypeData.ogId, {departmentId: attendanceTypeData.departmentId})
+        return {createshiftTypeData, allEmployeeAttendance};
       }  
       
   public async updateAttendance(attendanceData: UpdateAttendanceDto): Promise<any> {
@@ -114,7 +117,7 @@ class AttendanceTypeService {
     attendanceRecord.minutesWorked = workTimeResult.minutesWorked 
     attendanceRecord.clockOutTime = attendanceData.clockOutTime
     
-    let updateRecord = await attendanceModel.findOneAndUpdate(
+    const updateRecord = await attendanceModel.findOneAndUpdate(
       {
         _id: attendanceData.attendanceId
       },
@@ -123,11 +126,11 @@ class AttendanceTypeService {
       },
       { new: true })
     
-    // return workTimeResult;
-    if(workTimeResult.timeDeductions > 0)
-    {
-      const deductions = await deductionModel.create({employeeId: attendanceRecord.employeeId, deductionTypeId: attendanceRecord.shiftTypeId.deductionTypeId, quantity: workTimeResult.timeDeductions })
-    }
+    // // return workTimeResult;
+    // if(workTimeResult.timeDeductions > 0)
+    // {
+    //   const deductions = await deductionModel.create({employeeId: attendanceRecord.employeeId, deductionTypeId: attendanceRecord.shiftTypeId.deductionTypeId, quantity: workTimeResult.timeDeductions })
+    // }
     return updateRecord;
   }
   
