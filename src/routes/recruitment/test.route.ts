@@ -3,9 +3,10 @@ import { Router } from 'express';
 import TestController from '@controllers/recruitment/test.controller';
 import validationMiddleware from '@middlewares/validation.middleware';
 import { CreateTestDto, UpdateTestDto } from '@dtos/recruitment/test.dto';
+import authMiddleware from '@middlewares/auth.middleware';
 
 class TestRoute implements Routes{
-  public path = "/test";
+  public path = "/api/test";
   public router = Router();
   public testController = new TestController();
 
@@ -14,11 +15,11 @@ class TestRoute implements Routes{
   }
 
   private initializeRoutes(){
-    this.router.get(`${this.path}`,this.testController.getTests);
-    this.router.get(`${this.path}/:id`,this.testController.getTestById);
-    this.router.post(`${this.path}`,validationMiddleware(CreateTestDto,'body'),this.testController.createTest);
-    this.router.patch(`${this.path}/:id`, validationMiddleware(UpdateTestDto, 'body'), this.testController.updateTest);
-    this.router.delete(`${this.path}/:id`,this.testController.deleteTest);
+    this.router.get(`${this.path}`,authMiddleware,this.testController.getTests);
+    this.router.get(`${this.path}/:id`,authMiddleware,this.testController.getTestById);
+    this.router.post(`${this.path}`,authMiddleware,validationMiddleware(CreateTestDto,'body'),this.testController.createTest);
+    this.router.patch(`${this.path}/:id`,authMiddleware, validationMiddleware(UpdateTestDto, 'body'), this.testController.updateTest);
+    this.router.delete(`${this.path}/:id`,authMiddleware,this.testController.deleteTest);
 
   }
 }

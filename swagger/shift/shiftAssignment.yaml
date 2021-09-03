@@ -4,7 +4,7 @@ tags:
 
 paths:
   # [GET] shiftAssignment
-  /shiftAssignment:
+  /api/shiftAssignment:
     get:
       tags:
         - shiftAssignment
@@ -26,7 +26,7 @@ paths:
           description: shift assignment Data
           required: true
           schema:
-            $ref: '#/definitions/shiftAssignment'
+            $ref: '#/definitions/api/shiftAssignment'
       responses:
         201:
           description: 'Created'
@@ -38,7 +38,7 @@ paths:
           description: 'Server Error'
 
   # [GET] shiftAssignment/id
-  /shiftAssignment/{id}:
+  /api/shiftAssignment/{id}:
     get:
       tags:
         - shiftAssignment
@@ -71,7 +71,7 @@ paths:
           description: shift Assignment Data
           required: true
           schema:
-            $ref: '#/definitions/shiftAssignment'
+            $ref: '#/definitions/api/shiftAssignment'
       responses:
         200:
           description: 'OK'

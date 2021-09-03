@@ -54,8 +54,8 @@ validateEnv();
 const app = new App([
   new IndexRoute(),
   new UsersRoute(),
-  new AuthRoute(),
-  new EmployeesRoute(),
+  // new AuthRoute(),
+  // new EmployeesRoute(),
   new ShiftTypeRoute(),
   new AttendanceRoute(),
   new IncentiveRoute(),

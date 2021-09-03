@@ -4,7 +4,7 @@ tags:
 
 paths:
   # [GET] warningLetter
-  /warningLetter:
+  /api/warningLetter:
     get:
       tags:
         - warningLetter
@@ -26,7 +26,7 @@ paths:
           description: warning letter Data
           required: true
           schema:
-            $ref: '#/definitions/warningLetter'
+            $ref: '#/definitions/api/warningLetter'
       responses:
         201:
           description: 'Created'
@@ -38,7 +38,7 @@ paths:
           description: 'Server Error'
 
   # [GET] warningLetter/id
-  /warningLetter/{id}:
+  /api/warningLetter/{id}:
     get:
       tags:
         - warningLetter
@@ -110,12 +110,12 @@ definitions:
       date_issued:
         type: Date
         description: date of warning letter issued
-      warningCount:
-        type: number
-        description: how many waring letter an employee has received
-      isInPip:
-        type: boolean
-        description: to know if employee is in PIP or not
+#      warningCount:
+#        type: number
+#        description: how many waring letter an employee has received
+#      isInPip:
+#        type: boolean
+#        description: to know if employee is in PIP or not
 
 schemes:
   - https
