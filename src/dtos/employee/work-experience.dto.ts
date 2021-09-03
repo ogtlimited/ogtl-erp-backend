@@ -13,7 +13,7 @@ export class CreateWorkExperienceDto{
         public designation: string;
 
     @IsNumber()
-        public salary: string;
+        public salary: number;
 
     @IsString()
         public address: string;
@@ -35,7 +35,7 @@ export class UpdateWorkExperienceDto{
         public designation: string;
 
     @IsNumber()
-        public salary: string;
+        public salary: number;
 
     @IsString()
         public address: string;

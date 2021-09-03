@@ -11,7 +11,7 @@ export class CreateEmergencyContactDto{
 
 @IsNotEmpty()
 @IsNumber()    
-    public emergency_phone: string;
+    public emergency_phone: number;
 
 @IsNotEmpty()
 @IsString()    
@@ -33,7 +33,7 @@ export class UpdateEmergencyContactDto{
     
     @IsNotEmpty()
     @IsNumber()   
-        public emergency_phone: string;
+        public emergency_phone: number;
     
     @IsNotEmpty()
     @IsString()    
