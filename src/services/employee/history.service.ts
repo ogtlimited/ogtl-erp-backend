@@ -1,7 +1,8 @@
+/* eslint-disable prettier/prettier */
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { History } from '@/interfaces/employee-interface/history.interface';
-import { CreateHistoryDto } from '@/dtos/employee/history.dto';
+import { CreateHistoryDto,UpdateHistoryDto } from '@/dtos/employee/history.dto';
 import HistoryModel from '@models/employee/history.model';
 
 class HistoryService{
@@ -38,14 +39,14 @@ class HistoryService{
 
         if(findHistory) throw new HttpException(409, `Employee ${HistoryData.employee_id} already provided details`);
 
-        const createHistoryData = await this.Historys.create({HistoryData});
+        const createHistoryData = await this.Historys.create(HistoryData);
 
         return createHistoryData;
     }
 
     //Updates History Details
 
-    public async updateHistory(HistoryId:string,HistoryData:CreateHistoryDto):Promise<History>{
+    public async updateHistory(HistoryId:string,HistoryData:UpdateHistoryDto):Promise<History>{
         if (isEmpty(HistoryData)) throw new HttpException(400, "No data provided");
 
         if(HistoryData.employee_id){

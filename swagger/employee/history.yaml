@@ -1,0 +1,137 @@
+tags:
+- name: History
+  description: History API
+
+paths:
+# [GET] History
+  /History:
+    get:
+      tags:
+      - History
+      summary: Find All Exits
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] History
+    post:
+      tags:
+      - History
+      summary: Add History
+      parameters:
+      - name: body
+        in: body
+        description: History Data
+        required: true
+        schema:
+          $ref: '#/definitions/History'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] History/id
+  /History/{id}:
+    get:
+      tags:
+      - History
+      summary: Find History By Id
+      parameters:
+      - name: id
+        in: path
+        description: History Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PUT] History/id
+    put:
+      tags:
+      - History
+      summary: Update History By Id
+      parameters:
+      - name: id
+        in: path
+        description: History Id
+        required: true
+      - name: body
+        in: body
+        description: History Data
+        required: true
+        schema:
+          $ref: '#/definitions/History'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] History/id
+    delete:
+      tags:
+      - History
+      summary: Delete History By Id
+      parameters:
+      - name: id
+        in: path
+        description: History Id
+        required: true
+        schema:
+          type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+
+#definitions
+definitions: 
+  History:
+    type: object
+    required:
+     - employee_id
+     
+    properties:
+      id:
+        description: History Id
+      employee_id:
+        type: string
+        description: Employee Id
+      branch_id:
+        type: string
+        description: Branch Id
+      designation_id:
+        type: string
+        description: Designation Id
+      from_date:
+         type: date
+         description: from date
+      to_date:
+         type: date
+         description: to date
+      
+    
+schemes:
+  - https
+  - http

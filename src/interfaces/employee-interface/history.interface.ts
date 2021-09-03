@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export interface History{
     _id: string;
     employee_id: string;

@@ -1,0 +1,139 @@
+tags:
+- name: WorkExperience
+  description: WorkExperience API
+
+paths:
+# [GET] WorkExperience
+  /WorkExperience:
+    get:
+      tags:
+      - WorkExperience
+      summary: Find All WorkExperiences
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] WorkExperience
+    post:
+      tags:
+      - WorkExperience
+      summary: Add WorkExperience
+      parameters:
+      - name: body
+        in: body
+        description: WorkExperience Data
+        required: true
+        schema:
+          $ref: '#/definitions/WorkExperience'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] WorkExperience/id
+  /WorkExperience/{id}:
+    get:
+      tags:
+      - WorkExperience
+      summary: Find WorkExperience By Id
+      parameters:
+      - name: id
+        in: path
+        description: WorkExperience Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PUT] WorkExperience/id
+    put:
+      tags:
+      - WorkExperience
+      summary: Update WorkExperience By Id
+      parameters:
+      - name: id
+        in: path
+        description: WorkExperience Id
+        required: true
+      - name: body
+        in: body
+        description: WorkExperience Data
+        required: true
+        schema:
+          $ref: '#/definitions/WorkExperience'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] WorkExperience/id
+    delete:
+      tags:
+      - WorkExperience
+      summary: Delete WorkExperience By Id
+      parameters:
+      - name: id
+        in: path
+        description: WorkExperience Id
+        required: true
+        schema:
+          type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+
+#definitions
+definitions: 
+  WorkExperience:
+    type: object
+    required:
+     - employee_id
+    properties:
+      id:
+        description: WorkExperience Id
+      employee_id:
+        type: string
+        description: Employee Id
+      company:
+         type: string
+         description: company where employee worked
+      designation:
+         type: string
+         description: designation of employee
+      salary:
+         type: number
+         description: salary of employee
+      address:
+         type: string
+         description: current address of company
+      
+      
+      
+
+
+schemes:
+  - https
+  - http

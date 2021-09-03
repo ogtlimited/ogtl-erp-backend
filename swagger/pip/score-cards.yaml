@@ -1,0 +1,134 @@
+tags:
+- name: scoreCard
+  description: scoreCard API
+
+paths:
+# [GET] scoreCard
+  /scoreCard:
+    get:
+      tags:
+      - scoreCard
+      summary: Find All score Cards
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] scoreCard
+    post:
+      tags:
+      - scoreCard
+      summary: Add score Card
+      parameters:
+      - name: body
+        in: body
+        description: scoreCard Data
+        required: true
+        schema:
+          $ref: '#/definitions/scoreCard'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] scoreCard/id
+  /scoreCard/{id}:
+    get:
+      tags:
+      - scoreCard
+      summary: Find scoreCard By Id
+      parameters:
+      - name: id
+        in: path
+        description: scoreCard Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PUT] scoreCard/id
+    put:
+      tags:
+      - scoreCard
+      summary: Update scoreCard By Id
+      parameters:
+      - name: id
+        in: path
+        description: scoreCard Id
+        required: true
+      - name: body
+        in: body
+        description: scoreCard Data
+        required: true
+        schema:
+          $ref: '#/definitions/scoreCard'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] scoreCard/id
+    delete:
+      tags:
+      - scoreCard
+      summary: Delete scoreCard By Id
+      parameters:
+      - name: id
+        in: path
+        description: scoreCard Id
+        required: true
+        schema:
+          type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+
+definitions:
+  Score Card:
+    type: object
+    required:
+        - employee_id
+        - performance_score
+        - company_values_score
+    properties:
+      id:
+         type: string
+         description: allocation Id
+      employee_id:
+         type: string
+         description: employee id
+      performance_score:
+         type: number
+         description: Employees performance score
+      company_values_score:
+         type: number
+         description: Employees company values score
+      
+
+
+
+schemes:
+ - https
+ - http

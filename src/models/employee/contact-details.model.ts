@@ -11,7 +11,7 @@ const contactDetailsSchema: Schema = new Schema (
             ref: "Employee",
           },
           mobile: {
-            type: String,
+            type: Number,
             required: true,
           },
       
@@ -44,6 +44,6 @@ const contactDetailsSchema: Schema = new Schema (
       },
     );
 
-    const userModel = model<ContactDetail & Document>('ContactDetails',contactDetailsSchema );
+    const ContactDetailModel = model<ContactDetail & Document>('ContactDetails',contactDetailsSchema );
 
-    export default userModel;
+    export default ContactDetailModel;

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { CreateWorkExperienceDto } from '@/dtos/employee/work-experience.dto';
+import { CreateWorkExperienceDto,UpdateWorkExperienceDto } from '@/dtos/employee/work-experience.dto';
 import { WorkExperience } from '@/interfaces/employee-interface/work-experience.interface';
 import WorkExperienceService from '@/services/employee/work-experience.service';
 
@@ -48,7 +48,7 @@ class WorkExperienceController{
    public updateWorkExperience = async  (req: Request, res: Response, next: NextFunction) => {
     try{
         const WorkExperienceId: string = req.params.id;
-        const WorkExperienceData: CreateWorkExperienceDto = req.body;
+        const WorkExperienceData: UpdateWorkExperienceDto= req.body;
         const updateWorkExperienceData: WorkExperience = await this.WorkExperienceService.updateWorkExperience(WorkExperienceId,WorkExperienceData);
         res.status(200).json({data:updateWorkExperienceData, message:"WorkExperience Updated"});
     }

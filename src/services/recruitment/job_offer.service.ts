@@ -10,7 +10,7 @@ class JobOfferService {
 
   //Method for finding all job offers
   public async findAllJobOffers(): Promise<IJobOffer[]>{
-    return this.jobOffer.find();
+    return this.jobOffer.find().populate('job_applicant_id designation_id');
   }
 
   //Method for finding a single job offer
@@ -18,7 +18,7 @@ class JobOfferService {
     //check if no Job offer id is empty
     if(isEmpty(jobOfferId)) throw new HttpException(400,`Job offer with Id:${jobOfferId}, does not exist`);
     //find Job offer using the id provided
-    const findJobOffer:IJobOffer = await this.jobOffer.findOne({_id:jobOfferId});
+    const findJobOffer:IJobOffer = await this.jobOffer.findOne({_id:jobOfferId}).populate('job_applicant_id designation_id');
     //throw error if Job offer does not exist
     if(!findJobOffer) throw new HttpException(409,`Job offer with Id:${jobOfferId}, does not exist`);
     //return Job offer

@@ -1,0 +1,104 @@
+tags:
+  - name: branch
+    description: branch API
+
+paths:
+  # [GET] branch
+  /branch:
+    get:
+      tags:
+        - branch
+      summary: Find All branches
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+    # [POST] branch
+    post:
+      tags:
+        - branch
+      summary: Add Branch
+      parameters:
+        - name: body
+          in: body
+          description: Branch Data
+          required: true
+          schema:
+            $ref: '#/definitions/branch'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  # [GET] branch/id
+  /branch/{id}:
+    get:
+      tags:
+        - branch
+      summary: Find Branch By Id
+      parameters:
+        - name: id
+          in: path
+          description: Branch Id
+          required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [DELETE] branch/id
+    delete:
+      tags:
+        - branch
+      summary: Delete Branch By Id
+      parameters:
+        - name: id
+          in: path
+          description: Branch Id
+          required: true
+          schema:
+            type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+
+#definitions
+definitions: 
+  Branch:
+    type: object
+    required:
+      - branch
+    properties:
+      id:
+        description: Branch Id
+      branch:
+        type: string
+        description: Branch name
+
+schemes:
+  - https
+  - http
+
+       
+
+  
+
+
+      

@@ -1,0 +1,125 @@
+tags:
+- name: EmployeeType
+  description: EmployeeType API
+
+paths:
+# [GET] EmployeeType
+  /EmployeeType:
+    get:
+      tags:
+      - EmployeeType
+      summary: Find All Employee Types
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] EmployeeType
+    post:
+      tags:
+      - EmployeeType
+      summary: Add Employee Type
+      parameters:
+      - name: body
+        in: body
+        description: Employee Type Data
+        required: true
+        schema:
+          $ref: '#/definitions/EmployeeType'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] EmployeeType/id
+  /EmployeeType/{id}:
+    get:
+      tags:
+      - EmployeeType
+      summary: Find Employee Type By Id
+      parameters:
+      - name: id
+        in: path
+        description: Employee Type Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PUT] EmployeeType/id
+    put:
+      tags:
+      - EmployeeType
+      summary: Update EmployeeType By Id
+      parameters:
+      - name: id
+        in: path
+        description: EmployeeType Id
+        required: true
+      - name: body
+        in: body
+        description: EmployeeType Data
+        required: true
+        schema:
+          $ref: '#/definitions/EmployeeType'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] EmployeeType/id
+    delete:
+      tags:
+      - EmployeeType
+      summary: Delete EmployeeType By Id
+      parameters:
+      - name: id
+        in: path
+        description: EmployeeType Id
+        required: true
+        schema:
+          type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+
+
+#definitions
+definitions: 
+  EmployeeType:
+    type: object
+    required:
+     - type
+    properties:
+      id:
+        description: EmployeeType Id
+      type:
+         type: string
+         description: type of employee
+      
+    
+schemes:
+  - https
+  - http

@@ -9,7 +9,7 @@ class ShiftRequestService {
 
   //Method for finding all shift Request
   public async findAllShiftRequests(): Promise<IShiftRequest[]>{
-    return this.shiftRequest.find();
+    return this.shiftRequest.find().populate('employee_id shift_type_id');
   }
 
   //Method for finding a single shift Request
@@ -17,7 +17,7 @@ class ShiftRequestService {
     //check if no shift Request id is empty
     if(isEmpty(shiftRequestId)) throw new HttpException(400,`Shift request Id must be provided`);
     //find shift Request using the id provided
-    const findShiftRequest:IShiftRequest = await this.shiftRequest.findOne({_id:shiftRequestId});
+    const findShiftRequest:IShiftRequest = await this.shiftRequest.findOne({_id:shiftRequestId}).populate('employee_id shift_type_id');
     //throw error if shift Request does not exist
     if(!findShiftRequest) throw new HttpException(409,`Shift request with Id:${shiftRequestId}, does not exist`);
     //return shift Request

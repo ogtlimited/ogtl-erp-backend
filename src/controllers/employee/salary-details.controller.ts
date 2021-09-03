@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { CreateSalaryDetailsDto } from '@/dtos/employee/salary-details.dto';
+import { CreateSalaryDetailsDto,UpdateSalaryDetailsDto } from '@/dtos/employee/salary-details.dto';
 import { SalaryDetail } from '@/interfaces/employee-interface/salary-details.interface';
 import SalaryDetailsService from '@/services/employee/salary-details.service';
 
@@ -52,7 +52,7 @@ class SalaryDetailsController{
 public updateSalaryDetails = async  (req: Request, res: Response, next: NextFunction) => {
     try{
         const SalaryDetailsId: string = req.params.id;
-        const SalaryDetailsData: CreateSalaryDetailsDto = req.body;
+        const SalaryDetailsData: UpdateSalaryDetailsDto  = req.body;
         const updateSalaryDetailsData: SalaryDetail = await this.SalaryDetailsService.updateSalaryDetails(SalaryDetailsId,SalaryDetailsData);
         res.status(200).json({data:updateSalaryDetailsData, message:"SalaryDetails Updated"});
     }

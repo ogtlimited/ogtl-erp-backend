@@ -1,0 +1,100 @@
+tags:
+  - name: designation
+    description: designation API
+
+paths:
+  # [GET] designation
+  /designation:
+    get:
+      tags:
+        - designation
+      summary: Find All designation
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+    # [POST] designation
+    post:
+      tags:
+        - designation
+      summary: Add Designation
+      parameters:
+        - name: body
+          in: body
+          description: Designation Data
+          required: true
+          schema:
+            $ref: '#/definitions/designation'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  # [GET] designation/id
+  /designation/{id}:
+    get:
+      tags:
+        - designation
+      summary: Find Designation By Id
+      parameters:
+        - name: id
+          in: path
+          description: Designation Id
+          required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [DELETE] designation/id
+    delete:
+      tags:
+        - designation
+      summary: Delete Designation By Id
+      parameters:
+        - name: id
+          in: path
+          description: Designation Id
+          required: true
+          schema:
+            type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+#definitions
+definitions: 
+  Designation:
+    type: object
+    required:
+      - designation
+    properties:
+      id:
+        description: Designation Id
+      designation:
+        type: string
+        description: Designation name
+
+schemes:
+  - https
+  - http
+
+
+
+  

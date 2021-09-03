@@ -1,7 +1,8 @@
+/* eslint-disable prettier/prettier */
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { EmployeeType } from '@/interfaces/employee-interface/employee-type.interface';
-import { CreateEmployeeTypeDto } from '@/dtos/employee/employee-type.dto';
+import { CreateEmployeeTypeDto,UpdateEmployeeTypeDto } from '@/dtos/employee/employee-type.dto';
 import EmployeeTypeModel from '@models/employee/employee-type.model';
 
 
@@ -49,7 +50,7 @@ class EmployeeTypeService{
        const findEmployeeType: EmployeeType = await this.EmployeeTypes.findOne({EmployeeType: EmployeeTypeData.type});
        if(findEmployeeType) throw new HttpException(409, `EmployeeType ${EmployeeTypeData.type} already exists`);
 
-       const createEmployeeTypeData: EmployeeType = await this.EmployeeTypes.create({EmployeeTypeData});
+       const createEmployeeTypeData: EmployeeType = await this.EmployeeTypes.create(EmployeeTypeData);
        return createEmployeeTypeData;
      }
 
@@ -57,7 +58,7 @@ class EmployeeTypeService{
      *Updates existing EmployeeType 
      */
 
-     public async updateEmployeeType(EmployeeTypeId:string,EmployeeTypeData: CreateEmployeeTypeDto)  : Promise<EmployeeType>{
+     public async updateEmployeeType(EmployeeTypeId:string,EmployeeTypeData: UpdateEmployeeTypeDto)  : Promise<EmployeeType>{
 
         //Check if data is empty
         if (isEmpty(EmployeeTypeData)) throw new HttpException(400, "No data provided");

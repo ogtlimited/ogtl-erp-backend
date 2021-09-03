@@ -1,7 +1,8 @@
+/* eslint-disable prettier/prettier */
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { Designation } from '@/interfaces/employee-interface/designation.interface';
-import { CreateDesignationDto } from '@/dtos/employee/designation.dto';
+import { CreateDesignationDto,UpdateDesignationDto } from '@/dtos/employee/designation.dto';
 import DesignationModel from '@models/employee/designation.model';
 
 
@@ -49,7 +50,7 @@ public async findDesignationById(DesignationId:string) : Promise<Designation>{
        const findDesignation: Designation = await this.Designations.findOne({Designation: DesignationData.designation});
        if(findDesignation) throw new HttpException(409, `Designation ${DesignationData.designation} already exists`);
 
-       const createDesignationData: Designation = await this.Designations.create({DesignationData});
+       const createDesignationData: Designation = await this.Designations.create(DesignationData);
        return createDesignationData;
      }
 
@@ -58,7 +59,7 @@ public async findDesignationById(DesignationId:string) : Promise<Designation>{
      *Updates existing Designation 
      */
 
-     public async updateDesignation(DesignationId:string,DesignationData: CreateDesignationDto)  : Promise<Designation>{
+     public async updateDesignation(DesignationId:string,DesignationData: UpdateDesignationDto)  : Promise<Designation>{
 
         //Check if data is empty
         if (isEmpty(DesignationData)) throw new HttpException(400, "No data provided");

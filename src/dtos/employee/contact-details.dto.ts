@@ -1,16 +1,16 @@
-import {IsNotEmpty, IsString } from 'class-validator';
+import {IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateContactDetailsDto{
   
-    @IsString()
-        public _id: string;
+    
+        
     
     @IsNotEmpty()
     @IsString()
         public employee_id: string;
     
     @IsNotEmpty()
-    @IsString()
+    @IsNumber()
         public mobile: string;
     
     @IsNotEmpty()
@@ -35,9 +35,9 @@ export class CreateContactDetailsDto{
 
 }
 export class UpdateContactDetailsDto{
-  
     @IsString()
-        public _id: string;
+    public _id: string;
+        
 
     @IsString()
         public employee_id: string;

@@ -1,0 +1,130 @@
+tags:
+- name: Grade
+  description: Grade API
+
+paths:
+# [GET] Grade
+  /grade:
+    get:
+      tags:
+      - Grade
+      summary: Find All Grades
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] Grade
+    post:
+      tags:
+      - Grade
+      summary: Add Grade
+      parameters:
+      - name: body
+        in: body
+        description: Grade Data
+        required: true
+        schema:
+          $ref: '#/definitions/Grade'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] Grade/id
+  /grade/{id}:
+    get:
+      tags:
+      - Grade
+      summary: Find Grade By Id
+      parameters:
+      - name: id
+        in: path
+        description: Grade Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PUT] Grade/id
+    put:
+      tags:
+      - Grade
+      summary: Update Grade By Id
+      parameters:
+      - name: id
+        in: path
+        description: Grade Id
+        required: true
+      - name: body
+        in: body
+        description: Grade Data
+        required: true
+        schema:
+          $ref: '#/definitions/Grade'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] Grade/id
+    delete:
+      tags:
+      - Grade
+      summary: Delete Grade By Id
+      parameters:
+      - name: id
+        in: path
+        description: Grade Id
+        required: true
+        schema:
+          type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+   
+
+#definitions
+definitions: 
+  grade:
+    type: object
+    required:
+      - grade
+    properties:
+      id:
+        description: Grade Id
+      grade:
+        type: string
+        description: Grade name
+
+schemes:
+  - https
+  - http
+
+       
+
+  
+
+
+      

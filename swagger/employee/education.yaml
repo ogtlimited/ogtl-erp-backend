@@ -1,0 +1,145 @@
+tags:
+- name: Education
+  description: Education API
+
+paths:
+# [GET] Education
+  /Education:
+    get:
+      tags:
+      - Education
+      summary: Find All Education
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] Education
+    post:
+      tags:
+      - Education
+      summary: Add Education
+      parameters:
+      - name: body
+        in: body
+        description: Education Data
+        required: true
+        schema:
+          $ref: '#/definitions/Education'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] Education/id
+  /Education/{id}:
+    get:
+      tags:
+      - Education
+      summary: Find Education By Id
+      parameters:
+      - name: id
+        in: path
+        description: Education Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PUT] Education/id
+    put:
+      tags:
+      - Education
+      summary: Update Education By Id
+      parameters:
+      - name: id
+        in: path
+        description: Education Id
+        required: true
+      - name: body
+        in: body
+        description: Education Data
+        required: true
+        schema:
+          $ref: '#/definitions/Education'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] Education/id
+    delete:
+      tags:
+      - Education
+      summary: Delete Education By Id
+      parameters:
+      - name: id
+        in: path
+        description: Education Id
+        required: true
+        schema:
+          type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+
+#definitions
+definitions: 
+  Education:
+    type: object
+    required:
+      - employee_id
+    properties:
+      id:
+        description: Education Id
+      employee_id:
+        type: string
+        description: Employee Id
+      school:
+        type: string
+        description: Employee school
+      qualification:
+        type: string
+        description:  Employee Qualification level
+      level:
+        type: string
+        description: Employee Level
+        enum: ["Graduate", "Post Graduate", "Under Graduate"]
+      year_of_passing:
+        type: number
+        description: Employee year of graduation
+    
+       
+
+schemes:
+  - https
+  - http
+
+       
+
+  
+
+
+      

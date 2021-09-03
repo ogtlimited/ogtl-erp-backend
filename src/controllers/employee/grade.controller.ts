@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { Grade } from '@/interfaces/employee-interface/grade.interface';
-import { CreateGradeDto } from '@/dtos/employee/grade.dto';
+import { CreateGradeDto,UpdateGradeDto } from '@/dtos/employee/grade.dto';
 import GradeService from '@/services/employee/grade.service';
 
 
@@ -11,7 +11,7 @@ class GradeController{
    public getGrades = async  (req: Request, res: Response, next: NextFunction) => {
     try{
         const findAllGradesData: Grade[] = await this.GradeService.findAllGrades();
-         
+
         res.status(200).json({data:findAllGradesData,numGrades:findAllGradesData.length, message:"All Grades"});
     }
     catch(error){
@@ -25,7 +25,7 @@ class GradeController{
         try{
             const GradeData: CreateGradeDto = req.body;
             const createGradeData: Grade = await this.GradeService.createGrade(GradeData);
-            res.status(201).json({ data: createGradeData, message: 'Grade succesfully created' });
+            res.status(201).json({ data: createGradeData, message: 'Grade successfully created' });
         }
         catch(error){
         next(error);
@@ -49,7 +49,7 @@ class GradeController{
    public updateGrade = async  (req: Request, res: Response, next: NextFunction) => {
     try{
         const GradeId: string = req.params.id;
-        const GradeData: CreateGradeDto = req.body;
+        const GradeData: UpdateGradeDto = req.body;
         const updateGradeData: Grade = await this.GradeService.updateGrade(GradeId,GradeData);
         res.status(200).json({data:updateGradeData, message:"Grade Updated"});
     }
@@ -67,7 +67,7 @@ class GradeController{
         catch(error){
          next(error);
         }
-   
+
 };
 
 }

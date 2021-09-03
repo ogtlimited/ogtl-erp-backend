@@ -1,0 +1,110 @@
+tags:
+  - name: Company
+    description: Company API
+
+paths:
+  # [GET] company
+  /company:
+    get:
+      tags:
+        - company
+      summary: Find All company
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+    # [POST] company
+    post:
+      tags:
+        - company
+      summary: Add company
+      parameters:
+        - name: body
+          in: body
+          description: company Data
+          required: true
+          schema:
+            $ref: '#/definitions/company'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  # [GET] company/id
+  /company/{id}:
+    get:
+      tags:
+        - company
+      summary: Find company By Id
+      parameters:
+        - name: id
+          in: path
+          description: company Id
+          required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [DELETE] company/id
+    delete:
+      tags:
+        - company
+      summary: Delete company By Id
+      parameters:
+        - name: id
+          in: path
+          description: company Id
+          required: true
+          schema:
+            type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  company:
+    type: object
+    required:
+      - companyName
+      - companyEmail
+      - logo
+      - abbreviation
+      
+    properties:
+      id:
+        description: company Id
+      companyName:
+        type: string
+        description: Name of the company
+      companyEmail:
+        type: string
+        description: Company Email
+      logo:
+        type: string
+        description: company logo
+      abbreviation:
+        type: string
+        description: abbreviation of company name
+      
+
+schemes:
+  - https
+  - http

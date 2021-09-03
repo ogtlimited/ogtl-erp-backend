@@ -25,7 +25,7 @@ const educationSchema : Schema = new Schema({
    },
 
    year_of_passing: {
-        type: String,
+        type: Number,
   },
 },
 
@@ -36,6 +36,6 @@ const educationSchema : Schema = new Schema({
 
 );
 
-const userModel = model<Education & Document>('Education', educationSchema);
+const EducationModel = model<Education & Document>('Education', educationSchema);
 
-export default userModel;
+export default EducationModel;

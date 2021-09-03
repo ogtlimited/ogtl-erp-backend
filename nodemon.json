@@ -1,8 +1,13 @@
 {
     "watch": [
         "src",
-        ".env"
+        ".env",
+        "swagger"
+        
     ],
+
+    
+    
     "ext": "js,ts,json",
     "ignore": [
         "src/**/*.spec.ts",

@@ -1,0 +1,141 @@
+tags:
+- name: SalaryDetails
+  description: SalaryDetails API
+
+paths:
+# [GET] SalaryDetails
+  /SalaryDetails:
+    get:
+      tags:
+      - SalaryDetails
+      summary: Find All SalaryDetailss
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] SalaryDetails
+    post:
+      tags:
+      - SalaryDetails
+      summary: Add SalaryDetails
+      parameters:
+      - name: body
+        in: body
+        description: SalaryDetails Data
+        required: true
+        schema:
+          $ref: '#/definitions/SalaryDetails'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] SalaryDetails/id
+  /SalaryDetails/{id}:
+    get:
+      tags:
+      - SalaryDetails
+      summary: Find SalaryDetails By Id
+      parameters:
+      - name: id
+        in: path
+        description: SalaryDetails Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PUT] SalaryDetails/id
+    put:
+      tags:
+      - SalaryDetails
+      summary: Update SalaryDetails By Id
+      parameters:
+      - name: id
+        in: path
+        description: SalaryDetails Id
+        required: true
+      - name: body
+        in: body
+        description: SalaryDetails Data
+        required: true
+        schema:
+          $ref: '#/definitions/SalaryDetails'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] SalaryDetails/id
+    delete:
+      tags:
+      - SalaryDetails
+      summary: Delete SalaryDetails By Id
+      parameters:
+      - name: id
+        in: path
+        description: SalaryDetails Id
+        required: true
+        schema:
+          type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+
+#definitions
+definitions: 
+  SalaryDetails:
+    type: object
+    required:
+     - employee_id
+    properties:
+      id:
+        description: SalaryDetails Id
+      employee_id:
+        type: string
+        description: Employee Id
+      bank_account_number:
+         type: number
+         description: Account number of employee
+      bank_name:
+         type: string
+         description: Bank of employee
+      salary_mode:
+         type: string
+         enum: ["bank", "cash", "cheque"]
+         description: Salary mode of employee
+      bank_code:
+         type: string
+         description: Bank Code of employee
+     
+      
+      
+      
+
+
+schemes:
+  - https
+  - http

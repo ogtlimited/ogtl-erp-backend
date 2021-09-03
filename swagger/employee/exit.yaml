@@ -1,0 +1,148 @@
+tags:
+- name: Exit
+  description: Exit API
+
+paths:
+# [GET] Exit
+  /Exit:
+    get:
+      tags:
+      - Exit
+      summary: Find All Exits
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] Exit
+    post:
+      tags:
+      - Exit
+      summary: Add Exit
+      parameters:
+      - name: body
+        in: body
+        description: Exit Data
+        required: true
+        schema:
+          $ref: '#/definitions/Exit'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] Exit/id
+  /Exit/{id}:
+    get:
+      tags:
+      - Exit
+      summary: Find Exit By Id
+      parameters:
+      - name: id
+        in: path
+        description: Exit Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PUT] Exit/id
+    put:
+      tags:
+      - Exit
+      summary: Update Exit By Id
+      parameters:
+      - name: id
+        in: path
+        description: Exit Id
+        required: true
+      - name: body
+        in: body
+        description: Exit Data
+        required: true
+        schema:
+          $ref: '#/definitions/Exit'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] Exit/id
+    delete:
+      tags:
+      - Exit
+      summary: Delete Exit By Id
+      parameters:
+      - name: id
+        in: path
+        description: Exit Id
+        required: true
+        schema:
+          type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+
+
+#definitions
+definitions: 
+  Exit:
+    type: object
+    required:
+     - employee_id
+    properties:
+      id:
+        description: Exit Id
+      employee_id:
+        type: string
+        description: Employee Id
+      resignation_letter_date:
+         type: date
+         description: Date resignation letter was given
+      relieving_date:
+         type: date
+         description: Date employee was relieved
+      leave_encashed:
+         type: string
+         description: was leave encashed?
+         enum: ["yes", "no"]
+      encashment_date:
+         type: date
+         description: Date encashment was given
+      reason_for_resignation:
+         type: string
+         description: Reason for Resignation
+         enum: ["better_prospects", "health_concern"]
+      new_work_place:
+         type: string
+         description: new work place of employee
+      feedback:
+         type: string
+         description: feedback
+      
+    
+schemes:
+  - https
+  - http

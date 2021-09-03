@@ -1,0 +1,136 @@
+tags:
+- name: EmergencyContact
+  description: EmergencyContact API
+
+paths:
+# [GET] EmergencyContact
+  /EmergencyContact:
+    get:
+      tags:
+      - EmergencyContact
+      summary: Find All EmergencyContacts
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] EmergencyContact
+    post:
+      tags:
+      - EmergencyContact
+      summary: Add EmergencyContact
+      parameters:
+      - name: body
+        in: body
+        description: EmergencyContact Data
+        required: true
+        schema:
+          $ref: '#/definitions/EmergencyContact'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] EmergencyContact/id
+  /EmergencyContact/{id}:
+    get:
+      tags:
+      - EmergencyContact
+      summary: Find EmergencyContact By Id
+      parameters:
+      - name: id
+        in: path
+        description: EmergencyContact Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PUT] EmergencyContact/id
+    put:
+      tags:
+      - EmergencyContact
+      summary: Update EmergencyContact By Id
+      parameters:
+      - name: id
+        in: path
+        description: EmergencyContact Id
+        required: true
+      - name: body
+        in: body
+        description: EmergencyContact Data
+        required: true
+        schema:
+          $ref: '#/definitions/EmergencyContact'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] EmergencyContact/id
+    delete:
+      tags:
+      - EmergencyContact
+      summary: Delete EmergencyContact By Id
+      parameters:
+      - name: id
+        in: path
+        description: EmergencyContact Id
+        required: true
+        schema:
+          type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+
+#definitions
+definitions: 
+  EmergencyContact:
+    type: object
+    required:
+     - employee_id
+     - emergency_phone
+     - emergency_contact_name
+     - relation
+    properties:
+      id:
+        description: EmergencyContact Id
+      employee_id:
+        type: string
+        description: Employee Id
+      emergency_phone:
+         type: number
+         description: Mobile number of emergency contact
+      emergency_contact_name:
+         type: string
+         description: Name  of emergency contact
+      relation:
+         type: string
+         description: Relation of emergency contact to employee
+      
+    
+schemes:
+  - https
+  - http

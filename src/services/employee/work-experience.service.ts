@@ -1,7 +1,8 @@
+/* eslint-disable prettier/prettier */
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { WorkExperience } from '@/interfaces/employee-interface/work-experience.interface';
-import { CreateWorkExperienceDto } from '@/dtos/employee/work-experience.dto';
+import { CreateWorkExperienceDto,UpdateWorkExperienceDto } from '@/dtos/employee/work-experience.dto';
 import WorkExperienceModel from '@models/employee/work-experience.model';
 
 class WorkExperienceService{
@@ -38,7 +39,7 @@ class WorkExperienceService{
 
         if(findWorkExperience) throw new HttpException(409, `Employee ${WorkExperienceData.employee_id} already provided details`);
 
-        const createWorkExperienceData = await this.WorkExperiences.create({WorkExperienceData});
+        const createWorkExperienceData = await this.WorkExperiences.create(WorkExperienceData);
 
         return createWorkExperienceData;
     }
@@ -46,7 +47,7 @@ class WorkExperienceService{
 
     //Updates WorkExperience Details
 
-    public async updateWorkExperience(WorkExperienceId:string,WorkExperienceData:CreateWorkExperienceDto):Promise<WorkExperience>{
+    public async updateWorkExperience(WorkExperienceId:string,WorkExperienceData:UpdateWorkExperienceDto):Promise<WorkExperience>{
         if (isEmpty(WorkExperienceData)) throw new HttpException(400, "No data provided");
 
         if(WorkExperienceData.employee_id){

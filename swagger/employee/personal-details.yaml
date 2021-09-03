@@ -1,0 +1,148 @@
+tags:
+- name: PersonalDetails
+  description: PersonalDetails API
+
+paths:
+# [GET] PersonalDetails
+  /PersonalDetails:
+    get:
+      tags:
+      - PersonalDetails
+      summary: Find All PersonalDetailss
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] PersonalDetails
+    post:
+      tags:
+      - PersonalDetails
+      summary: Add PersonalDetails
+      parameters:
+      - name: body
+        in: body
+        description: PersonalDetails Data
+        required: true
+        schema:
+          $ref: '#/definitions/PersonalDetails'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] PersonalDetails/id
+  /PersonalDetails/{id}:
+    get:
+      tags:
+      - PersonalDetails
+      summary: Find PersonalDetails By Id
+      parameters:
+      - name: id
+        in: path
+        description: PersonalDetails Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PUT] PersonalDetails/id
+    put:
+      tags:
+      - PersonalDetails
+      summary: Update PersonalDetails By Id
+      parameters:
+      - name: id
+        in: path
+        description: PersonalDetails Id
+        required: true
+      - name: body
+        in: body
+        description: PersonalDetails Data
+        required: true
+        schema:
+          $ref: '#/definitions/PersonalDetails'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] PersonalDetails/id
+    delete:
+      tags:
+      - PersonalDetails
+      summary: Delete PersonalDetails By Id
+      parameters:
+      - name: id
+        in: path
+        description: PersonalDetails Id
+        required: true
+        schema:
+          type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+
+#definitions
+definitions: 
+  PersonalDetails:
+    type: object
+    required:
+     - employee_id
+    properties:
+      id:
+        description: PersonalDetails Id
+      employee_id:
+        type: string
+        description: Employee Id
+      passport_number:
+         type: number
+         description: passport number of employee
+      date_of_issue:
+         type: date
+         description: date passport was issued
+      valid_upto:
+         type: date
+         description: date passport is valid up to
+      marital_status:
+         type: string
+         enum: ["single", "married", "divorced", "widowed"]
+         description: marital status of employee
+      place_of_issue:
+         type: string
+         description: place passport was issued
+      blood_group:
+         type: string
+         enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]
+         description: blood type of employee
+      
+      
+      
+      
+
+
+schemes:
+  - https
+  - http

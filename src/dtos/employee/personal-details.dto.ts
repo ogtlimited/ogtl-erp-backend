@@ -1,14 +1,14 @@
-import {IsDate, IsNotEmpty, IsString } from 'class-validator';
+/* eslint-disable prettier/prettier */
+import {IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreatePersonalDetailsDto{
-    @IsString()
-        public  _id: string;
+    
         
     @IsNotEmpty()
     @IsString()
         public employee_id: string;
 
-    @IsString()
+    @IsNumber()
         public passport_number: string;
 
     @IsDate()
@@ -35,7 +35,7 @@ export class UpdatePersonalDetailsDto{
     @IsString()
         public employee_id: string;
 
-    @IsString()
+    @IsNumber()
         public passport_number: string;
 
     @IsDate()

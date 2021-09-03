@@ -1,4 +1,5 @@
-import { CreateContactDetailsDto } from "@/dtos/employee/contact-details.dto";
+/* eslint-disable prettier/prettier */
+import { CreateContactDetailsDto,UpdateContactDetailsDto } from "@/dtos/employee/contact-details.dto";
 import { ContactDetail } from "@/interfaces/employee-interface/contact-details.interface";
 import ContactDetailsModel from "@models/employee/contact-details.model"
 import { HttpException } from '@exceptions/HttpException';
@@ -48,7 +49,7 @@ class ContactDetailsService{
 
         if(findContactDetails) throw new HttpException(409, `Employee ${ContactDetailData.employee_id} already provided details`);
 
-        const createContactDetailsData = await this.ContactDetails.create({ContactDetailData});
+        const createContactDetailsData = await this.ContactDetails.create(ContactDetailData);
 
         return createContactDetailsData;
     }
@@ -58,7 +59,7 @@ class ContactDetailsService{
      * Updates ContactDetails
      */
 
-    public async updateContactDetails(ContactDetailsId:string,ContactDetailData:CreateContactDetailsDto):Promise<ContactDetail>{
+    public async updateContactDetails(ContactDetailsId:string,ContactDetailData:UpdateContactDetailsDto):Promise<ContactDetail>{
         if (isEmpty(ContactDetailData)) throw new HttpException(400, "No data provided");
 
         if(ContactDetailData.employee_id){

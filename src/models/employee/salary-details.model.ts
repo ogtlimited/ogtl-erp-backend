@@ -21,7 +21,7 @@ const salaryDetailsSchema: Schema = new Schema(
             type: String,
         },
         bank_account_number: {
-            type: String,
+            type: Number,
         },
 
     },
@@ -31,6 +31,6 @@ const salaryDetailsSchema: Schema = new Schema(
     }
 );
 
-const userModel = model<SalaryDetail & Document>('SalaryDetails', salaryDetailsSchema);
+const SalaryDetailModel = model<SalaryDetail & Document>('SalaryDetails', salaryDetailsSchema);
 
-export default userModel;
+export default SalaryDetailModel;

@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import bcrypt from 'bcrypt';
+import { UpdateEmployeeDto } from './../dtos/employee/employee.dto';
 import { CreateEmployeeDto } from '@dtos/employee/employee.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
@@ -11,7 +12,7 @@ class EmployeeService {
   public Employees = EmployeeModel;
 
   public async findAllEmployee(): Promise<Employee[]> {
-    const Employees: Employee[] = await this.Employees.find();
+    const Employees: Employee[] = await this.Employees.find().populate('designation');
     return Employees;
   }
 
@@ -31,12 +32,15 @@ class EmployeeService {
     if (findEmployee) throw new HttpException(409, `You're email ${EmployeeData.company_email} already exists`);
 
     const hashedPassword = await bcrypt.hash(EmployeeData.password, 10);
-    const createEmployeeData: Employee = await this.Employees.create({ ...EmployeeData, password: hashedPassword });
+    const newOgid = this.generateOGID();
+    console.log(newOgid)
+    console.log(EmployeeData)
+    const createEmployeeData: Employee = await this.Employees.create({ ...EmployeeData, password: hashedPassword, ogid: newOgid });
 
     return createEmployeeData;
   }
 
-  public async updateEmployee(EmployeeId: string, EmployeeData: CreateEmployeeDto): Promise<Employee> {
+  public async updateEmployee(EmployeeId: string, EmployeeData: UpdateEmployeeDto): Promise<Employee> {
     if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
 
     if (EmployeeData.company_email) {
@@ -60,6 +64,9 @@ class EmployeeService {
     if (!deleteEmployeeById) throw new HttpException(409, "You're not Employee");
 
     return deleteEmployeeById;
+  }
+  private generateOGID(){
+    return "OG"+ Math.floor(1000 + Math.random() * 9000)
   }
 }
 

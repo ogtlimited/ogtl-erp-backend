@@ -1,4 +1,5 @@
-import { CreateBranchDto } from '@/dtos/employee/branch.dto';
+/* eslint-disable prettier/prettier */
+import { CreateBranchDto, UpdateBranchDto } from '@/dtos/employee/branch.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { Branch } from '@/interfaces/employee-interface/branch.interface';
 import BranchModel from '@models/employee/branch.model';
@@ -46,7 +47,7 @@ class BranchService {
        const findBranch: Branch = await this.Branches.findOne({branch: BranchData.branch});
        if(findBranch) throw new HttpException(409, `Branch ${BranchData.branch} already exists`);
 
-       const createBranchData: Branch = await this.Branches.create({BranchData});
+       const createBranchData: Branch = await this.Branches.create(BranchData);
        return createBranchData;
      }
 
@@ -54,7 +55,7 @@ class BranchService {
      *Updates existing branch 
      */
 
-     public async updateBranch(BranchId:string,BranchData: CreateBranchDto)  : Promise<Branch>{
+     public async updateBranch(BranchId:string,BranchData: UpdateBranchDto)  : Promise<Branch>{
 
         //Check if data is empty
         if (isEmpty(BranchData)) throw new HttpException(400, "No data provided");
