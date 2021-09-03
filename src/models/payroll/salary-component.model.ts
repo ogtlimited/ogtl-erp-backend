@@ -19,17 +19,9 @@ const salaryComponentSchema: Schema = new Schema(
     description: {
       type: String
     },
-    incentiveAmount: {
-      type: Number,
-      default:0
-    },
     isTaxApplicable: {
       type: Boolean,
       required: true,
-    },
-    dependsOnPaymentDays: {
-      type: Boolean,
-      default: false
     },
     type:{
         enum: ["deduction", "earning"],

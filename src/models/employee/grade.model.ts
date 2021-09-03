@@ -18,5 +18,5 @@ const gradeSchema : Schema = new Schema (
 );
 
 
-const ExitModel = model<Grade & Document>('Grade', gradeSchema);
-export default ExitModel;
+const gradeModel = model<Grade & Document>('Grade', gradeSchema);
+export default gradeModel;

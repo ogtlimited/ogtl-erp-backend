@@ -5,6 +5,9 @@ export class CreateLeaveAllocationDto{
     @IsString()
     public employee_id: string;
 
+    @IsString()
+    public leave_type_id: string;
+
     @IsNotEmpty()
     @IsDate()
     public from_date: Date;

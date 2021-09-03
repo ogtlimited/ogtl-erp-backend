@@ -13,9 +13,10 @@ const applicationSchema : Schema = new Schema (
            },
 
         leave_type_id:{
-                type: mongoose.Schema.Types.ObjectId,
+                type: String,
+                enum:["Annual","Casual","Sick","Without Pay","Maternity"],
                 required: true,
-                ref: "LeaveType",
+                
            },
 
         from_date:{

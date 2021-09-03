@@ -9,21 +9,33 @@ const attendanceSchema: Schema = new Schema(
       required: true,
       ref: "Employee"
     },
+    ogId: {
+      type: String,
+      required: true,
+    },
     shiftTypeId: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "ShiftType"
     },
-    statusId: {
+    departmentId: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "Status"
+      ref: "Department"
     },
-    startTime: {
-      type: String
+    clockInTime: {
+      type: Date
     },
-    endTime: {
-      type: String
+    clockOutTime: {
+      type: Date
+    },
+    hoursWorked:{
+      type: Number,
+      default: 0
+    },
+    minutesWorked:{
+      type: Number,
+      default: 0
     }
   },
   {

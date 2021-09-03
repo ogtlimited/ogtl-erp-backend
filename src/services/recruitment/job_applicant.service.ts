@@ -10,7 +10,7 @@ class JobApplicantService {
 
   //Method for finding all job applicants
   public async findAllJobApplicants(): Promise<IJobApplicant[]>{
-    return this.jobApplicant.find();
+    return this.jobApplicant.find().populate('job_opening_id');
   }
 
   //Method for finding a single job applicant
@@ -18,7 +18,7 @@ class JobApplicantService {
     //check if no Job applicant id is empty
     if(isEmpty(jobApplicantId)) throw new HttpException(400,`Job applicant with Id:${jobApplicantId}, does not exist`);
     //find Job applicant using the id provided
-    const findJobApplicant:IJobApplicant = await this.jobApplicant.findOne({_id:jobApplicantId});
+    const findJobApplicant:IJobApplicant = await this.jobApplicant.findOne({_id:jobApplicantId}).populate('job_opening_id');
     //throw error if Job applicant does not exist
     if(!findJobApplicant) throw new HttpException(409,`Job applicant with Id:${jobApplicantId}, does not exist`);
     //return Job applicant
