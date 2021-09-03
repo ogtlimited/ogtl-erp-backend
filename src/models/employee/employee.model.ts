@@ -57,13 +57,11 @@ const employeeSchema: Schema = new Schema(
       enum: ["male", "female"],
     },
     image: {
-      type: String,
-      
+      type: String, 
     },
     last_name: {
       type: String,
       required: true,
-    
     },
     middle_name: {
       type: String,
