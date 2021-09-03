@@ -14,11 +14,6 @@ const salarySlipSchema: Schema = new Schema(
       required: true,
       ref: "SalaryStructure"
     },
-    salaryDeduction: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "SalaryDeduction"
-    },
     designation: {
       type: Schema.Types.ObjectId,
       required: true,
@@ -89,12 +84,6 @@ const salarySlipSchema: Schema = new Schema(
       type: Boolean,
       required: true,
     },
-    deduction:[
-        {
-            type: Schema.Types.ObjectId,
-            ref: "Deduction"
-        }
-    ],
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: 'Employee',
