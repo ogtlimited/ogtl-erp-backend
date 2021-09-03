@@ -1,4 +1,4 @@
-import { IsString,IsDate,IsEnum ,IsOptional,IsNotEmpty} from 'class-validator';
+import { IsString,IsDateString,IsEnum ,IsOptional,IsNotEmpty} from 'class-validator';
 import { JobOfferStatus } from '@interfaces/recruitment/job_offer.interface';
 
 export class CreateJobOfferDto {
@@ -9,7 +9,7 @@ export class CreateJobOfferDto {
   @IsEnum(JobOfferStatus)
   public status: JobOfferStatus;
 
-  @IsDate()
+  @IsDateString()
   public offer_date: Date;
 
   @IsString()
@@ -34,7 +34,7 @@ export class UpdateJobOfferDto {
   @IsEnum(JobOfferStatus)
   public status: JobOfferStatus;
 
-  @IsDate()
+  @IsDateString()
   public offer_date: Date;
 
   @IsString()

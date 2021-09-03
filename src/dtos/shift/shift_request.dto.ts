@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsString,IsDate,IsNotEmpty } from 'class-validator';
+import { IsString,IsDateString,IsNotEmpty } from 'class-validator';
 
 export class CreateShiftRequestDto {
   @IsNotEmpty()
@@ -10,10 +10,10 @@ export class CreateShiftRequestDto {
   @IsString()
   public employee_id: string;
 
-  @IsDate()
+  @IsDateString()
   public from_date: Date;
 
-  @IsDate()
+  @IsDateString()
   public to_date: Date;
 }
 
@@ -29,9 +29,9 @@ export class UpdateShiftRequestDto {
   @IsString()
   public employee_id: string;
 
-  @IsDate()
+  @IsDateString()
   public from_date: Date;
 
-  @IsDate()
+  @IsDateString()
   public to_date: Date;
 }
