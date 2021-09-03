@@ -114,7 +114,7 @@ class AttendanceTypeService {
     attendanceRecord.minutesWorked = workTimeResult.minutesWorked 
     attendanceRecord.clockOutTime = attendanceData.clockOutTime
     
-    const updateRecord = await attendanceModel.findOneAndUpdate(
+    let updateRecord = await attendanceModel.findOneAndUpdate(
       {
         _id: attendanceData.attendanceId
       },
