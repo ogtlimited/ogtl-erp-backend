@@ -56,7 +56,7 @@ class EducationService{
             if(findEducation && findEducation._id != EducationId) throw new HttpException(409, `Employee ${EducationData.employee_id} Education details dont exist`);
         }
 
-        const updateEducationData: Education = await this.Educations.findByIdAndUpdate(EducationId,{EducationData})
+        const updateEducationData: Education = await this.Educations.findByIdAndUpdate(EducationId,EducationData);
         if(!updateEducationData) throw new HttpException(409, "details could not be updated");
         return updateEducationData;
     }
