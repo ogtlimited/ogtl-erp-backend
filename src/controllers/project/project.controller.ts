@@ -52,15 +52,15 @@ class ProjectController {
         }
     };
 
-    public deleteLoan = async (req: Request, res: Response, next: NextFunction) => {
+    public deleteProject = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const id: string = req.params.loanId;
-            const dropLoan: Loan = await this.loanService.delete(id);
-            res.status(200).json({ data: dropLoan, message: 'deleted' });
+            const id: string = req.params.projectId;
+            const dropProject: IProject = await this.projectService.delete(id);
+            res.status(200).json({ data: dropProject, message: 'deleted' });
         } catch (error) {
             next(error);
         }
     };
 }
 
-export default LoanController;
+export default ProjectController;
