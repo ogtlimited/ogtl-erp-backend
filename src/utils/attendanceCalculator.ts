@@ -1,5 +1,11 @@
 const moment = require('moment');
 
+interface resultInterface {
+  hoursWorked?: Number;
+  minutesWorked?: Number;
+  timeDeductions?: Number;
+}
+
 const calculateLateness = (clock_in_time, resumption_time) => {
   // calculates the hourly deductions
   const formatDate = str => {
@@ -15,7 +21,7 @@ const calculateLateness = (clock_in_time, resumption_time) => {
     const calc = (clock_in - resume) / 60 / 60;
     const remainder = ((clock_in - resume) / 60) % 60;
     if (remainder > 0) {
-      return parseInt(calc + 1);
+      return calc + 1;
     } else {
       return calc;
     }
@@ -25,15 +31,15 @@ const calculateLateness = (clock_in_time, resumption_time) => {
 };
 
 const getWorkTime = (userStartTime: any, userEndTime: any, resumptionTime?) => {
-  const result = {};
+  const result: resultInterface = {};
   const startTime = moment(userStartTime);
   const endTime = moment(userEndTime);
   console.log(startTime, endTime);
 
   const timeDifference = moment.duration(moment(endTime).diff(startTime));
   const { hours, minutes } = timeDifference._data;
-  result.hoursWorked = hours;
-  result.minutesWorked = minutes;
+  result.hoursWorked = Number(hours);
+  result.minutesWorked = Number(minutes);
   if (resumptionTime != undefined) {
     const timeDeductions = calculateLateness(startTime.format('hh:mm'), resumptionTime);
     result.timeDeductions = timeDeductions;
