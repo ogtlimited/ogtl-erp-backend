@@ -4,5 +4,4 @@ export interface IShiftType {
   shift_name: string;
   start_time: string;
   end_time: string;
-  deductionTypeId: string;
 }

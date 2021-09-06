@@ -20,7 +20,7 @@ class TestController {
   //Method for returning a single test
   public getTestById = async (req:Request, res:Response, next:NextFunction) =>{
     try {
-      const testId:string = req.body.id;
+      const testId:string = req.params.id;
       const findTest:ITest = await this.testService.findTestById(testId);
       res.status(200).json({data:findTest, message:"Test found successfully"})
     }
@@ -44,7 +44,7 @@ class TestController {
   //Method for updating test
   public updateTest = async (req:Request, res:Response, next:NextFunction) =>{
     try {
-      const testId:string = req.body.id;
+      const testId:string = req.params.id;
       const testData:UpdateTestDto = req.body;
       const updatedTestData: ITest = await this.testService.updateTest(testId,testData);
       res.status(200).json({ data: updatedTestData, message: 'Test updated.' });
@@ -57,7 +57,7 @@ class TestController {
   //Method for deleting test
   public deleteTest = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const testId:string = req.body.id;
+      const testId:string = req.params.id;
       const deleteTest = await this.testService.deleteTest(testId);
 
       res.status(200).json({ data: deleteTest, message: 'Test deleted' });

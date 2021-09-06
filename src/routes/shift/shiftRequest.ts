@@ -18,8 +18,8 @@ class ShiftRequestRoute implements Routes{
   private initializeRoutes() {
     this.router.get(`${this.path}`, authMiddleware,this.shiftRequestController.getShiftRequests);
     this.router.get(`${this.path}/:id`, authMiddleware,this.shiftRequestController.getShiftRequestById);
-    this.router.post(`${this.path}`, authMiddleware,validationMiddleware(CreateShiftRequestDto, 'body'), this.shiftRequestController.createShiftRequest);
-    this.router.patch(`${this.path}/:id`,authMiddleware, validationMiddleware(UpdateShiftRequestDto, 'body', true), this.shiftRequestController.updateShiftRequest);
+    this.router.post(`${this.path}`, [validationMiddleware(CreateShiftRequestDto, 'body'),authMiddleware], this.shiftRequestController.createShiftRequest);
+    this.router.patch(`${this.path}/:id`,[ validationMiddleware(UpdateShiftRequestDto, 'body', true),authMiddleware], this.shiftRequestController.updateShiftRequest);
     this.router.delete(`${this.path}/:id`, authMiddleware,this.shiftRequestController.deleteShiftRequest);
   }
 }

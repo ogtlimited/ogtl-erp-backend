@@ -20,7 +20,7 @@ class WarningLetterController {
   //Method for getting one warning letter
   public getWarningLetterById = async (req:Request, res:Response, next:NextFunction) =>{
     try {
-      const warningLetterId:string = req.body.id;
+      const warningLetterId:string = req.params.id;
       const findWarningLetter:IWarningLetter = await this.warningLetterService.findWarningLetterById(warningLetterId);
       res.status(200).json({data:findWarningLetter, message:"Warning letter found successfully"})
     }
@@ -44,7 +44,7 @@ class WarningLetterController {
   //Method for deleting warning letter
   public deleteWarningLetter = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const warningLetterId:string = req.body.id;
+      const warningLetterId:string = req.params.id;
       const deleteWarningLetter = await this.warningLetterService.deleteWarningLetter(warningLetterId);
 
       res.status(200).json({ data: deleteWarningLetter, message: 'Warning letter deleted' });

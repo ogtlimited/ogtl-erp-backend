@@ -19,7 +19,7 @@ class JobOpeningController {
   //Method for returning a single job opening
   public getJobOpeningById = async (req:Request, res:Response, next:NextFunction) =>{
     try {
-      const jobOpeningId:string = req.body.id;
+      const jobOpeningId:string = req.params.id;
       const findJobOpening:IJobOpening = await this.jobOpeningService.findJobOpeningById(jobOpeningId);
       res.status(200).json({data:findJobOpening, message:"Job opening found successfully"})
     }
@@ -43,7 +43,7 @@ class JobOpeningController {
   //Method for updating job opening
   public updateJobOpening = async (req:Request, res:Response, next:NextFunction) =>{
     try {
-      const jobOpeningId:string = req.body.id;
+      const jobOpeningId:string = req.params.id;
       const jobOpeningData:UpdateJobOpeningDto = req.body;
       const updateJobOpeningData: IJobOpening = await this.jobOpeningService.updateJobOpening(jobOpeningId,jobOpeningData);
       res.status(200).json({ data: updateJobOpeningData, message: 'Job opening updated.' });
@@ -56,7 +56,7 @@ class JobOpeningController {
   //Method for deleting job opening
   public deleteJobOpening = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const jobOpeningId:string = req.body.id;
+      const jobOpeningId:string = req.params.id;
       const deleteJobOpening = await this.jobOpeningService.deleteJobOpening(jobOpeningId);
 
       res.status(200).json({ data: deleteJobOpening, message: 'Job opening deleted' });

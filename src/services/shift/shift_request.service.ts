@@ -28,10 +28,6 @@ class ShiftRequestService {
   public async createShiftRequest(shiftRequestData: CreateShiftRequestDto): Promise<IShiftRequest>{
     //check if no shift Request data is empty
     if (isEmpty(shiftRequestData)) throw new HttpException(400, "Bad request");
-    //find shift Request using the employee id provided
-    const findShitRequest: IShiftRequest = await this.shiftRequest.findOne({ employee_id: shiftRequestData.employee_id });
-    //throw error if shift Request does exist
-    if (findShitRequest) throw new HttpException(409, `${shiftRequestData.employee_id} already exists`);
     // return created shift Request
     return await this.shiftRequest.create(shiftRequestData);
   }

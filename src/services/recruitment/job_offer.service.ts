@@ -29,10 +29,7 @@ class JobOfferService {
   public async createJobOffer(jobOfferData: CreateJobOfferDto): Promise<IJobOffer>{
     //check if no job offer data is empty
     if (isEmpty(jobOfferData)) throw new HttpException(400, "Bad request");
-    //find job offer using the job applicant id provided
-    // const jobOffer: IJobOffer = await this.jobOffer.findOne({ job_applicant_id: jobOfferData.job_applicant_id });
-    // //throw error if job offer does exist
-    // if (jobOffer) throw new HttpException(409, `${jobOffer.job_applicant_id} already exists`);
+
     // return created job offer
     return await this.jobOffer.create(jobOfferData);
   }

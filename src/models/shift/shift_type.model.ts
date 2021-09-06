@@ -16,11 +16,6 @@ const shiftTypeSchema: Schema = new Schema(
       type: String,
       default: null,
     },
-    deductionTypeId: {
-      type: Schema.Types.ObjectId,
-      ref: "DeductionType",
-      default: null,
-    },
   },
   {
     timestamps: true,
