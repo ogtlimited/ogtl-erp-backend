@@ -47,7 +47,7 @@ class JobOfferService {
       if(findJobOffer && findJobOffer._id != jobOfferId) throw new HttpException(409, `${jobOfferData._id } already exist`);
     }
     //find job offer using the id provided and update it
-    const updateJobOfferById:IJobOffer = await this.jobOffer.findByIdAndUpdate(jobOfferId,{jobOfferData})
+    const updateJobOfferById:IJobOffer = await this.jobOffer.findByIdAndUpdate(jobOfferId,jobOfferData ,{new:true})
     if (!updateJobOfferById) throw new HttpException(409, "Job offer could not be updated");
     // return updated job offer
     return updateJobOfferById;

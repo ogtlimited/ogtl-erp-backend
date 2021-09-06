@@ -44,7 +44,7 @@ class TestServices {
       if(findTest && findTest._id != testId) throw new HttpException(409, `${testData.test_type } already exist`);
     }
     //find Test using the id provided and update it
-    const updateTestById:ITest = await this.test.findByIdAndUpdate(testId,{testData})
+    const updateTestById:ITest = await this.test.findByIdAndUpdate(testId,testData ,{new:true})
     if (!updateTestById) throw new HttpException(409, "Test could not be updated");
     // return updated Test
     return updateTestById;

@@ -46,7 +46,7 @@ class ShiftRequestService {
       if(findShitRequest && findShitRequest._id != shiftRequestId) throw new HttpException(409, `${shiftRequestData.employee_id} already exists`);
     }
     //find shift Request using the id provided and update it
-    const updateShiftRequestById:IShiftRequest = await this.shiftRequest.findByIdAndUpdate(shiftRequestId,{shiftRequestData})
+    const updateShiftRequestById:IShiftRequest = await this.shiftRequest.findByIdAndUpdate(shiftRequestId,shiftRequestData,{new:true})
     if (!updateShiftRequestById) throw new HttpException(409, "shift request could not be updated");
     // return updated shift Request
     return updateShiftRequestById;

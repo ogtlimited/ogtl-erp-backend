@@ -47,7 +47,7 @@ class ShiftAssignmentService {
       if(findShitAssignment && findShitAssignment._id != shiftAssignmentId) throw new HttpException(409, `${shiftAssignmentData.employee_id} already exists`);
     }
     //find shift assignment using the id provided and update it
-    const updateShiftAssignmentById:IShiftAssignment = await this.shiftAssignment.findByIdAndUpdate(shiftAssignmentId,{shiftAssignmentData})
+    const updateShiftAssignmentById:IShiftAssignment = await this.shiftAssignment.findByIdAndUpdate(shiftAssignmentId,shiftAssignmentData,{new:true})
     if (!updateShiftAssignmentById) throw new HttpException(409, "shift assignment could not be updated");
     // return updated shift assignment
     return updateShiftAssignmentById;
