@@ -48,7 +48,7 @@ class scoreCardController {
      public updateScoreCard = async (req:Request, res:Response, next:NextFunction) =>{
         try{
             const ScoreCardId: string = req.params.id;
-            const ScoreCardData: CreateScoreCardDto = req.body;
+            const ScoreCardData: UpdateScoreCardDto = req.body;
             const updateScoreCardData: IScoreCard = await this.scoreCardService.updateScoreCard(ScoreCardId,ScoreCardData);
             res.status(200).json({data:updateScoreCardData, message:"ScoreCard Updated"});
         }

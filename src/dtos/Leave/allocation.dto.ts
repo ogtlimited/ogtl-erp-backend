@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import { IsString, IsDate, IsBoolean, IsNotEmpty } from 'class-validator';
+import { IsString, IsDate, IsBoolean, IsNotEmpty, IsDateString } from 'class-validator';
 export class CreateLeaveAllocationDto{
     @IsString()
     public employee_id: string;
@@ -9,11 +9,11 @@ export class CreateLeaveAllocationDto{
     public leave_type_id: string;
 
     @IsNotEmpty()
-    @IsDate()
+    @IsDateString()
     public from_date: Date;
 
     @IsNotEmpty()
-    @IsDate()
+    @IsDateString()
     public to_date : Date;
 
     @IsString()
@@ -30,11 +30,11 @@ export class UpdateLeaveAllocationDto{
     public employee_id: string;
 
     @IsNotEmpty()
-    @IsDate()
+    @IsDateString()
     public from_date: Date;
 
     @IsNotEmpty()
-    @IsDate()
+    @IsDateString()
     public to_date : Date;
 
     @IsString()

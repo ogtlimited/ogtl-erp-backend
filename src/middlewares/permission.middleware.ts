@@ -4,7 +4,7 @@ import { NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { HttpException } from '@exceptions/HttpException';
 import { DataStoredInToken, RequestWithUser } from '@interfaces/auth.interface';
-import userModel from '@models/users.model';
+import employeeModel from '@models/employee/employee.model';
 //0 - 000
 //1 - 001
 //2 - 010
@@ -65,9 +65,9 @@ const permissionMiddleware = async (req: RequestWithUser, res: Response, next: N
       const secretKey: string = config.get('secretKey');
       const verificationResponse = (await jwt.verify(Authorization, secretKey)) as DataStoredInToken;
       const userId = verificationResponse._id;
-      const findUser = await userModel.findById(userId);
+      const findUser = await employeeModel.findById(userId);
       console.log(findUser);
-      const permission = new userPermissions(findUser.permissionLevel).getAllPermissions()
+      const permission = new userPermissions(Number(findUser.permissionLevel)).getAllPermissions()
       if(req.method === 'get'){
         if(permission.Read === true){
           req.user = findUser;
