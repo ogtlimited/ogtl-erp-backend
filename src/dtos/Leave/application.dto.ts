@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import { IsDate, IsString } from 'class-validator';
+import { IsDate, IsDateString, IsString } from 'class-validator';
 
 export class CreateLeaveApplicationDTO{
 
@@ -10,16 +10,16 @@ export class CreateLeaveApplicationDTO{
     @IsString()
     public leave_type_id: string;
 
-    @IsDate()
+    @IsDateString()
     public from_date: Date;
 
-    @IsDate()
+    @IsDateString()
     public to_date : Date;
 
     @IsString()
     public leave_approver: string;
 
-    @IsDate()
+    @IsDateString()
     public posting_date: Date;
 
     @IsString()
