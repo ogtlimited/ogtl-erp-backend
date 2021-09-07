@@ -50,6 +50,7 @@ import LoanApplicationRoute from '@routes/loan/loan-application.route';
 import CoachingFormRoute from './routes/coaching/coachingForm.route';
 import ProjectRoute from './routes/project/client.route';
 import ClientRoute  from '@routes/project/client.route';
+import AssetsRoute from '@routes/assets/assets.route';
 
 
 
@@ -101,6 +102,7 @@ const app = new App([
   new CoachingFormRoute(),
   new ProjectRoute(),
   new ClientRoute(),
+  new AssetsRoute(),
 
 ]);
 
