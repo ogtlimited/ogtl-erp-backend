@@ -13,10 +13,10 @@ class ContactDetailsService{
          *Returns all contact Details
         */
 
-    public async findAllContactDetails(): Promise<ContactDetail[]> { 
+    public async findAllContactDetails(): Promise<ContactDetail[]> {
         const ContactDetails: ContactDetail[] = await this.ContactDetails.find();
         return ContactDetails;
-        
+
     }
 
      /**
@@ -41,7 +41,7 @@ class ContactDetailsService{
       * Creates new Contact details
       */
     public async createContactDetails(ContactDetailData:CreateContactDetailsDto) : Promise<ContactDetail>{
-    
+
         if (isEmpty(ContactDetailData)) throw new HttpException(400, "No data provided");
 
         //check if employee already provided contact details
@@ -75,7 +75,7 @@ class ContactDetailsService{
 
 
     public async deleteContactDetails(ContactDetailsId:string) : Promise<ContactDetail>{
-         
+
           const deleteContactDetailsById: ContactDetail = await this.ContactDetails.findByIdAndDelete(ContactDetailsId);
           if(!deleteContactDetailsById) throw new HttpException(409, "Details don't exist");
           return deleteContactDetailsById;

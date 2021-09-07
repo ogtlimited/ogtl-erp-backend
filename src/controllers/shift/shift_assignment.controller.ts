@@ -20,7 +20,7 @@ class ShiftAssignmentController {
   //Method for returning a single shift assignment
   public getShiftAssignmentById = async (req:Request, res:Response, next:NextFunction) =>{
     try {
-      const shiftAssignmentId:string = req.body.id;
+      const shiftAssignmentId:string = req.params.id;
       const findShiftAssignment:IShiftAssignment = await this.shiftAssignmentService.findShiftAssignmentById(shiftAssignmentId);
       res.status(200).json({data:findShiftAssignment, message:"Shift assignment found successfully"})
     }
@@ -44,7 +44,7 @@ class ShiftAssignmentController {
   //Method for updating shift assignment
   public updateShiftAssignment = async (req:Request, res:Response, next:NextFunction) =>{
     try {
-      const shiftAssignmentId:string = req.body.id;
+      const shiftAssignmentId:string = req.params.id;
       const shiftAssignmentData:UpdateShiftAssignmentDto = req.body;
       const updateShiftAssignmentData: IShiftAssignment = await this.shiftAssignmentService.updateShiftAssignment(shiftAssignmentId,shiftAssignmentData);
       res.status(200).json({ data: updateShiftAssignmentData, message: 'Shift assignment updated.' });
@@ -57,7 +57,7 @@ class ShiftAssignmentController {
   //Method for deleting shift assignment
   public deleteShiftAssignment = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const shiftAssignmentId:string = req.body.id;
+      const shiftAssignmentId:string = req.params.id;
       const deleteShiftAssignment = await this.shiftAssignmentService.deleteShiftAssignment(shiftAssignmentId);
 
       res.status(200).json({ data: deleteShiftAssignment, message: 'Shift assignment deleted' });

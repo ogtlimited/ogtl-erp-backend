@@ -12,11 +12,26 @@ class LeaveApplicationService {
   public application = applicationModel;
 
   public async findAllLeaveapplication(): Promise<ILeaveApplication[]> {
-    const application: ILeaveApplication[] = await this.application.find();
+    const application: ILeaveApplication[] = await this.application.find().populate({
+      path: 'employee_id', 
+      model: 'Employee',
+      populate: {
+          path: 'designation',
+          model: 'Designation'
+      }
+  });
     return application;
   }
 
   public async findLeaveapplicationById(LeaveapplicationId: string): Promise<ILeaveApplication> {
+    if (isEmpty(LeaveapplicationId)) throw new HttpException(400, "You're not LeaveapplicationId");
+
+    const findLeaveapplication: ILeaveApplication = await this.application.findOne({ _id: LeaveapplicationId });
+    if (!findLeaveapplication) throw new HttpException(409, "Leave application not found");
+
+    return findLeaveapplication;
+  }
+  public async findLeaveapplicationByEmployeeId(LeaveapplicationId: string): Promise<ILeaveApplication> {
     if (isEmpty(LeaveapplicationId)) throw new HttpException(400, "You're not LeaveapplicationId");
 
     const findLeaveapplication: ILeaveApplication = await this.application.findOne({ _id: LeaveapplicationId });
@@ -42,8 +57,8 @@ class LeaveApplicationService {
       const findLeaveapplication: ILeaveApplication = await this.application.findOne({ _id : LeaveapplicationData._id  });
       if (findLeaveapplication && findLeaveapplication._id != LeaveapplicationId) throw new HttpException(409, `${LeaveapplicationData._id } already exists`);
     }
-    const updateLeaveapplicationById: ILeaveApplication = await this.application.findByIdAndUpdate(LeaveapplicationId, { LeaveapplicationData });
-    if (!updateLeaveapplicationById) throw new HttpException(409, "shift does not exist");
+    const updateLeaveapplicationById: ILeaveApplication = await this.application.findByIdAndUpdate(LeaveapplicationId, LeaveapplicationData,{new: true});
+    if (!updateLeaveapplicationById) throw new HttpException(409, "leave does not exist");
 
     return updateLeaveapplicationById;
   }

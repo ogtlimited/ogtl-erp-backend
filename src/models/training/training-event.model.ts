@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { TrainingEvent } from '@interfaces/training/training-event.interface';
+import { ITrainingEvent } from '@interfaces/training/training-event.interface';
 import { model, Schema, Document } from 'mongoose';
 
 const TrainingEventSchema: Schema = new Schema(
@@ -73,5 +73,5 @@ const TrainingEventSchema: Schema = new Schema(
   },
 );
 
-const TrainingEventModel = model<TrainingEvent & Document>('TrainingEvent', TrainingEventSchema);
+const TrainingEventModel = model<ITrainingEvent & Document>('TrainingEvent', TrainingEventSchema);
 export default TrainingEventModel;

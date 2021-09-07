@@ -1,0 +1,153 @@
+tags:
+- name: Project
+  description: Project API
+
+paths:
+# [GET] project
+  /api/project:
+    get:
+      tags:
+      - project
+      summary: Find All Projects
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] project
+    post:
+      tags:
+      - project
+      summary: Add project 
+      parameters:
+      - name: body
+        in: body
+        description: project Data
+        required: true
+        schema:
+          $ref: '#/definitions/project'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] project/projectId
+  /api/project/{projectId}:
+    get:
+      tags:
+      - project
+      summary: Find project By Id
+      parameters:
+      - name: projectId
+        in: path
+        description: project Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PUT] loan/loanId
+    put:
+      tags:
+      - project
+      summary: Update project By Id
+      parameters:
+      - name: projectId
+        in: path
+        description: project Id
+        required: true
+      - name: body
+        in: body
+        description: project Data
+        required: true
+        schema:
+          $ref: '#/definitions/project'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] allocation/id
+    delete:
+      tags:
+      - project
+      summary: Delete project By Id
+      parameters:
+      - name: projectId
+        in: path
+        description: project Id
+        required: true
+        schema:
+          type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  project:
+    type: object
+    required:
+        - project_name
+        - type
+        - objectives
+        - hours_of_operation
+        - type_of_employees
+        - start_date
+        - end_date
+        - number_of_employees
+        - billing_structure
+    properties:
+      project_name:
+        type: string
+        description: project name
+      type:
+        type: string
+        description: project type
+      objectives:
+        type: string
+        description: project objectives
+      hours_of_operation:
+        type: number
+        description: hours of operation
+      type_of_employees:
+        type: string
+        description: types of employees
+      start_date:
+        type: string
+        description: project start date
+      end_date:
+        type: string
+        description: project end date
+      number_of_employees:
+        type: string
+        description: number of employees for project
+      billing_structure:
+        type: string
+        description: billing structure
+      
+
+schemes:
+ - https
+ - http

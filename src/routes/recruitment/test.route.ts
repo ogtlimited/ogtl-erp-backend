@@ -17,8 +17,8 @@ class TestRoute implements Routes{
   private initializeRoutes(){
     this.router.get(`${this.path}`,authMiddleware,this.testController.getTests);
     this.router.get(`${this.path}/:id`,authMiddleware,this.testController.getTestById);
-    this.router.post(`${this.path}`,authMiddleware,validationMiddleware(CreateTestDto,'body'),this.testController.createTest);
-    this.router.patch(`${this.path}/:id`,authMiddleware, validationMiddleware(UpdateTestDto, 'body'), this.testController.updateTest);
+    this.router.post(`${this.path}`,[validationMiddleware(CreateTestDto,'body'),authMiddleware],this.testController.createTest);
+    this.router.patch(`${this.path}/:id`, [validationMiddleware(UpdateTestDto, 'body'),authMiddleware], this.testController.updateTest);
     this.router.delete(`${this.path}/:id`,authMiddleware,this.testController.deleteTest);
 
   }

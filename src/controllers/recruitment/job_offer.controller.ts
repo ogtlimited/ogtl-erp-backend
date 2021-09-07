@@ -20,7 +20,7 @@ class JobOfferController {
   //Method for returning a single job offer
   public getJobOfferById = async (req:Request, res:Response, next:NextFunction) =>{
     try {
-      const jobOfferId:string = req.body.id;
+      const jobOfferId:string = req.params.id;
       const findJobOffer:IJobOffer = await this.jobOfferService.findJobOfferById(jobOfferId);
       res.status(200).json({data:findJobOffer, message:"Job offer found successfully"})
     }
@@ -44,7 +44,7 @@ class JobOfferController {
   //Method for updating job offer
   public updateJobOffer = async (req:Request, res:Response, next:NextFunction) =>{
     try {
-      const jobOfferId:string = req.body.id;
+      const jobOfferId:string = req.params.id;
       const jobOfferData:UpdateJobOfferDto = req.body;
       const updateJobOfferData: IJobOffer = await this.jobOfferService.updateJobOffer(jobOfferId,jobOfferData);
       res.status(200).json({ data: updateJobOfferData, message: 'Job offer updated.' });
@@ -57,7 +57,7 @@ class JobOfferController {
   //Method for deleting job offer
   public deleteJobOffer = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const jobOfferId:string = req.body.id;
+      const jobOfferId:string = req.params.id;
       const deleteJobOffer = await this.jobOfferService.deleteJobOffer(jobOfferId);
 
       res.status(200).json({ data: deleteJobOffer, message: 'Job offer deleted' });

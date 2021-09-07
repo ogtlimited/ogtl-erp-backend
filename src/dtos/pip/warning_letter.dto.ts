@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsNotEmpty, IsNumber, IsBoolean} from 'class-validator';
+import { IsString,IsDateString, IsNotEmpty} from 'class-validator';
 
 export class CreateWarningLetterDto {
   @IsNotEmpty()
@@ -23,7 +23,7 @@ export class CreateWarningLetterDto {
   public actions: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsDateString()
   public date_issued: Date;
 
   // @IsNumber()

@@ -79,4 +79,4 @@ const projectSchema :Schema = new Schema(
 //Use a pre method to add , to range when you want to retrieve data
 const projectModel = model<IProject & Document>("Project", projectSchema);
 
-module.exports = projectModel;
+export default projectModel;

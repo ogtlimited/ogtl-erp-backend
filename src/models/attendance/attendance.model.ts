@@ -20,7 +20,10 @@ const attendanceSchema: Schema = new Schema(
     },
     departmentId: {
       type: Schema.Types.ObjectId,
-      required: true,
+      ref: "Department"
+    },
+    projectId: {
+      type: Schema.Types.ObjectId,
       ref: "Department"
     },
     clockInTime: {

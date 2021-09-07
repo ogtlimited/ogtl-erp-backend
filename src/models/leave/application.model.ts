@@ -16,13 +16,11 @@ const applicationSchema : Schema = new Schema (
                 type: String,
                 enum:["Annual","Casual","Sick","Without Pay","Maternity"],
                 required: true,
-                
            },
 
         from_date:{
             type: Date,
             required: true,
-        
         },
 
         to_date : {

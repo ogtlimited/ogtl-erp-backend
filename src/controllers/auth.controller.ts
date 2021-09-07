@@ -22,7 +22,7 @@ class AuthController {
 
   public logOut = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-      const userData: Employee = req.user;
+      const userData: EmployeeLoginDto = req.user;
       const logOutUserData: Employee = await this.authService.logout(userData);
 
       res.setHeader('Set-Cookie', ['Authorization=; Max-age=0']);

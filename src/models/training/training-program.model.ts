@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { TrainingProgram } from '@interfaces/training/training-program.interface';
+import { ITrainingProgram } from '@interfaces/training/training-program.interface';
 import { model, Schema, Document } from 'mongoose';
 
 const TrainingProgramSchema: Schema = new Schema(
@@ -44,5 +44,5 @@ const TrainingProgramSchema: Schema = new Schema(
   },
 );
 
-const TrainingProgramModel = model<TrainingProgram & Document>('TrainingProgram', TrainingProgramSchema);
+const TrainingProgramModel = model<ITrainingProgram & Document>('TrainingProgram', TrainingProgramSchema);
 export default TrainingProgramModel;
