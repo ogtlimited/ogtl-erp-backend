@@ -3,7 +3,6 @@ import  shiftTypeService  from '@/services/shift/shift.service';
 import  DesignationService  from '@/services/employee/designation.service';
 import EmployeeService from './employee.service';
 
-
 class CombineServices {
   public designationS = new DesignationService();
   public shiftS = new shiftTypeService();

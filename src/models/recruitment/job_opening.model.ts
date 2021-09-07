@@ -12,10 +12,10 @@ const jobOpeningSchema: Schema = new Schema({
     ref: 'Designation',
     default: null,
   },
-  campaign_id: {
+  project_id: {
     type: Schema.Types.ObjectId,
     required: true,
-    ref: 'Campaign',
+    ref: 'Project',
     default: null,
   },
   status:{
