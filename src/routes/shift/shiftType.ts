@@ -16,11 +16,11 @@ class ShiftTypeRoute implements Routes {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}`, authMiddleware,this.shiftTypeController.getShifts);
+        this.router.get(`${this.path}`,authMiddleware, this.shiftTypeController.getShifts);
         this.router.get(`${this.path}/:id`,authMiddleware, this.shiftTypeController.getShiftById);
-        this.router.post(`${this.path}`, authMiddleware,validationMiddleware(CreateShiftTypeDto, 'body'), this.shiftTypeController.createShift);
-        this.router.patch(`${this.path}/:id`,authMiddleware, validationMiddleware(UpdateShiftTypeDto, 'body', true), this.shiftTypeController.updateShift);
-        this.router.delete(`${this.path}/:id`,authMiddleware, this.shiftTypeController.deleteShift);
+        this.router.post(`${this.path}`,[validationMiddleware(CreateShiftTypeDto, 'body'),authMiddleware], this.shiftTypeController.createShift);
+        this.router.patch(`${this.path}/:id`, [validationMiddleware(UpdateShiftTypeDto, 'body', true),authMiddleware], this.shiftTypeController.updateShift);
+        this.router.delete(`${this.path}/:id`, authMiddleware, this.shiftTypeController.deleteShift);
     }
   }
   export default ShiftTypeRoute;

@@ -36,7 +36,7 @@ class shiftTypeService {
       const findShiftType: IShiftType = await this.shiftTypes.findOne({ _id: shiftTypeData._id });
       if (findShiftType && findShiftType._id != shiftTypeId) throw new HttpException(409, `${shiftTypeData.shift_name} already exists`);
     }
-    const updateShiftTypeById: IShiftType = await this.shiftTypes.findByIdAndUpdate(shiftTypeId, { shiftTypeData });
+    const updateShiftTypeById: IShiftType = await this.shiftTypes.findByIdAndUpdate(shiftTypeId,  shiftTypeData ,{new:true});
     if (!updateShiftTypeById) throw new HttpException(409, "shift does not exist");
 
     return updateShiftTypeById;

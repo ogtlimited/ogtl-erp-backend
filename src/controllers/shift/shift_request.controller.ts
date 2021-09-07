@@ -19,7 +19,7 @@ class ShiftRequestController {
   //Method for returning a single shift request
   public getShiftRequestById = async (req:Request, res:Response, next:NextFunction) =>{
     try {
-      const shiftRequestId:string = req.body.id;
+      const shiftRequestId:string = req.params.id;
       const findShiftRequest:IShiftRequest = await this.shiftRequestService.findShiftRequestById(shiftRequestId);
       res.status(200).json({data:findShiftRequest, message:"Shift request found successfully"});
     }
@@ -43,7 +43,7 @@ class ShiftRequestController {
   //Method for updating shift request
   public updateShiftRequest = async (req:Request, res:Response, next:NextFunction) =>{
     try {
-      const shiftRequestId:string = req.body.id;
+      const shiftRequestId:string = req.params.id;
       const shiftRequestData:UpdateShiftRequestDto = req.body;
       const updateShiftRequestData: IShiftRequest = await this.shiftRequestService.updateShiftRequest(shiftRequestId,shiftRequestData);
       res.status(200).json({ data: updateShiftRequestData, message: 'Shift request updated.' });
@@ -56,7 +56,7 @@ class ShiftRequestController {
   //Method for deleting shift request
   public deleteShiftRequest= async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const shiftRequestId:string = req.body.id;
+      const shiftRequestId:string = req.params.id;
       const deleteShiftRequest = await this.shiftRequestService.deleteShiftRequest(shiftRequestId)
 
       res.status(200).json({ data: deleteShiftRequest, message: 'Shift request deleted' });

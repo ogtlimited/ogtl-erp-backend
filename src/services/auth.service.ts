@@ -42,7 +42,7 @@ class AuthService {
     return { token: tokenData, employee };
   }
 
-  public async logout(EmployeeData: Employee): Promise<Employee> {
+  public async logout(EmployeeData: EmployeeLoginDto): Promise<Employee> {
     if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
 
     const findEmployee: Employee = await this.Employees.findOne({ email: EmployeeData.company_email, password: EmployeeData.password });
