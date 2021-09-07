@@ -34,7 +34,7 @@ class ShiftAssignmentService {
     //find shift assignment using the employee id provided
     const findShitAssignment: IShiftAssignment = await this.shiftAssignment.findOne({ employee_id: shiftAssignmentData.employee_id });
     //throw error if shift assignment does exist
-    if (findShitAssignment) throw new HttpException(409, `${shiftAssignmentData.employee_id} already exists`);
+    if (findShitAssignment) throw new HttpException(409, `Shift assignment already exists`);
     // return created shift assignment
     return await this.shiftAssignment.create(shiftAssignmentData);
   }

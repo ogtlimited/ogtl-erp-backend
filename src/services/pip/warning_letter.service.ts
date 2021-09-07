@@ -36,25 +36,25 @@ class WarningLetterService {
     if(findWarningLetterByEmployeeId.warningCount > 2 ){
       //set employee active to false
       const newWarningCount = findWarningLetterByEmployeeId.warningCount+= 1
-      this.warningLetter.findOneAndUpdate({_id: warningLetterData.employee_id}, {$set: {warningCount: newWarningCount}},{ new: true })
-      this.employeeModel.findOneAndUpdate({_id: warningLetterData.employee_id}, {$set: {status:'terminated'}}, { new: true })
-
+      this.warningLetter.findOneAndUpdate({employee_id: warningLetterData.employee_id}, {$set: {warningCount: newWarningCount}},{ new: true })
+      this.employeeModel.findOneAndUpdate({employee_id: warningLetterData.employee_id}, {$set: {status:'terminated'}}, { new: true })
+      return await this.warningLetter.create(warningLetterData);
     }
     //2) check if warning count of employee is greater than 1
     //   i: increment warning count
     //  ii: change inPipStatus to true
     else if(findWarningLetterByEmployeeId.warningCount > 1 ){
-      this.warningLetter.findOneAndUpdate({_id: warningLetterData.employee_id}, {$set: {warningCount: findWarningLetterByEmployeeId.warningCount+= 1,isInPip: true}},{ new: true })
-
+      this.warningLetter.findOneAndUpdate({employee_id: warningLetterData.employee_id}, {$set: {warningCount: findWarningLetterByEmployeeId.warningCount+= 1,isInPip: true}},{ new: true })
+      return await this.warningLetter.create(warningLetterData);
     }
     //3) check if warning count ===0
     //  i: increment warning count to 1
       else{
-      this.warningLetter.findOneAndUpdate({_id: warningLetterData.employee_id}, {$set: {warningCount: 1}},{ new: true })
-
+      this.warningLetter.findOneAndUpdate({employee_id: warningLetterData.employee_id}, {$set: {warningCount: 1}},{ new: true })
+      return await this.warningLetter.create(warningLetterData);
     }
     // return warning letter
-    return await this.warningLetter.create(warningLetterData);
+
   }
 
   //Method for deleting warning letter
