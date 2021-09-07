@@ -20,7 +20,7 @@ class JobApplicantController {
   //Method for returning a single job applicant
   public getJobApplicantById = async (req:Request, res:Response, next:NextFunction) =>{
     try {
-      const jobApplicantId:string = req.body.id;
+      const jobApplicantId:string = req.params.id;
       const findJobApplicant:IJobApplicant = await this.jobApplicantService.findJobApplicantById(jobApplicantId);
       res.status(200).json({data:findJobApplicant, message:"Job applicant found successfully"})
     }
@@ -44,7 +44,7 @@ class JobApplicantController {
   //Method for updating job Applicant
   public updateJobApplicant = async (req:Request, res:Response, next:NextFunction) =>{
     try {
-      const jobApplicantId:string = req.body.id;
+      const jobApplicantId:string = req.params.id;
       const jobApplicantData:UpdateJobApplicantDto = req.body;
       const updateJobApplicantData: IJobApplicant = await this.jobApplicantService.updateJobApplicant(jobApplicantId,jobApplicantData);
       res.status(200).json({ data: updateJobApplicantData, message: 'Job applicant updated.' });
@@ -57,7 +57,7 @@ class JobApplicantController {
   //Method for deleting job Applicant
   public deleteJobApplicant = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const jobApplicantId:string = req.body.id;
+      const jobApplicantId:string = req.params.id;
       const deleteJobApplicant = await this.jobApplicantService.deleteJobApplicant(jobApplicantId);
 
       res.status(200).json({ data: deleteJobApplicant, message: 'Job applicant deleted' });

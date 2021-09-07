@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsDate ,IsNotEmpty} from 'class-validator';
+import { IsString, IsDateString ,IsNotEmpty} from 'class-validator';
 
 export class CreateShiftAssignmentDto {
   @IsNotEmpty()
@@ -10,7 +10,7 @@ export class CreateShiftAssignmentDto {
   @IsString()
   public employee_id: string;
 
-  @IsDate()
+  @IsDateString()
   public assignment_date: Date;
 }
 
@@ -26,6 +26,6 @@ export class UpdateShiftAssignmentDto {
   @IsString()
   public employee_id: string;
 
-  @IsDate()
+  @IsDateString()
   public assignment_date: Date;
 }

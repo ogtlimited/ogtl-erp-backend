@@ -4,9 +4,11 @@ import shiftAssignmentModel from '@models/shift/shift_assignment.model';
 import { isEmpty } from '@utils/util';
 import { HttpException } from '@exceptions/HttpException';
 import { CreateShiftAssignmentDto, UpdateShiftAssignmentDto } from '@dtos/shift/shift_assignment.dto';
+import EmployeeModel from '@models/employee/employee.model';
 
 class ShiftAssignmentService {
   public shiftAssignment = shiftAssignmentModel;
+  public employeeModel = EmployeeModel
 
   //Method for finding all shift assignments
   public async findAllShiftAssignments(): Promise<IShiftAssignment[]>{
@@ -40,6 +42,7 @@ class ShiftAssignmentService {
   //Method for updating shift assignment
   public async updateShiftAssignment(shiftAssignmentId: string,shiftAssignmentData: UpdateShiftAssignmentDto):Promise<IShiftAssignment>{
     //check if no shift assignment data is empty
+
     if (isEmpty(shiftAssignmentData)) throw new HttpException(400, "Bad request");
     if(shiftAssignmentData._id){
       //find shift assignment using the employee id provided
@@ -47,7 +50,8 @@ class ShiftAssignmentService {
       if(findShitAssignment && findShitAssignment._id != shiftAssignmentId) throw new HttpException(409, `${shiftAssignmentData.employee_id} already exists`);
     }
     //find shift assignment using the id provided and update it
-    const updateShiftAssignmentById:IShiftAssignment = await this.shiftAssignment.findByIdAndUpdate(shiftAssignmentId,{shiftAssignmentData})
+    const updateShiftAssignmentById:IShiftAssignment = await this.shiftAssignment.findByIdAndUpdate(shiftAssignmentId,shiftAssignmentData,{new:true})
+    this.employeeModel.findOneAndUpdate({_id: shiftAssignmentData.employee_id}, {$set: {default_shift:shiftAssignmentData.shift_type_id}}, { new: true })
     if (!updateShiftAssignmentById) throw new HttpException(409, "shift assignment could not be updated");
     // return updated shift assignment
     return updateShiftAssignmentById;

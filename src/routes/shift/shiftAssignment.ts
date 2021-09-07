@@ -16,11 +16,11 @@ class ShiftAssignmentRoute implements Routes{
   }
 
   private initializeRoutes(){
-    this.router.get(`${this.path}`,this.shiftAssignmentController.getShiftAssignments);
-    this.router.get(`${this.path}/:id`,this.shiftAssignmentController.getShiftAssignmentById);
+    this.router.get(`${this.path}`, this.shiftAssignmentController.getShiftAssignments);
+    this.router.get(`${this.path}/:id`, this.shiftAssignmentController.getShiftAssignmentById);
     this.router.post(`${this.path}`,validationMiddleware(CreateShiftAssignmentDto,'body'),this.shiftAssignmentController.createShiftAssignment);
-    this.router.patch(`${this.path}/:id`, validationMiddleware(UpdateShiftAssignmentDto, 'body'), this.shiftAssignmentController.updateShiftAssignment);
-    this.router.delete(`${this.path}/:id`,this.shiftAssignmentController.deleteShiftAssignment);
+    this.router.patch(`${this.path}/:id`, validationMiddleware(UpdateShiftAssignmentDto, 'body',true), this.shiftAssignmentController.updateShiftAssignment);
+    this.router.delete(`${this.path}/:id`, this.shiftAssignmentController.deleteShiftAssignment);
 
   }
 }

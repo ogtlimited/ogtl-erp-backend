@@ -1,4 +1,4 @@
-import { IsString, IsDate, IsEnum, IsOptional,IsNotEmpty } from 'class-validator';
+import { IsString, IsDateString, IsEnum, IsOptional,IsNotEmpty } from 'class-validator';
 import { TestStatus, TestType } from '@interfaces/recruitment/test.interface';
 
 export class CreateTestDto {
@@ -19,7 +19,7 @@ export class CreateTestDto {
   @IsString()
   public score: string;
 
-  @IsDate()
+  @IsDateString()
   public interview_date: Date;
 
   @IsString()
@@ -51,7 +51,7 @@ export class UpdateTestDto {
   @IsString()
   public score: string;
 
-  @IsDate()
+  @IsDateString()
   public interview_date: Date;
 
   @IsString()
