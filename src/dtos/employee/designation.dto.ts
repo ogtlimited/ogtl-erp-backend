@@ -1,10 +1,7 @@
 import {IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateDesignationDto{
-   
-        
-
-    @IsNotEmpty()
+   @IsNotEmpty()
     @IsString()
         public designation: string;
 

@@ -10,7 +10,7 @@ class JobOpeningService {
 
   //Method for finding all job openings
   public async findAllJobOpenings(): Promise<IJobOpening[]>{
-    return this.jobOpening.find();
+    return this.jobOpening.find().populate("designation_id project_id");
   }
 
   //Method for finding a single job opening
@@ -18,7 +18,7 @@ class JobOpeningService {
     //check if no Job opening id is empty
     if(isEmpty(jobOpeningId)) throw new HttpException(400,`Job opening with Id:${jobOpeningId}, does not exist`);
     //find Job opening using the id provided
-    const findJobOpening:IJobOpening = await this.jobOpening.findOne({_id:jobOpeningId});
+    const findJobOpening:IJobOpening = await this.jobOpening.findOne({_id:jobOpeningId}).populate("designation_id project_id");
     //throw error if Job opening does not exist
     if(!findJobOpening) throw new HttpException(409,`Job opening with Id:${jobOpeningId}, does not exist`);
     //return Job opening
@@ -39,7 +39,7 @@ class JobOpeningService {
     if (isEmpty(jobOpeningData)) throw new HttpException(400, "Bad request");
     if(jobOpeningData._id){
       //find job opening using the employee id provided
-      const findJobOpening: IJobOpening = await this.jobOpening.findOne({ _id: jobOpeningData._id });
+      const findJobOpening: IJobOpening = await this.jobOpening.findOne({ _id: jobOpeningData._id }).populate("designation_id project_id");
       if(findJobOpening && findJobOpening._id != jobOpeningId) throw new HttpException(409, `${jobOpeningData._id } already exists`);
     }
     //find job opening using the id provided and update it
