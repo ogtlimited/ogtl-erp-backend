@@ -24,7 +24,8 @@ const employeeSchema: Schema = new Schema(
       default: null,
     },
     department:  {
-      type: ["HR", "Account", "Operations", "Facilities", "IT"],
+      type: String,
+      enum: ["HR", "Account", "Operations", "Facilities", "IT"],
     },
     password:  {
       type: String,
