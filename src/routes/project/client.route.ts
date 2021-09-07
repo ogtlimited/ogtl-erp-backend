@@ -7,8 +7,8 @@ import { CreateClientDto, UpdateClientDto } from '@dtos/project/client.dto';
 import ClientController from '@/controllers/project/client.controller';
 
 
-class ProjectRoute implements Routes {
-  public path = '/api/project';
+class ClientRoute implements Routes {
+  public path = '/api/client';
   public router = Router();
   public client = new ClientController();
 
@@ -25,4 +25,4 @@ class ProjectRoute implements Routes {
   }
 }
 
-export default ProjectRoute;
+export default ClientRoute;
