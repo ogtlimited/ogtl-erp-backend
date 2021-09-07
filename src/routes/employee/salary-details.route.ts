@@ -18,8 +18,8 @@ class SalaryDetailsRoute implements Routes {
     private initializeRoutes() {
         this.router.get(`${this.path}`,authMiddleware, this.SalaryDetailsController.getSalaryDetails);
         this.router.get(`${this.path}/:id`,authMiddleware, this.SalaryDetailsController.getSalaryDetailsById);
-        this.router.post(`${this.path}`,authMiddleware, validationMiddleware(CreateSalaryDetailsDto, 'body'), this.SalaryDetailsController.CreateSalaryDetails);
-        this.router.put(`${this.path}/:id`, authMiddleware,validationMiddleware(UpdateSalaryDetailsDto, 'body', true), this.SalaryDetailsController.updateSalaryDetails);
+        this.router.post(`${this.path}`,[validationMiddleware(CreateSalaryDetailsDto, 'body'),authMiddleware], this.SalaryDetailsController.CreateSalaryDetails);
+        this.router.put(`${this.path}/:id`, [validationMiddleware(UpdateSalaryDetailsDto, 'body', true),authMiddleware], this.SalaryDetailsController.updateSalaryDetails);
         this.router.delete(`${this.path}/:id`,authMiddleware, this.SalaryDetailsController.deleteSalaryDetails);
       }
     }

@@ -57,7 +57,7 @@ class ExitService{
             if(findExit && findExit._id != ExitId) throw new HttpException(409, `Employee ${ExitData.employee_id} Exit details dont exist`);
         }
 
-        const updateExitData: Exit = await this.Exits.findByIdAndUpdate(ExitId,{ExitData})
+        const updateExitData: Exit = await this.Exits.findByIdAndUpdate(ExitId,ExitData)
         if(!updateExitData) throw new HttpException(409, "details could not be updated");
         return updateExitData;
     }
