@@ -8,7 +8,7 @@ import ClientController from '@/controllers/project/client.controller';
 
 
 class ClientRoute implements Routes {
-  public path = '/api/project';
+  public path = '/api/client';
   public router = Router();
   public client = new ClientController();
 
