@@ -12,7 +12,7 @@ export class CreateJobOpeningDto {
 
   @IsNotEmpty()
   @IsString()
-  public campaign_id: string;
+  public project_id: string;
 
    @IsEnum(Status)
   public status: Status;
@@ -36,7 +36,7 @@ export class UpdateJobOpeningDto {
 
   @IsNotEmpty()
   @IsString()
-  public campaign_id: string;
+  public project_id: string;
 
   @IsEnum(Status)
   public status: Status;

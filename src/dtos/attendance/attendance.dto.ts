@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import {IsDateString, IsString } from 'class-validator';
+import {IsDateString, IsOptional, IsString } from 'class-validator';
 
 export class CreateAttendanceDto {  
   @IsString()
@@ -15,6 +15,14 @@ export class CreateAttendanceDto {
 
   @IsString()
   public clockInTime: string;
+
+  @IsString()
+  @IsOptional()
+  public departmentId: string;
+
+  @IsString()
+  @IsOptional()
+  public projectId: string;
 }
 
 export class UpdateAttendanceDto {  

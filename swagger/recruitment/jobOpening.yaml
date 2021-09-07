@@ -111,7 +111,7 @@ definitions:
     required:
       - job_title
       - designation_id
-      - campaign_id
+      - project_id
       - status
       - description
     properties:
@@ -125,7 +125,7 @@ definitions:
         description: designation id
       campaign_id:
         type: string
-        description: campaign id
+        description: project id
       status:
         type: string
         description: status of job opening

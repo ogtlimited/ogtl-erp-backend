@@ -10,7 +10,7 @@ class TestServices {
 
   //Method for finding all tests
   public async findAllTests(): Promise<ITest[]>{
-    return this.test.find().populate('job_applicant_id');
+    return this.test.find().populate('job_applicant_id hr_user');
   }
 
   //Method for finding a single test
@@ -18,7 +18,7 @@ class TestServices {
     //check if no Test id is empty
     if(isEmpty(testId)) throw new HttpException(400,`Test with Id:${testId}, does not exist`);
     //find Test using the id provided
-    const findTest:ITest = await this.test.findOne({_id:testId}).populate('job_applicant_id');
+    const findTest:ITest = await this.test.findOne({_id:testId}).populate('job_applicant_id hr_user');
     //throw error if Test does not exist
     if(!findTest) throw new HttpException(409,`Test with Id:${testId}, does not exist`);
     //return Test
@@ -40,7 +40,7 @@ class TestServices {
     if (isEmpty(testData)) throw new HttpException(400, "Bad request");
     if(testData._id){
       //find Test using the test type provided
-      const findTest: ITest = await this.test.findOne({ _id: testData._id });
+      const findTest: ITest = await this.test.findOne({ _id: testData._id }).populate('job_applicant_id hr_user ');
       if(findTest && findTest._id != testId) throw new HttpException(409, `${testData.test_type } already exist`);
     }
     //find Test using the id provided and update it
