@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 // import { ISalaryStructure } from '@interfaces/payroll/salary-structure.interface';
 import { ISalaryStructure } from '@/interfaces/payroll/salary-structure.interface';
-import { model, Schema } from 'mongoose';
+import { model, Schema, Document } from 'mongoose';
 
 const salaryStructureSchema: Schema = new Schema(
   {
