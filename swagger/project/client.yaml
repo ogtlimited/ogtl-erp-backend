@@ -1,0 +1,128 @@
+tags:
+- name: Client
+  description: Client API
+
+paths:
+# [GET] client
+  /api/client:
+    get:
+      tags:
+      - client
+      summary: Find All Clients
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] client
+    post:
+      tags:
+      - client
+      summary: Add client 
+      parameters:
+      - name: body
+        in: body
+        description: client Data
+        required: true
+        schema:
+          $ref: '#/definitions/client'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] client/clientId
+  /api/client/{clientId}:
+    get:
+      tags:
+      - client
+      summary: Find client By Id
+      parameters:
+      - name: clientId
+        in: path
+        description: client Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PUT] client/clientId
+    put:
+      tags:
+      - client
+      summary: Update client By Id
+      parameters:
+      - name: clientId
+        in: path
+        description: client Id
+        required: true
+      - name: body
+        in: body
+        description: client Data
+        required: true
+        schema:
+          $ref: '#/definitions/client'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] client/clientId
+    delete:
+      tags:
+      - client
+      summary: Delete client By Id
+      parameters:
+      - name: clientId
+        in: path
+        description: client Id
+        required: true
+        schema:
+          type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  project:
+    type: object
+    required:
+        - client_name
+        - email
+        - contact_phone
+    properties:
+      client_name:
+        type: string
+        description: client name
+      email:
+        type: string
+        description: client email
+      contact_phone:
+        type: string
+        description: client phone number
+      
+schemes:
+ - https
+ - http

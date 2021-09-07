@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { TrainingResult } from '@interfaces/training/training-result.interface';
+import { ITrainingResult } from '@interfaces/training/training-result.interface';
 import { model, Schema, Document } from 'mongoose';
 
 const result: Schema = new Schema({
@@ -37,5 +37,5 @@ const TrainingResultSchema: Schema = new Schema(
   },
 );
 
-const TrainingResultModel = model<TrainingResult & Document>('TrainingResult', TrainingResultSchema);
+const TrainingResultModel = model<ITrainingResult & Document>('TrainingResult', TrainingResultSchema);
 export default TrainingResultModel;
