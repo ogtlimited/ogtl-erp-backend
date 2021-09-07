@@ -6,6 +6,7 @@ export class CreateProjectDto {
   @IsString()
   public project_name: string;
 
+  @IsNotEmpty()
   @IsString()
   public client_id: string;
 
@@ -24,6 +25,7 @@ export class CreateProjectDto {
   public type_of_employees: string;
 
   @IsNotEmpty()
+
   @IsDateString()
   public start_date: Date;
 
@@ -38,6 +40,7 @@ export class CreateProjectDto {
   @IsString()
   public billing_structure: string;
 
+  @IsNotEmpty()
   @IsString()
   public diallers: string;
 
