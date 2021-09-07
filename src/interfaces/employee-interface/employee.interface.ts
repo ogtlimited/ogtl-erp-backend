@@ -18,5 +18,7 @@ export interface Employee {
     reports_to: string;
     status: string;
     permissionLevel: string;
-   
+    warningCount: number;
+    isInPIP: boolean
+
 }
