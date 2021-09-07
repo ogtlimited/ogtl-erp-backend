@@ -19,9 +19,9 @@ class AttendanceTypeService {
     const {clockInTime, clockOutTime} = query
     const departmentId = id
     // const dbQuery = {departmentId, clockInTime:{$gte: clockInTime, $lte: clockOutTime}}
-    const employees = await employeeModel.find({department_id: "612ce924fc13ae5329000af8"}, {ogId: 1, first_name:1, last_name:1, profile_pic:1, _id:1})
+    const employees = await employeeModel.find({department_id: departmentId}, {ogId: 1, first_name:1, last_name:1, profile_pic:1, _id:1})
     for (let index = 0; index < employees.length; index++) {
-      const employee = employees[index].toObject();
+      const employee = {...employees[index].toObject(),attendance:null};
       const employeeAttendance = await this.attendanceTypes.aggregate(
         [
           {
