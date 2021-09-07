@@ -48,8 +48,8 @@ import LoanRoute from '@routes/loan/loan.route';
 import LoanTypeRoute from '@routes/loan/loan-type.route';
 import LoanApplicationRoute from '@routes/loan/loan-application.route';
 import CoachingFormRoute from './routes/coaching/coachingForm.route';
-import ProjectRoute from './routes/project/client.route';
 import ClientRoute  from '@routes/project/client.route';
+import ProjectRoute from '@routes/project/project.route';
 
 
 

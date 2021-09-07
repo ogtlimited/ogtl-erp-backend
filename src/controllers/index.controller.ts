@@ -19,6 +19,15 @@ class IndexController {
       next(error);
     }
   };
+
+  public getAdminDashboardData = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const getAdminDashboardData = await this.indexS.adminDashboardDate();
+      res.status(200).json({ getAdminDashboardData, message: 'combined admin data result' });
+    }catch (e) {
+      next(e)
+    }
+  }
 }
 
 export default IndexController;
