@@ -14,9 +14,6 @@ export class CreateAttendanceDto {
   public ogId: string;
 
   @IsString()
-  public departmentId: string;
-
-  @IsString()
   public clockInTime: string;
 }
 

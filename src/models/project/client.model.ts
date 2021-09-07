@@ -29,4 +29,4 @@ const clientSchema :Schema = new Schema(
 //Use a pre method to add , to range when you want to retrieve data
 const clientModel = model<IClient & Document>("Client", clientSchema);
 
-module.exports = clientModel;
+export default clientModel;
