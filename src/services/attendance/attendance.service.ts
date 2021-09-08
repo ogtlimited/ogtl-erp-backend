@@ -14,12 +14,16 @@ const moment = require('moment');
 class AttendanceTypeService {
   public attendanceTypes = attendanceModel;
 
-  public async findAllDepartmentAttendance(id, query): Promise<any> {
+  public async findAllDepartmentAttendance(query): Promise<any> {
     const payload = []
-    const {clockInTime, clockOutTime} = query
-    const departmentId = id
+    const {startOfMonth, endOfMonth} = query
+    let office:any  = {query: {department_id: query.departmentId}, title:'departmentId', _id: query.departmentId};
+    if(query.projectId)
+    {
+      office = {query: {projectId: query.projectId}, title: 'projectId', _id: query.projectId}
+    }
     // const dbQuery = {departmentId, clockInTime:{$gte: clockInTime, $lte: clockOutTime}}
-    const employees = await employeeModel.find({department_id: departmentId}, {ogId: 1, first_name:1, last_name:1, profile_pic:1, _id:1})
+    const employees = await employeeModel.find(office.query, {ogId: 1, first_name:1, last_name:1, profile_pic:1, _id:1})
     for (let index = 0; index < employees.length; index++) {
       const employee = {...employees[index].toObject(),attendance:null};
       const employeeAttendance = await this.attendanceTypes.aggregate(
@@ -27,10 +31,10 @@ class AttendanceTypeService {
           {
             '$match': {
           'employeeId': new ObjectId(employee._id), 
-            'departmentId': new ObjectId(departmentId), 
-            'clockInTime': {
-              '$gte': new Date(clockInTime), 
-              '$lte': new Date(clockOutTime)
+            'departmentId': new ObjectId(office._id), 
+            'createdAt': {
+              '$gte': new Date(startOfMonth), 
+              '$lte': new Date(endOfMonth)
             },
             }
           }, {
