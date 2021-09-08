@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import { CreateAttendanceDto, UpdateAttendanceDto } from '@dtos/attendance/attendance.dto';
 import { HttpException } from '@exceptions/HttpException';
-import { IAttendance, IAttendanceCreatedResponse } from '@/interfaces/attendance-interface/attendance-interface';
+import { IAttendance, ICreateAttendance } from '@/interfaces/attendance-interface/attendance-interface';
 import attendanceModel  from '@models/attendance/attendance.model';
 import employeeModel  from '@models/employee/employee.model';
-import deductionModel  from '@models/payroll/deduction.model';
+// import deductionModel  from '@models/payroll/deduction.model';
 import { isEmpty } from '@utils/util';
 import {getWorkTime}  from '@/utils/attendanceCalculator';
 import {ObjectId} from 'mongodb'
@@ -57,13 +57,16 @@ class AttendanceTypeService {
   }
 
   public async findAllEmployeeAttendance(ogId: string, query): Promise<any> {
-   
-    const {departmentId} = query
-    const startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
-    const endOfMonth   = moment().endOf('month').format('YYYY-MM-DD');
-    const dbQuery = {ogId, departmentId, createdAt:{$gte: startOfMonth, $lte: endOfMonth}}
+    let {startOfMonth, endOfMonth} = query
+    startOfMonth = new Date(startOfMonth)
+    endOfMonth = new Date(endOfMonth)
+    const dbQuery: any = {ogId, createdAt:{$gte: startOfMonth, $lte: endOfMonth}}
+    // if (query.departmentId) {
+    //   dbQuery = {ogId, 'departmentId': query.departmentId , createdAt:{$gte: startOfMonth, $lte: endOfMonth}}
+    // }
     const attendanceTypes = await this.attendanceTypes.find(dbQuery);
-    return attendanceTypes;
+    console.log(attendanceTypes);
+    return attendanceTypes
   }
   
   public async findAttendanceTypeById(attendanceId: string): Promise<IAttendance> {
@@ -73,37 +76,18 @@ class AttendanceTypeService {
     return findAttendanceType;
   }
   
-  public async createAttendanceType(attendanceTypeData: CreateAttendanceDto): Promise<any> {
-    
-    //seeding the attendance table
-    
-    // let day = 1
-    // let now = moment().format('MMM DD h:mm');
-    // let formatter= 'YYYY-MM-DD[T]HH:mm';
-    // for (let index = 0; index < 10; index++) {
-    //     console.log("here"+index);
-    //     const num = `${day}`
-    //     const date = new Date(`July ${num}, 2021 9:00`);
-    //     const data = {
-    //         employeeId: "612cead8fc13ae35b5000353",
-    //         shiftTypeId: "612ea6c4b870ac743823511c",
-    //         departmentId: "612ce924fc13ae5329000af8",
-    //         clockInTime: moment(date).format(formatter),
-    //         ogId: "850rho199",
-    //       }
-        
-    //       // const result = await getWorkTime(data.clockInTime, data.clockOutTime);
-    //       // data.hoursWorked = result.hoursWorked
-    //       // data.minutesWorked = result.minutesWorked    
-    //       await this.attendanceTypes.create(data);
-    //       day ++;
-        
-    //     }
-    //     return "done";
+  public async createAttendanceType(attendanceTypeData: ICreateAttendance): Promise<any> {
         if (isEmpty(attendanceTypeData)) throw new HttpException(400, "Bad request");
+        const employee = await  employeeModel.findOne({ogid: attendanceTypeData.ogId})
+        if(!employee)
+        {
+          throw new HttpException(404, 'employee not found')
+        }
+        attendanceTypeData.shiftTypeId = employee.default_shift;
         const attendance = await this.attendanceTypes.create(attendanceTypeData);
-        const allEmployeeAttendance = await this.findAllEmployeeAttendance(attendanceTypeData.ogId, {departmentId: attendanceTypeData.departmentId})
-        return {attendance, allEmployeeAttendance};
+
+        // const allEmployeeAttendance = await this.findAllEmployeeAttendance(attendanceTypeData.ogId, {departmentId: attendanceTypeData.departmentId})
+        return {attendance};
       }  
       
   public async updateAttendance(attendanceData: UpdateAttendanceDto): Promise<any> {
