@@ -18,7 +18,7 @@ class AttendanceRoute implements Routes {
 
     private initializeRoutes() {
         // this.router.get(`${this.path}`, this.AttendanceController.getAttendances);
-        this.router.get(`${this.path}/department/:id`, this.AttendanceController.getDepartmentAttendance);
+        this.router.get(`${this.path}`, this.AttendanceController.getDepartmentAttendance);
         this.router.get(`${this.path}/employee/:ogId`, this.AttendanceController.getEmployeeAttendance);
         this.router.get(`${this.path}/:id`, this.AttendanceController.getAttendanceById);
         this.router.post(`${this.path}`, validationMiddleware(CreateAttendanceDto, 'body'), this.AttendanceController.createAttendance);
