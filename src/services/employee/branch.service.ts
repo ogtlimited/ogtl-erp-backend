@@ -11,10 +11,10 @@ class BranchService {
     /**
      *Returns all branches
      */
-    public async findAllBranches(): Promise<Branch[]> { 
-        const Branches: Branch[] = await this.Branches.find();
-        return Branches;
-        
+    public async findAllBranches(): Promise<Branch[]> {
+
+      return this.Branches.find();
+
     }
 
     /**
@@ -31,16 +31,16 @@ class BranchService {
        if(!findBranch) throw new HttpException(409, "Branch with that Id doesnt exist");
 
        return findBranch;
-        
+
     }
 
     /**
-     *Creates a new branch 
+     *Creates a new branch
      */
 
 
      public async createBranch(BranchData: CreateBranchDto) : Promise<Branch>{
-        
+
         //Check if data is empty
        if (isEmpty(BranchData)) throw new HttpException(400, "No data provided");
 
@@ -52,7 +52,7 @@ class BranchService {
      }
 
      /**
-     *Updates existing branch 
+     *Updates existing branch
      */
 
      public async updateBranch(BranchId:string,BranchData: UpdateBranchDto)  : Promise<Branch>{

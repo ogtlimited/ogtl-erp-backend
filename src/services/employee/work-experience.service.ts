@@ -2,7 +2,7 @@
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { WorkExperience } from '@/interfaces/employee-interface/work-experience.interface';
-import { CreateWorkExperienceDto,UpdateWorkExperienceDto } from '@/dtos/employee/work-experience.dto';
+import { CreateWorkExperienceDto, UpdateWorkExperienceDto } from '@/dtos/employee/work-experience.dto';
 import WorkExperienceModel from '@models/employee/work-experience.model';
 
 class WorkExperienceService{
@@ -10,28 +10,20 @@ class WorkExperienceService{
 
    //Returns all WorkExperience details
    public async findAllWorkExperience(): Promise<WorkExperience[]>{
-        const WorkExperiences: WorkExperience[] = await this.WorkExperiences.find();
-        return WorkExperiences
+     return this.WorkExperiences.find();
     }
 
     //find WorkExperience by Id
 
-    public async findWorkExperienceById(WorkExperienceId: string) : Promise<WorkExperience>{
+    public async findWorkExperienceById(WorkExperienceId: string) : Promise<WorkExperience[]>{
         if (isEmpty(WorkExperienceId)) throw new HttpException(400, "No Id provided");
-       //find WorkExperience Details with Id given
-
-       const findWorkExperience: WorkExperience = await this.WorkExperiences.findOne({_id:WorkExperienceId});
-
-       if(!findWorkExperience) throw new HttpException(409, "Details with that Id dont exist");
-
-       return findWorkExperience
-
+       return this.WorkExperiences.find({ employee_id: WorkExperienceId });
     }
 
     //create new WorkExperience details
 
     public async createWorkExperience(WorkExperienceData:CreateWorkExperienceDto) : Promise<WorkExperience>{
-    
+
         if (isEmpty(WorkExperienceData)) throw new HttpException(400, "No data provided");
 
         //check if employee already provided WorkExperience details
@@ -60,14 +52,14 @@ class WorkExperienceService{
         return updateWorkExperienceData;
     }
 
-    
+
     //deletes WorkExperience Details
 
     public async deleteWorkExperience(WorkExperienceId:string): Promise<WorkExperience>{
         const deleteWorkExperienceById: WorkExperience = await this.WorkExperiences.findByIdAndDelete(WorkExperienceId);
         if(!deleteWorkExperienceById) throw new HttpException(409, "Details don't exist");
-        return deleteWorkExperienceById; 
-      
+        return deleteWorkExperienceById;
+
 
     }
 

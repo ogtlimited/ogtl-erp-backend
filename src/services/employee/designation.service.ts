@@ -2,7 +2,7 @@
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { Designation } from '@/interfaces/employee-interface/designation.interface';
-import { CreateDesignationDto,UpdateDesignationDto } from '@/dtos/employee/designation.dto';
+import { CreateDesignationDto, UpdateDesignationDto } from '@/dtos/employee/designation.dto';
 import DesignationModel from '@models/employee/designation.model';
 
 
@@ -14,8 +14,7 @@ class DesignationService{
  */
 
 public async findAllDesignations(): Promise<Designation[]>{
-    const Designations : Designation[] = await this.Designations.find();
-    return Designations;
+  return this.Designations.find();
     }
 
 /**
@@ -23,7 +22,7 @@ public async findAllDesignations(): Promise<Designation[]>{
  */
 
 public async findDesignationById(DesignationId:string) : Promise<Designation>{
-   
+
     //Check if Id is empty
     if (isEmpty(DesignationId)) throw new HttpException(400, "No Id provided");
 
@@ -34,16 +33,16 @@ public async findDesignationById(DesignationId:string) : Promise<Designation>{
 
     return findDesignation;
 
-   
+
     }
 
     /**
-     *Creates a new Designation 
+     *Creates a new Designation
      */
 
 
      public async createDesignation(DesignationData: CreateDesignationDto) : Promise<Designation>{
-        
+
         //Check if data is empty
        if (isEmpty(DesignationData)) throw new HttpException(400, "No data provided");
 
@@ -56,7 +55,7 @@ public async findDesignationById(DesignationId:string) : Promise<Designation>{
 
 
     /**
-     *Updates existing Designation 
+     *Updates existing Designation
      */
 
      public async updateDesignation(DesignationId:string,DesignationData: UpdateDesignationDto)  : Promise<Designation>{
@@ -67,7 +66,7 @@ public async findDesignationById(DesignationId:string) : Promise<Designation>{
         const updateDesignationById: Designation = await this.Designations.findByIdAndUpdate(DesignationId,{DesignationData});
         if(!updateDesignationById) throw new HttpException(409, "Designation doesn't exist");
          return updateDesignationById;
-   } 
+   }
 
 
      //deletes existing designation

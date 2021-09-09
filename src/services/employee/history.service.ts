@@ -2,36 +2,29 @@
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { History } from '@/interfaces/employee-interface/history.interface';
-import { CreateHistoryDto,UpdateHistoryDto } from '@/dtos/employee/history.dto';
+import { CreateHistoryDto, UpdateHistoryDto } from '@/dtos/employee/history.dto';
 import HistoryModel from '@models/employee/history.model';
 
 class HistoryService{
     public Historys = HistoryModel;
     //Returns all history details
     public async findAllHistory(): Promise<History[]>{
-        const Historys: History[] = await this.Historys.find();
-        return Historys
+      return this.Historys.find().populate("employee_id branch_id designation_id");
     }
 
    //find History by Id
 
-   public async findHistoryById(HistoryId: string) : Promise<History>{
+   public async findHistoryById(HistoryId: string) : Promise<History[]>{
         if (isEmpty(HistoryId)) throw new HttpException(400, "No Id provided");
-        //find History Details with Id given
+        return this.Historys.find({ employee_id: HistoryId }).populate("employee_id branch_id designation_id");
 
-        const findHistory: History = await this.Historys.findOne({_id:HistoryId});
-
-        if(!findHistory) throw new HttpException(409, "Details with that Id dont exist");
-
-        return findHistory
-
-    }    
+    }
 
 
     //create new History details
 
     public async createHistory(HistoryData:CreateHistoryDto) : Promise<History>{
-    
+
         if (isEmpty(HistoryData)) throw new HttpException(400, "No data provided");
 
         //check if employee already provided History details
@@ -59,14 +52,14 @@ class HistoryService{
         return updateHistoryData;
     }
 
-    
+
     //deletes History Details
 
     public async deleteHistory(HistoryId:string): Promise<History>{
         const deleteHistoryById: History = await this.Historys.findByIdAndDelete(HistoryId);
         if(!deleteHistoryById) throw new HttpException(409, "Details don't exist");
-        return deleteHistoryById; 
-      
+        return deleteHistoryById;
+
 
     }
 

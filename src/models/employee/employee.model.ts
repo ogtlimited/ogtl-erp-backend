@@ -20,7 +20,7 @@ const employeeSchema: Schema = new Schema(
     },
     default_shift: {
       type: Schema.Types.ObjectId,
-      ref: 'Shift',
+      ref: 'ShiftType',
       default: null,
     },
     department:  {
@@ -39,6 +39,16 @@ const employeeSchema: Schema = new Schema(
     projectId: {
       type: Schema.Types.ObjectId,
       ref: 'Project',
+      default: null,
+    },
+    branch: {
+      type: Schema.Types.ObjectId,
+      ref: 'Branch',
+      default: null,
+    },
+    employeeType: {
+      type: Schema.Types.ObjectId,
+      ref: 'EmployeeType',
       default: null,
     },
     first_name: {

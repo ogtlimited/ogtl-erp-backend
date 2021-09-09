@@ -10,12 +10,9 @@ export interface Employee {
     designation: string;
     first_name: string;
     employment_type: string;
-    isAdmin: boolean;
-    gender: string;
-    image: string;
-    last_name: string;
-    middle_name: string;
-    reports_to: string;
+    branch:string;
+    employeeType:string;
+    projectId:string;
     status: string;
     permissionLevel: string;
     warningCount: number;

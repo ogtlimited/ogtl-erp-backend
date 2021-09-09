@@ -1,11 +1,9 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import { IsEmail, IsString,IsBoolean } from 'class-validator';
+import { IsEmail, IsString,IsBoolean,IsDateString} from 'class-validator';
 
 export class CreateEmployeeDto {
-
-
   @IsString()
   public date_of_joining: string;
 
@@ -26,9 +24,6 @@ export class CreateEmployeeDto {
 
   @IsString()
   public first_name: string;
-
-  @IsString()
-  public employment_type: string;
 
   @IsBoolean()
   public isAdmin: boolean;
@@ -51,6 +46,14 @@ export class CreateEmployeeDto {
   @IsString()
   public status: string;
 
+  @IsString()
+  public branch: string;
+
+  @IsString()
+  public employeeType: string;
+
+  @IsString()
+  public projectId: string;
 
 
 
@@ -76,9 +79,6 @@ export class UpdateEmployeeDto {
   @IsString()
   public first_name: string;
 
-  @IsString()
-  public employment_type: string;
-
   @IsBoolean()
   public isAdmin: boolean;
   gender: string;
@@ -97,6 +97,15 @@ export class UpdateEmployeeDto {
 
   @IsString()
   public status: string;
+
+  @IsString()
+  public branch: string;
+
+  @IsString()
+  public employeeType: string;
+
+  @IsString()
+  public projectId: string;
 
   @IsString()
   public permissionLevel: string;
