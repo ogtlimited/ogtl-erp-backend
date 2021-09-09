@@ -8,7 +8,7 @@ import employeeModel  from '@models/employee/employee.model';
 import { isEmpty } from '@utils/util';
 import {getWorkTime}  from '@/utils/attendanceCalculator';
 import {ObjectId} from 'mongodb'
-const moment = require('moment');
+// const moment = require('moment');
 
 
 class AttendanceTypeService {
@@ -17,21 +17,33 @@ class AttendanceTypeService {
   public async findAllDepartmentAttendance(query): Promise<any> {
     const payload = []
     const {startOfMonth, endOfMonth} = query
-    let office:any  = {query: {department_id: query.departmentId}, title:'departmentId', _id: query.departmentId};
+    let office:any  = {query: {department_id: new ObjectId(query.departmentId)}, aggregateQuery: {
+      
+    }};
     if(query.projectId)
     {
-      office = {query: {projectId: query.projectId}, title: 'projectId', _id: query.projectId}
+      office = {query: {projectId: query.projectId}}
     }
     // const dbQuery = {departmentId, clockInTime:{$gte: clockInTime, $lte: clockOutTime}}
-    const employees = await employeeModel.find(office.query, {ogId: 1, first_name:1, last_name:1, profile_pic:1, _id:1})
+    const employees = await employeeModel.find(office.query, {ogid: 1, first_name:1, last_name:1, profile_pic:1, _id:1})
+    console.log(employees.length);
+    
     for (let index = 0; index < employees.length; index++) {
       const employee = {...employees[index].toObject(),attendance:null};
       const employeeAttendance = await this.attendanceTypes.aggregate(
         [
           {
             '$match': {
-          'employeeId': new ObjectId(employee._id), 
-            'departmentId': new ObjectId(office._id), 
+          'ogId': employee.ogid, 
+          '$or': [
+            {
+              'projectId': new ObjectId(query.projectId) 
+            },
+            {
+              'departmentId': new ObjectId(query.departmentId)
+            }
+           
+          ],  
             'createdAt': {
               '$gte': new Date(startOfMonth), 
               '$lte': new Date(endOfMonth)
@@ -39,13 +51,16 @@ class AttendanceTypeService {
             }
           }, {
             '$group': {
-              '_id': 'hoursWorked', 
+              '_id': 'calculatedWorkTime',
               'daysWorked': {
-                '$sum': 1
-              }, 
+                  '$sum': 1
+              },
               'total_hours': {
-                '$sum': '$hoursWorked'
-              }
+                  '$sum': '$hoursWorked'
+              },
+              'total_minutes': {
+                  '$sum': '$minutesWorked'
+        }
             }
           }
         ]
@@ -69,7 +84,7 @@ class AttendanceTypeService {
     //   dbQuery = {ogId, 'departmentId': query.departmentId , createdAt:{$gte: startOfMonth, $lte: endOfMonth}}
     // }
     const attendanceTypes = await this.attendanceTypes.find(dbQuery);
-    console.log(attendanceTypes);
+    // console.log(attendanceTypes);
     return attendanceTypes
   }
   
