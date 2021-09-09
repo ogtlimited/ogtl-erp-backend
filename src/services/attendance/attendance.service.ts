@@ -42,7 +42,6 @@ class AttendanceTypeService {
             {
               'departmentId': new ObjectId(query.departmentId)
             }
-           
           ],  
             'createdAt': {
               '$gte': new Date(startOfMonth), 
@@ -69,8 +68,7 @@ class AttendanceTypeService {
           continue
         }
         employee.attendance = employeeAttendance[0]
-        payload.push(employee)
-        
+        payload.push(employee)        
       }
     return payload;
   }
