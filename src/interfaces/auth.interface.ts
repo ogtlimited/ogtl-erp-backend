@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { EmployeeLoginDto } from '@dtos/employee/employee.dto';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
 import { Request } from 'express';
