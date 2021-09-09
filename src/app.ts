@@ -1,7 +1,9 @@
 /* eslint-disable prettier/prettier */
 process.env['NODE_CONFIG_DIR'] = __dirname + '/configs';
 
+
 import compression from 'compression';
+import { dirname } from 'path';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import config from 'config';
@@ -18,14 +20,18 @@ import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
 import * as cron from 'node-cron';
 import attendanceModel  from '@models/attendance/attendance.model';
-import {getWorkTime, calculateLateness}  from '@/utils/attendanceCalculator';
+// import {getWorkTime, calculateLateness}  from '@/utils/attendanceCalculator';
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config({ path: dirname( module.paths[1] ) + "/.env" });
+}
 
 class App {
   public app: express.Application;
   public port: string | number;
   public env: string;
 
-  constructor(routes: Routes[]) {
+  constructor(routes: Routes[]) { 
+
     this.app = express();
     this.port = process.env.PORT || 3000;
     this.env = process.env.NODE_ENV || 'development';
@@ -54,9 +60,8 @@ class App {
   private connectToDatabase() {
     if (this.env !== 'production') {
       set('debug', true);
-    }
-
-    connect(dbConnection.url, dbConnection.options);
+    }    
+    connect(process.env.databaseUrl, dbConnection.options);
   }
 
   private initializeMiddlewares() {
@@ -152,53 +157,53 @@ class App {
     this.app.use(errorMiddleware);
   }
 
-  private  initializeCron(){
+  // private  initializeCron(){
 
-    const task = cron.schedule('* * * * *', async function() {
-      console.log('running a task every minute');
-      const d = new Date();
-      console.log('At 1 Minutes:', d);
-      const num = 23;
-      const data: any = {
-      employeeId: "612cead8fc13ae35b5000353",
-      shiftTypeId: "612ceef7fc13ae57e600012c",
-      departmentId: "612ce924fc13ae5329000af8",
-      clockInTime: new Date(2021, 7, Number(num), 10,),
-      clockOutTime: new Date(2021, 7, Number(num), 18,),
-      ogId: "850rho199",
-    }
+  //   const task = cron.schedule('* * * * *', async function() {
+  //     console.log('running a task every minute');
+  //     const d = new Date();
+  //     console.log('At 1 Minutes:', d);
+  //     const num = 23;
+  //     const data: any = {
+  //     employeeId: "612cead8fc13ae35b5000353",
+  //     shiftTypeId: "612ceef7fc13ae57e600012c",
+  //     departmentId: "612ce924fc13ae5329000af8",
+  //     clockInTime: new Date(2021, 7, Number(num), 10,),
+  //     clockOutTime: new Date(2021, 7, Number(num), 18,),
+  //     ogId: "850rho199",
+  //   }
   
-    const result: any = await getWorkTime(data.clockInTime, data.clockOutTime);
-    data.hoursWorked = result.hoursWorked
-    data.minutesWorked = result.minutesWorked    
-    await attendanceModel.create(data);
+  //   const result: any = await getWorkTime(data.clockInTime, data.clockOutTime);
+  //   data.hoursWorked = result.hoursWorked
+  //   data.minutesWorked = result.minutesWorked    
+  //   await attendanceModel.create(data);
 
-    });
+  //   });
 
-    task.start()
-    // console.log('Before job instantiation');
-    // const job = new CronJob('* 1 * * * *', async function() {
-    //   const d = new Date();
-    //   console.log('At 1 Minutes:', d);
-    //   const num = 23;
-    //   const data: any = {
-    //   employeeId: "612cead8fc13ae35b5000353",
-    //   shiftTypeId: "612ceef7fc13ae57e600012c",
-    //   departmentId: "612ce924fc13ae5329000af8",
-    //   clockInTime: new Date(2021, 7, Number(num), 10,),
-    //   clockOutTime: new Date(2021, 7, Number(num), 18,),
-    //   ogId: "850rho199",
-    // }
+  //   task.start()
+  //   // console.log('Before job instantiation');
+  //   // const job = new CronJob('* 1 * * * *', async function() {
+  //   //   const d = new Date();
+  //   //   console.log('At 1 Minutes:', d);
+  //   //   const num = 23;
+  //   //   const data: any = {
+  //   //   employeeId: "612cead8fc13ae35b5000353",
+  //   //   shiftTypeId: "612ceef7fc13ae57e600012c",
+  //   //   departmentId: "612ce924fc13ae5329000af8",
+  //   //   clockInTime: new Date(2021, 7, Number(num), 10,),
+  //   //   clockOutTime: new Date(2021, 7, Number(num), 18,),
+  //   //   ogId: "850rho199",
+  //   // }
   
-    // const result: any = await getWorkTime(data.clockInTime, data.clockOutTime);
-    // data.hoursWorked = result.hoursWorked
-    // data.minutesWorked = result.minutesWorked    
-    // await attendanceModel.create(data);
-    // });
-    // console.log('After job instantiation');
-    // job.
-    // console.log('is job running? ', job.running);
-  }
+  //   // const result: any = await getWorkTime(data.clockInTime, data.clockOutTime);
+  //   // data.hoursWorked = result.hoursWorked
+  //   // data.minutesWorked = result.minutesWorked    
+  //   // await attendanceModel.create(data);
+  //   // });
+  //   // console.log('After job instantiation');
+  //   // job.
+  //   // console.log('is job running? ', job.running);
+  // }
 }
 
 export default App;

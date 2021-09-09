@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { IPayRollEntry } from '@/interfaces/payroll/payroll-Entry.interface';
-import { model, Schema } from 'mongoose';
+import { model, Schema, Document } from 'mongoose';
 
 /*
  Reconsider having an array field: employees
