@@ -48,9 +48,9 @@ import LoanRoute from '@routes/loan/loan.route';
 import LoanTypeRoute from '@routes/loan/loan-type.route';
 import LoanApplicationRoute from '@routes/loan/loan-application.route';
 import CoachingFormRoute from './routes/coaching/coachingForm.route';
-import ProjectRoute from './routes/project/client.route';
 import ClientRoute  from '@routes/project/client.route';
 import AssetsRoute from '@routes/assets/assets.route';
+import ProjectRoute from '@routes/project/project.route';
 
 
 
@@ -99,11 +99,12 @@ const app = new App([
   new LoanRoute(),
   new LoanTypeRoute(),
   // new LoanApplicationRoute(),
-  new CoachingFormRoute(),
+
   new ProjectRoute(),
   new ClientRoute(),
   new AssetsRoute(),
 
+  new CoachingFormRoute()
 ]);
 
 app.listen();

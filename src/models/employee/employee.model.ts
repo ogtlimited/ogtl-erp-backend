@@ -59,12 +59,12 @@ const employeeSchema: Schema = new Schema(
     },
     image: {
       type: String,
-      
+
     },
     last_name: {
       type: String,
       required: true,
-    
+
     },
     middle_name: {
       type: String,
@@ -78,6 +78,14 @@ const employeeSchema: Schema = new Schema(
     },
     permissionLevel: {
       type: Number,
+    },
+    warningCount:{
+      type: Number,
+      default:0,
+    },
+    isInPIP:{
+      type: Boolean,
+      default: false,
     }
   }
 );
