@@ -5,11 +5,6 @@ import { model, Schema, Document } from 'mongoose';
 
 const salaryStructureSchema: Schema = new Schema(
   {
-    payrollFrequency: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: 'PayrollFrequency',
-    },
     deductions: [
       {
         type: Schema.Types.ObjectId,
@@ -27,10 +22,6 @@ const salaryStructureSchema: Schema = new Schema(
       required: true,
       ref: 'Status',
     },
-    // currency: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: 'Currency',
-    // },
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: 'Employee',

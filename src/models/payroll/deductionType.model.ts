@@ -3,14 +3,12 @@ import { model, Schema} from 'mongoose';
 
 const deductionTypeSchema: Schema = new Schema(
   {
-    departmentId: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "Department"
-    },
     title: {
       type: String,
       required: true
+    },
+    description: {
+      type: String,
     },
     status: {
       type: Schema.Types.ObjectId,
@@ -27,7 +25,9 @@ const deductionTypeSchema: Schema = new Schema(
     },
     amount: {
       type: Number,
-      required: true
+    },
+    percentage: {
+      type: Number,
     }
   },
   {

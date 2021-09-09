@@ -10,18 +10,17 @@ const salaryComponentSchema: Schema = new Schema(
     },
     salaryComponentAbbr: {
       type: String,
-      required: true,
     },
     title: {
       type: String,
       required: true,
     },
+    amount: {
+      type: Number,
+      required: true,
+    },
     description: {
       type: String
-    },
-    isTaxApplicable: {
-      type: Boolean,
-      required: true,
     },
     type:{
         enum: ["deduction", "earning"],

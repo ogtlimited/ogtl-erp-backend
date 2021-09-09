@@ -14,35 +14,10 @@ const salarySlipSchema: Schema = new Schema(
       required: true,
       ref: "SalaryStructure"
     },
-    designation: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "Designation"
-    },
-    department: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "Department"
-    },
-    branch: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "Branch"
-    },
     Status: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "Status"
-    },
-    payRollEntry: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "PayRollEntry"
-    },
-    bank: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "Bank"
     },
     loans: {
       type: Schema.Types.ObjectId,
@@ -56,33 +31,12 @@ const salarySlipSchema: Schema = new Schema(
       type: String,
       required: true,
     },
-    totalWorkingDays: {
-      type: Number,
-      required: true,
-    },
-    paymentDays: {
-      type: Number,
-      required: true,
-    },
-    totalWorkingHours: {
-      type: Number,
-      required: true,
-    },
-    totalDeduction: {
-      type: Number,
-      required: true,
-    },
     netPay: {
       type: Number,
       required: true,
     },
-    startDate: {
-      type: Boolean,
-      required: true,
-    },
-    endDate: {
-      type: Boolean,
-      required: true,
+    month: {
+      type: Date,
     },
     createdBy: {
       type: Schema.Types.ObjectId,
