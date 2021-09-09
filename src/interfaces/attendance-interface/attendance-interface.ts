@@ -13,3 +13,11 @@ export interface IAttendanceCreatedResponse {
     shiftTypeId: string;
     statusId: string;
 }
+
+export interface ICreateAttendance {
+    ogId: string;
+    shiftTypeId?: string;
+    clockInTime: string;
+    departmentId?: string;
+    projectId?: string;
+}
