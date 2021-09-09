@@ -42,15 +42,15 @@ class AuthService {
     return { token: tokenData, employee };
   }
 
-  // public async logout(EmployeeData: EmployeeLoginDto): Promise<Employee> {
-  //   if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
-  //
-  //   const findEmployee: Employee = await this.Employees.findOne({ email: EmployeeData.company_email, password: EmployeeData.password });
-  //
-  //   if (!findEmployee) throw new HttpException(409, `You're email ${EmployeeData.company_email} not found`);
-  //
-  //   return findEmployee;
-  // }
+  public async logout(EmployeeData: EmployeeLoginDto): Promise<Employee> {
+    if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
+
+    const findEmployee: Employee = await this.Employees.findOne({ email: EmployeeData.ogid, password: EmployeeData.password });
+
+    if (!findEmployee) throw new HttpException(409, `Ogid ${EmployeeData.ogid} not found`);
+
+    return findEmployee;
+  }
   public createToken(Employee: Employee): TokenData {
     const dataStoredInToken: DataStoredInToken = { _id: Employee._id };
 
