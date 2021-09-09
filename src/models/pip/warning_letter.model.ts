@@ -9,11 +9,6 @@ const warningLetterSchema: Schema = new Schema(
       required: true,
       ref: "Employee",
     },
-    hr_user_id: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "Employee",
-    },
     reason: {
       type: String,
       required: true
@@ -30,14 +25,6 @@ const warningLetterSchema: Schema = new Schema(
       type: Date,
       default: null,
     },
-    warningCount:{
-      type: Number,
-      default:0,
-    },
-    isInPip:{
-      type: Boolean,
-      default: false,
-    }
   },
   {
     timestamps: true,

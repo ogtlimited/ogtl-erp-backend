@@ -8,10 +8,6 @@ export class CreateWarningLetterDto {
 
   @IsNotEmpty()
   @IsString()
-  public hr_user_id: string;
-
-  @IsNotEmpty()
-  @IsString()
   public reason: string;
 
   @IsNotEmpty()
@@ -26,9 +22,4 @@ export class CreateWarningLetterDto {
   @IsDateString()
   public date_issued: Date;
 
-  // @IsNumber()
-  // public warningCount: number;
-  //
-  // @IsBoolean()
-  // public isInPip: boolean;
 }

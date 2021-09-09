@@ -4,6 +4,7 @@ import { HttpException } from '@exceptions/HttpException';
 import { IShiftType } from '@interfaces/shift-interface/shift_type.interface';
 import shiftTypeModel from '@models/shift/shift_type.model';
 import { isEmpty } from '@utils/util';
+import { SumHours } from '@utils/calculateTimeDifference';
 
 class shiftTypeService {
   public shiftTypes = shiftTypeModel;
@@ -26,6 +27,8 @@ class shiftTypeService {
 
     const findShiftType: IShiftType = await this.shiftTypes.findOne({ shift_name: shiftTypeData.shift_name });
     if (findShiftType) throw new HttpException(409, `${shiftTypeData.shift_name} already exists`);
+    const result = SumHours(shiftTypeData.end_time,shiftTypeData.start_time)
+    if(result < 8) throw new HttpException(409,"Working hours has to be greater than 8");
     return await this.shiftTypes.create(shiftTypeData);
   }
 

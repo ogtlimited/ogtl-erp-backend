@@ -3,7 +3,7 @@
 
 import { IsEmail, IsString,IsBoolean } from 'class-validator';
 
-export class CreateEmployeeDto {  
+export class CreateEmployeeDto {
 
 
   @IsString()
@@ -50,6 +50,8 @@ export class CreateEmployeeDto {
 
   @IsString()
   public status: string;
+
+
 
 
 }
