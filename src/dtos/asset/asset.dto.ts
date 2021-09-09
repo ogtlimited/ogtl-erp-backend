@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {IsDateString, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateAssetDto{
@@ -15,7 +16,7 @@ export class CreateAssetDto{
 
     @IsNotEmpty()
     @IsDateString()
-    public purchaseDate: string; 
+    public purchaseDate: string;
 
     @IsNotEmpty()
     @IsString()
@@ -47,17 +48,18 @@ export class CreateAssetDto{
     @IsString()
     public value: string;
 
- 
+
     @IsString()
     public description: string;
 
 
-    
+
 
 }
 
 export class UpdateAssetDto{
-    
+    @IsString()
+    public _id : string;
 
     @IsNotEmpty()
     @IsString()
@@ -74,7 +76,7 @@ export class UpdateAssetDto{
 
     @IsNotEmpty()
     @IsDateString()
-    public purchaseDate: string; 
+    public purchaseDate: string;
 
     @IsNotEmpty()
     @IsString()
@@ -106,7 +108,7 @@ export class UpdateAssetDto{
     @IsString()
     public value: string;
 
- 
+
     @IsString()
     public description: string;
 

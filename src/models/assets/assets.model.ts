@@ -7,7 +7,7 @@ const AssetsSchema: Schema = new Schema(
         assetName: {
             type: String,
             required: true,
-            
+
           },
           assetId: {
             type: String,
@@ -17,22 +17,22 @@ const AssetsSchema: Schema = new Schema(
           assigned_to: {
             type: String,
             required: true,
-            
+
           },
           purchaseDate: {
             type: Date,
             required: true,
-           
+
           },
-          maufacturer: {
+          manufacturer: {
             type: String,
             required: true,
-            
+
           },
           model: {
             type: String,
             required: true,
-            
+
           },
           serialNumber: {
             type: String,
@@ -42,29 +42,30 @@ const AssetsSchema: Schema = new Schema(
           supplier: {
             type: String,
             required: true,
-            
+
           },
           condition: {
             type: String,
             required: true,
+            enum : ["Fair", "Excellent", "Terrible"]
 
-            
+
           },
           warranty: {
             type: String,
             required: true,
-            enum : ["Fair", "Excellent", "Terrible"]
-            
+
+
           },
           value: {
             type: String,
             required: true,
-            
+
           },
           description: {
             type: String,
-            required: true,
-            
+
+
           },
 
     },

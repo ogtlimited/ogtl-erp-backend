@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Router } from 'express';
 import { Routes } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
@@ -15,11 +16,11 @@ class AssetsRoute implements Routes {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}`,authMiddleware, this.AssetsController.getAssetes);
+        this.router.get(`${this.path}`,authMiddleware, this.AssetsController.getAssets);
         this.router.get(`${this.path}/:id`,authMiddleware, this.AssetsController.getAssetById);
-        this.router.post(`${this.path}` , [validationMiddleware(CreateAssetDto, 'body'), authMiddleware], this.AssetsController.CreateAsset);
+        this.router.post(`${this.path}` , [validationMiddleware(CreateAssetDto, 'body'),authMiddleware], this.AssetsController.CreateAsset);
         this.router.put(`${this.path}/:id`, [validationMiddleware(UpdateAssetDto, 'body', true),authMiddleware], this.AssetsController.updateAsset);
-        this.router.delete(`${this.path}/:id`,authMiddleware, this.AssetsController.deleteAsset);
+        this.router.delete(`${this.path}/:id`,authMiddleware ,this.AssetsController.deleteAsset);
       }
     }
 

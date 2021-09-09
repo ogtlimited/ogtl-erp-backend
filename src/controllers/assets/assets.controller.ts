@@ -8,11 +8,11 @@ class AssetsController {
   public AssetService = new AssetService();
 
   //Returns all Assets
-  public getAssetes = async (req: Request, res: Response, next: NextFunction) => {
+  public getAssets = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const findAllAssetsData: Assets[] = await this.AssetService.findAllAsset();
 
-      res.status(200).json({ data: findAllAssetsData, numAssetes: findAllAssetsData.length, message: 'All Assets' });
+      res.status(200).json({ data: findAllAssetsData, numAssets: findAllAssetsData.length, message: 'All Assets' });
     } catch (error) {
       next(error);
     }
@@ -23,7 +23,7 @@ class AssetsController {
     try {
       const AssetData: CreateAssetDto = req.body;
       const createAssetData: Assets = await this.AssetService.createAssets(AssetData);
-      res.status(201).json({ data: createAssetData, message: 'Asset succesfully created' });
+      res.status(201).json({ data: createAssetData, message: 'Asset successfully created' });
     } catch (error) {
       next(error);
     }
@@ -34,7 +34,7 @@ class AssetsController {
     try {
       const AssetId: string = req.params.id;
       const findOneAssetData: Assets = await this.AssetService.findAssetsById(AssetId);
-      res.status(200).json({ data: findOneAssetData, message: 'All Assetes' });
+      res.status(200).json({ data: findOneAssetData, message: 'All Assets' });
     } catch (error) {
       next(error);
     }
