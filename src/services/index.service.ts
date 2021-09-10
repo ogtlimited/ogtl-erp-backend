@@ -13,6 +13,7 @@ import PersonalDetailsService from '@services/employee/personal-details.service'
 import SalaryDetailsService from '@services/employee/salary-details.service';
 import WorkExperienceService from '@services/employee/work-experience.service';
 import BranchService from '@services/employee/branch.service';
+import EmployeeTypeService from '@services/employee/employee-type.service';
 
 class CombineServices {
   public designationS = new DesignationService();
@@ -29,6 +30,7 @@ class CombineServices {
   public salaryDetailS = new SalaryDetailsService()
   public  workExperienceS = new WorkExperienceService()
   public brancheS = new BranchService()
+  public employeeTypeS = new EmployeeTypeService()
 //   public departmentS = new Department
 
   public async createEmployeeFormSelection(){
@@ -38,13 +40,15 @@ class CombineServices {
     const projects = await this.projectS.findAll();
     const jobApplicants = await this.jobApplicantS.findAllJobApplicants()
     const branches = await this.brancheS.findAllBranches();
+    const employeeTypes = await this.employeeTypeS.findAllEmployeeTypes()
     return {
         shifts: shifts,
         designations: designations,
         employees,
         projects,
         jobApplicants,
-        branches
+        branches,
+        employeeTypes
     }
   }
 
