@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import { IsEmail, IsString,IsBoolean } from 'class-validator';
+import { IsEmail, IsString,IsBoolean, IsNumber } from 'class-validator';
 
 export class CreateEmployeeDto {
 
@@ -100,6 +100,20 @@ export class UpdateEmployeeDto {
 
   @IsString()
   public permissionLevel: string;
+
+
+}
+export class UpdateEmployeePermissionDto {
+
+  @IsEmail()
+  public company_email: string;
+
+  @IsString()
+  public department: string;
+
+
+  @IsNumber()
+  public permissionLevel: number;
 
 
 }
