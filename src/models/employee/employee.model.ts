@@ -24,8 +24,9 @@ const employeeSchema: Schema = new Schema(
       default: null,
     },
     department:  {
-      type: String,
-      enum: ["HR", "Account", "Operations", "Facilities", "IT"],
+      type: Schema.Types.ObjectId,
+      ref: 'Department',
+      default: null
     },
     password:  {
       type: String,

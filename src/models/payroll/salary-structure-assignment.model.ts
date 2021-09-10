@@ -4,15 +4,10 @@ import { model, Schema, Document } from 'mongoose';
 
 const salaryStructureAssignmentSchema: Schema = new Schema(
   {
-    employee: {
+    employeeId: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "Employee"
-    },
-    department: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "Department"
     },
     salaryStructure: {
       type: Schema.Types.ObjectId,

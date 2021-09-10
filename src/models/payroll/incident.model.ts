@@ -1,15 +1,14 @@
 /* eslint-disable prettier/prettier */
 import { model, Schema} from 'mongoose';
 
-const deductionSchema: Schema = new Schema(
+//should have the option to reference assests
+
+const incidentSchema: Schema = new Schema(
   {
-    deductionTypeId: {
+    description: {
       type: Schema.Types.ObjectId,
-      ref: "DeductionType"
-    },
-    incidentTypeId: {
-      type: Schema.Types.ObjectId,
-      ref: "Incident"
+      required: true,
+      ref: "incidentType"
     },
     employeeId: {
         type: Schema.Types.ObjectId,
@@ -34,5 +33,5 @@ const deductionSchema: Schema = new Schema(
   },
 );
 
-const deductionModel = model('Deduction', deductionSchema);
-export default deductionModel;
+const incidentModel = model('Incident', incidentSchema);
+export default incidentModel;

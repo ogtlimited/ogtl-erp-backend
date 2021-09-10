@@ -8,62 +8,30 @@ import { model, Schema, Document } from 'mongoose';
 */
 const payRollEntrySchema: Schema = new Schema(
   {
-    branch: {
+    employeeId: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "Branch"
     },
-    department: {
+    departmentId: {
       type: Schema.Types.ObjectId,
-      required:true,
       ref: "Department"
+    },
+    projectId: {
+      type: Schema.Types.ObjectId,
+      ref: "Project"
     },
     status: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "Status"
     },
-    payrollFrequency: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "PayrollFrequency"
-    },
-    paymentAccount: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "PaymentAccount"
-    },
     startDate: {
       type: Date,
-      required: true,
     },
     endDate: {
       type: Date,
-      required: true,
-    },
-    salarySlipsCreated: {
-      type: Boolean,
-      required:true
-    },
-    validateAttendance: {
-      type: Boolean,
-      required:true
-    },
-    salarySlipsSubmitted: {
-      type: Boolean,
-      required:true
-    },
-    numberOfEmployees: 
-      {
-          type: Number,
-          required: true
-      },
-    employees:[
-      {
-          type: Schema.Types.ObjectId,
-          ref: "Employee"
-      }
-  ]
+    }
   },
   {
     timestamps: true,

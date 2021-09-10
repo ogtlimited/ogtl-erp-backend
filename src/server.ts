@@ -51,6 +51,7 @@ import CoachingFormRoute from './routes/coaching/coachingForm.route';
 import ClientRoute  from '@routes/project/client.route';
 import AssetsRoute from '@routes/assets/assets.route';
 import ProjectRoute from '@routes/project/project.route';
+import DepartmentRoute from './routes/employee/department.route';
 
 
 
@@ -103,8 +104,8 @@ const app = new App([
   new ProjectRoute(),
   new ClientRoute(),
   new AssetsRoute(),
-
-  new CoachingFormRoute()
+  new CoachingFormRoute(),
+  new DepartmentRoute()
 ]);
 
 app.listen();

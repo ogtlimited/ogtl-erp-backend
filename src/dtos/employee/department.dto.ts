@@ -1,20 +1,20 @@
 /* eslint-disable prettier/prettier */
 import {IsNotEmpty, IsString } from 'class-validator';
 
-export class CreateDesignationDto{
-   @IsNotEmpty()
+export class CreateDepartmentDto{
+    @IsNotEmpty()
     @IsString()
-    public designation: string;
+    public department: string;
 
 
 }
-export class UpdateDesignationDto{
+export class UpdateDepartmentDto{
     @IsString()
     public _id: string;
 
     @IsNotEmpty()
     @IsString()
-    public designation: string;
+    public department: string;
 
 
 }
