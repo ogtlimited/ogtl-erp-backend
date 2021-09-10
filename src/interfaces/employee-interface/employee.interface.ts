@@ -9,7 +9,6 @@ export interface Employee {
     password: string;
     designation: string;
     first_name: string;
-    employment_type: string;
     branch:string;
     employeeType:string;
     projectId:string;

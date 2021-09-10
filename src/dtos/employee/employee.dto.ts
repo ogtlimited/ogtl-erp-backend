@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import { IsEmail, IsString,IsBoolean,IsDateString} from 'class-validator';
+import { IsEmail, IsString,IsBoolean} from 'class-validator';
 
 export class CreateEmployeeDto {
   @IsString()

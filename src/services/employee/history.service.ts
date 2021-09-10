@@ -28,13 +28,13 @@ class HistoryService{
         if (isEmpty(HistoryData)) throw new HttpException(400, "No data provided");
 
         //check if employee already provided History details
-        const findHistory: History = await this.Historys.findOne({id: HistoryData.employee_id});
-
-        if(findHistory) throw new HttpException(409, `Employee ${HistoryData.employee_id} already provided details`);
-
-        const createHistoryData = await this.Historys.create(HistoryData);
-
-        return createHistoryData;
+        // const findHistory: History = await this.Historys.findOne({employee_id: HistoryData.employee_id});
+        //
+        // if(findHistory) throw new HttpException(409, `Employee ${HistoryData.employee_id} already provided details`);
+        const newHistory = await this.Historys.create(HistoryData);
+        const newData = await this.Historys.findOne({ employee_id: newHistory.employee_id }).populate("branch_id designation_id");
+        return newData
+      // return await this.Historys.create(HistoryData);
     }
 
     //Updates History Details
