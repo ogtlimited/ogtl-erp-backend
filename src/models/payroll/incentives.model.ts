@@ -9,9 +9,9 @@ const incentiveSchema: Schema = new Schema(
       required: true,
       ref: "Employee"
     },
-    additionalSalary: {
-      type: Schema.Types.ObjectId,
-      ref: "AdditionalSalary"
+    title: {
+      type: String,
+      required: true
     },
     salaryComponent: {
       type: Schema.Types.ObjectId,

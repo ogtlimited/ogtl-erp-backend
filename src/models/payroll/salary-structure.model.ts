@@ -22,10 +22,6 @@ const salaryStructureSchema: Schema = new Schema(
       required: true,
       ref: 'Status',
     },
-    // currency: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: 'Currency',
-    // },
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: 'Employee',
