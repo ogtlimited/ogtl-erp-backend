@@ -145,7 +145,8 @@ class App {
         'swagger/loan/loan-application.yaml',
         'swagger/company/company.yaml',
         'swagger/project/project.yaml',
-        'swagger/project/client.yaml'
+        'swagger/project/client.yaml',
+        'swagger/assets/assets.yaml'
               ],
     };
 

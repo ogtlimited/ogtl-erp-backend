@@ -20,8 +20,8 @@ class EmergencyContactRoute implements Routes {
     private initializeRoutes() {
         this.router.get(`${this.path}`,authMiddleware, this.EmergencyContactController.getEmergencyContacts);
         this.router.get(`${this.path}/:id`, authMiddleware,this.EmergencyContactController.getEmergencyContactById);
-        this.router.post(`${this.path}`,authMiddleware, validationMiddleware(CreateEmergencyContactDto, 'body'), this.EmergencyContactController.CreateEmergencyContacts);
-        this.router.put(`${this.path}/:id`,authMiddleware, validationMiddleware(UpdateEmergencyContactDto, 'body', true), this.EmergencyContactController.updateEmergencyContacts);
+        this.router.post(`${this.path}`,[ validationMiddleware(CreateEmergencyContactDto, 'body'),authMiddleware], this.EmergencyContactController.CreateEmergencyContacts);
+        this.router.put(`${this.path}/:id`,[validationMiddleware(UpdateEmergencyContactDto, 'body', true),authMiddleware], this.EmergencyContactController.updateEmergencyContacts);
         this.router.delete(`${this.path}/:id`,authMiddleware, this.EmergencyContactController.deleteEmergencyContacts);
       }
     }
