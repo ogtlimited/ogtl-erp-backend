@@ -66,7 +66,7 @@ class PersonalDetailsService{
             if(findPersonalDetails && findPersonalDetails._id != PersonalDetailsId) throw new HttpException(409, `Employee ${PersonalDetailData.employee_id} Personal details dont exist`);
         }
 
-        const updatePersonalDetailsData: PersonalDetail = await this.PersonalDetails.findByIdAndUpdate(PersonalDetailsId,{PersonalDetailData})
+        const updatePersonalDetailsData: PersonalDetail = await this.PersonalDetails.findByIdAndUpdate(PersonalDetailsId,PersonalDetailData);
         if(!updatePersonalDetailsData) throw new HttpException(409, "details could not be updated");
         return updatePersonalDetailsData;
     }

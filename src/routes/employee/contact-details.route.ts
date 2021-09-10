@@ -22,6 +22,6 @@ class ContactDetailsRoute implements Routes {
         this.router.put(`${this.path}/:id`,authMiddleware, validationMiddleware(UpdateContactDetailsDto, 'body', true), this.ContactDetailsController.updateContactDetails);
         this.router.delete(`${this.path}/:id`,authMiddleware, this.ContactDetailsController.deleteContactDetails);
       }
-    }
+    } 
 
     export default ContactDetailsRoute;
