@@ -39,7 +39,7 @@ class scoreCardService{
     public async updateScoreCard(scoreCardId:string,scoreCardData:UpdateScoreCardDto) : Promise<IScoreCard>{
          //Check if data is empty
         if (isEmpty(scoreCardData)) throw new HttpException(400, "No data provided");
-        const updateScoreCardById: IScoreCard = await this.scoreCard.findByIdAndUpdate(scoreCardId,{scoreCardData});
+        const updateScoreCardById: IScoreCard = await this.scoreCard.findByIdAndUpdate(scoreCardId,scoreCardData);
         if(!updateScoreCardById) throw new HttpException(409,"Score Card does not exist");
         return updateScoreCardById;
     }

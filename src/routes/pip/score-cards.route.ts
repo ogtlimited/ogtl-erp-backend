@@ -17,8 +17,8 @@ class scoreCardRoute implements Routes{
     private initializeRoutes(){
         this.router.get(`${this.path}`,authMiddleware, this.scoreCardController.getScoreCards);
         this.router.get(`${this.path}/:id`, authMiddleware,this.scoreCardController.getScoreCardById);
-        this.router.post(`${this.path}`, authMiddleware,validationMiddleware(CreateScoreCardDto, 'body'), this.scoreCardController.createScoreCard);
-        this.router.put(`${this.path}/:id`,authMiddleware, validationMiddleware(UpdateScoreCardDto, 'body', true), this.scoreCardController.updateScoreCard);
+        this.router.post(`${this.path}`, [validationMiddleware(CreateScoreCardDto, 'body'),authMiddleware], this.scoreCardController.createScoreCard);
+        this.router.put(`${this.path}/:id`,[ validationMiddleware(UpdateScoreCardDto, 'body', true),authMiddleware], this.scoreCardController.updateScoreCard);
         this.router.delete(`${this.path}/:id`,authMiddleware, this.scoreCardController.deleteScoreCard);
     }
 }

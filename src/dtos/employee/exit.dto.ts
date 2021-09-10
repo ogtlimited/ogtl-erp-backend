@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {IsDate, IsNotEmpty, IsString } from 'class-validator';
+import {IsDate, IsDateString, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateExitDto{
     
@@ -8,10 +8,10 @@ export class CreateExitDto{
     @IsString()    
         public employee_id: string;
 
-    @IsDate()
+    @IsDateString()
         public resignation_letter_date: Date;
     
-    @IsDate()
+    @IsDateString()
         public relieving_date: Date;
 
     @IsString()
@@ -20,7 +20,7 @@ export class CreateExitDto{
     @IsString()
         public leave_encashed: string;
     
-    @IsDate()
+    @IsDateString()
         public encashment_date: Date;
     
     @IsString()
@@ -41,10 +41,10 @@ export class UpdateExitDto{
     @IsString()
         public employee_id: string;
 
-    @IsDate()
+    @IsDateString()
         public resignation_letter_date: Date;
     
-    @IsDate()
+    @IsDateString()
         public relieving_date: Date;
 
     @IsString()
@@ -53,7 +53,7 @@ export class UpdateExitDto{
     @IsString()
         public leave_encashed: string;
     
-    @IsDate()
+    @IsDateString()
         public encashment_date: Date;
     
     @IsString()

@@ -61,7 +61,7 @@ class SalaryDetailsService{
             if(findSalaryDetails && findSalaryDetails._id != SalaryDetailsId) throw new HttpException(409, `Employee ${SalaryDetailData.employee_id} Salary details dont exist`);
         }
 
-        const updateSalaryDetailsData: SalaryDetail = await this.SalaryDetails.findByIdAndUpdate(SalaryDetailsId,{SalaryDetailData})
+        const updateSalaryDetailsData: SalaryDetail = await this.SalaryDetails.findByIdAndUpdate(SalaryDetailsId,SalaryDetailData)
         if(!updateSalaryDetailsData) throw new HttpException(409, "details could not be updated");
         return updateSalaryDetailsData;
     }

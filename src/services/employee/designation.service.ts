@@ -63,7 +63,7 @@ public async findDesignationById(DesignationId:string) : Promise<Designation>{
         //Check if data is empty
         if (isEmpty(DesignationData)) throw new HttpException(400, "No data provided");
 
-        const updateDesignationById: Designation = await this.Designations.findByIdAndUpdate(DesignationId,{DesignationData});
+        const updateDesignationById: Designation = await this.Designations.findByIdAndUpdate(DesignationId,DesignationData);
         if(!updateDesignationById) throw new HttpException(409, "Designation doesn't exist");
          return updateDesignationById;
    }

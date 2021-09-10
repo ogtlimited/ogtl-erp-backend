@@ -17,7 +17,7 @@ export class CreateSalaryDetailsDto{
        public bank_code: string;
     
     @IsNumber()
-        public bank_account_number: string;
+        public bank_account_number: number;
 
 
 }
@@ -40,7 +40,7 @@ export class UpdateSalaryDetailsDto{
       public bank_code: string;
    
     @IsNumber()
-       public bank_account_number: string;
+       public bank_account_number: number;
 
 
 }

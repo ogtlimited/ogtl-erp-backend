@@ -20,8 +20,8 @@ class ExitRoute implements Routes {
     private initializeRoutes() {
         this.router.get(`${this.path}`,authMiddleware, this.ExitController.getExits);
         this.router.get(`${this.path}/:id`,authMiddleware, this.ExitController.getExitById);
-        this.router.post(`${this.path}`, authMiddleware,validationMiddleware(CreateExitDto, 'body'), this.ExitController.CreateExit);
-        this.router.put(`${this.path}/:id`, authMiddleware,validationMiddleware(UpdateExitDto, 'body', true), this.ExitController.updateExit);
+        this.router.post(`${this.path}`,[validationMiddleware(CreateExitDto, 'body'),authMiddleware], this.ExitController.CreateExit);
+        this.router.put(`${this.path}/:id`, [validationMiddleware(UpdateExitDto, 'body', true),authMiddleware], this.ExitController.updateExit);
         this.router.delete(`${this.path}/:id`,authMiddleware, this.ExitController.deleteExit);
       }
     }

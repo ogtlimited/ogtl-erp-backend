@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import warningLetterModel from '@models/pip/warning_letter.model';
 import { IWarningLetter } from '@interfaces/pip-interface/warning_letter.interface';
 import { isEmpty } from '@utils/util';

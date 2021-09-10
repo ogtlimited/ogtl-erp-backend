@@ -13,7 +13,7 @@ export interface Employee {
     employeeType:string;
     projectId:string;
     status: string;
-    permissionLevel: string;
+    permissionLevel: number;
     warningCount: number;
     isInPIP: boolean
 

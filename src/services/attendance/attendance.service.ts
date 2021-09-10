@@ -102,7 +102,6 @@ class AttendanceTypeService {
         }
         attendanceTypeData.shiftTypeId = employee.default_shift;
         const attendance = await this.attendanceTypes.create(attendanceTypeData);
-
         // const allEmployeeAttendance = await this.findAllEmployeeAttendance(attendanceTypeData.ogId, {departmentId: attendanceTypeData.departmentId})
         return {attendance};
       }  

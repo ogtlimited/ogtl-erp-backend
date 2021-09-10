@@ -1,9 +1,10 @@
+/* eslint-disable prettier/prettier */
 import {IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateDesignationDto{
    @IsNotEmpty()
     @IsString()
-        public designation: string;
+    public designation: string;
 
 
 }
@@ -13,7 +14,7 @@ export class UpdateDesignationDto{
 
     @IsNotEmpty()
     @IsString()
-        public designation: string;
+    public designation: string;
 
 
 }

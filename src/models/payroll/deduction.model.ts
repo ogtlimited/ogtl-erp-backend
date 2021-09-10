@@ -5,8 +5,11 @@ const deductionSchema: Schema = new Schema(
   {
     deductionTypeId: {
       type: Schema.Types.ObjectId,
-      required: true,
       ref: "DeductionType"
+    },
+    incidentTypeId: {
+      type: Schema.Types.ObjectId,
+      ref: "Incident"
     },
     employeeId: {
         type: Schema.Types.ObjectId,
@@ -21,9 +24,9 @@ const deductionSchema: Schema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Employee"
     },
-    quantity: {
+    amount: {
       type: Number,
-      default: 1
+      required: true
     }
   },
   {
