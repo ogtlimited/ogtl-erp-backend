@@ -13,7 +13,6 @@ const moment = require('moment');
 
 class AttendanceTypeService {
   public attendanceTypes = attendanceModel;
-
   public async findAllDepartmentAttendance(id, query): Promise<any> {
     const payload = []
     const {clockInTime, clockOutTime} = query
