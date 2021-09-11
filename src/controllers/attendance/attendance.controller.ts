@@ -19,7 +19,7 @@ class AttendanceController {
 
   public getDepartmentAttendance = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const findAllDepartmentAttendanceData = await this.attendanceService.findAllDepartmentAttendance(req.query);
+      const findAllDepartmentAttendanceData = await this.attendanceService.findAllDepartmentAttendance(req.params.id, req.query);
       res.status(200).json({ data: findAllDepartmentAttendanceData});
     } catch (error) {
       next(error);
