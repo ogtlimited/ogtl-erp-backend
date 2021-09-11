@@ -4,11 +4,11 @@ import { model, Schema } from 'mongoose';
 
 const attendanceSchema: Schema = new Schema(
   {
-    employeeId: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "Employee"
-    },
+    // employeeId: {
+    //   type: Schema.Types.ObjectId,
+    //   required: true,
+    //   ref: "Employee"
+    // },
     ogId: {
       type: String,
       required: true,
@@ -24,7 +24,7 @@ const attendanceSchema: Schema = new Schema(
     },
     projectId: {
       type: Schema.Types.ObjectId,
-      ref: "Department"
+      ref: "Project"
     },
     clockInTime: {
       type: Date

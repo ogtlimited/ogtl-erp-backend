@@ -1,10 +1,9 @@
 /* eslint-disable prettier/prettier */
 export interface ISalaryComponent {
-    title: string;
+    salaryComponent: string;
     salaryComponentAbbr?: string;
     description: string;
+    dependsOnPaymentDays: boolean;
     amount: Number;
     type: string;
-    departmentId?: string;
-    projectId?: string;
 }

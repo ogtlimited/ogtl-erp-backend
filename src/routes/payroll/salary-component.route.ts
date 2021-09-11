@@ -16,9 +16,9 @@ class SalaryComponentRoute implements Routes {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}`, [],this.salaryComponentController.findAll);
-        this.router.get(`${this.path}/:id`,[], this.salaryComponentController.findById);
-        this.router.post(`${this.path}`, [ validationMiddleware(CreateSalaryComponentDto, 'body')], this.salaryComponentController.create);
+        this.router.get(`${this.path}`, [authMiddleware],this.salaryComponentController.findAll);
+        this.router.get(`${this.path}/:id`,[authMiddleware], this.salaryComponentController.findById);
+        this.router.post(`${this.path}`, [authMiddleware, validationMiddleware(CreateSalaryComponentDto, 'body')], this.salaryComponentController.create);
         // this.router.patch(`${this.path}`, validationMiddleware(DTO, 'body'), this.salaryComponentController.createIncentive);
     }
   }

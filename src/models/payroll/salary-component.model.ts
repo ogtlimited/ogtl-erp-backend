@@ -8,14 +8,6 @@ const salaryComponentSchema: Schema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Status"
     },
-    projectId: {
-      type: Schema.Types.ObjectId,
-      ref: "Project"
-    },
-    departmentId: {
-      type: Schema.Types.ObjectId,
-      ref: "Department"
-    },
     salaryComponentAbbr: {
       type: String,
     },
@@ -31,7 +23,6 @@ const salaryComponentSchema: Schema = new Schema(
       type: String
     },
     type:{
-        type: String,
         enum: ["deduction", "earning"],
     },
     createdBy: {

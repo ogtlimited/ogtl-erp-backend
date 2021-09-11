@@ -10,8 +10,8 @@ class SalaryComponentController {
   
   public findAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const salaryComponent = await this.salaryComponentService.findAll(req.query);
-      res.status(200).json({ data: salaryComponent});
+      const salaryStructures = await this.salaryComponentService.findAll();
+      res.status(200).json({ data: salaryStructures});
     } catch (error) {
       next(error);
     }

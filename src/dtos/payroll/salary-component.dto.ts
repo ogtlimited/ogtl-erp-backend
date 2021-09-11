@@ -1,32 +1,32 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import { IsString, IsNumber, IsOptional } from 'class-validator';
+import { IsString, IsBoolean, IsNumber, IsArray } from 'class-validator';
 
 export class CreateSalaryComponentDto {  
 
     @IsString()
-    title: string;
+    public title: string;
 
     @IsString()
-    @IsOptional()
     salaryComponentAbbr: string;
 
     @IsString()
     description: string;
-   
-    @IsString()
-    @IsOptional()
-    departmentId: string;
 
-    @IsString()
-    @IsOptional()
-    projectId: string;
+    @IsBoolean()
+    isTaxApplicable: boolean;
+
+    @IsBoolean()
+    dependsOnPaymentDays: boolean;
 
     @IsNumber()
     amount: Number;
 
-    @IsString()
+    @IsNumber()
+    incentiveAmount: Number;
+
+    @IsArray()
     type: string;
 
 }
