@@ -9,11 +9,15 @@ export interface Employee {
     password: string;
     designation: string;
     first_name: string;
-    branch:string;
-    employeeType:string;
-    projectId:string;
+    employment_type: string;
+    isAdmin: boolean;
+    gender: string;
+    image: string;
+    last_name: string;
+    middle_name: string;
+    reports_to: string;
     status: string;
-    permissionLevel: number;
+    permissionLevel: string;
     warningCount: number;
     isInPIP: boolean
 

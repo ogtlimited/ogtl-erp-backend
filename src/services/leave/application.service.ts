@@ -7,15 +7,9 @@ import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { CreateLeaveApplicationDTO, UpdateLeaveApplicationDTO } from '@/dtos/Leave/application.dto';
 import applicationModel from '@/models/leave/application.model';
-import  allocationModel  from '@/models/leave/allocation.model';
-import  EmployeeService  from '@services/employee.service';
-import { Employee } from '@/interfaces/employee-interface/employee.interface';
-
 
 class LeaveApplicationService {
   public application = applicationModel;
-  public allocationM = allocationModel;
-  public employeeS = new EmployeeService();
 
   public async findAllLeaveapplication(): Promise<ILeaveApplication[]> {
     const application: ILeaveApplication[] = await this.application.find().populate({
@@ -48,51 +42,12 @@ class LeaveApplicationService {
 
   public async createLeaveapplication(LeaveapplicationData: CreateLeaveApplicationDTO): Promise<ILeaveApplication> {
     if (isEmpty(LeaveapplicationData)) throw new HttpException(400, "Bad request");
-    const startDate = new Date(LeaveapplicationData.from_date)
-    const endDate = new Date(LeaveapplicationData.to_date)
-    if(startDate > endDate) throw new HttpException(400, "Leave end date must be greater than end date");
-    const MaxLeave = 24;
-    const date = new Date()
-    const user: Employee = await this.employeeS.findEmployeeById(LeaveapplicationData.employee_id)
-    const prevLeaves: ILeaveApplication[] = await this.application.find(
-      { employee_id: LeaveapplicationData.employee_id,'createdAt': {
-        '$gte': new Date(date.getFullYear().toString()),
-      }, });
-    const totalApplied = this.getBusinessDatesCount(new Date(LeaveapplicationData.from_date), new Date(LeaveapplicationData.to_date))
-    const monthAfterOnboarding = this.monthDiff(new Date(user.date_of_joining), new Date());
-    // if(user)
-    if(totalApplied > 12){
-      throw new HttpException(400, "You can apply for more than 12 working days");
-    }
-    if(monthAfterOnboarding == 0){
-      throw new HttpException(400, "You can only apply exactly one month after onboarding");
-    }
-    console.log(prevLeaves, 'prev')
-    if(prevLeaves.length == 0){
-      // console.log(prevLeaves)
-      const createLeaveapplicationData: ILeaveApplication = await this.application.create(LeaveapplicationData);
-      return createLeaveapplicationData;
-    }else{
-      const getLeaveDays = prevLeaves.map(e => this.getBusinessDatesCount(new Date(e.from_date), new Date(e.to_date)))
-      const totalLeaveThisYear = getLeaveDays.reduce((previousValue, currentValue) => previousValue + currentValue)
-      const oldAndNewLeave = totalApplied + totalLeaveThisYear;
-      console.log(getLeaveDays)
-      console.log(totalLeaveThisYear, 'totalLeaveThisYear')
-      if(totalLeaveThisYear > MaxLeave){
-        throw new HttpException(400, "You have exceeded your total alloted leave");
-      }else{
-        if(oldAndNewLeave > MaxLeave){
-          throw new HttpException(400, "You have used "+ (totalLeaveThisYear) +", you have "+ (MaxLeave -  totalLeaveThisYear )+ " leave left");
-        }else{
-          const createLeaveapplicationData: ILeaveApplication = await this.application.create(LeaveapplicationData);
-          return createLeaveapplicationData;
-        }
-      }
 
-    }
     // const findLeaveapplication: ILeaveApplication = await this.application.findOne({ employee_id: LeaveapplicationData.employee_id });
     // if (findLeaveapplication) throw new HttpException(409, `${LeaveapplicationData.employee_id} already exists`);
-    
+    const createLeaveapplicationData: ILeaveApplication = await this.application.create(LeaveapplicationData);
+
+    return createLeaveapplicationData;
   }
 
   public async updateLeaveapplication(LeaveapplicationId: string, LeaveapplicationData: UpdateLeaveApplicationDTO): Promise<ILeaveApplication> {
@@ -114,25 +69,6 @@ class LeaveApplicationService {
 
     return deleteLeaveapplicationById;
   }
-
-  public getBusinessDatesCount(startDate, endDate) {
-    console.log('start date')
-    console.log(startDate, endDate)
-      let count = 0;
-      const curDate = new Date(startDate.getTime());
-      while (curDate <= endDate) {
-          const dayOfWeek = curDate.getDay();
-          if(!(dayOfWeek in [0, 6])) count++;
-          curDate.setDate(curDate.getDate() + 1);
-      }
-      return count;
-  }
-  public monthDiff(dateFrom, dateTo) {
-    return dateTo.getMonth() - dateFrom.getMonth() + 
-      (12 * (dateTo.getFullYear() - dateFrom.getFullYear()))
-   }
 }
-
-
 
 export default LeaveApplicationService;

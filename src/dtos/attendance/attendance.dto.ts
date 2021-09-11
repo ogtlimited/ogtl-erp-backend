@@ -5,9 +5,15 @@ import {IsDateString, IsOptional, IsString } from 'class-validator';
 
 export class CreateAttendanceDto {  
   @IsString()
+  public employeeId: string;
+  
+  @IsString()
+  public shiftTypeId: string;
+
+  @IsString()
   public ogId: string;
 
-  @IsDateString()
+  @IsString()
   public clockInTime: string;
 
   @IsString()

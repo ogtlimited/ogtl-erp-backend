@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { CreateContactDetailsDto, UpdateContactDetailsDto } from '@/dtos/employee/contact-details.dto';
-import { ContactDetail } from '@/interfaces/employee-interface/contact-details.interface';
-import ContactDetailsModel from '@models/employee/contact-details.model';
+import { CreateContactDetailsDto,UpdateContactDetailsDto } from "@/dtos/employee/contact-details.dto";
+import { ContactDetail } from "@/interfaces/employee-interface/contact-details.interface";
+import ContactDetailsModel from "@models/employee/contact-details.model"
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 
@@ -14,7 +14,8 @@ class ContactDetailsService{
         */
 
     public async findAllContactDetails(): Promise<ContactDetail[]> {
-      return this.ContactDetails.find();
+        const ContactDetails: ContactDetail[] = await this.ContactDetails.find();
+        return ContactDetails;
 
     }
 
@@ -26,7 +27,13 @@ class ContactDetailsService{
      public async findContactDetailsById(ContactDetailsId:string) : Promise<ContactDetail>{
        //Check if Id is empty
        if (isEmpty(ContactDetailsId)) throw new HttpException(400, "No Id provided");
-       return this.ContactDetails.findOne({ employee_id: ContactDetailsId });
+       //find Contact Details with Id given
+
+       const findContactDetails: ContactDetail = await this.ContactDetails.findOne({_id:ContactDetailsId});
+
+       if(!findContactDetails) throw new HttpException(409, "Details with that Id dont exist");
+
+       return findContactDetails
      }
 
 
@@ -60,7 +67,7 @@ class ContactDetailsService{
             if(findContactDetails && findContactDetails._id != ContactDetailsId) throw new HttpException(409, `Employee ${ContactDetailData.employee_id} Contact details dont exist`);
         }
 
-        const updateContactDetailsData: ContactDetail = await this.ContactDetails.findByIdAndUpdate(ContactDetailsId,{ContactDetailData},{new:true})
+        const updateContactDetailsData: ContactDetail = await this.ContactDetails.findByIdAndUpdate(ContactDetailsId,{ContactDetailData})
         if(!updateContactDetailsData) throw new HttpException(409, "details could not be updated");
         return updateContactDetailsData;
     }

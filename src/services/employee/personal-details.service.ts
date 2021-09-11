@@ -2,7 +2,7 @@
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { PersonalDetail } from '@/interfaces/employee-interface/personal-details.interface';
-import { CreatePersonalDetailsDto, UpdatePersonalDetailsDto } from '@/dtos/employee/personal-details.dto';
+import { CreatePersonalDetailsDto,UpdatePersonalDetailsDto } from '@/dtos/employee/personal-details.dto';
 import PersonalDetailsModel from '@models/employee/personal-details.model';
 
 
@@ -13,10 +13,10 @@ class PersonalDetailsService{
          *Returns all Personal Details
         */
 
-    public async findAllPersonalDetails(): Promise<PersonalDetail[]> {
+    public async findAllPersonalDetails(): Promise<PersonalDetail[]> { 
         const PersonalDetails: PersonalDetail[] = await this.PersonalDetails.find();
         return PersonalDetails;
-
+    
     }
 
      /**
@@ -27,7 +27,13 @@ class PersonalDetailsService{
      public async findPersonalDetailsById(PersonalDetailsId:string) : Promise<PersonalDetail>{
         //Check if Id is empty
         if (isEmpty(PersonalDetailsId)) throw new HttpException(400, "No Id provided");
-        return this.PersonalDetails.findOne({ employee_id: PersonalDetailsId });
+        //find Personal Details with Id given
+ 
+        const findPersonalDetails: PersonalDetail = await this.PersonalDetails.findOne({_id:PersonalDetailsId});
+ 
+        if(!findPersonalDetails) throw new HttpException(409, "Details with that Id dont exist");
+ 
+        return findPersonalDetails
       }
 
 
@@ -35,7 +41,7 @@ class PersonalDetailsService{
       * Creates new Personal details
       */
     public async createPersonalDetails(PersonalDetailData:CreatePersonalDetailsDto) : Promise<PersonalDetail>{
-
+    
         if (isEmpty(PersonalDetailData)) throw new HttpException(400, "No data provided");
 
         //check if employee already provided Personal details
@@ -60,7 +66,7 @@ class PersonalDetailsService{
             if(findPersonalDetails && findPersonalDetails._id != PersonalDetailsId) throw new HttpException(409, `Employee ${PersonalDetailData.employee_id} Personal details dont exist`);
         }
 
-        const updatePersonalDetailsData: PersonalDetail = await this.PersonalDetails.findByIdAndUpdate(PersonalDetailsId,PersonalDetailData);
+        const updatePersonalDetailsData: PersonalDetail = await this.PersonalDetails.findByIdAndUpdate(PersonalDetailsId,{PersonalDetailData})
         if(!updatePersonalDetailsData) throw new HttpException(409, "details could not be updated");
         return updatePersonalDetailsData;
     }
@@ -68,7 +74,7 @@ class PersonalDetailsService{
 
 
     public async deletePersonalDetails(PersonalDetailsId:string) : Promise<PersonalDetail>{
-
+         
           const deletePersonalDetailsById: PersonalDetail = await this.PersonalDetails.findByIdAndDelete(PersonalDetailsId);
           if(!deletePersonalDetailsById) throw new HttpException(409, "Details don't exist");
           return deletePersonalDetailsById;
@@ -77,7 +83,7 @@ class PersonalDetailsService{
 
     }
 
-
+ 
 
 }
 

@@ -20,13 +20,12 @@ const employeeSchema: Schema = new Schema(
     },
     default_shift: {
       type: Schema.Types.ObjectId,
-      ref: 'ShiftType',
+      ref: 'Shift',
       default: null,
     },
     department:  {
-      type: Schema.Types.ObjectId,
-      ref: 'Department',
-      default: null
+      type: String,
+      enum: ["HR", "Account", "Operations", "Facilities", "IT"],
     },
     password:  {
       type: String,
@@ -42,17 +41,11 @@ const employeeSchema: Schema = new Schema(
       ref: 'Project',
       default: null,
     },
-    branch: {
-      type: Schema.Types.ObjectId,
-      ref: 'Branch',
-      default: null,
-    },
-    employeeType: {
-      type: Schema.Types.ObjectId,
-      ref: 'EmployeeType',
-      default: null,
-    },
     first_name: {
+      type: String,
+      required: true,
+    },
+    employment_type: {
       type: String,
       required: true,
     },

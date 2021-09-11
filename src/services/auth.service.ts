@@ -31,7 +31,6 @@ class AuthService {
 
     if (!employee) throw new HttpException(409, `This ogid ${EmployeeData.ogid} does not exist`);
 
-    if(employee.status === 'terminated'  || employee.status === 'left') throw new HttpException(409, `Your employment has been terminated`);
     const isPasswordMatching: boolean = await bcrypt.compare(EmployeeData.password, employee.password);
 
     if (!isPasswordMatching) throw new HttpException(409, "You're password not matching");

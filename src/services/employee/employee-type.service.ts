@@ -63,7 +63,7 @@ class EmployeeTypeService{
         //Check if data is empty
         if (isEmpty(EmployeeTypeData)) throw new HttpException(400, "No data provided");
 
-        const updateEmployeeTypeById: EmployeeType = await this.EmployeeTypes.findByIdAndUpdate(EmployeeTypeId,EmployeeTypeData);
+        const updateEmployeeTypeById: EmployeeType = await this.EmployeeTypes.findByIdAndUpdate(EmployeeTypeId,{EmployeeTypeData});
         if(!updateEmployeeTypeById) throw new HttpException(409, "EmployeeType doesn't exist");
          return updateEmployeeTypeById;
    } 

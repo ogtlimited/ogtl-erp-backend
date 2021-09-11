@@ -8,7 +8,6 @@ import validationMiddleware from '@middlewares/validation.middleware';
 import { CreateLeaveApplicationDTO, UpdateLeaveApplicationDTO } from '@/dtos/Leave/application.dto';
 import LeaveApplicationController from '@/controllers/Leave/application.controller';
 
-import  permissionMiddleware  from '@/middlewares/permission.middleware';
 
 class LeaveApplicationRoute implements Routes {
   public path = '/leave-application';
@@ -20,9 +19,9 @@ class LeaveApplicationRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, [authMiddleware, permissionMiddleware], this.leaveApplicationController.getLeaveApplications);
+    this.router.get(`${this.path}`, authMiddleware, this.leaveApplicationController.getLeaveApplications);
     this.router.get(`${this.path}/:id`, authMiddleware, this.leaveApplicationController.getLeaveApplicationById);
-    this.router.post(`${this.path}`, [validationMiddleware(CreateLeaveApplicationDTO, 'body'),authMiddleware, permissionMiddleware('HR')], this.leaveApplicationController.createLeaveApplication);
+    this.router.post(`${this.path}`, [validationMiddleware(CreateLeaveApplicationDTO, 'body'),authMiddleware], this.leaveApplicationController.createLeaveApplication);
     this.router.put(`${this.path}/:id`, [validationMiddleware(UpdateLeaveApplicationDTO, 'body', true), authMiddleware], this.leaveApplicationController.updateLeaveApplication);
     this.router.delete(`${this.path}/:id`,authMiddleware, this.leaveApplicationController.deleteLeaveApplication);
   }
