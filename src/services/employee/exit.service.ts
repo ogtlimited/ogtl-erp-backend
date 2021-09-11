@@ -2,7 +2,7 @@
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { Exit } from '@/interfaces/employee-interface/exit.interface';
-import { CreateExitDto,UpdateExitDto } from '@/dtos/employee/exit.dto';
+import { CreateExitDto, UpdateExitDto } from '@/dtos/employee/exit.dto';
 import ExitModel from '@models/employee/exit.model';
 
 
@@ -12,8 +12,7 @@ class ExitService{
 
     //Returns all Exit details
     public async findAllExit(): Promise<Exit[]>{
-        const Exits: Exit[] = await this.Exits.find();
-        return Exits
+      return this.Exits.find();
     }
 
      //find Exit by Id
@@ -34,7 +33,7 @@ class ExitService{
     //create new Exit details
 
     public async createExit(ExitData:CreateExitDto) : Promise<Exit>{
-    
+
         if (isEmpty(ExitData)) throw new HttpException(400, "No data provided");
 
         //check if employee already provided Exit details
@@ -62,14 +61,14 @@ class ExitService{
         return updateExitData;
     }
 
-    
+
     //deletes Exit Details
 
     public async deleteExit(ExitId:string): Promise<Exit>{
         const deleteExitById: Exit = await this.Exits.findByIdAndDelete(ExitId);
         if(!deleteExitById) throw new HttpException(409, "Details don't exist");
-        return deleteExitById; 
-      
+        return deleteExitById;
+
 
     }
 

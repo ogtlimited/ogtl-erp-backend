@@ -12,7 +12,7 @@ class DesignationRoute implements Routes {
     public path = '/designation';
     public router = Router();
     public DesignationController = new DesignationController();
-  
+
     constructor() {
       this.initializeRoutes();
     }
@@ -20,7 +20,7 @@ class DesignationRoute implements Routes {
     private initializeRoutes() {
         this.router.get(`${this.path}`,authMiddleware, this.DesignationController.getDesignations);
         this.router.get(`${this.path}/:id`,authMiddleware, this.DesignationController.getDesignationById);
-        this.router.post(`${this.path}`, [validationMiddleware(CreateDesignationDto, 'body'),authMiddleware], this.DesignationController.CreateDesignation);
+        this.router.post(`${this.path}`,[validationMiddleware(CreateDesignationDto, 'body'),authMiddleware], this.DesignationController.CreateDesignation);
         this.router.put(`${this.path}/:id`, [validationMiddleware(UpdateDesignationDto, 'body', true),authMiddleware], this.DesignationController.updateDesignation);
         this.router.delete(`${this.path}/:id`,authMiddleware, this.DesignationController.deleteDesignation);
       }

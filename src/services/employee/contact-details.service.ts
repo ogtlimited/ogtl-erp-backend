@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { CreateContactDetailsDto,UpdateContactDetailsDto } from "@/dtos/employee/contact-details.dto";
-import { ContactDetail } from "@/interfaces/employee-interface/contact-details.interface";
-import ContactDetailsModel from "@models/employee/contact-details.model"
+import { CreateContactDetailsDto, UpdateContactDetailsDto } from '@/dtos/employee/contact-details.dto';
+import { ContactDetail } from '@/interfaces/employee-interface/contact-details.interface';
+import ContactDetailsModel from '@models/employee/contact-details.model';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 
@@ -14,8 +14,7 @@ class ContactDetailsService{
         */
 
     public async findAllContactDetails(): Promise<ContactDetail[]> {
-        const ContactDetails: ContactDetail[] = await this.ContactDetails.find();
-        return ContactDetails;
+      return this.ContactDetails.find();
 
     }
 
@@ -27,13 +26,7 @@ class ContactDetailsService{
      public async findContactDetailsById(ContactDetailsId:string) : Promise<ContactDetail>{
        //Check if Id is empty
        if (isEmpty(ContactDetailsId)) throw new HttpException(400, "No Id provided");
-       //find Contact Details with Id given
-
-       const findContactDetails: ContactDetail = await this.ContactDetails.findOne({_id:ContactDetailsId});
-
-       if(!findContactDetails) throw new HttpException(409, "Details with that Id dont exist");
-
-       return findContactDetails
+       return this.ContactDetails.findOne({ employee_id: ContactDetailsId });
      }
 
 

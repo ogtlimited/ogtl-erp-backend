@@ -11,14 +11,13 @@ class EmployeeService {
   public Employees = EmployeeModel;
 
   public async findAllEmployee(): Promise<Employee[]> {
-    const Employees: Employee[] = await this.Employees.find().populate('designation');
-    return Employees;
+    return this.Employees.find().populate("default_shift designation projectId branch employeeType");
   }
 
   public async findEmployeeById(EmployeeId: string): Promise<Employee> {
     if (isEmpty(EmployeeId)) throw new HttpException(400, "You're not EmployeeId");
 
-    const findEmployee: Employee = await this.Employees.findOne({ _id: EmployeeId });
+    const findEmployee: Employee = await this.Employees.findOne({ _id: EmployeeId }).populate("default_shift designation projectId branch employeeType");
     if (!findEmployee) throw new HttpException(409, "You're not Employee");
 
     return findEmployee;
