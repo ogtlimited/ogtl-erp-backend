@@ -1,38 +1,39 @@
-import {IsString,IsBoolean} from 'class-validator';
+/* eslint-disable prettier/prettier */
+import { IsString, IsBoolean } from 'class-validator';
 
 export class CreateRolePermissionDto {
   @IsString()
-  public role:string;
+  public role: string;
 
   @IsBoolean()
-  public create:boolean;
+  public create: boolean;
 
   @IsBoolean()
-  public read:boolean;
+  public read: boolean;
 
-   @IsBoolean()
-  public update:boolean;
+  @IsBoolean()
+  public update: boolean;
 
-   @IsBoolean()
-  public delete:boolean;
+  @IsBoolean()
+  public delete: boolean;
 }
 
 export class UpdateRolePermissionDto {
   @IsString()
-  public _id:string;
+  public _id: string;
 
   @IsString()
-  public role:string;
+  public role: string;
 
   @IsBoolean()
-  public create:boolean;
+  public create: boolean;
 
   @IsBoolean()
-  public read:boolean;
+  public read: boolean;
 
   @IsBoolean()
-  public update:boolean;
+  public update: boolean;
 
   @IsBoolean()
-  public delete:boolean;
+  public delete: boolean;
 }
