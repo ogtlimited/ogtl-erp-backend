@@ -4,14 +4,21 @@ import { HttpException } from '@exceptions/HttpException';
 import { ISalaryComponent } from '@/interfaces/payroll/salary-component.interface';
 import salaryComponentModel  from '@models/payroll/salary-component.model';
 import { isEmpty } from '@utils/util';
+import {ObjectId} from 'mongodb';
 
 
 class SalaryComponentService {
   public salaryComponentModel = salaryComponentModel;
 
   public async findAll(query): Promise<ISalaryComponent[]> {
-    const dbQuery = query.departmentId ? {departmentId: query.departmentId} : {projectId: query.projectId};
-    const salaryComponents = await this.salaryComponentModel.find(dbQuery);
+    let office:any  = {query: {department_id: new ObjectId(query.departmentId)}, aggregateQuery: {
+      
+    }};
+    if(query.projectId)
+    {
+      office = {query: {projectId: query.projectId}}
+    }
+    const salaryComponents = await this.salaryComponentModel.find(office.query);
     return salaryComponents;
   }
 
