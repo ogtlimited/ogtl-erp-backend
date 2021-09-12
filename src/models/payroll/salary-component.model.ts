@@ -21,6 +21,7 @@ const salaryComponentSchema: Schema = new Schema(
     },
     title: {
       type: String,
+      unique:true,
       required: true,
     },
     amount: {

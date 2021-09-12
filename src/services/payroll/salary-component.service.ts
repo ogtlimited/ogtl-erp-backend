@@ -5,20 +5,15 @@ import { ISalaryComponent } from '@/interfaces/payroll/salary-component.interfac
 import salaryComponentModel  from '@models/payroll/salary-component.model';
 import { isEmpty } from '@utils/util';
 import {ObjectId} from 'mongodb';
-
+import { duplicateErrorMessageFormatter } from '@/utils/mongoDbErrorFormatter';
+import { officeQueryGenerator } from '@/utils/payrollUtil';
 
 class SalaryComponentService {
   public salaryComponentModel = salaryComponentModel;
 
   public async findAll(query): Promise<ISalaryComponent[]> {
-    let office:any  = {query: {department_id: new ObjectId(query.departmentId)}, aggregateQuery: {
-      
-    }};
-    if(query.projectId)
-    {
-      office = {query: {projectId: query.projectId}}
-    }
-    const salaryComponents = await this.salaryComponentModel.find(office.query);
+    const dbQuery = officeQueryGenerator(query)
+    const salaryComponents = await this.salaryComponentModel.find(dbQuery);
     return salaryComponents;
   }
 
@@ -30,9 +25,16 @@ class SalaryComponentService {
   }
 
   public async create(data: CreateSalaryComponentDto): Promise<ISalaryComponent> {
-    if (isEmpty(data)) throw new HttpException(400, "Bad request");
-    const createdata = await this.salaryComponentModel.create(data);
-    return createdata;
+    try {
+      if (isEmpty(data)) throw new HttpException(400, "Bad request");
+      const createdata = await this.salaryComponentModel.create(data);
+      return createdata;
+    } catch (error) {
+      if (error.code === 11000) {
+         throw new HttpException(409, duplicateErrorMessageFormatter(error.keyPattern) )
+      }
+      throw error
+    }
   }
 
 //   public async updateIncentiveType(data: CreateSalaryComponentDto): Promise<ISalaryComponent> {

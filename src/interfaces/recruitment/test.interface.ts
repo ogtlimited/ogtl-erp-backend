@@ -21,5 +21,4 @@ export interface ITest {
   interview_date: Date;
   phone_number: string;
   notes?: string;
-
 }

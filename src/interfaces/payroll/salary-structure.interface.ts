@@ -1,16 +1,18 @@
 /* eslint-disable prettier/prettier */
 export interface ISalaryStructure {
-    payrollFrequency: string;
-    salaryDeductions: Array<Object>;
-    status: string;
-    hourRate: Number;
-    earning: Number;
-    netPay: Number;
+    deductions: Array<String>;
+    earnings: Array<String>;
+    departmentId: String;
+    projectId: String;
+    title: String;
+    netPay?:Number
 }
 
-/*determine if enum
-
-base: string;
-currency: string;
-
-*/
+export interface IUpdateSalaryStructure {
+    deductions?: Array<String>;
+    earnings?: Array<String>;
+    departmentId?: String;
+    projectId?: String;
+    title?: String;
+    netPay?:Number
+}
