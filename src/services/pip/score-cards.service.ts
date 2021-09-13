@@ -9,7 +9,7 @@ class scoreCardService{
 
    //Method for getting all score cards
    public async findAllScoreCards(): Promise<IScoreCard[]>{
-       return this.scoreCard.find().populate('employee_id');
+       return this.scoreCard.find();
    }
 
    //finds one score card
@@ -17,7 +17,7 @@ class scoreCardService{
        //checks if 
        if(isEmpty(ScoreCardId)) throw new HttpException(400,`No Id provided`);
        //finds scorecard with Id given
-       const findScoreCard:IScoreCard = await this.scoreCard.findOne({_id:ScoreCardId}).populate('employee_id');
+       const findScoreCard:IScoreCard = await this.scoreCard.findOne({_id:ScoreCardId});
        if(!findScoreCard) throw new HttpException(409,`Score Card with ID:${ScoreCardId} does not exist.`);
 
        //return score card
