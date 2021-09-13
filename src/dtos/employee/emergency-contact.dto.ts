@@ -1,45 +1,39 @@
-import {IsString,IsNotEmpty, IsNumber } from 'class-validator';
+/* eslint-disable prettier/prettier */
+import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
 
-export class CreateEmergencyContactDto{
+export class CreateEmergencyContactDto {
+  @IsNotEmpty()
+  @IsString()
+  public employee_id: string;
 
+  @IsNotEmpty()
+  @IsNumber()
+  public emergency_phone: string;
 
-    
+  @IsNotEmpty()
+  @IsString()
+  public emergency_contact_name: string;
 
-@IsNotEmpty()
-@IsString()
-    public employee_id: string;
-
-@IsNotEmpty()
-@IsNumber()    
-    public emergency_phone: string;
-
-@IsNotEmpty()
-@IsString()    
-    public emergency_contact_name:string;
-    
-@IsString()    
-    public relation: string;
-
+  @IsString()
+  public relation: string;
 }
 
-export class UpdateEmergencyContactDto{
+export class UpdateEmergencyContactDto {
+  @IsString()
+  public _id: string;
 
-    @IsString()
-    public _id: string;
-    
-    @IsNotEmpty()
-    @IsString()
-        public employee_id: string;
-    
-    @IsNotEmpty()
-    @IsNumber()   
-        public emergency_phone: string;
-    
-    @IsNotEmpty()
-    @IsString()    
-        public emergency_contact_name:string;
-        
-    @IsString()    
-        public relation: string;
-    
-    }
+  @IsNotEmpty()
+  @IsString()
+  public employee_id: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  public emergency_phone: string;
+
+  @IsNotEmpty()
+  @IsString()
+  public emergency_contact_name: string;
+
+  @IsString()
+  public relation: string;
+}
