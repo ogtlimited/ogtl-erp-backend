@@ -13,6 +13,11 @@ class TestServices {
     return this.test.find().populate('job_applicant_id hr_user');
   }
 
+  //Method for finding all tests where applicants have undergone soft skills and passed
+  public async findAllPassedTests(): Promise<ITest[]>{
+    return this.test.find({test_type:"Soft Skills", status:"Passed"}).populate('job_applicant_id hr_user');
+  }
+
   //Method for finding a single test
   public async findTestById(testId: string): Promise<ITest>{
     //check if no Test id is empty

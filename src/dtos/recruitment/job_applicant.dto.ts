@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+
 import { IsString, IsOptional, IsNotEmpty } from 'class-validator';
 
 export class CreateJobApplicantDto {
