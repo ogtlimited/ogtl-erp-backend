@@ -2,7 +2,6 @@
 import { Router } from 'express';
 import IndexController from '@controllers/index.controller';
 import { Routes } from '@interfaces/routes.interface';
-import authMiddleware from '@middlewares/auth.middleware';
 
 class IndexRoute implements Routes {
   public path = '/';
@@ -17,7 +16,6 @@ class IndexRoute implements Routes {
     this.router.get(`${this.path}`, this.indexController.index);
     this.router.get(`${this.path}combine-employee-form`, this.indexController.createEmployeeFormSelection);
     this.router.get(`${this.path}admin-dashboard`, this.indexController.getAdminDashboardData);
-    this.router.get(`${this.path}profile-dashboard/:id`, this.indexController.getEmployeeFUllData);
   }
 }
 

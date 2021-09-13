@@ -12,7 +12,7 @@ const personalDetailsSchema: Schema = new Schema(
                 ref: "Employee",
             },
         passport_number: {
-            type: String,
+            type: Number,
         },
         date_of_issue: {
             type: Date,
@@ -31,16 +31,13 @@ const personalDetailsSchema: Schema = new Schema(
             type: String,
             enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
         },
-      date_of_birth: {
-          type: Date
-      }
     },
 
     {
         timestamps: true
     }
-
-
+    
+    
     );
 
 const PersonalDetailModel = model<PersonalDetail & Document>('PersonalDetails', personalDetailsSchema);

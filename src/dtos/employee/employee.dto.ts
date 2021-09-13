@@ -100,24 +100,17 @@ export class UpdateEmployeeDto {
   @IsString()
   public status: string;
 
-  @IsString()
-  public permissionLevel: string;
-
-
-}
-export class UpdateEmployeePermissionDto {
-
-  @IsEmail()
-  public company_email: string;
-
-  @IsString()
-  public department: string;
-
-
   @IsNumber()
   public permissionLevel: number;
 
 
+}
+export class UpdateEmployeePermissionDto{
+  @IsEmail()
+  public company_email: string;
+
+  @IsNumber()
+  public permissionLevel: number
 }
 
 export class EmployeeLoginDto {

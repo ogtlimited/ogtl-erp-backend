@@ -1,38 +1,45 @@
-import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
+import {IsString,IsNotEmpty, IsNumber } from 'class-validator';
 
-export class CreateEmergencyContactDto {
-  @IsNotEmpty()
-  @IsString()
-  public employee_id: string;
+export class CreateEmergencyContactDto{
 
-  @IsNotEmpty()
-  @IsString()
-  public emergency_phone: string;
 
-  @IsNotEmpty()
-  @IsString()
-  public emergency_contact_name: string;
+    
 
-  @IsString()
-  public relation: string;
+@IsNotEmpty()
+@IsString()
+    public employee_id: string;
+
+@IsNotEmpty()
+@IsNumber()    
+    public emergency_phone: string;
+
+@IsNotEmpty()
+@IsString()    
+    public emergency_contact_name:string;
+    
+@IsString()    
+    public relation: string;
+
 }
 
-export class UpdateEmergencyContactDto {
-  @IsString()
-  public _id: string;
+export class UpdateEmergencyContactDto{
 
-  @IsNotEmpty()
-  @IsString()
-  public employee_id: string;
-
-  @IsNotEmpty()
-  @IsString()
-  public emergency_phone: string;
-
-  @IsNotEmpty()
-  @IsString()
-  public emergency_contact_name: string;
-
-  @IsString()
-  public relation: string;
-}
+    @IsString()
+    public _id: string;
+    
+    @IsNotEmpty()
+    @IsString()
+        public employee_id: string;
+    
+    @IsNotEmpty()
+    @IsNumber()   
+        public emergency_phone: string;
+    
+    @IsNotEmpty()
+    @IsString()    
+        public emergency_contact_name:string;
+        
+    @IsString()    
+        public relation: string;
+    
+    }

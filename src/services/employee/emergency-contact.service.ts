@@ -2,8 +2,8 @@
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { EmergencyContact } from '@/interfaces/employee-interface/emergency-contact.interface';
-import { CreateEmergencyContactDto, UpdateEmergencyContactDto } from '@/dtos/employee/emergency-contact.dto';
-import EmergencyContactModel from '@models/employee/emergency-contact.model';
+import { CreateEmergencyContactDto,UpdateEmergencyContactDto } from '@/dtos/employee/emergency-contact.dto';
+import EmergencyContactModel from '@models/employee/emergency-contact.model'
 
 
 class EmergencyContactService{
@@ -12,21 +12,29 @@ class EmergencyContactService{
     //Returns all emergency contacts
 
     public async findAllEmergencyContacts(): Promise<EmergencyContact[]>{
-      return this.EmergencyContacts.find();
+        const EmergencyContacts: EmergencyContact[] = await this.EmergencyContacts.find();
+        return EmergencyContacts
 
     }
 
     //finds emergency Contacts  by Id
 
-    public async findEmergencyContactById(EmergencyContactId: string) : Promise<EmergencyContact[]>{
+    public async findEmergencyContactById(EmergencyContactId: string) : Promise<EmergencyContact>{
         if (isEmpty(EmergencyContactId)) throw new HttpException(400, "No Id provided");
-        return this.EmergencyContacts.find({ employee_id: EmergencyContactId });
+       //find EmergencyContact Details with Id given
+
+       const findEmergencyContact: EmergencyContact = await this.EmergencyContacts.findOne({_id:EmergencyContactId});
+
+       if(!findEmergencyContact) throw new HttpException(409, "Details with that Id dont exist");
+
+       return findEmergencyContact
+
     }
 
 
     //Creates new emergency Contact
     public async createEmergencyContact(EmergencyContactData:CreateEmergencyContactDto) : Promise<EmergencyContact>{
-
+    
         if (isEmpty(EmergencyContactData)) throw new HttpException(400, "No data provided");
 
         //check if employee already provided emergency contact details
@@ -51,7 +59,7 @@ class EmergencyContactService{
             if(findEmergencyContact && findEmergencyContact._id != EmergencyContactId) throw new HttpException(409, `Employee ${EmergencyContactData.employee_id} Emergency Contact details dont exist`);
         }
 
-        const updateEmergencyContactData: EmergencyContact = await this.EmergencyContacts.findByIdAndUpdate(EmergencyContactId,EmergencyContactData)
+        const updateEmergencyContactData: EmergencyContact = await this.EmergencyContacts.findByIdAndUpdate(EmergencyContactId,{EmergencyContactData})
         if(!updateEmergencyContactData) throw new HttpException(409, "details could not be updated");
         return updateEmergencyContactData;
     }
@@ -61,8 +69,8 @@ class EmergencyContactService{
      public async deleteEmergencyContact(EmergencyContactId:string): Promise<EmergencyContact>{
         const deleteEmergencyContactById: EmergencyContact = await this.EmergencyContacts.findByIdAndDelete(EmergencyContactId);
         if(!deleteEmergencyContactById) throw new HttpException(409, "Details don't exist");
-        return deleteEmergencyContactById;
-
+        return deleteEmergencyContactById; 
+      
 
     }
 

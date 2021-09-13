@@ -2,13 +2,13 @@
 
 import  authMiddleware  from '@middlewares/auth.middleware';
 import { Router } from 'express';
+import  permissionMiddleware  from '@/middlewares/permission.middleware';
 
 import { Routes } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
 import { CreateLeaveApplicationDTO, UpdateLeaveApplicationDTO } from '@/dtos/Leave/application.dto';
 import LeaveApplicationController from '@/controllers/Leave/application.controller';
 
-import  permissionMiddleware  from '@/middlewares/permission.middleware';
 
 class LeaveApplicationRoute implements Routes {
   public path = '/leave-application';
