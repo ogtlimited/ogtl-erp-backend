@@ -1,4 +1,4 @@
-import { IsString,IsEnum,IsNotEmpty ,IsOptional} from 'class-validator';
+import { IsString, IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
 import { Status } from '@interfaces/recruitment/job_opening.interface';
 
 export class CreateJobOpeningDto {
@@ -13,9 +13,6 @@ export class CreateJobOpeningDto {
   @IsNotEmpty()
   @IsString()
   public project_id: string;
-
-   @IsEnum(Status)
-  public status: Status;
 
    @IsOptional()
    @IsString()
