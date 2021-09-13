@@ -49,12 +49,10 @@ import LoanTypeRoute from '@routes/loan/loan-type.route';
 import LoanApplicationRoute from '@routes/loan/loan-application.route';
 import CoachingFormRoute from './routes/coaching/coachingForm.route';
 import ClientRoute  from '@routes/project/client.route';
+import AssetsRoute from '@routes/assets/assets.route';
 import ProjectRoute from '@routes/project/project.route';
-<<<<<<< HEAD
-import DepartmentRoute from './routes/employee/department.route';
+//import DepartmentRoute from './routes/employee/department.route';
 import scoreCardRoute from './routes/pip/score-cards.route';
-=======
->>>>>>> 9b9dfc58b1e3e7474ca93e2a88cf5acddb557787
 
 
 
@@ -106,14 +104,10 @@ const app = new App([
 
   new ProjectRoute(),
   new ClientRoute(),
-<<<<<<< HEAD
   new AssetsRoute(),
   new CoachingFormRoute(),
-  new DepartmentRoute(),
+  //new DepartmentRoute(),
   new scoreCardRoute()
-=======
-  new CoachingFormRoute()
->>>>>>> 9b9dfc58b1e3e7474ca93e2a88cf5acddb557787
 ]);
 
 app.listen();
