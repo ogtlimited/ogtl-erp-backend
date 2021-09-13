@@ -1,4 +1,14 @@
 /* eslint-disable prettier/prettier */
+export enum EmployeeType {
+  Apprentice,
+  Intern,
+  Commission,
+  Contract,
+  Probation,
+  PartTime,
+  FullTime,
+}
+
 export interface Employee {
     _id: string;
     ogid: string;
@@ -9,13 +19,9 @@ export interface Employee {
     password: string;
     designation: string;
     first_name: string;
-    employment_type: string;
-    isAdmin: boolean;
-    gender: string;
-    image: string;
-    last_name: string;
-    middle_name: string;
-    reports_to: string;
+    branch:string;
+    employeeType:EmployeeType;
+    projectId:string;
     status: string;
     permissionLevel: number;
     warningCount: number;

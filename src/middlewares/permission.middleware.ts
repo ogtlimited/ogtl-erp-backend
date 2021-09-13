@@ -28,10 +28,10 @@ import employeeModel from '@models/employee/employee.model';
 
 // console.log((2).toString(2)) // 10
 // console.log((0b10).toString(10)) // 2
-const READ = 1; // 001
+const READ = 1; // 001 3
 const WRITE = 2; // 001
-const UPDATE = 4; // 001
-const DELETE = 8; // 001
+const UPDATE = 3; // 001
+const DELETE = 4; // 001
 
 export class userPermissions{
     permission: any;

@@ -27,19 +27,16 @@ class AuthService {
 
   public async login(EmployeeData: EmployeeLoginDto): Promise<{ token: any; employee: Employee }> {
     if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
-    const employee: Employee = await this.Employees.findOne({ ogid: EmployeeData.ogid });
-
+    const employee: Employee =  await this.Employees.findOne({ ogid: EmployeeData.ogid }).populate(['department', 'default_shift', 'designation', 'projectId']);
+ 
     if (!employee) throw new HttpException(409, `This ogid ${EmployeeData.ogid} does not exist`);
 
-    if(employee.status === 'terminated'  || employee.status === 'left') throw new HttpException(409, `Your employment has been terminated`);
     const isPasswordMatching: boolean = await bcrypt.compare(EmployeeData.password, employee.password);
 
     if (!isPasswordMatching) throw new HttpException(409, "You're password not matching");
 
     const tokenData = this.createToken(employee);
     // const cookie = this.createCookie(tokenData);
-    // console.log(tokenData);
-    console.log(employee);
     return { token: tokenData, employee };
   }
 
@@ -56,10 +53,7 @@ class AuthService {
     const dataStoredInToken: DataStoredInToken = { _id: Employee._id };
 
     const secretKey: string = config.get('secretKey');
-
     const expiresIn: number = 60 * 60;
-    console.log(dataStoredInToken);
-
     return { expiresIn, token: jwt.sign(dataStoredInToken, secretKey, { expiresIn }) };
   }
 

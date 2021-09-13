@@ -1,16 +1,15 @@
-import { IsString, IsDateString, IsEnum, IsOptional,IsNotEmpty } from 'class-validator';
-import { TestStatus, TestType } from '@interfaces/recruitment/test.interface';
+import { IsString, IsDateString, IsOptional, IsNotEmpty } from 'class-validator';
 
 export class CreateTestDto {
   @IsNotEmpty()
-  @IsEnum(TestType)
-  public test_type: TestType;
+  @IsString()
+  public test_type: string;
 
   @IsString()
   public job_applicant_id: string;
 
-  @IsEnum(TestStatus)
-  public status: TestStatus;
+  @IsString()
+  public status: string;
 
   @IsString()
   public hr_user: string;
@@ -35,14 +34,14 @@ export class UpdateTestDto {
   public _id: string;
 
   @IsNotEmpty()
-  @IsEnum(TestType)
-  public test_type: TestType;
+  @IsString()
+  public test_type: string;
 
   @IsString()
   public job_applicant_id: string;
 
-  @IsEnum(TestStatus)
-  public status: TestStatus;
+  @IsString()
+  public status: string;
 
   @IsString()
   public hr_user: string;

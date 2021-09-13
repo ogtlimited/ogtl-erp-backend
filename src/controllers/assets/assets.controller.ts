@@ -4,6 +4,7 @@ import { CreateAssetDto, UpdateAssetDto } from '@/dtos/asset/asset.dto';
 import { Assets } from '@/interfaces/assets/assets.interface';
 import AssetService from '@/services/assets/assets.service';
 
+
 class AssetsController {
   public AssetService = new AssetService();
 

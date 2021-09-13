@@ -64,7 +64,7 @@ class GradeService {
         //Check if data is empty
         if (isEmpty(GradeData)) throw new HttpException(400, "No data provided");
 
-        const updateGradeById: Grade = await this.Grades.findByIdAndUpdate(GradeId,GradeData);
+        const updateGradeById: Grade = await this.Grades.findByIdAndUpdate(GradeId,{GradeData});
         if(!updateGradeById) throw new HttpException(409, "Grade doesn't exist");
          return updateGradeById;
    } 

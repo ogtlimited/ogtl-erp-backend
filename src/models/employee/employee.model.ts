@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Employee } from '@interfaces/employee-interface/employee.interface';
+import { Employee, EmployeeType } from '@interfaces/employee-interface/employee.interface';
 import { model, Schema, Document } from 'mongoose';
 
 const employeeSchema: Schema = new Schema(
@@ -24,9 +24,8 @@ const employeeSchema: Schema = new Schema(
       default: null,
     },
     department:  {
-      type: Schema.Types.ObjectId,
-      ref: 'Department',
-      default: null
+      type: String,
+      enum: ["HR", "Account", "Operations", "Facilities", "IT"],
     },
     password:  {
       type: String,
@@ -41,6 +40,15 @@ const employeeSchema: Schema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'Project',
       default: null,
+    },
+    branch: {
+      type: Schema.Types.ObjectId,
+      ref: 'Branch',
+      default: null,
+    },
+    employeeType: {
+      type: String,
+      enum: EmployeeType
     },
     first_name: {
       type: String,
