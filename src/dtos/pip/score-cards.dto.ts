@@ -7,12 +7,12 @@ export class CreateScoreCardDto{
     public employee_id: string;
 
     @IsNotEmpty()
-    @IsString()
-    public company_values_score : string;
+    @IsNumber()
+    public company_values_score :string;
 
     @IsNotEmpty()
-    @IsString()
-    public performance_score : string;
+    @IsNumber()
+    public performance_score :string;
 
 }
 
@@ -25,11 +25,11 @@ export class UpdateScoreCardDto{
     public employee_id: string;
 
     @IsNotEmpty()
-    @IsString()
+    @IsNumber()
     public company_values_score :string;
 
     @IsNotEmpty()
-    @IsString()
+    @IsNumber()
     public performance_score :string;
 
 }
