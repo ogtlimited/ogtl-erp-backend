@@ -2,7 +2,7 @@
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { Education } from '@/interfaces/employee-interface/education.interface';
-import { CreateEducationDto, UpdateEducationDto } from '@/dtos/employee/education.dto';
+import { CreateEducationDto,UpdateEducationDto } from '@/dtos/employee/education.dto';
 import EducationModel from '@models/employee/education.model';
 
 class EducationService{
@@ -11,21 +11,28 @@ class EducationService{
 
    //Returns all education details
     public async findAllEducation(): Promise<Education[]>{
-      return this.Educations.find();
+        const Educations: Education[] = await this.Educations.find();
+        return Educations
     }
 
 
     //find education by Id
 
-    public async findEducationById(EducationId: string) : Promise<Education[]>{
+    public async findEducationById(EducationId: string) : Promise<Education>{
         if (isEmpty(EducationId)) throw new HttpException(400, "No Id provided");
-       return this.Educations.find({ employee_id: EducationId });
+       //find Education Details with Id given
+
+       const findEducation: Education = await this.Educations.findOne({_id:EducationId});
+
+       if(!findEducation) throw new HttpException(409, "Details with that Id dont exist");
+
+       return findEducation
 
     }
         //create new education details
 
     public async createEducation(EducationData:CreateEducationDto) : Promise<Education>{
-
+    
         if (isEmpty(EducationData)) throw new HttpException(400, "No data provided");
 
         //check if employee already provided education details
@@ -49,19 +56,19 @@ class EducationService{
             if(findEducation && findEducation._id != EducationId) throw new HttpException(409, `Employee ${EducationData.employee_id} Education details dont exist`);
         }
 
-        const updateEducationData: Education = await this.Educations.findByIdAndUpdate(EducationId,{EducationData});
+        const updateEducationData: Education = await this.Educations.findByIdAndUpdate(EducationId,{EducationData})
         if(!updateEducationData) throw new HttpException(409, "details could not be updated");
         return updateEducationData;
     }
 
-
+    
     //deletes Education Details
 
     public async deleteEducation(EducationId:string): Promise<Education>{
         const deleteEducationById: Education = await this.Educations.findByIdAndDelete(EducationId);
         if(!deleteEducationById) throw new HttpException(409, "Details don't exist");
-        return deleteEducationById;
-
+        return deleteEducationById; 
+      
 
     }
 

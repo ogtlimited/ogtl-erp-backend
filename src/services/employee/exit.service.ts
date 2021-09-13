@@ -2,7 +2,7 @@
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { Exit } from '@/interfaces/employee-interface/exit.interface';
-import { CreateExitDto, UpdateExitDto } from '@/dtos/employee/exit.dto';
+import { CreateExitDto,UpdateExitDto } from '@/dtos/employee/exit.dto';
 import ExitModel from '@models/employee/exit.model';
 
 
@@ -12,7 +12,8 @@ class ExitService{
 
     //Returns all Exit details
     public async findAllExit(): Promise<Exit[]>{
-      return this.Exits.find();
+        const Exits: Exit[] = await this.Exits.find();
+        return Exits
     }
 
      //find Exit by Id
@@ -33,7 +34,7 @@ class ExitService{
     //create new Exit details
 
     public async createExit(ExitData:CreateExitDto) : Promise<Exit>{
-
+    
         if (isEmpty(ExitData)) throw new HttpException(400, "No data provided");
 
         //check if employee already provided Exit details
@@ -56,19 +57,19 @@ class ExitService{
             if(findExit && findExit._id != ExitId) throw new HttpException(409, `Employee ${ExitData.employee_id} Exit details dont exist`);
         }
 
-        const updateExitData: Exit = await this.Exits.findByIdAndUpdate(ExitId,ExitData)
+        const updateExitData: Exit = await this.Exits.findByIdAndUpdate(ExitId,{ExitData})
         if(!updateExitData) throw new HttpException(409, "details could not be updated");
         return updateExitData;
     }
 
-
+    
     //deletes Exit Details
 
     public async deleteExit(ExitId:string): Promise<Exit>{
         const deleteExitById: Exit = await this.Exits.findByIdAndDelete(ExitId);
         if(!deleteExitById) throw new HttpException(409, "Details don't exist");
-        return deleteExitById;
-
+        return deleteExitById; 
+      
 
     }
 

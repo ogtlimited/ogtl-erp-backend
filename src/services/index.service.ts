@@ -1,6 +1,8 @@
 /* eslint-disable prettier/prettier */
 import  shiftTypeService  from '@/services/shift/shift.service';
+
 import  DesignationService  from '@/services/employee/designation.service';
+import  DepartmentService  from '@/services/employee/department.service';
 import EmployeeService from './employee.service';
 import ProjectService from '@services/project/project.service';
 import ClientService from '@services/project/client.service';
@@ -18,6 +20,7 @@ import TestServices from '@services/recruitment/test.services';
 
 class CombineServices {
   public designationS = new DesignationService();
+  public departmentS = new DepartmentService();
   public shiftS = new shiftTypeService();
   public employeeS = new EmployeeService()
   public projectS = new ProjectService()
@@ -32,13 +35,13 @@ class CombineServices {
   public  workExperienceS = new WorkExperienceService()
   public brancheS = new BranchService()
   public acceptedJobOfferS = new JobOfferService()
-  public passedTestApplicants = new TestServices()
 //   public departmentS = new Department
 
   public async createEmployeeFormSelection(){
     const shifts = await this.shiftS.findAllshiftType()
     const employees = await this.employeeS.findAllEmployee()
     const designations = await this.designationS.findAllDesignations()
+    const departments = await this.departmentS.findAllDepartments()
     const projects = await this.projectS.findAll();
     const jobApplicants = await this.jobApplicantS.findAllJobApplicants()
     const branches = await this.brancheS.findAllBranches();
@@ -47,6 +50,7 @@ class CombineServices {
     return {
         shifts: shifts,
         designations: designations,
+        departments,
         employees,
         projects,
         jobApplicants,
@@ -67,28 +71,5 @@ class CombineServices {
       totalEmployees: employees.length
     }
   }
-  public async employeeFullInfo(EmployeeId: string) {
-    const employee = await this.employeeS.findEmployeeById(EmployeeId)
-    const contactDetails = await this.contactDetailS.findContactDetailsById(EmployeeId)
-    const education = await this.educationService.findEducationById(EmployeeId)
-    const emergencyContact = await this.emergencyContactS.findEmergencyContactById(EmployeeId)
-    const history = await this.historyS.findHistoryById(EmployeeId)
-    const personalDetails = await this.personalDetailS.findPersonalDetailsById(EmployeeId)
-    const salaryDetails = await this.salaryDetailS.findSalaryDetailsById(EmployeeId)
-    const workExperience = await this.workExperienceS.findWorkExperienceById(EmployeeId)
-
-    return{
-      employee,
-      contactDetails,
-      education,
-      emergencyContact,
-      history,
-      personalDetails,
-      salaryDetails,
-      workExperience
-    }
-
-  }
-
 }
  export default CombineServices

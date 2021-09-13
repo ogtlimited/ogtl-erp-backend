@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import bcrypt from 'bcrypt';
-import { CreateEmployeeDto,UpdateEmployeeDto, UpdateEmployeePermissionDto } from '@dtos/employee/employee.dto';
+
+import { CreateEmployeeDto, UpdateEmployeeDto, UpdateEmployeePermissionDto } from '@dtos/employee/employee.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
 import EmployeeModel from '@models/employee/employee.model';
@@ -11,13 +12,14 @@ class EmployeeService {
   public Employees = EmployeeModel;
 
   public async findAllEmployee(): Promise<Employee[]> {
-    return this.Employees.find().populate("default_shift designation projectId branch employeeType");
+    const Employees: Employee[] = await this.Employees.find().populate('designation');
+    return Employees;
   }
 
   public async findEmployeeById(EmployeeId: string): Promise<Employee> {
     if (isEmpty(EmployeeId)) throw new HttpException(400, "You're not EmployeeId");
 
-    const findEmployee: Employee = await this.Employees.findOne({ _id: EmployeeId }).populate("default_shift designation projectId branch employeeType");
+    const findEmployee: Employee = await this.Employees.findOne({ _id: EmployeeId });
     if (!findEmployee) throw new HttpException(409, "You're not Employee");
 
     return findEmployee;
@@ -31,8 +33,10 @@ class EmployeeService {
 
     const hashedPassword = await bcrypt.hash(EmployeeData.password, 10);
     const newOgid = this.generateOGID();
-    console.log(newOgid)
-    console.log(EmployeeData)
+    if(!EmployeeData.department){
+      EmployeeData.department = null;
+    }
+
     const createEmployeeData: Employee = await this.Employees.create({ ...EmployeeData, password: hashedPassword, ogid: newOgid });
 
     return createEmployeeData;
@@ -67,7 +71,7 @@ class EmployeeService {
 
     const updateEmployeeById: Employee = await this.Employees.findOneAndUpdate
     ({_id: EmployeeId}, { $set: { permissionLevel: EmployeeData.permissionLevel } }, {new : true});
-    console.log('updateEmployeeById', updateEmployeeById)
+
     if (!updateEmployeeById) throw new HttpException(409, "You're not Employee");
 
     return updateEmployeeById;

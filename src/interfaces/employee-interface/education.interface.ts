@@ -5,5 +5,5 @@ export interface Education{
     school: string;
     qualification: string;
     level: string;
-    year_of_passing: string;
+    year_of_passing: Number;
 }

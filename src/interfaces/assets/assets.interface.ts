@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 export interface Assets{
-   _id :string;
     assetName: string;
     assetId: string;
     assigned_to: string;
