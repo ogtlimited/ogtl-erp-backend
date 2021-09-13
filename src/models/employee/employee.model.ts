@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Employee } from '@interfaces/employee-interface/employee.interface';
+import { Employee, EmployeeType } from '@interfaces/employee-interface/employee.interface';
 import { model, Schema, Document } from 'mongoose';
 
 const employeeSchema: Schema = new Schema(
@@ -48,9 +48,8 @@ const employeeSchema: Schema = new Schema(
       default: null,
     },
     employeeType: {
-      type: Schema.Types.ObjectId,
-      ref: 'EmployeeType',
-      default: null,
+      type: String,
+      enum: EmployeeType
     },
     first_name: {
       type: String,

@@ -1,12 +1,9 @@
-export enum JobOfferStatus {
-  AWAITING_RESPONSE,
-  ACCEPTED,
-  REJECTED
-}
+/* eslint-disable prettier/prettier */
+
 export interface IJobOffer {
   _id: string;
   job_applicant_id: string;
-  status: JobOfferStatus;
+  status: string;
   offer_date: Date;
   designation_id: string;
   job_offer_terms: string[];

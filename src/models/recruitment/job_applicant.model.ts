@@ -1,11 +1,18 @@
 /* eslint-disable prettier/prettier */
 import {model,Schema,Document} from "mongoose"
-import { IJobApplicant,JobApplicantStatus } from '@interfaces/recruitment/job_applicant.interface';
+import { IJobApplicant } from '@interfaces/recruitment/job_applicant.interface';
 
 const jobApplicantSchema: Schema = new Schema({
-  applicant_name: {
+  first_name: {
     type: String,
     required: true,
+  },
+  last_name: {
+    type: String,
+    required: true,
+  },
+  middle_name: {
+    type: String,
   },
   email_address: {
    type:String,
@@ -23,8 +30,8 @@ const jobApplicantSchema: Schema = new Schema({
   },
   status:{
     type: String,
-    enum: JobApplicantStatus,
-    default: JobApplicantStatus.OPEN
+    enum: ["Open","Replied","Rejected","Hold","Accepted"],
+    default: "Open"
   },
   resume_attachment:{
     type: String,
