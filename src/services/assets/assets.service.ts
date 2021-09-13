@@ -44,10 +44,11 @@ class AssetsService {
         //Check if data is empty
        if (isEmpty(AssetsData)) throw new HttpException(400, "No data provided");
 
-       const findAssets: Assets = await this.Asset.findOne({Assets: AssetsData.serialNumber});
-       if(findAssets) throw new HttpException(409, `Assets ${AssetsData.serialNumber} already exists`);
+       const findAssets: Assets = await this.Asset.findOne({Assets: AssetsData.assetId});
+       if(findAssets) throw new HttpException(409, `Assets ${AssetsData.assetId} already exists`);
+       const newAssetId = this.generateAssetID()
 
-       const createAssetsData: Assets = await this.Asset.create(AssetsData);
+       const createAssetsData: Assets = await this.Asset.create({ ...AssetsData, assetId: newAssetId});
        return createAssetsData;
      }
 
@@ -70,7 +71,10 @@ class AssetsService {
          if(!deleteAssetsById) throw new HttpException(409, "Assets doesn't exist");
          return deleteAssetsById;
      }
-
+ 
+     private generateAssetID(){
+        return "OGA"+ Math.floor(1000 + Math.random() * 9000)
+      }
 }
 
 export default AssetsService;

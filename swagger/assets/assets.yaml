@@ -2,6 +2,7 @@ tags:
   - name: assets
     description: assets API
 
+
 paths:
   # [GET] assets
   /api/assets:

@@ -2,6 +2,7 @@
 export interface Assets{
    _id :string;
     assetName: string;
+    assetId : string;
     assigned_to: string;
     purchaseDate: string;
     manufacturer: string;

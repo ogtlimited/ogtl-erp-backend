@@ -9,6 +9,11 @@ const AssetsSchema: Schema = new Schema(
             required: true,
 
           },
+          assetId: {
+            type: String,
+            required: true,
+
+          },
           assigned_to: {
             type: String,
             required: true,

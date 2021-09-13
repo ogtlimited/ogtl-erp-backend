@@ -12,6 +12,8 @@ class AssetsRoute implements Routes {
     public AssetsController = new AssetsController();
     
 
+
+    
     constructor() {
       this.initializeRoutes();
     }
