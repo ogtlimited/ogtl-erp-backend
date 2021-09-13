@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import jobOfferModel from '@models/recruitment/job_offer.model';
-import { IJobOffer, JobOfferStatus } from '@interfaces/recruitment/job_offer.interface';
+import { IJobOffer } from '@interfaces/recruitment/job_offer.interface';
 import { isEmpty } from '@utils/util';
 import { HttpException } from '@exceptions/HttpException';
 import { CreateJobOfferDto, UpdateJobOfferDto } from '@dtos/recruitment/job_offer.dto';
@@ -15,7 +15,7 @@ class JobOfferService {
 
   //Method for finding all job offers where status is accepted
   public async findAllAcceptedJobOffers() : Promise<IJobOffer[]>{
-    return this.jobOffer.find({status: JobOfferStatus.ACCEPTED}).populate('job_applicant_id designation_id');
+    return this.jobOffer.find({status: 'JobOfferStatus.ACCEPTED'}).populate('job_applicant_id designation_id');
   }
 
   //Method for finding a single job offer

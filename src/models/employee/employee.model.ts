@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { Employee, EmployeeType } from '@interfaces/employee-interface/employee.interface';
 import { model, Schema, Document } from 'mongoose';
+import { Employee, EmployeeType } from '@interfaces/employee-interface/employee.interface';
 
 const employeeSchema: Schema = new Schema(
   {
@@ -20,12 +20,13 @@ const employeeSchema: Schema = new Schema(
     },
     default_shift: {
       type: Schema.Types.ObjectId,
-      ref: 'Shift',
+      ref: 'ShiftType',
       default: null,
     },
     department:  {
-      type: String,
-      enum: ["HR", "Account", "Operations", "Facilities", "IT"],
+      type: Schema.Types.ObjectId,
+      ref: 'Department',
+      default: null,
     },
     password:  {
       type: String,
