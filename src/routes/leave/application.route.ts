@@ -20,10 +20,10 @@ class LeaveApplicationRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, [authMiddleware, permissionMiddleware], this.leaveApplicationController.getLeaveApplications);
+    this.router.get(`${this.path}`, [authMiddleware, permissionMiddleware('HR')], this.leaveApplicationController.getLeaveApplications);
     this.router.get(`${this.path}/:id`, authMiddleware, this.leaveApplicationController.getLeaveApplicationById);
-    this.router.post(`${this.path}`, [validationMiddleware(CreateLeaveApplicationDTO, 'body'),authMiddleware, permissionMiddleware('HR')], this.leaveApplicationController.createLeaveApplication);
-    this.router.put(`${this.path}/:id`, [validationMiddleware(UpdateLeaveApplicationDTO, 'body', true), authMiddleware], this.leaveApplicationController.updateLeaveApplication);
+    this.router.post(`${this.path}`, [validationMiddleware(CreateLeaveApplicationDTO, 'body'),authMiddleware], this.leaveApplicationController.createLeaveApplication);
+    this.router.put(`${this.path}/:id`, [validationMiddleware(UpdateLeaveApplicationDTO, 'body', true), authMiddleware, permissionMiddleware('HR')], this.leaveApplicationController.updateLeaveApplication);
     this.router.delete(`${this.path}/:id`,authMiddleware, this.leaveApplicationController.deleteLeaveApplication);
   }
 }

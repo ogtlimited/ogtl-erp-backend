@@ -9,14 +9,14 @@ import EmployeeModel  from '@models/employee/employee.model';
 const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
   try {
     const Authorization = req.header('Authorization').split('Bearer ')[1] || null;
-
+    console.log(req.header)
     if (Authorization) {
       const secretKey: string = config.get('secretKey');
       const verificationResponse = (await jwt.verify(Authorization, secretKey)) as DataStoredInToken;
       const userId = verificationResponse._id;
       const findUser = await EmployeeModel.findById(userId);
       // console.log(verificationResponse);
-      // console.log(findUser);
+      console.log(findUser);
       // console.log(req.user);
       if (findUser) {
         req.user = findUser;
@@ -28,6 +28,7 @@ const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFun
       next(new HttpException(404, 'Authentication token missing'));
     }
   } catch (error) {
+    console.log(error)
     next(new HttpException(401, 'Wrong authentication token'));
   }
 };

@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import { IsEmail, IsString,IsBoolean, IsNumber } from 'class-validator';
+import { IsEmail, IsString,IsBoolean, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateEmployeeDto {
 
@@ -13,6 +13,7 @@ export class CreateEmployeeDto {
   public default_shift: string;
 
   @IsString()
+  @IsOptional()
   public department: string;
 
   @IsString()
@@ -28,6 +29,7 @@ export class CreateEmployeeDto {
   public first_name: string;
 
   @IsString()
+  @IsOptional()
   public employment_type: string;
 
   @IsBoolean()
@@ -76,7 +78,7 @@ export class UpdateEmployeeDto {
   @IsString()
   public first_name: string;
 
-  @IsString()
+  @IsOptional()
   public employment_type: string;
 
   @IsBoolean()

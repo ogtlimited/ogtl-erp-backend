@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import  shiftTypeService  from '@/services/shift/shift.service';
+import DepartmentService  from '@/services/employee/department.service';
 import  DesignationService  from '@/services/employee/designation.service';
 import EmployeeService from './employee.service';
 import ProjectService from '@services/project/project.service';
@@ -17,6 +18,7 @@ import EmployeeTypeService from '@services/employee/employee-type.service';
 
 class CombineServices {
   public designationS = new DesignationService();
+  public departmentS = new DepartmentService();
   public shiftS = new shiftTypeService();
   public employeeS = new EmployeeService()
   public projectS = new ProjectService()
@@ -37,6 +39,7 @@ class CombineServices {
     const shifts = await this.shiftS.findAllshiftType()
     const employees = await this.employeeS.findAllEmployee()
     const designations = await this.designationS.findAllDesignations()
+    const departments = await this.departmentS.findAllDepartments()
     const projects = await this.projectS.findAll();
     const jobApplicants = await this.jobApplicantS.findAllJobApplicants()
     const branches = await this.brancheS.findAllBranches();
@@ -44,6 +47,7 @@ class CombineServices {
     return {
         shifts: shifts,
         designations: designations,
+        departments,
         employees,
         projects,
         jobApplicants,

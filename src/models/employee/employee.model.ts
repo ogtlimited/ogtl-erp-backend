@@ -50,7 +50,6 @@ const employeeSchema: Schema = new Schema(
     employeeType: {
       type: Schema.Types.ObjectId,
       ref: 'EmployeeType',
-      default: null,
     },
     first_name: {
       type: String,

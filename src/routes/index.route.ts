@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Router } from 'express';
 import IndexController from '@controllers/index.controller';
 import { Routes } from '@interfaces/routes.interface';

@@ -31,8 +31,10 @@ class EmployeeService {
 
     const hashedPassword = await bcrypt.hash(EmployeeData.password, 10);
     const newOgid = this.generateOGID();
-    console.log(newOgid)
-    console.log(EmployeeData)
+    if(!EmployeeData.department){
+      EmployeeData.department = null;
+    }
+
     const createEmployeeData: Employee = await this.Employees.create({ ...EmployeeData, password: hashedPassword, ogid: newOgid });
 
     return createEmployeeData;
@@ -67,7 +69,7 @@ class EmployeeService {
 
     const updateEmployeeById: Employee = await this.Employees.findOneAndUpdate
     ({_id: EmployeeId}, { $set: { permissionLevel: EmployeeData.permissionLevel } }, {new : true});
-    console.log('updateEmployeeById', updateEmployeeById)
+
     if (!updateEmployeeById) throw new HttpException(409, "You're not Employee");
 
     return updateEmployeeById;
