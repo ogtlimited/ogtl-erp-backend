@@ -6,9 +6,6 @@ export class CreateAssetDto{
     @IsString()
     public assetName: string;
 
-    @IsNotEmpty()
-    @IsString()
-    public assetId: string;
 
     @IsNotEmpty()
     @IsString()
@@ -65,10 +62,6 @@ export class UpdateAssetDto{
     @IsString()
     public assetName: string;
 
-
-    @IsNotEmpty()
-    @IsString()
-    public assetId: string;
 
     @IsNotEmpty()
     @IsString()

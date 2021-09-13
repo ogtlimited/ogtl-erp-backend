@@ -10,6 +10,7 @@ class AssetsRoute implements Routes {
     public path = '/api/assets';
     public router = Router();
     public AssetsController = new AssetsController();
+    
 
     constructor() {
       this.initializeRoutes();

@@ -9,7 +9,7 @@ class AssetsService {
     public Asset = AssetsModel;
 
     /**
-     *Returns all Asset
+     *Returns all Assets
      */
     public async findAllAsset(): Promise<Assets[]> { 
         const Asset: Assets[] = await this.Asset.find();
@@ -44,8 +44,8 @@ class AssetsService {
         //Check if data is empty
        if (isEmpty(AssetsData)) throw new HttpException(400, "No data provided");
 
-       const findAssets: Assets = await this.Asset.findOne({Assets: AssetsData.assetId});
-       if(findAssets) throw new HttpException(409, `Assets ${AssetsData.assetId} already exists`);
+       const findAssets: Assets = await this.Asset.findOne({Assets: AssetsData.serialNumber});
+       if(findAssets) throw new HttpException(409, `Assets ${AssetsData.serialNumber} already exists`);
 
        const createAssetsData: Assets = await this.Asset.create(AssetsData);
        return createAssetsData;
