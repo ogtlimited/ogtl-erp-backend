@@ -5,6 +5,7 @@ import { Assets } from '@/interfaces/assets/assets.interface';
 import AssetsModel from '@models/assets/assets.model';
 import { isEmpty } from '@utils/util';
 
+
 class AssetsService {
     public Asset = AssetsModel;
 
@@ -44,8 +45,8 @@ class AssetsService {
         //Check if data is empty
        if (isEmpty(AssetsData)) throw new HttpException(400, "No data provided");
 
-       const findAssets: Assets = await this.Asset.findOne({Assets: AssetsData.assetId});
-       if(findAssets) throw new HttpException(409, `Assets ${AssetsData.assetId} already exists`);
+       const findAssets: Assets = await this.Asset.findOne({Assets: AssetsData.serialNumber});
+       if(findAssets) throw new HttpException(409, `Assets ${AssetsData.serialNumber} already exists`);
        const newAssetId = this.generateAssetID()
 
        const createAssetsData: Assets = await this.Asset.create({ ...AssetsData, assetId: newAssetId});

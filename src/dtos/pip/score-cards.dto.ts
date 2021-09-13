@@ -8,11 +8,11 @@ export class CreateScoreCardDto{
 
     @IsNotEmpty()
     @IsNumber()
-    public company_values_score :number;
+    public company_values_score :string;
 
     @IsNotEmpty()
     @IsNumber()
-    public performance_score :number;
+    public performance_score :string;
 
 }
 
@@ -26,10 +26,10 @@ export class UpdateScoreCardDto{
 
     @IsNotEmpty()
     @IsNumber()
-    public company_values_score :number;
+    public company_values_score :string;
 
     @IsNotEmpty()
     @IsNumber()
-    public performance_score :number;
+    public performance_score :string;
 
 }

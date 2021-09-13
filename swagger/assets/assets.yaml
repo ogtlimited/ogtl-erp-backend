@@ -110,7 +110,7 @@ definitions:
   assets:
     type: object
     required:
-      - assetId
+      
       - assetName
       - assigned_to
       - purchaseDate
