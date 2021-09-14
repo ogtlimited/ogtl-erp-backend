@@ -36,6 +36,7 @@ export class UpdateJobOfferDto {
   @IsString()
   public designation_id: string;
 
+  @IsOptional()
   @IsString()
   public job_offer_terms: string[];
 

@@ -12,27 +12,21 @@ class SalaryDetailsService{
          *Returns all Salary Details
         */
 
-    public async findAllSalaryDetails(): Promise<SalaryDetail[]> { 
-        const SalaryDetails: SalaryDetail[] = await this.SalaryDetails.find();
-        return SalaryDetails;
-    
+    public async findAllSalaryDetails(): Promise<SalaryDetail[]> {
+
+      return this.SalaryDetails.find();
+
     }
-  
+
     /**
      *Returns the Salary details with the Id given
      */
 
 
-     public async findSalaryDetailsById(SalaryDetailsId:string) : Promise<SalaryDetail>{
-        //Check if Id is empty
-        if (isEmpty(SalaryDetailsId)) throw new HttpException(400, "No Id provided");
-        //find Salary Details with Id given
- 
-        const findSalaryDetails: SalaryDetail = await this.SalaryDetails.findOne({_id:SalaryDetailsId});
- 
-        if(!findSalaryDetails) throw new HttpException(409, "Details with that Id dont exist");
- 
-        return findSalaryDetails
+    public async findSalaryDetailsById(SalaryDetailsId:string) : Promise<SalaryDetail>{
+      //Check if Id is empty
+      if (isEmpty(SalaryDetailsId)) throw new HttpException(400, "No Id provided");
+      return this.SalaryDetails.findOne({ employee_id: SalaryDetailsId });
     }
 
 
@@ -41,17 +35,22 @@ class SalaryDetailsService{
       * Creates new Salary details
       */
     public async createSalaryDetails(SalaryDetailData:CreateSalaryDetailsDto) : Promise<SalaryDetail>{
-    
+
         if (isEmpty(SalaryDetailData)) throw new HttpException(400, "No data provided");
 
         //check if employee already provided Salary details
-        const findSalaryDetails: SalaryDetail = await this.SalaryDetails.findOne({id: SalaryDetailData.employee_id});
+        const findSalaryDetails: SalaryDetail = await this.SalaryDetails.findOne({employee_id: SalaryDetailData.employee_id});
 
-        if(findSalaryDetails) throw new HttpException(409, `Employee ${SalaryDetailData.employee_id} already provided details`);
+        if(findSalaryDetails){
+          const updateSalaryDetailsData: SalaryDetail = await this.SalaryDetails.findByIdAndUpdate(SalaryDetailData._id,{SalaryDetailData})
+          if(!updateSalaryDetailsData) throw new HttpException(409, "details could not be updated");
+          return updateSalaryDetailsData;
+        }
+        else{
+          return await this.SalaryDetails.create(SalaryDetailData);
+        }
 
-        const createSalaryDetailsData = await this.SalaryDetails.create(SalaryDetailData);
 
-        return createSalaryDetailsData;
     }
 
 
@@ -76,7 +75,7 @@ class SalaryDetailsService{
 
 
     public async deleteSalaryDetails(SalaryDetailsId:string) : Promise<SalaryDetail>{
-         
+
           const deleteSalaryDetailsById: SalaryDetail = await this.SalaryDetails.findByIdAndDelete(SalaryDetailsId);
           if(!deleteSalaryDetailsById) throw new HttpException(409, "Details don't exist");
           return deleteSalaryDetailsById;

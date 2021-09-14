@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsString, IsNotEmpty } from 'class-validator';
 
 export class CreateEmergencyContactDto {
   @IsNotEmpty()
@@ -7,7 +7,7 @@ export class CreateEmergencyContactDto {
   public employee_id: string;
 
   @IsNotEmpty()
-  @IsNumber()
+  @IsString()
   public emergency_phone: string;
 
   @IsNotEmpty()
@@ -27,7 +27,7 @@ export class UpdateEmergencyContactDto {
   public employee_id: string;
 
   @IsNotEmpty()
-  @IsNumber()
+  @IsString()
   public emergency_phone: string;
 
   @IsNotEmpty()

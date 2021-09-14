@@ -11,9 +11,9 @@ const personalDetailsSchema: Schema = new Schema(
                 required: true,
                 ref: "Employee",
             },
-        passport_number: {
-            type: Number,
-        },
+      passport_number: {
+        type: String,
+      },
         date_of_issue: {
             type: Date,
         },
@@ -36,8 +36,8 @@ const personalDetailsSchema: Schema = new Schema(
     {
         timestamps: true
     }
-    
-    
+
+
     );
 
 const PersonalDetailModel = model<PersonalDetail & Document>('PersonalDetails', personalDetailsSchema);

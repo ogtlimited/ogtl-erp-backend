@@ -5,5 +5,5 @@ export interface SalaryDetail{
     salary_mode: string;
     bank_name: string;
     bank_code: string;
-    bank_account_number: Number;
+    bank_account_number: string;
 }

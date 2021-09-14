@@ -16,6 +16,7 @@ import SalaryDetailsService from '@services/employee/salary-details.service';
 import WorkExperienceService from '@services/employee/work-experience.service';
 import BranchService from '@services/employee/branch.service';
 import JobOfferService from '@services/recruitment/job_offer.service';
+import TestServices from '@services/recruitment/test.services';
 
 class CombineServices {
   public designationS = new DesignationService();
@@ -34,7 +35,8 @@ class CombineServices {
   public  workExperienceS = new WorkExperienceService()
   public brancheS = new BranchService()
   public acceptedJobOfferS = new JobOfferService()
-
+  public passedTestApplicants = new TestServices()
+//   public departmentS = new Department
 
   public async createEmployeeFormSelection(){
     const shifts = await this.shiftS.findAllshiftType()
@@ -45,6 +47,7 @@ class CombineServices {
     const jobApplicants = await this.jobApplicantS.findAllJobApplicants()
     const branches = await this.brancheS.findAllBranches();
     const acceptedJobOffers = await this.acceptedJobOfferS.findAllAcceptedJobOffers()
+    const passedApplicants = await this.passedTestApplicants.findAllPassedTests()
     return {
         shifts: shifts,
         designations: designations,
@@ -53,7 +56,8 @@ class CombineServices {
         projects,
         jobApplicants,
         branches,
-        acceptedJobOffers
+        acceptedJobOffers,
+        passedApplicants
     }
   }
 
@@ -67,6 +71,28 @@ class CombineServices {
       totalClients: clients.length,
       totalEmployees: employees.length
     }
+  }
+  public async employeeFullInfo(EmployeeId: string) {
+    const employee = await this.employeeS.findEmployeeById(EmployeeId)
+    const contactDetails = await this.contactDetailS.findContactDetailsById(EmployeeId)
+    const education = await this.educationService.findEducationById(EmployeeId)
+    const emergencyContact = await this.emergencyContactS.findEmergencyContactById(EmployeeId)
+    const history = await this.historyS.findHistoryById(EmployeeId)
+    const personalDetails = await this.personalDetailS.findPersonalDetailsById(EmployeeId)
+    const salaryDetails = await this.salaryDetailS.findSalaryDetailsById(EmployeeId)
+    const workExperience = await this.workExperienceS.findWorkExperienceById(EmployeeId)
+
+    return{
+      employee,
+      contactDetails,
+      education,
+      emergencyContact,
+      history,
+      personalDetails,
+      salaryDetails,
+      workExperience
+    }
+
   }
 }
  export default CombineServices

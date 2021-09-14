@@ -13,6 +13,11 @@ class JobApplicantService {
     return this.jobApplicant.find().populate('job_opening_id');
   }
 
+  //Method for finding all job applicants where status is accepted
+  public async findAllAcceptedJobApplicants() : Promise<IJobApplicant[]>{
+    return this.jobApplicant.find({status: "Accepted"}).populate('job_opening_id');
+  }
+
   //Method for finding a single job applicant
   public async findJobApplicantById(jobApplicantId: string): Promise<IJobApplicant>{
     //check if no Job applicant id is empty
