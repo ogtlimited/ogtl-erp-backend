@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { model, Schema, Document } from 'mongoose';
-import { Employee, EmployeeType } from '@interfaces/employee-interface/employee.interface';
+import { Employee } from '@interfaces/employee-interface/employee.interface';
 
 const employeeSchema: Schema = new Schema(
   {
@@ -47,9 +47,14 @@ const employeeSchema: Schema = new Schema(
       ref: 'Branch',
       default: null,
     },
+    salaryStructure: {
+      type: Schema.Types.ObjectId,
+      ref: 'SalaryStructure',
+      default: null,
+    },
     employeeType: {
       type: String,
-      enum: EmployeeType
+      enum: ["Apprentice","Intern","Commission","Contract","Probation","PartTime","FullTime"]
     },
     first_name: {
       type: String,

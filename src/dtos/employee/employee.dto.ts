@@ -1,8 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import { IsEmail, IsString, IsBoolean, IsEnum, IsNumber, IsOptional } from 'class-validator';
-import { EmployeeType } from '@interfaces/employee-interface/employee.interface';
+import { IsEmail, IsString, IsBoolean, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateEmployeeDto {
 
@@ -29,10 +28,6 @@ export class CreateEmployeeDto {
   @IsString()
   public first_name: string;
 
-  @IsString()
-  @IsOptional()
-  public employment_type: string;
-
   @IsBoolean()
   public isAdmin: boolean;
 
@@ -58,8 +53,8 @@ export class CreateEmployeeDto {
   @IsString()
   public branch: string;
 
-  @IsEnum(EmployeeType)
-  public employeeType: EmployeeType;
+  @IsString()
+  public employeeType: string;
 
   @IsString()
   public projectId: string;
@@ -88,8 +83,8 @@ export class UpdateEmployeeDto {
   @IsString()
   public first_name: string;
 
-  @IsOptional()
-  public employment_type: string;
+  @IsString()
+  public employeeType: string;
 
   @IsBoolean()
   public isAdmin: boolean;
