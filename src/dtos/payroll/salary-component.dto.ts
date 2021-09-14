@@ -13,6 +13,7 @@ export class CreateSalaryComponentDto {
     salaryComponentAbbr: string;
 
     @IsString()
+    @IsOptional()
     description: string;
    
     @IsString()

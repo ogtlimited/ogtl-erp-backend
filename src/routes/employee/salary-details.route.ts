@@ -5,23 +5,30 @@ import { CreateSalaryDetailsDto, UpdateSalaryDetailsDto } from '@/dtos/employee/
 import SalaryDetailsController from '@/controllers/employee/salary-details.controller';
 import authMiddleware from '@/middlewares/auth.middleware';
 
-
 class SalaryDetailsRoute implements Routes {
-    public path = '/SalaryDetails';
-    public router = Router();
-    public SalaryDetailsController = new SalaryDetailsController();
-  
-    constructor() {
-      this.initializeRoutes();
-    }
+  public path = '/SalaryDetails';
+  public router = Router();
+  public SalaryDetailsController = new SalaryDetailsController();
 
-    private initializeRoutes() {
-        this.router.get(`${this.path}`,authMiddleware, this.SalaryDetailsController.getSalaryDetails);
-        this.router.get(`${this.path}/:id`,authMiddleware, this.SalaryDetailsController.getSalaryDetailsById);
-        this.router.post(`${this.path}`,authMiddleware, validationMiddleware(CreateSalaryDetailsDto, 'body'), this.SalaryDetailsController.CreateSalaryDetails);
-        this.router.put(`${this.path}/:id`, authMiddleware,validationMiddleware(UpdateSalaryDetailsDto, 'body', true), this.SalaryDetailsController.updateSalaryDetails);
-        this.router.delete(`${this.path}/:id`,authMiddleware, this.SalaryDetailsController.deleteSalaryDetails);
-      }
-    }
+  constructor() {
+    this.initializeRoutes();
+  }
 
-    export default SalaryDetailsRoute;
+  private initializeRoutes() {
+    this.router.get(`${this.path}`, authMiddleware, this.SalaryDetailsController.getSalaryDetails);
+    this.router.get(`${this.path}/:id`, authMiddleware, this.SalaryDetailsController.getSalaryDetailsById);
+    this.router.post(
+      `${this.path}`,
+      [validationMiddleware(CreateSalaryDetailsDto, 'body'), authMiddleware],
+      this.SalaryDetailsController.CreateSalaryDetails,
+    );
+    this.router.put(
+      `${this.path}/:id`,
+      [validationMiddleware(UpdateSalaryDetailsDto, 'body', true), authMiddleware],
+      this.SalaryDetailsController.updateSalaryDetails,
+    );
+    this.router.delete(`${this.path}/:id`, authMiddleware, this.SalaryDetailsController.deleteSalaryDetails);
+  }
+}
+
+export default SalaryDetailsRoute;

@@ -8,41 +8,29 @@ import HistoryModel from '@models/employee/history.model';
 class HistoryService{
     public Historys = HistoryModel;
     //Returns all history details
-    public async findAllHistory(): Promise<History[]>{
-        const Historys: History[] = await this.Historys.find();
-        return Historys
-    }
+  public async findAllHistory(): Promise<History[]>{
+    return this.Historys.find().populate("employee_id branch_id designation_id");
+  }
 
    //find History by Id
 
-   public async findHistoryById(HistoryId: string) : Promise<History>{
-        if (isEmpty(HistoryId)) throw new HttpException(400, "No Id provided");
-        //find History Details with Id given
+  public async findHistoryById(HistoryId: string) : Promise<History[]>{
+    if (isEmpty(HistoryId)) throw new HttpException(400, "No Id provided");
+    return this.Historys.find({ employee_id: HistoryId }).populate("employee_id branch_id designation_id");
 
-        const findHistory: History = await this.Historys.findOne({_id:HistoryId});
-
-        if(!findHistory) throw new HttpException(409, "Details with that Id dont exist");
-
-        return findHistory
-
-    }    
+  }
 
 
     //create new History details
 
-    public async createHistory(HistoryData:CreateHistoryDto) : Promise<History>{
-    
-        if (isEmpty(HistoryData)) throw new HttpException(400, "No data provided");
+  public async createHistory(HistoryData:CreateHistoryDto) : Promise<History>{
 
-        //check if employee already provided History details
-        const findHistory: History = await this.Historys.findOne({id: HistoryData.employee_id});
+    if (isEmpty(HistoryData)) throw new HttpException(400, "No data provided");
+    const newHistory = await this.Historys.create(HistoryData);
+    const newData = await this.Historys.findOne({ employee_id: newHistory.employee_id }).populate("branch_id designation_id");
+    return newData
 
-        if(findHistory) throw new HttpException(409, `Employee ${HistoryData.employee_id} already provided details`);
-
-        const createHistoryData = await this.Historys.create(HistoryData);
-
-        return createHistoryData;
-    }
+  }
 
     //Updates History Details
 
@@ -59,14 +47,14 @@ class HistoryService{
         return updateHistoryData;
     }
 
-    
+
     //deletes History Details
 
     public async deleteHistory(HistoryId:string): Promise<History>{
         const deleteHistoryById: History = await this.Historys.findByIdAndDelete(HistoryId);
         if(!deleteHistoryById) throw new HttpException(409, "Details don't exist");
-        return deleteHistoryById; 
-      
+        return deleteHistoryById;
+
 
     }
 

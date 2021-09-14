@@ -109,11 +109,17 @@ export class UpdateProjectDto {
     public creator: string;
 
     @IsString()
-    public approved: string;
-
-    @IsString()
     public manager: string;
 
     @IsString()
     public quality_analyst: string;
   }
+
+
+  export class ApproveProjectDto {
+
+    @IsString()
+    public status: string;
+
+  }
+  

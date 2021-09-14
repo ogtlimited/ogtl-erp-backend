@@ -29,6 +29,15 @@ class IndexController {
       next(e)
     }
   }
+  public getEmployeeFUllData = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const employeeId = req.params.id,
+        getEmployeeFullData = await this.indexS.employeeFullInfo(employeeId);
+      res.status(200).json({ getEmployeeFullData, message: 'Employee user data' });
+    } catch (e) {
+      next(e);
+    }
+  };
 }
 
 export default IndexController;

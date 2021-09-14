@@ -6,7 +6,9 @@ import { IsString, IsEmail } from 'class-validator';
 export class TrainingResultDto {  
     @IsString()
     public training_event_id: string;
+}
 
+export class PutTrainingResultDto {  
     @IsString()
-    public training_result: object;
+    public training_event_id: string;
 }

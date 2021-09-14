@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+
 import { model, Schema, Document } from 'mongoose';
 import { IJobOffer } from '@interfaces/recruitment/job_offer.interface';
 

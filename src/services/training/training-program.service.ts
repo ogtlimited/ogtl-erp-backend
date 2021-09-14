@@ -4,7 +4,7 @@ import TrainingProgram from '@/models/training/training-program.model';
 import { ITrainingProgram } from '@/interfaces/training/training-program.interface';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
-import { TrainingProgramDto } from '@/dtos/training/training-program.dto';
+import { TrainingProgramDto, PutTrainingProgramDto } from '@/dtos/training/training-program.dto';
 
 class TrainingProgramService {
     public trainingProgram: any;
@@ -31,11 +31,11 @@ class TrainingProgramService {
         return newTrainingProgram;
     }
 
-    // public async update(id: string, Payload: PutTrainingProgramDto): Promise<ITrainingProgram> {
-    //     if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
-    //     const updateTrainingProgram: ITrainingProgram = await this.trainingProgram.findByIdAndUpdate(id, { Payload }, {new: true});
-    //     return updateTrainingProgram;
-    // }
+    public async update(id: string, Payload: PutTrainingProgramDto): Promise<ITrainingProgram> {
+        if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
+        const updateTrainingProgram: ITrainingProgram = await this.trainingProgram.findByIdAndUpdate(id, { Payload }, {new: true});
+        return updateTrainingProgram;
+    }
 
     public async delete(id: string): Promise<ITrainingProgram> {
         const drop: ITrainingProgram = await this.trainingProgram.findByIdAndDelete(id);

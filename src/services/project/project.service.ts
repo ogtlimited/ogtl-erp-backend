@@ -4,7 +4,7 @@ import projectModel from '@/models/project/project.model';
 import { IProject } from '@/interfaces/project-interface/project.interface';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
-import { CreateProjectDto, UpdateProjectDto } from '@/dtos/project/project.dto';
+import { CreateProjectDto, UpdateProjectDto, ApproveProjectDto } from '@/dtos/project/project.dto';
 
 class ProjectService {
     public project: any;
@@ -13,8 +13,8 @@ class ProjectService {
         this.project = projectModel;
     }
 
-    public async findAll(): Promise<IProject[]> {
-        const projects: IProject[] = await this.project.find();
+    public async findAll(param: any = {}): Promise<IProject[]> {
+        const projects: IProject[] = await this.project.find(param);
         return projects;
     }
 
@@ -32,6 +32,14 @@ class ProjectService {
     }
 
     public async update(projectId: string, Payload: UpdateProjectDto): Promise<IProject> {
+        if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
+        const findproject = this.findOne(projectId);
+        if (!findproject) throw new HttpException(409, "Project not found");
+        const updateProject: IProject = await this.project.findByIdAndUpdate(projectId, { Payload }, {new: true});
+        return updateProject;
+    }
+
+    public async approve(projectId: string, Payload: ApproveProjectDto): Promise<IProject> {
         if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
         const findproject = this.findOne(projectId);
         if (!findproject) throw new HttpException(409, "Project not found");

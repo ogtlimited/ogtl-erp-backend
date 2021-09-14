@@ -2,7 +2,7 @@
 export interface ContactDetail {
     _id: string;
     employee_id: string;
-    mobile: Number;
+    mobile: string;
     personal_email: string;
     parmanent_addresss_is: string;
     parmanent_addresss:string;

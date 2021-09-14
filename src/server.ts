@@ -102,7 +102,7 @@ const app = new App([
   new WarningLetterRoute(),
   new LoanRoute(),
   new LoanTypeRoute(),
-  // new LoanApplicationRoute(),
+  new LoanApplicationRoute(),
 
   new ProjectRoute(),
   new ClientRoute(),

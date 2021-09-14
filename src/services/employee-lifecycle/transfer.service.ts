@@ -16,14 +16,12 @@ class TransferService {
 
   public async findById(id: string): Promise<ITransfer> {
     if (isEmpty(id)) throw new HttpException(400, "provide Id");
-
     const findDemoType: ITransfer = await this.transferModel.findOne({ _id: id });
     if (!findDemoType) throw new HttpException(404, "no record found");
     return findDemoType;
   }
 
   public async create(data: CreateTransferDto): Promise<ITransfer> {
-
     if (isEmpty(data)) throw new HttpException(400, "Bad request");
     const createdata = await this.transferModel.create(data);
     return createdata;

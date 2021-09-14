@@ -55,10 +55,6 @@ const employeeSchema: Schema = new Schema(
       type: String,
       required: true,
     },
-    employment_type: {
-      type: String,
-      required: true,
-    },
     isAdmin: {
       type: Boolean,
       required: true,

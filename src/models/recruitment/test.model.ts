@@ -19,11 +19,6 @@ const testSchema: Schema = new Schema({
     enum: ["Passed","Failed"],
     default: null
   },
-  hr_user: {
-    type: Schema.Types.ObjectId,
-    required: true,
-    ref: "Employee",
-  },
   score:{
     type: String,
     default: null

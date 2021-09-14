@@ -8,30 +8,23 @@ import WorkExperienceModel from '@models/employee/work-experience.model';
 class WorkExperienceService{
    public WorkExperiences = WorkExperienceModel;
 
-   //Returns all WorkExperience details
-   public async findAllWorkExperience(): Promise<WorkExperience[]>{
-        const WorkExperiences: WorkExperience[] = await this.WorkExperiences.find();
-        return WorkExperiences
-    }
+  //Returns all WorkExperience details
+  public async findAllWorkExperience(): Promise<WorkExperience[]>{
+    return this.WorkExperiences.find();
+  }
 
-    //find WorkExperience by Id
+  //find WorkExperience by Id
 
-    public async findWorkExperienceById(WorkExperienceId: string) : Promise<WorkExperience>{
-        if (isEmpty(WorkExperienceId)) throw new HttpException(400, "No Id provided");
-       //find WorkExperience Details with Id given
+  public async findWorkExperienceById(WorkExperienceId: string) : Promise<WorkExperience[]>{
+    if (isEmpty(WorkExperienceId)) throw new HttpException(400, "No Id provided");
+    return this.WorkExperiences.find({ employee_id: WorkExperienceId });
+  }
 
-       const findWorkExperience: WorkExperience = await this.WorkExperiences.findOne({_id:WorkExperienceId});
-
-       if(!findWorkExperience) throw new HttpException(409, "Details with that Id dont exist");
-
-       return findWorkExperience
-
-    }
 
     //create new WorkExperience details
 
     public async createWorkExperience(WorkExperienceData:CreateWorkExperienceDto) : Promise<WorkExperience>{
-    
+
         if (isEmpty(WorkExperienceData)) throw new HttpException(400, "No data provided");
 
         //check if employee already provided WorkExperience details
@@ -60,14 +53,14 @@ class WorkExperienceService{
         return updateWorkExperienceData;
     }
 
-    
+
     //deletes WorkExperience Details
 
     public async deleteWorkExperience(WorkExperienceId:string): Promise<WorkExperience>{
         const deleteWorkExperienceById: WorkExperience = await this.WorkExperiences.findByIdAndDelete(WorkExperienceId);
         if(!deleteWorkExperienceById) throw new HttpException(409, "Details don't exist");
-        return deleteWorkExperienceById; 
-      
+        return deleteWorkExperienceById;
+
 
     }
 
