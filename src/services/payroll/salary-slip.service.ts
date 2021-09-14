@@ -45,7 +45,8 @@ class SalarySlipService {
         const salarySlipConstructor:any = {
           employeeId: employee._id,
           salaryStructure: employee.salaryStructure_id._id,
-          netPay: employee.salaryStructure_id.netPay
+          netPay: employee.salaryStructure_id.netPay,
+          project_id: project._id
         }
         const deductions = await calculateEmployeeDeductions(employee,"date",employee.salaryStructure_id)
         if(deductions.hasDeductions)
