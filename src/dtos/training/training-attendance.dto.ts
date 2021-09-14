@@ -13,3 +13,14 @@ export class TrainingAttendanceDto {
     @IsString()
     public feedback: string;
 }
+
+export class PutTrainingAttendanceDto {  
+    @IsString()
+    public employee_id: string;
+
+    @IsString()
+    public training_event_id: string;
+
+    @IsString()
+    public feedback: string;
+}

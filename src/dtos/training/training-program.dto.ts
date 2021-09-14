@@ -8,7 +8,27 @@ export class TrainingProgramDto {
   public program_name: string;
 
   @IsString()
-  public company_id: string;
+  public status: string;
+
+  @IsString()
+  public trainer_name: string;
+
+  @IsEmail()
+  public trainer_email: string;
+
+  @IsString()
+  public supplier_id: string;
+
+  @IsString()
+  public contact_number: string;
+
+  @IsString()
+  public description: string;
+}
+
+export class PutTrainingProgramDto {  
+  @IsString()
+  public program_name: string;
 
   @IsString()
   public status: string;

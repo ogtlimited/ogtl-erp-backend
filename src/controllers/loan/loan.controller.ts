@@ -4,6 +4,11 @@ import { NextFunction, Request, Response } from 'express';
 import { LoanDto, PutLoanDto } from '@/dtos/loan/loan.dto';
 import { Loan } from '@/interfaces/loan/loan.interface';
 import LoanService from '@/services/loan/loan.service';
+import {opts} from '@/utils/rbac-opts';
+
+const RBAC = require('easy-rbac');
+const rbac = new RBAC(opts);
+
 
 class LoanController {
     public loanService;
@@ -13,12 +18,25 @@ class LoanController {
     }
 
     public getLoans = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const findAllLoans: Loan[] = await this.loanService.findAll();
-            res.status(200).json({ data: findAllLoans, message: 'findAll' });
-        } catch (error) {
-            next(error);
-        }
+        let user = (<any>req).user
+        rbac.can(user.role, 'post:read')
+        .then(result => {
+            if (result) {
+                const findAllLoans: Loan[] = this.loanService.findAll();
+                res.status(200).json({ data: findAllLoans, message: 'findAll' });
+            } else {
+                res.status(422).json({ message: 'not permitted' });
+            }
+        })
+        .catch(err => {
+            next(err);
+        })
+        // try {
+        //     const findAllLoans: Loan[] = await this.loanService.findAll();
+        //     res.status(200).json({ data: findAllLoans, message: 'findAll' });
+        // } catch (error) {
+        //     next(error);
+        // }
     };
 
     public getLoan = async (req: Request, res: Response, next: NextFunction) => {

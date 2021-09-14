@@ -9,12 +9,12 @@ const scoreCardSchema: Schema = new Schema({
       ref: "Employee",
     },
     performance_score:{
-        type: Number,
+        type: String,
         required : true
     },
 
     company_values_score:{
-        type: Number,
+        type: String,
         required : true
     }
 

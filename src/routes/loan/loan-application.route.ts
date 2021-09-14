@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { Router } from 'express';
-
+import  authMiddleware  from '@middlewares/auth.middleware';
 import { Routes } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
-import { LoanApplicationDto } from '@dtos/loan/loan-application.dto';
+import { LoanApplicationDto, PutDto, ApprovalDto } from '@dtos/loan/loan-application.dto';
 import LoanApplicationController from '@/controllers/loan/loan-application.controller';
 
 
@@ -17,10 +17,12 @@ class LoanApplicationRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.loanApplication.getLoanApplications);
-    this.router.get(`${this.path}/:loanApplicationId`, this.loanApplication.getLoanApplication);
-    this.router.post(`${this.path}`, validationMiddleware(LoanApplicationDto, 'body'), this.loanApplication.createLoanApplication);
-    this.router.delete(`${this.path}/:loanApplicationId`, this.loanApplication.deleteLoanApplication);
+    this.router.get(`${this.path}`, authMiddleware, this.loanApplication.getLoanApplications);
+    this.router.get(`${this.path}/:loanApplicationId`, authMiddleware, this.loanApplication.getLoanApplication);
+    this.router.post(`${this.path}`, [validationMiddleware(LoanApplicationDto, 'body'), authMiddleware], this.loanApplication.createLoanApplication);
+    this.router.put(`${this.path}/:loanApplicationId`, [validationMiddleware(PutDto, 'body', true), authMiddleware], this.loanApplication.updateLoanApplication);
+    this.router.put(`${this.path}/status/:loanApplicationId`, [validationMiddleware(ApprovalDto, 'body', true), authMiddleware], this.loanApplication.approveLoanApplication);
+    this.router.delete(`${this.path}/:loanApplicationId`, authMiddleware, this.loanApplication.deleteLoanApplication);
   }
 }
 

@@ -4,7 +4,7 @@ import TrainingResult from '@/models/training/training-result.model';
 import { ITrainingResult } from '@/interfaces/training/training-result.interface';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
-import { TrainingResultDto } from '@/dtos/training/training-result.dto';
+import { TrainingResultDto, PutTrainingResultDto } from '@/dtos/training/training-result.dto';
 
 class TrainingResultService {
     public trainingResult: any;
@@ -31,11 +31,11 @@ class TrainingResultService {
         return newTrainingResult;
     }
 
-    // public async update(id: string, Payload: PutTrainingResultDto): Promise<ITrainingResult> {
-    //     if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
-    //     const updateTrainingResult: ITrainingResult = await this.trainingResult.findByIdAndUpdate(id, { Payload }, {new: true});
-    //     return updateTrainingResult;
-    // }
+    public async update(id: string, Payload: PutTrainingResultDto): Promise<ITrainingResult> {
+        if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
+        const updateTrainingResult: ITrainingResult = await this.trainingResult.findByIdAndUpdate(id, { Payload }, {new: true});
+        return updateTrainingResult;
+    }
 
     public async delete(id: string): Promise<ITrainingResult> {
         const drop: ITrainingResult = await this.trainingResult.findByIdAndDelete(id);

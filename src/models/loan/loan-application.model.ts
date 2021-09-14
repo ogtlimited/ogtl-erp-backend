@@ -7,7 +7,7 @@ const loanApplicationSchema: Schema = new Schema(
     applicant_name_id: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "ApplicantName"
+      ref: "Employee"
     },
     loan_type_id: {
       type: Schema.Types.ObjectId,
@@ -20,8 +20,7 @@ const loanApplicationSchema: Schema = new Schema(
       ref: "SalaryComponent"
     },
     status: {
-        enum: ["open", "approved", "rejected"],
-        default: "open"
+        enum: ["open", "approved", "rejected"]
     },
     reason: {
       type: String,
