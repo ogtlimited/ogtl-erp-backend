@@ -35,6 +35,7 @@ class CombineServices {
   public  workExperienceS = new WorkExperienceService()
   public brancheS = new BranchService()
   public acceptedJobOfferS = new JobOfferService()
+  public passedTestApplicants = new TestServices()
 //   public departmentS = new Department
 
   public async createEmployeeFormSelection(){
@@ -70,6 +71,28 @@ class CombineServices {
       totalClients: clients.length,
       totalEmployees: employees.length
     }
+  }
+  public async employeeFullInfo(EmployeeId: string) {
+    const employee = await this.employeeS.findEmployeeById(EmployeeId)
+    const contactDetails = await this.contactDetailS.findContactDetailsById(EmployeeId)
+    const education = await this.educationService.findEducationById(EmployeeId)
+    const emergencyContact = await this.emergencyContactS.findEmergencyContactById(EmployeeId)
+    const history = await this.historyS.findHistoryById(EmployeeId)
+    const personalDetails = await this.personalDetailS.findPersonalDetailsById(EmployeeId)
+    const salaryDetails = await this.salaryDetailS.findSalaryDetailsById(EmployeeId)
+    const workExperience = await this.workExperienceS.findWorkExperienceById(EmployeeId)
+
+    return{
+      employee,
+      contactDetails,
+      education,
+      emergencyContact,
+      history,
+      personalDetails,
+      salaryDetails,
+      workExperience
+    }
+
   }
 }
  export default CombineServices

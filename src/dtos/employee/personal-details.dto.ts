@@ -1,20 +1,22 @@
 /* eslint-disable prettier/prettier */
-import {IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreatePersonalDetailsDto{
-    
-        
+  @IsOptional()
+  @IsString()
+  public _id: string;
+
     @IsNotEmpty()
     @IsString()
         public employee_id: string;
 
-    @IsNumber()
+    @IsString()
         public passport_number: string;
 
-    @IsDate()
+    @IsDateString()
         public date_of_issue: Date;
 
-    @IsDate()
+    @IsDateString()
         public valid_upto:  Date;
 
     @IsString()
@@ -25,25 +27,28 @@ export class CreatePersonalDetailsDto{
 
     @IsString()
         public blood_group: string;
+
+  @IsDateString()
+  public date_of_birth: string;
 }
 
 export class UpdatePersonalDetailsDto{
     @IsString()
         public  _id: string;
-    
+
     @IsNotEmpty()
     @IsString()
         public employee_id: string;
 
-    @IsNumber()
+    @IsString()
         public passport_number: string;
 
-    @IsDate()
+    @IsDateString()
         public date_of_issue: Date;
 
-    @IsDate()
+    @IsDateString()
         public valid_upto:  Date;
-        
+
     @IsString()
         public place_of_issue: string;
 
@@ -52,6 +57,9 @@ export class UpdatePersonalDetailsDto{
 
     @IsString()
         public blood_group: string;
+
+  @IsDateString()
+  public date_of_birth: string;
 }
 
 

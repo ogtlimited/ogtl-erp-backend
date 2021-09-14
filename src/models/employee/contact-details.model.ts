@@ -10,11 +10,11 @@ const contactDetailsSchema: Schema = new Schema (
               required: true,
             ref: "Employee",
           },
-          mobile: {
-            type: Number,
-            required: true,
-          },
-      
+      mobile: {
+        type: String,
+        required: true,
+      },
+
           personal_email: {
             type: String,
             required: true,
@@ -23,7 +23,7 @@ const contactDetailsSchema: Schema = new Schema (
           permanent_address_is: {
             type: String,
             enum: ["rented", "owned"],
-            
+
           },
           permanent_address: {
             type: String,
@@ -31,7 +31,7 @@ const contactDetailsSchema: Schema = new Schema (
           current_address_is: {
             type: String,
             enum: ["rented", "owned"],
-            
+
           },
           current_address: {
             type: String,

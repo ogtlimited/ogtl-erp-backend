@@ -25,14 +25,14 @@ const educationSchema : Schema = new Schema({
    },
 
    year_of_passing: {
-        type: Number,
+        type: String,
   },
 },
 
 {
     timestamps: true,
   },
-  
+
 
 );
 
