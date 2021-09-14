@@ -13,7 +13,7 @@ class AssetsService {
      *Returns all Assets
      */
     public async findAllAsset(): Promise<Assets[]> { 
-        const Asset: Assets[] = await this.Asset.find();
+        const Asset: Assets[] = await this.Asset.find().populate("assigned_to");
         return Asset;
         
     }
@@ -27,7 +27,7 @@ class AssetsService {
        if (isEmpty(AssetsId)) throw new HttpException(400, "No Id provided");
 
        //find Assets with Id given
-       const findAssets:Assets = await this.Asset.findOne({  _id: AssetsId});
+       const findAssets:Assets = await this.Asset.findOne({  _id: AssetsId}).populate("assigned_to");
 
        if(!findAssets) throw new HttpException(409, "Assets with that Id doesnt exist");
 

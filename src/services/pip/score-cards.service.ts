@@ -3,9 +3,12 @@ import { isEmpty } from '@utils/util';
 import { HttpException } from '@exceptions/HttpException';
 import scoreCardModel from "@/models/pip/score-cards.model";
 import { CreateScoreCardDto, UpdateScoreCardDto } from "@/dtos/pip/score-cards.dto";
+import EmployeeModel from '@models/employee/employee.model';
+import { Employee } from '@interfaces/employee-interface/employee.interface';
 
 class scoreCardService{
    public scoreCard = scoreCardModel;
+   public employeeModel = EmployeeModel;
 
    //Method for getting all score cards
    public async findAllScoreCards(): Promise<IScoreCard[]>{
@@ -30,7 +33,9 @@ class scoreCardService{
     public async createScoreCard(scoreCardData:CreateScoreCardDto) : Promise<IScoreCard>{
        //Check if data is empty
        if (isEmpty(scoreCardData)) throw new HttpException(400, "No data provided");
-
+      //checks if employee exists
+      const findEmployeeById: Employee = await this.employeeModel.findOne({ _id:scoreCardData.employee_id });
+    if (!findEmployeeById) throw new HttpException(404, 'Employee does not exist!');
        const createscoreCardData: IScoreCard = await this.scoreCard.create(scoreCardData);
        return createscoreCardData;
 

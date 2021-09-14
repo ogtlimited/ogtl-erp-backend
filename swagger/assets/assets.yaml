@@ -149,9 +149,11 @@ definitions:
       condition:
         type: string
         description: Asset condition
+        enum : ["Fair", "Excellent", "Terrible"]
       warranty:
         type: string
         description: Asset warranty
+        enum : ["6 Months","1 year","More than 1 year"]
       value:
         type: string
         description: Asset Value
