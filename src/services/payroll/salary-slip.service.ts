@@ -25,10 +25,13 @@ class SalarySlipService {
 
   public async create(data: CreateSalarySlipDto): Promise<ISalarySlip> {
 
+
+
     if (isEmpty(data)) throw new HttpException(400, "Bad request");
-    const createdata = await this.salarySlipModel.create(data);
+    // const createdata = await this.salarySlipModel.create(data);
     // const response: ISalarySlip =  omit(createdata.toObject(), [])
-    return createdata;
+    // return createdata;
+    return "we here";
   }
 
 //   public async updateIncentiveType(data: DTO): Promise<ISalarySlip> {
