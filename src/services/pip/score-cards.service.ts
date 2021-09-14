@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { IScoreCard } from "@/interfaces/pip-interface/score-cards.interface";
 import { isEmpty } from '@utils/util';
 import { HttpException } from '@exceptions/HttpException';

@@ -53,6 +53,8 @@ import AssetsRoute from '@routes/assets/assets.route';
 import ProjectRoute from '@routes/project/project.route';
 //import DepartmentRoute from './routes/employee/department.route';
 import scoreCardRoute from './routes/pip/score-cards.route';
+import TerminationRoute from './routes/employee-lifecycle/termination.route';
+
 
 
 
@@ -107,7 +109,9 @@ const app = new App([
   new AssetsRoute(),
   new CoachingFormRoute(),
   //new DepartmentRoute(),
-  new scoreCardRoute()
+  new scoreCardRoute(),
+  new PromotionRoute(),
+  new TerminationRoute()
 ]);
 
 app.listen();
