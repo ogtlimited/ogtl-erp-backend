@@ -4,6 +4,7 @@ import { NextFunction, Request, Response } from 'express';
 import { LoanApplicationDto, PutDto, ApprovalDto } from '@/dtos/loan/loan-application.dto';
 import { LoanApplication } from '@/interfaces/loan/loan-application.interface';
 import LoanApplicationService from '@/services/loan/loan-application.service';
+import LoanDeductionService from '@/services/loan/loan-deduction.service';
 import {opts} from '@/utils/rbac-opts';
 
 const RBAC = require('easy-rbac');
@@ -11,13 +12,18 @@ const rbac = new RBAC(opts);
 
 class LoanApplicationController {
     public loanApplicationService: any
+    public loanDeductionService: any
 
     constructor() {
         this.loanApplicationService = new LoanApplicationService();
+        this.loanDeductionService = new LoanDeductionService();
     }
 
     public getLoanApplications = async (req: Request, res: Response, next: NextFunction) => {
         let user = (<any>req).user
+        // const mongoose = require('mongoose');
+        // const models = mongoose.modelNames()
+        // console.log('my mongojhghfhgjjhfdf'+models)
         rbac.can(user.role, 'post:readAll')
         .then(result => {
             if (result) {
