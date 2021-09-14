@@ -16,9 +16,17 @@ const loanTypeSchema: Schema = new Schema(
       type: Number,
       required: true
     },
+    percentage_loan: {
+      type: Number,
+      required: true
+    },
     description: {
       type: String,
       default: null
+    },
+    min_stay: {
+      type: Number,
+      default: 6
     },
     disabled: {
       type: Boolean,

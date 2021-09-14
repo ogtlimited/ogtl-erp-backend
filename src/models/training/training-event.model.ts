@@ -31,17 +31,14 @@ const TrainingEventSchema: Schema = new Schema(
       },
     company_id: {
         type: Schema.Types.ObjectId,
-        required: true,
         ref: "Company"
     },
     supplier_id: {
         type: Schema.Types.ObjectId,
-        required: true,
         ref: "Supplier"
     },
     contact_number: {
         type: String,
-        required: true
     },
     description: {
         type: String,

@@ -4,7 +4,7 @@ import TrainingEvent from '@/models/training/training-event.model';
 import { ITrainingEvent } from '@/interfaces/training/training-event.interface';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
-import { TrainingEventDto } from '@/dtos/training/training-event.dto';
+import { TrainingEventDto, PutTrainingEventDto } from '@/dtos/training/training-event.dto';
 
 class TrainingEventService {
     public trainingEvent: any;
@@ -31,11 +31,11 @@ class TrainingEventService {
         return newTrainingEvent;
     }
 
-    // public async update(id: string, Payload: PutTrainingEventDto): Promise<ITrainingEvent> {
-    //     if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
-    //     const updateTrainingEvent: ITrainingEvent = await this.trainingEvent.findByIdAndUpdate(id, { Payload }, {new: true});
-    //     return updateTrainingEvent;
-    // }
+    public async update(id: string, Payload: PutTrainingEventDto): Promise<ITrainingEvent> {
+        if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
+        const updateTrainingEvent: ITrainingEvent = await this.trainingEvent.findByIdAndUpdate(id, { Payload }, {new: true});
+        return updateTrainingEvent;
+    }
 
     public async delete(id: string): Promise<ITrainingEvent> {
         const drop: ITrainingEvent = await this.trainingEvent.findByIdAndDelete(id);
