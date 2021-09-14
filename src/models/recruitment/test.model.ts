@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
 import {model,Schema,Document} from "mongoose"
-import { ITest, TestStatus, TestType } from '@interfaces/recruitment/test.interface';
+import { ITest } from '@interfaces/recruitment/test.interface';
 
 const testSchema: Schema = new Schema({
   test_type:{
     type:String,
-    enum:TestType,
+    enum:["Phone Screening","Typing Test","Excel Test","Formal Writing","Soft Skills"],
     required: true
   },
   job_applicant_id: {
@@ -16,7 +16,7 @@ const testSchema: Schema = new Schema({
   },
   status:{
     type: String,
-    enum: TestStatus,
+    enum: ["Passed","Failed"],
     default: null
   },
   hr_user: {

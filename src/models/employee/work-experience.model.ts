@@ -17,7 +17,7 @@ const workExperienceSchema: Schema = new Schema(
             type: String,
         },
         salary: {
-            type: Number,
+            type: String,
         },
         address: {
             type: String,

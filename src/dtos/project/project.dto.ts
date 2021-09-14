@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { IsString,IsEnum ,IsDateString,IsNotEmpty} from 'class-validator';
 import { IProject } from '@interfaces/project-interface/project.interface';
 

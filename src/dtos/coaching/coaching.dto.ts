@@ -9,7 +9,7 @@ export class CoachingFormDTO {
     public coaching_type: string;
 
     @IsString()
-    public employeeId: string;
+    public ogid: string;
 
     @IsString()
     public goals: string;

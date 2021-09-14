@@ -60,7 +60,7 @@ class BranchService {
         //Check if data is empty
         if (isEmpty(BranchData)) throw new HttpException(400, "No data provided");
 
-        const updateBranchById: Branch = await this.Branches.findByIdAndUpdate(BranchId,BranchData);
+        const updateBranchById: Branch = await this.Branches.findByIdAndUpdate(BranchId,{BranchData});
         if(!updateBranchById) throw new HttpException(409, "Branch doesn't exist");
          return updateBranchById;
    }

@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import bcrypt from 'bcrypt';
-import { CreateEmployeeDto,UpdateEmployeeDto, UpdateEmployeePermissionDto } from '@dtos/employee/employee.dto';
+
+import { CreateEmployeeDto, UpdateEmployeeDto, UpdateEmployeePermissionDto } from '@dtos/employee/employee.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
 import EmployeeModel from '@models/employee/employee.model';
@@ -28,12 +29,14 @@ class EmployeeService {
     if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
 
     const findEmployee: Employee = await this.Employees.findOne({ email: EmployeeData.company_email });
-    if (findEmployee) throw new HttpException(409, `You're email ${EmployeeData.company_email} already exists`);
+    if (findEmployee) throw new HttpException(409, `Your email ${EmployeeData.company_email} already exists`);
 
     const hashedPassword = await bcrypt.hash(EmployeeData.password, 10);
     const newOgid = this.generateOGID();
-    console.log(newOgid)
-    console.log(EmployeeData)
+    if(!EmployeeData.department){
+      EmployeeData.department = null;
+    }
+
     const createEmployeeData: Employee = await this.Employees.create({ ...EmployeeData, password: hashedPassword, ogid: newOgid });
 
     return createEmployeeData;
@@ -68,7 +71,7 @@ class EmployeeService {
 
     const updateEmployeeById: Employee = await this.Employees.findOneAndUpdate
     ({_id: EmployeeId}, { $set: { permissionLevel: EmployeeData.permissionLevel } }, {new : true});
-    console.log('updateEmployeeById', updateEmployeeById)
+
     if (!updateEmployeeById) throw new HttpException(409, "You're not Employee");
 
     return updateEmployeeById;

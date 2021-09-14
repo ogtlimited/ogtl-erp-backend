@@ -18,10 +18,10 @@ class ContactDetailsRoute implements Routes {
     private initializeRoutes() {
         this.router.get(`${this.path}`,authMiddleware, this.ContactDetailsController.getContactDetails);
         this.router.get(`${this.path}/:id`,authMiddleware, this.ContactDetailsController.getContactDetailsById);
-        this.router.post(`${this.path}`,[validationMiddleware(CreateContactDetailsDto, 'body'),authMiddleware], this.ContactDetailsController.CreateContactDetails);
-        this.router.put(`${this.path}/:id`, [validationMiddleware(UpdateContactDetailsDto, 'body', true),authMiddleware], this.ContactDetailsController.updateContactDetails);
+        this.router.post(`${this.path}`,authMiddleware, validationMiddleware(CreateContactDetailsDto, 'body'), this.ContactDetailsController.CreateContactDetails);
+        this.router.put(`${this.path}/:id`,authMiddleware, validationMiddleware(UpdateContactDetailsDto, 'body', true), this.ContactDetailsController.updateContactDetails);
         this.router.delete(`${this.path}/:id`,authMiddleware, this.ContactDetailsController.deleteContactDetails);
       }
-    } 
+    }
 
     export default ContactDetailsRoute;

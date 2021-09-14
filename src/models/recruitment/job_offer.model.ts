@@ -1,5 +1,5 @@
-import {model,Schema,Document} from "mongoose"
-import { IJobOffer,JobOfferStatus } from '@interfaces/recruitment/job_offer.interface';
+import { model, Schema, Document } from 'mongoose';
+import { IJobOffer } from '@interfaces/recruitment/job_offer.interface';
 
 const jobOfferSchema: Schema = new Schema({
   job_applicant_id: {
@@ -8,14 +8,14 @@ const jobOfferSchema: Schema = new Schema({
     ref: 'JobApplicant',
     default: null,
   },
-  status:{
+  status: {
     type: String,
-    enum: JobOfferStatus,
-    default: JobOfferStatus.AWAITING_RESPONSE
+    enum: ['Awaiting Response', 'Accepted', 'Rejected'],
+    default: 'Awaiting Response',
   },
-  offer_date:{
+  offer_date: {
     type: Date,
-    default: null
+    default: null,
   },
   designation_id: {
     type: Schema.Types.ObjectId,
@@ -23,16 +23,18 @@ const jobOfferSchema: Schema = new Schema({
     ref: 'Designation',
     default: null,
   },
-  job_offer_terms:[{
+  job_offer_terms: [
+    {
+      type: String,
+      default: null,
+    },
+  ],
+  terms_and_conditions: {
     type: String,
-    default: null
-  }],
-  terms_and_conditions:{
-    type:String,
-    default:null
-  }
-})
+    default: null,
+  },
+});
 
-const jobOfferModel = model<IJobOffer & Document>('JobOffer',jobOfferSchema)
+const jobOfferModel = model<IJobOffer & Document>('JobOffer', jobOfferSchema);
 
-export default jobOfferModel
+export default jobOfferModel;

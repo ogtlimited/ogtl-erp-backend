@@ -55,7 +55,7 @@ class WorkExperienceService{
             if(findWorkExperience && findWorkExperience._id != WorkExperienceId) throw new HttpException(409, `Employee ${WorkExperienceData.employee_id} WorkExperience details dont exist`);
         }
 
-        const updateWorkExperienceData: WorkExperience = await this.WorkExperiences.findByIdAndUpdate(WorkExperienceId,WorkExperienceData)
+        const updateWorkExperienceData: WorkExperience = await this.WorkExperiences.findByIdAndUpdate(WorkExperienceId,{WorkExperienceData})
         if(!updateWorkExperienceData) throw new HttpException(409, "details could not be updated");
         return updateWorkExperienceData;
     }
