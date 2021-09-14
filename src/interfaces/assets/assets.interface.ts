@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 export interface Assets{
     assetName: string;
-    assetId: string;
+    assetId : string;
     assigned_to: string;
     purchaseDate: string;
     manufacturer: string;

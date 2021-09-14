@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import { CreateSalaryComponentDto} from '@dtos/payroll/salary-component.dto';
 import SalaryComponentService from '@/services/payroll/salary-component.service';
 import { ISalaryComponent } from '@/interfaces/payroll/salary-component.interface';
+import { duplicateErrorMessageFormatter } from '@/utils/mongoDbErrorFormatter';
 
 
 class SalaryComponentController {
@@ -33,7 +34,6 @@ class SalaryComponentController {
       const createdData: ISalaryComponent = await this.salaryComponentService.create(newData); 
       res.status(201).json({ data: createdData});
     } catch (error) {
-      
       next(error);
     }
   };

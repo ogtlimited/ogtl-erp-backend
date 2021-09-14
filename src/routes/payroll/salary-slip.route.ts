@@ -18,7 +18,7 @@ class SalarySlipRoute implements Routes {
     private initializeRoutes() {
         this.router.get(`${this.path}`,[authMiddleware], this.salarySlipController.findAll);
         this.router.get(`${this.path}/:id`, [authMiddleware], this.salarySlipController.findById);
-        this.router.post(`${this.path}`, [authMiddleware, validationMiddleware(CreateSalarySlipDto, 'body')], this.salarySlipController.create);
+        this.router.post(`${this.path}`, [validationMiddleware(CreateSalarySlipDto, 'body')], this.salarySlipController.create);
         // this.router.patch(`${this.path}`, validationMiddleware(DTO, 'body'), this.salarySlipController.createIncentive);
     }
   }

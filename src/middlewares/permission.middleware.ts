@@ -67,11 +67,14 @@ const permissionMiddleware = (dept) => {
           const secretKey: string = config.get('secretKey');
           const verificationResponse = (await jwt.verify(Authorization, secretKey)) as DataStoredInToken;
           const userId = verificationResponse._id;
-          const findUser = await employeeModel.findById(userId).populate('department');
-          const userDept = findUser.department['department']
-          console.log(userDept === dept);
-          console.log(dept, userDept);
-          if(userDept === dept){
+          const findUser = await (await employeeModel.findById(userId).populate('department')).toObject();
+          // const department = await departmentModel.findById(userId).populate('department');
+          const userDept = findUser.department
+          // console.log(findUser, 'role 72');
+          console.log(findUser.department);
+          // console.log(findUser);
+          console.log('your department', userDept['department']);
+          if(userDept['department'] === dept){
             const permission = new userPermissions(Number(findUser.permissionLevel)).getAllPermissions()
             console.log(req.method)
             if(req.method === 'GET'){

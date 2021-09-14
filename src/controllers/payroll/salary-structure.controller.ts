@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { NextFunction, Request, Response } from 'express';
-import { CreateSalaryStructureDto} from '@dtos/payroll/salary-structure.dto';
+import { CreateSalaryStructureDto, UpdateSalaryStructureDto} from '@dtos/payroll/salary-structure.dto';
 import { ISalaryStructure} from '@/interfaces/payroll/salary-structure.interface';
 import SalaryStructureService from '@/services/payroll/salary-structure.service';
 
@@ -11,7 +11,7 @@ class SalaryStrutureController {
   
   public findAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const allSalaryStructures = await this.salaryStructureService.findAll();
+      const allSalaryStructures = await this.salaryStructureService.findAll(req.query);
       res.status(200).json({ data: allSalaryStructures});
     } catch (error) {
       next(error);
@@ -31,10 +31,21 @@ class SalaryStrutureController {
   public create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const newSalaryStructure: CreateSalaryStructureDto= req.body;
+      // console.log(newSalaryStructure);
       const createdSalaryStructure: ISalaryStructure= await this.salaryStructureService.create(newSalaryStructure); 
       res.status(201).json({ data: createdSalaryStructure});
+      // return res.send('hafa');
     } catch (error) {
-      
+      next(error);
+    }
+  };
+
+  public update = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const updateData: UpdateSalaryStructureDto= req.body;
+      const updatedSalaryStructure: ISalaryStructure= await this.salaryStructureService.update(req.params.id, updateData); 
+      res.status(200).json({ data: updatedSalaryStructure});
+    } catch (error) {
       next(error);
     }
   };

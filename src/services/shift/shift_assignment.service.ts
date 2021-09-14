@@ -33,7 +33,7 @@ class ShiftAssignmentService {
     if (isEmpty(shiftAssignmentData)) throw new HttpException(400, "Bad request");
     //find shift assignment using the employee id provided
     const findShitAssignment: IShiftAssignment = await this.shiftAssignment.findOne({ employee_id: shiftAssignmentData.employee_id });
-    this.employeeModel.findOneAndUpdate({_id: shiftAssignmentData.employee_id}, {$set: {default_shift:shiftAssignmentData.shift_type_id}}, { new: true })
+    await this.employeeModel.findOneAndUpdate({_id: shiftAssignmentData.employee_id}, {$set: {default_shift:shiftAssignmentData.shift_type_id}}, { new: true })
 
     //throw error if shift assignment does exist
     if (findShitAssignment) throw new HttpException(409, `Shift assignment already exists`);
@@ -53,7 +53,7 @@ class ShiftAssignmentService {
     }
     //find shift assignment using the id provided and update it
     const updateShiftAssignmentById:IShiftAssignment = await this.shiftAssignment.findByIdAndUpdate(shiftAssignmentId,shiftAssignmentData,{new:true})
-    this.employeeModel.findOneAndUpdate({_id: shiftAssignmentData.employee_id}, {$set: {default_shift:shiftAssignmentData.shift_type_id}}, { new: true })
+    await this.employeeModel.findOneAndUpdate({_id: shiftAssignmentData.employee_id}, {$set: {default_shift:shiftAssignmentData.shift_type_id}}, { new: true })
     if (!updateShiftAssignmentById) throw new HttpException(409, "shift assignment could not be updated");
     // return updated shift assignment
     return updateShiftAssignmentById;

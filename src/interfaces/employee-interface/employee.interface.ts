@@ -15,7 +15,7 @@ export interface Employee {
     date_of_joining: string;
     default_shift: string;
     company_email: string
-    department: string;
+    department: any;
     password: string;
     designation: string;
     first_name: string;

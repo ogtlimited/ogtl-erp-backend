@@ -19,7 +19,7 @@ class AttendanceController {
 
   public getDepartmentAttendance = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const findAllDepartmentAttendanceData = await this.attendanceService.findAllDepartmentAttendance(req.params.id, req.query);
+      const findAllDepartmentAttendanceData = await this.attendanceService.findAllDepartmentAttendance(req.query);
       res.status(200).json({ data: findAllDepartmentAttendanceData});
     } catch (error) {
       next(error);
@@ -51,7 +51,6 @@ class AttendanceController {
       const createAttendanceData: any = await this.attendanceService.createAttendanceType(attendanceData); 
       res.status(201).json({ data: createAttendanceData});
     } catch (error) {
-      
       next(error);
     }
   };
@@ -63,7 +62,6 @@ class AttendanceController {
       const createAttendanceData: any = await this.attendanceService.updateAttendance(attendanceData); 
       res.status(201).json({ data: createAttendanceData});
     } catch (error) {
-      
       next(error);
     }
   };

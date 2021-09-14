@@ -4,6 +4,9 @@ import { HttpException } from '@exceptions/HttpException';
 import { ISalarySlip } from '@/interfaces/payroll/salary-slip.interface';
 import salarySlipModel  from '@models/payroll/salary-slip.model';
 import { isEmpty } from '@utils/util';
+import departmentModel from '@/models/department/department.model';
+import projectModel from '@/models/project/project.model';
+import { isValidObjectId } from 'mongoose';
 // import omit from 'lodash/omit'
 
 class SalarySlipService {
@@ -23,12 +26,18 @@ class SalarySlipService {
     return salarySlip;
   }
 
-  public async create(data: CreateSalarySlipDto): Promise<ISalarySlip> {
+  public async create(data: CreateSalarySlipDto): Promise<any> {
+
+
 
     if (isEmpty(data)) throw new HttpException(400, "Bad request");
-    const createdata = await this.salarySlipModel.create(data);
+    const projects = await projectModel.find();
+    // console.log(projects);
+    
+    // const createdata = await this.salarySlipModel.create(data);
     // const response: ISalarySlip =  omit(createdata.toObject(), [])
-    return createdata;
+    // return createdata;
+    return projects;
   }
 
 //   public async updateIncentiveType(data: DTO): Promise<ISalarySlip> {
@@ -42,3 +51,5 @@ class SalarySlipService {
 }
 
 export default SalarySlipService;
+
+

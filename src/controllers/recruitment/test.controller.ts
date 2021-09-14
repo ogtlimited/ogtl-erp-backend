@@ -16,6 +16,15 @@ class TestController {
       next(error)
     }
   }
+  //Method for returning all Test
+  public getPassedTests = async (req:Request, res:Response, next:NextFunction) =>{
+    try {
+      const findAllPassedTest: ITest[] = await this.testService.findAllPassedTests();
+      res.status(200).json({data:findAllPassedTest, totalTest: findAllPassedTest.length, message:"All passed test"})
+    }catch (error) {
+      next(error)
+    }
+  }
 
   //Method for returning a single test
   public getTestById = async (req:Request, res:Response, next:NextFunction) =>{

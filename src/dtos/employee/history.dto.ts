@@ -1,7 +1,7 @@
-import {IsDate, IsNotEmpty, IsString } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateHistoryDto{
-   
+
 
     @IsNotEmpty()
     @IsString()
@@ -13,10 +13,10 @@ export class CreateHistoryDto{
     @IsString()
         public designation_id: string;
 
-    @IsDate()
+    @IsDateString()
         public from_date: Date;
 
-    @IsDate()
+    @IsDateString()
         public to_date: Date;
 
 }
@@ -34,10 +34,10 @@ export class UpdateHistoryDto{
     @IsString()
         public designation_id: string;
 
-    @IsDate()
+    @IsDateString()
         public from_date: Date;
 
-    @IsDate()
+    @IsDateString()
         public to_date: Date;
 
 }

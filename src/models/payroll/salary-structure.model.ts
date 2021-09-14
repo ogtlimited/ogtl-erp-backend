@@ -5,6 +5,19 @@ import { model, Schema, Document } from 'mongoose';
 
 const salaryStructureSchema: Schema = new Schema(
   {
+    projectId: {
+      type: Schema.Types.ObjectId,
+      ref: "Project"
+    },
+    departmentId: {
+      type: Schema.Types.ObjectId,
+      ref: "Department"
+    },
+    title: {
+      type: String,
+      required: true,
+      unique:true
+    },
     deductions: [
       {
         type: Schema.Types.ObjectId,
@@ -19,7 +32,6 @@ const salaryStructureSchema: Schema = new Schema(
     ],
     status: {
       type: Schema.Types.ObjectId,
-      required: true,
       ref: 'Status',
     },
     createdBy: {

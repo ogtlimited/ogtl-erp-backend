@@ -17,6 +17,17 @@ class JobApplicantController {
     }
   }
 
+  //Method for returning all job accepted applicants
+  public getAcceptedJobApplicants = async (req:Request, res:Response, next:NextFunction) =>{
+    try {
+      const findAllAcceptedJobApplicants: IJobApplicant[] = await this.jobApplicantService.findAllAcceptedJobApplicants()
+      res.status(200).json({data:findAllAcceptedJobApplicants, totalJobApplicants: findAllAcceptedJobApplicants.length, message:"All accepted job applicants"})
+    }catch (error) {
+      next(error)
+    }
+  }
+
+
   //Method for returning a single job applicant
   public getJobApplicantById = async (req:Request, res:Response, next:NextFunction) =>{
     try {

@@ -115,15 +115,15 @@ definitions:
     properties:
       id:
          type: string
-         description: allocation Id
+         description: score card Id
       employee_id:
          type: string
          description: employee id
       performance_score:
-         type: number
+         type: string
          description: Employees performance score
       company_values_score:
-         type: number
+         type: string
          description: Employees company values score
       
 
