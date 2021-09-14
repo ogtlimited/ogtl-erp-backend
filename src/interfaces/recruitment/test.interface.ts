@@ -1,21 +1,10 @@
 /* eslint-disable prettier/prettier */
-export enum TestStatus {
-    PASSED,
-    FAILED,
-}
 
-export enum TestType{
-  PHONE_SCREENING,
-  TYPING_TEST,
-  EXCEL_TEST,
-  FORMAL_WRITING,
-  SOFT_SKILLS
-}
 export interface ITest {
   _id: string;
-  test_type:TestType;
+  test_type:string;
   job_applicant_id: string;
-  status: TestStatus;
+  status: string;
   hr_user: string;
   score?: string;
   interview_date: Date;

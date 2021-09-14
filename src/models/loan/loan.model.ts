@@ -4,11 +4,6 @@ import { model, Schema, Document } from 'mongoose';
 
 const loanSchema: Schema = new Schema(
   {
-    applicant_type_id: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: 'ApplicationType'
-    },
     applicant_id: {
       type: Schema.Types.ObjectId,
       required: true,
@@ -29,41 +24,49 @@ const loanSchema: Schema = new Schema(
       required: true
     },
     loan_amount: {
-        type: Number,
+        type: String,
         required: true
     },
     repayment_start_date: {
         type: String,
         required: true
     },
-    repayment_method: {
-        type: String,
-        required: true
-    },
     mode_of_payment_id: {
         type: Schema.Types.ObjectId,
-        required: true,
+        default: null,
         ref: 'ModeOfPayment'
     },
     loan_account_id: {
         type: Schema.Types.ObjectId,
-        required: true,
+        default: null,
         ref: 'Account'
     },
     payment_account_id: {
         type: Schema.Types.ObjectId,
-        required: true,
+        default: null,
         ref: 'Account'
     },
     interest_income_account_id: {
         type: Schema.Types.ObjectId,
-        required: true,
+        default: null,
         ref: 'Account'
     },
-    status_id: {
+    repayment_id: [{
+      type: Schema.Types.ObjectId,
+      ref: 'LoanRepayment'
+    }],
+    status: {
         type: String,
-        required: true
+        default: null
     },
+    completed: {
+      type: Boolean,
+      default: false
+    },
+    loan_balance: {
+      type: String,
+      required: true
+    }
   },
   {
     timestamps: true,

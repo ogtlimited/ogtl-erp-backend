@@ -1,6 +1,5 @@
 export interface ITrainingProgram {
     program_name:string;
-    company_id:string;
     status: string;
     trainer_name: string;
     trainer_email: string;

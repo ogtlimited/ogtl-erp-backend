@@ -13,6 +13,11 @@ class JobOfferService {
     return this.jobOffer.find().populate('job_applicant_id designation_id');
   }
 
+  //Method for finding all job offers where status is accepted
+  public async findAllAcceptedJobOffers() : Promise<IJobOffer[]>{
+    return this.jobOffer.find({status: 'JobOfferStatus.ACCEPTED'}).populate('job_applicant_id designation_id');
+  }
+
   //Method for finding a single job offer
   public async findJobOfferById(jobOfferId: string): Promise<IJobOffer>{
     //check if no Job offer id is empty

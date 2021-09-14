@@ -1,9 +1,13 @@
 /* eslint-disable prettier/prettier */
 
 import { NextFunction, Request, Response } from 'express';
-import { CreateProjectDto, UpdateProjectDto } from '@/dtos/project/project.dto';
+import { CreateProjectDto, UpdateProjectDto, ApproveProjectDto } from '@/dtos/project/project.dto';
 import { IProject } from '@/interfaces/project-interface/project.interface';
 import ProjectService from '@/services/project/project.service';
+import {opts} from '@/utils/rbac-opts';
+
+const RBAC = require('easy-rbac');
+const rbac = new RBAC(opts);
 
 class ProjectController {
     public projectService;
@@ -13,12 +17,23 @@ class ProjectController {
     }
 
     public getProjects = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const findAllProjects: IProject[] = await this.projectService.findAll();
-            res.status(200).json({ data: findAllProjects, message: 'findAll' });
-        } catch (error) {
-            next(error);
-        }
+        let user = (<any>req).user
+        rbac.can('ceo', 'ceo:super')
+        .then(result => {
+            if (result) {
+                const findAllProjects: IProject[] = this.projectService.findAll();
+                return findAllProjects;
+            } else {
+                const findAllProjects: IProject[] = this.projectService.findAll({status: 'approved'});
+                return findAllProjects;
+            }
+        })
+        .then(data => {
+            res.status(200).json({ data: data, message: 'findAll2' });
+        })
+        .catch(err => {
+            next(err);
+        })
     };
 
     public getProject = async (req: Request, res: Response, next: NextFunction) => {
@@ -32,24 +47,68 @@ class ProjectController {
     };
 
     public createProject = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const Payload: CreateProjectDto = req.body;
-            const newProject: IProject = await this.projectService.create(Payload);
-            res.status(201).json({ data: newProject, message: 'created' });
-        } catch (error) {
-            next(error);
-        }
+        let user = (<any>req).user
+        rbac.can('coo', 'coo:create')
+        .then(result => {
+            if (result) {
+                const Payload: CreateProjectDto = req.body;
+                const newProject: IProject = this.projectService.create(Payload);
+                return newProject;
+            } else {
+                res.status(200).json({ data: "Not permitted", message: 'findAll' });
+            }
+        })
+        .then(data => {
+            res.status(201).json({ data: data, message: 'created' });
+        })
+        .catch(err => {
+            next(err);
+        })
     };
 
     public updateProject = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const projectId: string = req.params.projectId;
-            const Payload: UpdateProjectDto = req.body;
-            const updateProject: IProject = await this.projectService.update(projectId, Payload);
-            res.status(200).json({ data: updateProject, message: 'updated' });
-        } catch (error) {
-            next(error);
-        }
+        let user = (<any>req).user
+        
+        const projectId: string = req.params.projectId;
+        const findProject: IProject = await this.projectService.find(projectId);
+        rbac.can('coo', 'coo:*', {userId: user._id, ownerId: findProject.creator, status: findProject.status['enum']})
+        .then(result => {
+            if (result) {
+                const projectId: string = req.params.projectId;
+                const Payload: ApproveProjectDto = req.body;
+                const updateProject: IProject = this.projectService.update(projectId, Payload);
+                return updateProject;
+            } else {
+                res.status(200).json({ data: "Not permitted", message: 'findAll' });
+            }
+        })
+        .then(data => {
+            res.status(200).json({ data: data, message: 'status updated' });
+        })
+        .catch(err => {
+            next(err);
+        })
+    };
+
+    public approveProject = async (req: Request, res: Response, next: NextFunction) => {
+        let user = (<any>req).user
+        rbac.can('ceo', 'ceo:super')
+        .then(result => {
+            if (result) {
+                const projectId: string = req.params.projectId;
+                const Payload: ApproveProjectDto = req.body;
+                const updateProject: IProject = this.projectService.update(projectId, Payload);
+                return updateProject;
+            } else {
+                res.status(200).json({ data: "Not permitted", message: 'findAll' });
+            }
+        })
+        .then(data => {
+            res.status(200).json({ data: data, message: 'status updated' });
+        })
+        .catch(err => {
+            next(err);
+        })
     };
 
     public deleteProject = async (req: Request, res: Response, next: NextFunction) => {

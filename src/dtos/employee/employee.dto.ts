@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import { IsEmail, IsString,IsBoolean } from 'class-validator';
+import { IsEmail, IsString, IsBoolean, IsEnum, IsNumber, IsOptional } from 'class-validator';
+import { EmployeeType } from '@interfaces/employee-interface/employee.interface';
 
 export class CreateEmployeeDto {
 
@@ -13,6 +14,7 @@ export class CreateEmployeeDto {
   public default_shift: string;
 
   @IsString()
+  @IsOptional()
   public department: string;
 
   @IsString()
@@ -28,6 +30,7 @@ export class CreateEmployeeDto {
   public first_name: string;
 
   @IsString()
+  @IsOptional()
   public employment_type: string;
 
   @IsBoolean()
@@ -51,6 +54,15 @@ export class CreateEmployeeDto {
   @IsString()
   public status: string;
 
+  @IsOptional()
+  @IsString()
+  public branch: string;
+
+  @IsEnum(EmployeeType)
+  public employeeType: EmployeeType;
+
+  @IsString()
+  public projectId: string;
 
 
 
@@ -76,7 +88,7 @@ export class UpdateEmployeeDto {
   @IsString()
   public first_name: string;
 
-  @IsString()
+  @IsOptional()
   public employment_type: string;
 
   @IsBoolean()
@@ -98,10 +110,17 @@ export class UpdateEmployeeDto {
   @IsString()
   public status: string;
 
-  @IsString()
-  public permissionLevel: string;
+  @IsNumber()
+  public permissionLevel: number;
 
 
+}
+export class UpdateEmployeePermissionDto{
+  @IsEmail()
+  public company_email: string;
+
+  @IsNumber()
+  public permissionLevel: number
 }
 
 export class EmployeeLoginDto {

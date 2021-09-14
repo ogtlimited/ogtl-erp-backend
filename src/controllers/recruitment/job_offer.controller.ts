@@ -17,6 +17,16 @@ class JobOfferController {
     }
   }
 
+  //method for return all job offers that have been accepted
+  public getAcceptedJobOffers = async (req:Request, res:Response, next:NextFunction) =>{
+    try {
+      const findAllAcceptedJobOffers: IJobOffer[] = await this.jobOfferService.findAllAcceptedJobOffers();
+      res.status(200).json({data:findAllAcceptedJobOffers, totalAcceptedJobOffers: findAllAcceptedJobOffers.length, message:"All accepted job offers"})
+    }catch (error) {
+      next(error)
+    }
+  }
+
   //Method for returning a single job offer
   public getJobOfferById = async (req:Request, res:Response, next:NextFunction) =>{
     try {

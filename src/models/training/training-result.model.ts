@@ -30,7 +30,7 @@ const TrainingResultSchema: Schema = new Schema(
         required: true,
         ref: "TrainingEvent"
     },
-    training_result: [result]
+    training_result: result
   },
   {
     timestamps: true,

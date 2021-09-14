@@ -9,10 +9,9 @@ const CoachingSchema: Schema = new Schema(
             type: String,
             required: true,
           },
-          employeeId:  {
-            type: Schema.Types.ObjectId,
+          ogid:  {
+            type: String,
             required: true,
-            ref: "Employee"
           },
           goals: {
             type: String,

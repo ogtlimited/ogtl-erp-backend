@@ -7,8 +7,6 @@ export interface ITrainingEvent {
     company_id: string;
     trainer_name: string;
     trainer_email: string;
-    supplier_id: string;
-    contact_number: string;
     description: string;
     has_certificate: boolean;
     course: string;

@@ -1,17 +1,18 @@
+/* eslint-disable prettier/prettier */
 import { model, Schema, Document } from 'mongoose';
 import { IProject } from '@interfaces/project-interface/project.interface';
 
-const projectSchema :Schema = new Schema(
+const projectSchema: Schema = new Schema(
   {
     project_name: {
       type: String,
       required: true,
       unique: true,
     },
-    client_id:{
+    client_id: {
       type: Schema.Types.ObjectId,
-      ref: "Client"
-    } ,
+      ref: 'Client',
+    },
     type: {
       type: String,
       required: true,
@@ -28,11 +29,11 @@ const projectSchema :Schema = new Schema(
       type: String,
       required: true,
     },
-    start_date:{
+    start_date: {
       type: Date,
-      required: true
+      required: true,
     },
-    end_date:{
+    end_date: {
       type: Date,
     },
     number_of_employees: {
@@ -42,41 +43,44 @@ const projectSchema :Schema = new Schema(
     billing_structure: {
       type: String,
       required: true,
-      enum: ["standard", "per_hour", "seat","per_hour/seat"],
+      enum: ['standard', 'per_hour', 'seat', 'per_hour/seat'],
     },
     diallers: {
       type: String,
-      enum: ["inhouse", "external", "others"],
+      enum: ['inhouse', 'external', 'others'],
     },
-    documents:[ {
-      type: String,
-      default: null,
-    }],
+    documents: [
+      {
+        type: String,
+        default: null,
+      },
+    ],
     creator: {
       type: Schema.Types.ObjectId,
-      ref: "Employee",
+      ref: 'Employee',
     },
-    approved: {
-      type: Boolean,
-      default: false,
+    status: {
+      type: String,
+      required: true,
+      enum: ["open", "approved", "rejected"],
     },
     manager: {
       type: Schema.Types.ObjectId,
-      ref: "Employee",
+      ref: 'Employee',
     },
     quality_analyst: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Employee",
+        ref: 'Employee',
       },
     ],
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 //Use a pre method to add , to range when you want to retrieve data
-const projectModel = model<IProject & Document>("Project", projectSchema);
+const projectModel = model<IProject & Document>('Project', projectSchema);
 
 export default projectModel;

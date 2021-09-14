@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import CombineServices from '@/services/index.service';
 import { NextFunction, Request, Response } from 'express';
 

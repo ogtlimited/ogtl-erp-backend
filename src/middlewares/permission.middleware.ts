@@ -28,7 +28,7 @@ import employeeModel from '@models/employee/employee.model';
 
 // console.log((2).toString(2)) // 10
 // console.log((0b10).toString(10)) // 2
-const READ = 1; // 001
+const READ = 1; // 001 3
 const WRITE = 2; // 001
 const UPDATE = 3; // 001
 const DELETE = 4; // 001
@@ -57,60 +57,77 @@ export class userPermissions{
 }
 
 
-const permissionMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
-  try {
-    const Authorization = req.header('Authorization').split('Bearer ')[1] || null;
+const permissionMiddleware = (dept) => {
+  console.log('this route is only accesible to ' + dept + ' users')
+  return  async (req: RequestWithUser, res: Response, next: NextFunction) =>{
+      try {
+        const Authorization = req.header('Authorization').split('Bearer ')[1] || null;
+    
+        if (Authorization) {
+          const secretKey: string = config.get('secretKey');
+          const verificationResponse = (await jwt.verify(Authorization, secretKey)) as DataStoredInToken;
+          const userId = verificationResponse._id;
+          const findUser = await (await employeeModel.findById(userId).populate('department')).toObject();
+          // const department = await departmentModel.findById(userId).populate('department');
+          const userDept = findUser.department
+          // console.log(findUser, 'role 72');
+          console.log(findUser.department);
+          // console.log(findUser);
+          console.log('your department', userDept['department']);
+          if(userDept['department'] === dept){
+            const permission = new userPermissions(Number(findUser.permissionLevel)).getAllPermissions()
+            console.log(req.method)
+            if(req.method === 'GET'){
+              if(permission.Read === true){
+                req.user = findUser;
+                next();
+              }else{
+                next(new HttpException(401, 'You have insufficient authorization level'));
+              }
+      
+            }else if(req.method === 'POST'){
+              console.log('POST REQUEST !!!!')
+              console.log('Permission', permission)
+              if(permission.Write === true){
+                req.user = findUser;
+                next();
+              }else{
+                next(new HttpException(401, 'You have insufficient authorization level'));
+              }
+            }else if(req.method === 'PUT'){
+              if(permission.Update === true){
+                req.user = findUser;
+                next();
+              }else{
+                next(new HttpException(401, 'You have insufficient authorization level'));
+              }
+      
+            }else if(req.method === 'DELETE'){
+              if(permission.Delete === true){
+                req.user = findUser;
+                next();
+              }else{
+                next(new HttpException(401, 'You have insufficient authorization level'));
+              }
+      
+            }
 
-    if (Authorization) {
-      const secretKey: string = config.get('secretKey');
-      const verificationResponse = (await jwt.verify(Authorization, secretKey)) as DataStoredInToken;
-      const userId = verificationResponse._id;
-      const findUser = await employeeModel.findById(userId);
-      console.log(findUser);
-      const permission = new userPermissions(Number(findUser.permissionLevel)).getAllPermissions()
-      if(req.method === 'get'){
-        if(permission.Read === true){
-          req.user = findUser;
-          next();
-        }else{
-          next(new HttpException(401, 'You have insufficient authorization level'));
+          }else{
+            next(new HttpException(401, 'this route is only accesible to ' + dept + ' users'))
+          }
+          // if (findUser) {
+          //   req.user = findUser;
+          //   next();
+          // } else {
+          //   next(new HttpException(401, 'Wrong authentication token'));
+          // }
+        } else {
+          next(new HttpException(404, 'Authentication token missing'));
         }
-
-      }else if(req.method === 'post'){
-        if(permission.Write === true){
-          req.user = findUser;
-          next();
-        }else{
-          next(new HttpException(401, 'You have insufficient authorization level'));
-        }
-      }else if(req.method === 'put'){
-        if(permission.Update === true){
-          req.user = findUser;
-          next();
-        }else{
-          next(new HttpException(401, 'You have insufficient authorization level'));
-        }
-
-      }else if(req.method === 'delete'){
-        if(permission.Delete === true){
-          req.user = findUser;
-          next();
-        }else{
-          next(new HttpException(401, 'You have insufficient authorization level'));
-        }
-
-      }
-      if (findUser) {
-        req.user = findUser;
-        next();
-      } else {
+      } catch (error) {
         next(new HttpException(401, 'Wrong authentication token'));
       }
-    } else {
-      next(new HttpException(404, 'Authentication token missing'));
-    }
-  } catch (error) {
-    next(new HttpException(401, 'Wrong authentication token'));
+
   }
 };
 
