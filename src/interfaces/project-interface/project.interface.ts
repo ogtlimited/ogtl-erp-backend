@@ -13,7 +13,7 @@ export interface IProject {
   diallers: string;
   documents: string;
   creator: string;
-  approved: string;
+  status: string;
   manager: string;
   quality_analyst: string;
 }

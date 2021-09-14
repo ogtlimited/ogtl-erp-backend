@@ -56,9 +56,10 @@ const projectSchema :Schema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Employee",
     },
-    approved: {
-      type: Boolean,
-      default: false,
+    status: {
+      type: String,
+      required: true,
+      enum: ["open", "approved", "rejected"],
     },
     manager: {
       type: Schema.Types.ObjectId,

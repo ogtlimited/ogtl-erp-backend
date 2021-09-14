@@ -26,8 +26,11 @@ class LoanService {
     }
 
     public async create(Payload: LoanDto): Promise<Loan> {
-        if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
-        const newLoan: Loan = await this.loan.create(Payload);
+        if (isEmpty(Payload)) throw new HttpException(400, "Bad request"); 
+        const newLoan: Loan = await new this.loan(Payload);
+        newLoan['loan_balance'] = Payload.loan_amount
+        this.loan.create(newLoan)
+        //const newLoan: Loan = await this.loan.create(Payload);
         return newLoan;
     }
 
