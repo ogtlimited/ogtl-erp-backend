@@ -23,7 +23,7 @@ class SalarySlipService {
     return salarySlip;
   }
 
-  public async create(data: CreateSalarySlipDto): Promise<ISalarySlip> {
+  public async create(data: CreateSalarySlipDto): Promise<any> {
 
 
 
