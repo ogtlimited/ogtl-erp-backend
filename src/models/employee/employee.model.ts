@@ -47,6 +47,11 @@ const employeeSchema: Schema = new Schema(
       ref: 'Branch',
       default: null,
     },
+    salaryStructure_id: {
+      type: Schema.Types.ObjectId,
+      ref: 'SalaryStructure',
+      default: null,
+    },
     employeeType: {
       type: String,
       enum: EmployeeType

@@ -4,7 +4,7 @@ import { model, Schema, Document } from 'mongoose';
 
 const salarySlipSchema: Schema = new Schema(
   {
-    employee: {
+    employeeId: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "Employee"
@@ -14,21 +14,30 @@ const salarySlipSchema: Schema = new Schema(
       required: true,
       ref: "SalaryStructure"
     },
+    department_id: {
+      type: Schema.Types.ObjectId,
+      ref: "Department"
+    },
+    project_id: {
+      type: Schema.Types.ObjectId,
+      ref: "Project"
+    },
     status: {
       type: Schema.Types.ObjectId,
       ref: "Status"
     },
     loans: [{
       type: Schema.Types.ObjectId,
-      ref: "Loans"
+      ref: "Loans",
+      default:null
     }],
     deductions: [{
       type: Schema.Types.ObjectId,
-      ref: "Deduction"
+      ref: "Deduction",
+      default:null
     }],
     totalInWords: {
       type: String,
-      required: true,
     },
     netPay: {
       type: Number,

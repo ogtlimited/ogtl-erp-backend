@@ -31,7 +31,7 @@ class SalarySlipController {
   public create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const newData: CreateSalarySlipDto = req.body;
-      const createdData: ISalarySlip = await this.salarySlipService.create(newData); 
+      const createdData: ISalarySlip = await this.salarySlipService.create(newData, req.query); 
       res.status(201).json({ data: createdData});
     } catch (error) {
       
