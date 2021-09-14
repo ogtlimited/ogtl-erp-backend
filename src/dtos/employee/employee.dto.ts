@@ -54,6 +54,7 @@ export class CreateEmployeeDto {
   @IsString()
   public status: string;
 
+  @IsOptional()
   @IsString()
   public branch: string;
 

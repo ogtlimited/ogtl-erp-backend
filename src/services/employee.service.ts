@@ -12,7 +12,7 @@ class EmployeeService {
   public Employees = EmployeeModel;
 
   public async findAllEmployee(): Promise<Employee[]> {
-    const Employees: Employee[] = await this.Employees.find().populate('designation');
+    const Employees: Employee[] = await this.Employees.find().populate('designation department');
     return Employees;
   }
 
