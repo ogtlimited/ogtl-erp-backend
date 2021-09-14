@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { CreateSalaryStructureDto } from '../../dtos/payroll/salary-structure.dto';
+import { CreateSalaryStructureDto, UpdateSalaryStructureDto } from '../../dtos/payroll/salary-structure.dto';
 import SalaryStrutureController from '@/controllers/payroll/salary-structure.controller';
 import { Routes } from '@/interfaces/routes.interface';
 import validationMiddleware from '@/middlewares/validation.middleware';
@@ -16,10 +16,10 @@ class SalaryStructureRoute implements Routes {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}`,[authMiddleware], this.salaryStrutureController.findAll);
-        this.router.get(`${this.path}/:id`,[authMiddleware], this.salaryStrutureController.findById);
-        this.router.post(`${this.path}`,[authMiddleware, validationMiddleware(CreateSalaryStructureDto, 'body')], this.salaryStrutureController.create);
-        // this.router.patch(`${this.path}`, validationMiddleware(CreateSalaryStructureDto, 'body'), this.CONTROLLER.createIncentive);
+        this.router.get(`${this.path}`,[], this.salaryStrutureController.findAll);
+        this.router.get(`${this.path}/:id`,[], this.salaryStrutureController.findById);
+        this.router.post(`${this.path}`,[validationMiddleware(CreateSalaryStructureDto, 'body')], this.salaryStrutureController.create);
+        this.router.patch(`${this.path}/:id`, [validationMiddleware(UpdateSalaryStructureDto, 'body')], this.salaryStrutureController.update);
     }
   }
   export default SalaryStructureRoute;

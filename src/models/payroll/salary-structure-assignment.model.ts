@@ -9,19 +9,17 @@ const salaryStructureAssignmentSchema: Schema = new Schema(
       required: true,
       ref: "Employee"
     },
-    salaryStructure: {
+    salaryStructureId: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "SalaryStructure"
     },
     status: {
       type: Schema.Types.ObjectId,
-      required: true,
       ref: "Status"
     },
     fromDate: {
       type: Date,
-      required: true,
     },
     createdBy: {
       type: Schema.Types.ObjectId,

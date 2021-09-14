@@ -2,30 +2,37 @@
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
 
-import { IsString, IsNumber, IsArray, IsOptional } from 'class-validator';
+import { IsString, IsArray, IsOptional } from 'class-validator';
+
 export class CreateSalaryStructureDto {  
- 
-    @IsString()
-    public payrollFrequency: string;
-
     @IsArray()
-    public salaryDeductions: string;
-    
-    // @IsString()
-    // @IsOptional()
-    // public currency: string;
+    public deductions: Array<String>;
+    @IsArray()
+    public earnings: Array<String>;
+    @IsString()
+    @IsOptional()
+    public departmentId: String;
+    @IsString()
+    @IsOptional()
+    public projectId: String;
+    @IsString()
+    public title: String;
+}
 
-    // @IsString()
-    // @IsOptional()
-    // public base: string;
-    
-    @IsNumber()
-    public hourRate: Number;
-    
-    @IsNumber()
-    public earning: Number;
-    
-    @IsNumber()
-    public netPay: Number;   
-
+export class UpdateSalaryStructureDto {  
+    @IsArray()
+    @IsOptional()
+    public deductions: Array<String>;
+    @IsArray()
+    @IsOptional()
+    public earnings: Array<String>;
+    @IsString()
+    @IsOptional()
+    public departmentId: String;
+    @IsString()
+    @IsOptional()
+    public projectId: String;
+    @IsString()
+    @IsOptional()
+    public title: String;
 }

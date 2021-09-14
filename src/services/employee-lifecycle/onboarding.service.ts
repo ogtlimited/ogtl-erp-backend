@@ -16,10 +16,8 @@ class OnBoardingService {
 
   public async findById(id: string): Promise<IOnBoarding> {
     if (isEmpty(id)) throw new HttpException(400, "provide Id");
-
     const onBoardingData: IOnBoarding = await this.onBoardingModel.findOne({ _id: id });
     if (!onBoardingData) throw new HttpException(404, "no record found");
-
     return onBoardingData;
   }
 

@@ -14,15 +14,14 @@ const salarySlipSchema: Schema = new Schema(
       required: true,
       ref: "SalaryStructure"
     },
-    Status: {
+    status: {
       type: Schema.Types.ObjectId,
-      required: true,
       ref: "Status"
     },
-    loans: {
+    loans: [{
       type: Schema.Types.ObjectId,
       ref: "Loans"
-    },
+    }],
     deductions: [{
       type: Schema.Types.ObjectId,
       ref: "Deduction"
