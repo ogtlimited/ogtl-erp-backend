@@ -45,6 +45,10 @@ import JobApplicantRoute from '@routes/recruitment/jobApplicant.route';
 import TestRoute from '@routes/recruitment/test.route';
 import WarningLetterRoute from '@routes/pip/warningLetter.route';
 import LoanRoute from '@routes/loan/loan.route';
+import TrainingAttendanceRoute from '@routes/training/training-attendance.route';
+import TrainingProgramRoute from '@routes/training/training-program.route';
+import TrainingEventRoute from '@routes/training/training-event.route';
+import TrainingResultRoute from '@routes/training/training-result.route';
 import LoanTypeRoute from '@routes/loan/loan-type.route';
 import LoanApplicationRoute from '@routes/loan/loan-application.route';
 import CoachingFormRoute from './routes/coaching/coachingForm.route';
@@ -113,7 +117,12 @@ const app = new App([
   new PromotionRoute(),
   new TerminationRoute(),
   new DepartmentRoute(),
-  new scoreCardRoute()
+  new scoreCardRoute(),
+
+  new TrainingAttendanceRoute(),
+  new TrainingEventRoute(),
+  new TrainingProgramRoute(),
+  new TrainingResultRoute()
 ]);
 
 app.listen();
