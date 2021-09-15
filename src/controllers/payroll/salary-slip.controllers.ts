@@ -11,7 +11,7 @@ class SalarySlipController {
   
   public findAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const salarySlips = await this.salarySlipService.findAll();
+      const salarySlips = await this.salarySlipService.findAll(req.query);
       res.status(200).json({ data: salarySlips});
     } catch (error) {
       next(error);
@@ -34,6 +34,18 @@ class SalarySlipController {
       const createdData: ISalarySlip = await this.salarySlipService.create(newData); 
       res.status(201).json({ data: createdData});
     } catch (error) {
+      
+      next(error);
+    }
+  };
+  
+  public createDepartmentPayroll = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const newData: CreateSalarySlipDto = req.body;
+      const createdData: ISalarySlip = await this.salarySlipService.createDepartmentPayroll(newData); 
+      res.status(201).json({ data: createdData});
+    } catch (error) {
+      console.log(error);
       
       next(error);
     }

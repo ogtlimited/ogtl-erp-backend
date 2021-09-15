@@ -30,9 +30,8 @@ class SalaryStructureAssignmentController {
     try {
       const newData: CreateSalaryStructureAssignmentDto = req.body;
       const createdData: ISalaryStructureAssignment = await this.salaryStructureAssignmentService.create(newData); 
-      res.status(201).json({ data: createdData});
+      res.status(201).json({ salaryStructureAssignment: createdData});
     } catch (error) {
-      
       next(error);
     }
   };

@@ -16,9 +16,9 @@ class SalaryStructureAssignmentRoute implements Routes {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}`, [authMiddleware], this.salaryStructureAssignmentController.findAll);
-        this.router.get(`${this.path}/:id`,[authMiddleware], this.salaryStructureAssignmentController.findById);
-        this.router.post(`${this.path}`,[authMiddleware, validationMiddleware(CreateSalaryStructureAssignmentDto, 'body')], this.salaryStructureAssignmentController.create);
+        this.router.get(`${this.path}`, [], this.salaryStructureAssignmentController.findAll);
+        this.router.get(`${this.path}/:id`,[], this.salaryStructureAssignmentController.findById);
+        this.router.post(`${this.path}`,[validationMiddleware(CreateSalaryStructureAssignmentDto, 'body')], this.salaryStructureAssignmentController.create);
         // this.router.patch(`${this.path}`, validationMiddleware(DTO, 'body'), this.salaryStructureAssignmentController.createIncentive);
     }
   }

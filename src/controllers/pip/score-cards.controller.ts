@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import scoreCardService from "@/services/pip/score-cards.service";
 import { NextFunction, Request, Response } from 'express';
 import { IScoreCard } from "@/interfaces/pip-interface/score-cards.interface";

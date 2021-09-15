@@ -83,9 +83,6 @@ export class UpdateEmployeeDto {
   @IsString()
   public first_name: string;
 
-  @IsString()
-  public employeeType: string;
-
   @IsBoolean()
   public isAdmin: boolean;
   gender: string;
@@ -104,6 +101,9 @@ export class UpdateEmployeeDto {
 
   @IsString()
   public status: string;
+
+  @IsString()
+  public employeeType: string;
 
   @IsNumber()
   public permissionLevel: number;

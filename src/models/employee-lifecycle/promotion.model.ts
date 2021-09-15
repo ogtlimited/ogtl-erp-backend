@@ -9,25 +9,11 @@ const promotionSchema: Schema = new Schema(
       required: true,
       ref: "Employee"
     },
-    status: {
+    
+    newDesignation: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "Status"
-    },
-    department: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "Department"
-    },
-    promotionDetails: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "PromotionDetails"
-    },
-    branch:{
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "Branch"
+      ref: "Designation"
     },
     promotionDate: {
       type: Date,

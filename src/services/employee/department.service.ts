@@ -64,8 +64,14 @@ public async findDepartmentById(DepartmentId:string) : Promise<IDepartment>{
 
         //Check if data is empty
         if (isEmpty(DepartmentData)) throw new HttpException(400, "No data provided");
-
-        const updateDepartmentById: IDepartment = await this.Departments.findByIdAndUpdate(DepartmentId,{DepartmentData});
+        console.log(DepartmentData)
+        const updateDepartmentById: IDepartment = await this.Departments.findByIdAndUpdate({
+            _id: DepartmentData._id
+          },
+          {
+            $set: {department: DepartmentData.department}
+          },
+          { new: true });
         if(!updateDepartmentById) throw new HttpException(409, "Department doesn't exist");
          return updateDepartmentById;
    } 

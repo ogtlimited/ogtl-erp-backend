@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Employee } from '@interfaces/employee-interface/employee.interface';
 import { NextFunction, Request, Response } from 'express';
 import { CreateUserDto } from '@dtos/users.dto';

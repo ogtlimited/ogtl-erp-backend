@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Routes } from '@interfaces/routes.interface';
 import { Router } from 'express';
 import validationMiddleware from '@middlewares/validation.middleware';
