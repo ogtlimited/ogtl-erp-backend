@@ -12,7 +12,6 @@ const deductionTypeSchema: Schema = new Schema(
     },
     status: {
       type: Schema.Types.ObjectId,
-      required: true,
       ref: "Status"
     },
     createdBy: {

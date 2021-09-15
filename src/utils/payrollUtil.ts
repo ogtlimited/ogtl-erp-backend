@@ -1,6 +1,8 @@
 import { ObjectId } from 'mongodb';
 import isEmpty from 'lodash/isEmpty';
 import { HttpException } from '@/exceptions/HttpException';
+import deductionModel from '@/models/payroll/deduction.model';
+import { deductionAggBuilder } from '@/utils/pipelineUtils';
 
 export const calculateNetPay = (salaryComponents: Array<any>) => {
   if (salaryComponents.length < 1) {
@@ -33,4 +35,27 @@ export const officeQueryGenerator = queryParams => {
     officeQuery = { projectId: new ObjectId(queryParams.projectId) };
   }
   return officeQuery;
+};
+
+export const calculateEmployeeDeductions = async (employee, month, salaryStructure) => {
+  // console.log(employee._id);
+  
+  const employeeDeductions: any = {
+    hasDeductions: false,
+    deductionIds: [],
+    totalAmount:0
+  };
+  const facetQuery = deductionAggBuilder(employee._id);
+  const deductions: any = await deductionModel.aggregate(facetQuery);
+  const { deductionIds, totalDeductions } = deductions[0];
+  if (deductionIds.length > 0) {
+    employeeDeductions.hasDeductions = true;
+    employeeDeductions.totalAmount = salaryStructure.netPay - totalDeductions[0].sum;
+    for (let index = 0; index < deductionIds.length; index++) {
+      const deduction = deductionIds[index];
+      employeeDeductions.deductionIds.push(deduction['_id']);
+    }
+  }
+
+  return employeeDeductions;
 };
