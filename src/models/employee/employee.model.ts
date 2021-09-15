@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { model, Schema, Document } from 'mongoose';
-import { Employee, EmployeeType } from '@interfaces/employee-interface/employee.interface';
+import { Employee } from '@interfaces/employee-interface/employee.interface';
 
 const employeeSchema: Schema = new Schema(
   {
