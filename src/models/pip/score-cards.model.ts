@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Document, model, Schema } from 'mongoose';
 import { IScoreCard } from '@/interfaces/pip-interface/score-cards.interface';
 
