@@ -1,5 +1,5 @@
 import { model, Schema, Document } from 'mongoose';
-import { IJobOpening, Status } from '@interfaces/recruitment/job_opening.interface';
+import { IJobOpening } from '@interfaces/recruitment/job_opening.interface';
 
 const jobOpeningSchema: Schema = new Schema({
   job_title: {
@@ -20,8 +20,8 @@ const jobOpeningSchema: Schema = new Schema({
   },
   status: {
     type: String,
-    enum: Status,
-    default: Status.OPEN,
+    enum: ['CLOSED', 'OPEN'],
+    default: 'OPEN',
   },
   description: {
     type: String,
