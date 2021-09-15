@@ -57,6 +57,8 @@ import AssetsRoute from '@routes/assets/assets.route';
 import ProjectRoute from '@routes/project/project.route';
 //import DepartmentRoute from './routes/employee/department.route';
 import scoreCardRoute from './routes/pip/score-cards.route';
+import TerminationRoute from './routes/employee-lifecycle/termination.route';
+
 import DepartmentRoute from './routes/employee/department.route';
 
 
@@ -111,6 +113,9 @@ const app = new App([
   new ClientRoute(),
   new AssetsRoute(),
   new CoachingFormRoute(),
+  new scoreCardRoute(),
+  new PromotionRoute(),
+  new TerminationRoute(),
   new DepartmentRoute(),
   new scoreCardRoute(),
 

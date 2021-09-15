@@ -1,10 +1,8 @@
 /* eslint-disable prettier/prettier */
 export interface IPromotion {
+   _id: string;
     employee: string;
-    status: string;
-    department: string;
-    branch: string;  
-    promotionDetails: string;
+    newDesignation: string;
     promotionDate: Date;
   }
   

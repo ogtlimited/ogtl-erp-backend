@@ -3,22 +3,27 @@
 
 import {IsDateString,  IsNotEmpty,  IsString } from 'class-validator';
 
-export class CreatePromotionDto {
+export class CreateTerminationDto {
     @IsNotEmpty()
     @IsString()
     public employee: string;
 
     @IsNotEmpty()
     @IsString()
-    public newDesignation: string;
+    public reason: string;
+
+    @IsNotEmpty()
+    @IsString()
+    public terminationType: string;
+
 
     @IsNotEmpty()
     @IsDateString()
-    public promotionDate: Date;
+    public terminationDate: Date;
 
 }
 
-export class UpdatePromotionDto {
+export class UpdateTerminationDto {
     @IsNotEmpty()
     @IsString()
     public _id : string
@@ -29,10 +34,14 @@ export class UpdatePromotionDto {
 
     @IsNotEmpty()
     @IsString()
-    public newDesignation: string;
+    public terminationType: string;
+
+    @IsNotEmpty()
+    @IsString()
+    public reason: string;
 
     @IsNotEmpty()
     @IsDateString()
-    public promotionDate: Date;
+    public terminationDate: Date;
 
 }
