@@ -49,7 +49,7 @@ const employeeSchema: Schema = new Schema(
     },
     employeeType: {
       type: String,
-      enum: EmployeeType
+      enum: ["Apprentice","Intern","Commission","Contract","Probation","PartTime","FullTime"]
     },
     first_name: {
       type: String,
