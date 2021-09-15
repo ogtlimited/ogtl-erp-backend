@@ -14,11 +14,11 @@ const salarySlipSchema: Schema = new Schema(
       required: true,
       ref: "SalaryStructure"
     },
-    department_id: {
+    departmentId: {
       type: Schema.Types.ObjectId,
       ref: "Department"
     },
-    project_id: {
+    projectId: {
       type: Schema.Types.ObjectId,
       ref: "Project"
     },
@@ -61,5 +61,5 @@ const salarySlipSchema: Schema = new Schema(
   },
 );
 
-const salarySlipModel = model<ISalarySlip & Document>('salarySlipModel', salarySlipSchema);
+const salarySlipModel = model<ISalarySlip & Document>('SalarySlip', salarySlipSchema);
 export default salarySlipModel;
