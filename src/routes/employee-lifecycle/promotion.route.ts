@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { CreatePromotionDto } from '../../dtos/employee-lifecycle/promotion.dto';
+import { CreatePromotionDto, UpdatePromotionDto } from '../../dtos/employee-lifecycle/promotion.dto';
 import PromotionController from '@/controllers/employee-lifecycle/promotion.controller';
 import { Routes } from '@/interfaces/routes.interface';
 import validationMiddleware from '@/middlewares/validation.middleware';
@@ -16,9 +16,11 @@ class PromotionRoute implements Routes {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}`, [authMiddleware], this.promotionController.findAll);
-        this.router.get(`${this.path}/:id`, [authMiddleware], this.promotionController.findById);
-        this.router.post(`${this.path}`, [authMiddleware, validationMiddleware(CreatePromotionDto, 'body')], this.promotionController.create);
+      this.router.get(`${this.path}`, authMiddleware, this.promotionController.findAllPromotions);
+      this.router.get(`${this.path}/:id`, authMiddleware, this.promotionController.findPromotionById);
+      this.router.post(`${this.path}`, [ validationMiddleware(CreatePromotionDto, 'body'),authMiddleware], this.promotionController.createPromotion);
+      this.router.put(`${this.path}/:id`, [ validationMiddleware(UpdatePromotionDto, 'body'),authMiddleware], this.promotionController.updatePromotion);
+      this.router.delete(`${this.path}/:id`,authMiddleware, this.promotionController.deletePromotion);
     }
   }
   export default PromotionRoute;

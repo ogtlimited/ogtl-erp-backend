@@ -1,8 +1,8 @@
-import {IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateEducationDto{
 
-   
+
 
     @IsNotEmpty()
     @IsString()
@@ -17,7 +17,7 @@ export class CreateEducationDto{
     @IsString()
         public level: string;
 
-    @IsNumber()
+    @IsString()
         public year_of_passing: string;
 
 
@@ -25,8 +25,8 @@ export class CreateEducationDto{
 }
 export class UpdateEducationDto{
     @IsString()
-    public _id: string;  
-  
+    public _id: string;
+
     @IsNotEmpty()
     @IsString()
         public employee_id: string;
@@ -40,7 +40,7 @@ export class UpdateEducationDto{
     @IsString()
         public level: string;
 
-    @IsNumber()
+    @IsString()
         public year_of_passing: string;
 
 

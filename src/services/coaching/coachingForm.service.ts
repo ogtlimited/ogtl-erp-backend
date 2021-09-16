@@ -13,7 +13,7 @@ class CoachingFormService {
      *Returns all CoachingForm
      */
     public async findAllCoaching(): Promise<CoachingFormInterface[]> { 
-        const Coaching: CoachingFormInterface[] = await this.Coaching.find().populate('employeeId');
+        const Coaching: CoachingFormInterface[] = await this.Coaching.find().populate('employee_id');
         return Coaching;
     }
 
@@ -27,6 +27,20 @@ class CoachingFormService {
 
        //find CoachingForm with Id given
        const findCoachingForm:CoachingFormInterface = await this.Coaching.findOne({ _id:CoachingFormId  });
+
+       if(!findCoachingForm) throw new HttpException(409, "CoachingForm with that Id doesnt exist");
+
+       return findCoachingForm;
+        
+    }
+
+    public async findEmployeeCoachingForm(employeeId:string) : Promise<CoachingFormInterface[]>
+    {
+       //Check if Id is empty
+       if (isEmpty(employeeId)) throw new HttpException(400, "No Id provided");
+
+       //find CoachingForm with Id given
+       const findCoachingForm:CoachingFormInterface[] = await this.Coaching.find({ employee_id:employeeId  });
 
        if(!findCoachingForm) throw new HttpException(409, "CoachingForm with that Id doesnt exist");
 

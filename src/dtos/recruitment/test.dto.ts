@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+
 import { IsString, IsDateString, IsOptional, IsNotEmpty } from 'class-validator';
 
 export class CreateTestDto {
@@ -10,9 +12,6 @@ export class CreateTestDto {
 
   @IsString()
   public status: string;
-
-  @IsString()
-  public hr_user: string;
 
   @IsOptional()
   @IsString()
@@ -42,9 +41,6 @@ export class UpdateTestDto {
 
   @IsString()
   public status: string;
-
-  @IsString()
-  public hr_user: string;
 
   @IsOptional()
   @IsString()

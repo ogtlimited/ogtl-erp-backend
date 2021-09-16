@@ -15,8 +15,9 @@ const AssetsSchema: Schema = new Schema(
 
           },
           assigned_to: {
-            type: String,
+            type: Schema.Types.ObjectId,
             required: true,
+            ref: "Employee",
 
           },
           purchaseDate: {
@@ -54,6 +55,7 @@ const AssetsSchema: Schema = new Schema(
           warranty: {
             type: String,
             required: true,
+            enum : ["6 Months","1 year","More than 1 year"]
 
 
           },

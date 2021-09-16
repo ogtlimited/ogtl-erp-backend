@@ -5,7 +5,7 @@ import { IDepartment } from '@/interfaces/employee-interface/department.interfac
 
 const departmentSchema: Schema = new Schema(
   {
-    title: {
+    department: {
         type: String,
         required: true,
     },

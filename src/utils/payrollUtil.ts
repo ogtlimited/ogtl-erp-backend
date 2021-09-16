@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { ObjectId } from 'mongodb';
 import isEmpty from 'lodash/isEmpty';
 import { HttpException } from '@/exceptions/HttpException';

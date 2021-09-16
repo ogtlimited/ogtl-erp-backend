@@ -1,26 +1,38 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import { IsDate,  IsString } from 'class-validator';
+import {IsDateString,  IsNotEmpty,  IsString } from 'class-validator';
 
 export class CreatePromotionDto {
-  
+    @IsNotEmpty()
     @IsString()
     public employee: string;
 
+    @IsNotEmpty()
     @IsString()
-    public status: string;
+    public newDesignation: string;
 
-    @IsString()
-    public department: string;
+    @IsNotEmpty()
+    @IsDateString()
+    public promotionDate: Date;
 
-    @IsString()
-    public branch: string;
-    
-    @IsString()
-    public promotionDetails: string;
+}
 
-    @IsDate()
+export class UpdatePromotionDto {
+    @IsNotEmpty()
+    @IsString()
+    public _id : string
+
+    @IsNotEmpty()
+    @IsString()
+    public employee: string;
+
+    @IsNotEmpty()
+    @IsString()
+    public newDesignation: string;
+
+    @IsNotEmpty()
+    @IsDateString()
     public promotionDate: Date;
 
 }

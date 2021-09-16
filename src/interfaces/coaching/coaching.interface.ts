@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 export interface CoachingFormInterface {
   _id: string;
-  ogid: string;
+  employee_id: string;
   coaching_type: string;
   goals: string;
   incident_date: string;

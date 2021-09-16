@@ -12,30 +12,19 @@ const exitSchema: Schema = new Schema(
           },
         resignation_letter_date: {
           type: Date,
+          required:true,
         },
         relieving_date: {
           type: Date,
+          required:true,
         },
-        reason_for_leaving: {
-          type: String,
-        },
-        leave_encashed: {
-          type: String,
-          enum: ["yes", "no"],
-        },
-        encashment_date: {
-          type: Date,
-        },
+    
         reason_for_resignation: {
           type: String,
-          enum: ["better_prospects", "health_concern"],
+          required:true,
+          
         },
-        new_work_place: {
-          type: String,
-        },
-        feedback: {
-          type: String,
-        },
+       
     },
 
     {

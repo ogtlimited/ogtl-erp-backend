@@ -11,7 +11,7 @@ const emergencyContactSchema: Schema = new Schema(
             ref: "Employee",
         },
       emergency_phone: {
-        type: Number,
+        type: String,
         required: true,
       },
       emergency_contact_name: {
