@@ -17,6 +17,7 @@ export interface IAttendanceCreatedResponse {
 export interface ICreateAttendance {
     ogId: string;
     shiftTypeId?: string;
+    employeeId?: string;
     clockInTime: string;
     departmentId?: string;
     projectId?: string;

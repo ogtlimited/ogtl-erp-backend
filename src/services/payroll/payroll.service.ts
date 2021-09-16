@@ -25,6 +25,7 @@ class PayRollService {
     return payRoll;
   }
 
+  //refactor
   public async create(data: CreatePayrollDto, query): Promise<any> {
     const slipConstructor: any = {}
     const officeKey = Object.keys(query)[0]
@@ -55,3 +56,4 @@ class PayRollService {
 }
 
 export default PayRollService;
+

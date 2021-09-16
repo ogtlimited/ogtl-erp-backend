@@ -23,7 +23,7 @@ const employeeSchema: Schema = new Schema(
       ref: 'ShiftType',
       default: null,
     },
-    department:  {
+    departmentId:  {
       type: Schema.Types.ObjectId,
       ref: 'Department',
       default: null,
