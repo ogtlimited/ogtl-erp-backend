@@ -57,6 +57,9 @@ export class CreateEmployeeDto {
   public employeeType: string;
 
   @IsString()
+  public role: string;
+
+  @IsString()
   public projectId: string;
 
 
@@ -104,6 +107,9 @@ export class UpdateEmployeeDto {
 
   @IsString()
   public employeeType: string;
+
+  @IsString()
+  public role: string;
 
   @IsNumber()
   public permissionLevel: number;
