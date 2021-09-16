@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { NextFunction, Request, Response } from 'express';
-import { CreateSalaryStructureAssignmentDto } from '@/dtos/payroll/salary-structure-assignment.dto';
-import { ISalaryStructureAssignment } from '@/interfaces/payroll/salary-structure-assignment.interface';
+// import { CreateSalaryStructureAssignmentDto } from '@/dtos/payroll/salary-structure-assignment.dto';
+// import { ISalaryStructureAssignment } from '@/interfaces/payroll/salary-structure-assignment.interface';
 import SalaryStructureAssignmentService from '@/services/payroll/salary-structure-assignment.service';
-import EmployeeModel from '@/models/employee/employee.model';
+// import EmployeeModel from '@/models/employee/employee.model';
 
 class SalaryStructureAssignmentController {
   public salaryStructureAssignmentService = new SalaryStructureAssignmentService();
@@ -29,7 +29,7 @@ class SalaryStructureAssignmentController {
 
   public create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const newData: CreateSalaryStructureAssignmentDto = req.body;
+      const newData = req.body;
       const createdData = await this.salaryStructureAssignmentService.create(newData); 
       res.status(201).json({ salaryStructureAssignment: createdData});
     } catch (error) {
