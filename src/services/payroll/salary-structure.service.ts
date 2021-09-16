@@ -82,6 +82,8 @@ class SalaryStructureService {
     }
   }
 
+  // public async assignSalaries
+
 //   public async updateIncentiveType(data: CreateSalaryStructureDto): Promise<ISalaryStructure> {
 
 //     if (isEmpty(data)) throw new HttpException(400, "Bad request");
