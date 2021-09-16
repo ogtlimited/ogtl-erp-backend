@@ -1,11 +1,20 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import { IsString } from 'class-validator';
+import { IsString, IsDateString, IsArray, IsNotEmpty } from 'class-validator';
 
-export class CreateSalaryStructureAssignmentDto {  
+export class CreateSalaryStructureAssignmentDto {
+
+    @IsArray()
+    @IsNotEmpty()
+    @IsString({each:true})
+    public employeeIds?: Array<String>;
+
     @IsString()
-    public ogid: string;
-    @IsString()
+    @IsNotEmpty()
     public salaryStructureId: String;
+
+    @IsDateString()
+    fromDate: string
+
 }

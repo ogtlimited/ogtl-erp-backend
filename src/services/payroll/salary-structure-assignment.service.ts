@@ -10,8 +10,14 @@ import EmployeeModel from '@/models/employee/employee.model';
 class SalaryStructureAssignmentService {
   public salaryStructureAssignmentModel = salaryStructureAssignmentModel;
 
-  public async findAll(): Promise<ISalaryStructureAssignment[]> {
-    const assignments = await this.salaryStructureAssignmentModel.find({employeeId: req.user._id});
+  public async findAll(query): Promise<ISalaryStructureAssignment[]> {
+  
+    const employee = await EmployeeModel.findOne({ogid: query.ogId},{_id:1})
+    if(!employee)
+    {
+      throw new HttpException(404, "unable to find record")
+    }
+    const assignments = await this.salaryStructureAssignmentModel.find({employeeId: employee._id}).populate('salaryStructureId',{_id:1, title:1, netPay:1}).populate('employeeId',{_id:1, first_name:1, last_name:1});
     return assignments;
   }
 
@@ -22,16 +28,29 @@ class SalaryStructureAssignmentService {
     return salaryStructureAssignment;
   }
 
-  public async create(data: ISalaryStructureAssignment): Promise<ISalaryStructureAssignment> {
-    if (isEmpty(data)) throw new HttpException(400, "Bad request");
-    const employee = await EmployeeModel.findOne({ogid:data.ogid});
-    if(!employee)
-    {
-      throw new HttpException(404, "invalid ogid");
-    }
-    data.employeeId = employee._id
-    const createdata = await this.salaryStructureAssignmentModel.create(data);
-    return createdata;
+  //remember to validate salary structure and employees for matching project and departments
+  public async create(data: ISalaryStructureAssignment): Promise<any> {
+  
+   const employees = await EmployeeModel.find({_id: {$in: [...data.employeeIds]}}, {_id:1})
+   const records = [];
+   if(employees.length<data.employeeIds.length || employees.length < 1)
+   {
+     throw new HttpException(401, "unable to perform request")
+   }
+   for (let index = 0; index < employees.length; index++) {
+     const employee = employees[index];
+     const structureConstructor = {
+      employeeId: employee._id,
+      salaryStructureId: data.salaryStructureId,
+      fromDate: data.fromDate
+     }
+     records.push(structureConstructor)
+   }
+   console.log(employees);
+   await this.salaryStructureAssignmentModel.insertMany(records)
+   await EmployeeModel.updateMany({_id: {$in: [...data.employeeIds]}},{$set: {salaryStructure_id: data.salaryStructureId}})
+   return 'done'
+   
   }
 
 //   public async updateIncentiveType(data: DTO): Promise<ISalaryStructureAssignment> {
