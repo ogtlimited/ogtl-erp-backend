@@ -52,7 +52,7 @@ export const attendanceofficeQueryGenerator = queryParams => {
 
 export const calculateEmployeeDeductions = async (employee, month, salaryStructure) => {
   // console.log(employee._id);
-  
+
   const employeeDeductions: any = {
     hasDeductions: false,
     deductionIds: [],
