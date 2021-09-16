@@ -1,18 +1,14 @@
 /* eslint-disable prettier/prettier */
-import { IPayRollEntry } from '@/interfaces/payroll/payroll-Entry.interface';
+import { IPayRoll } from '@/interfaces/payroll/payroll.interface';
 import { model, Schema, Document } from 'mongoose';
 
 /*
  Reconsider having an array field: employees
 
 */
-const payRollEntrySchema: Schema = new Schema(
+const payRollSchema: Schema = new Schema(
   {
-    employeeId: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "Branch"
-    },
+   
     departmentId: {
       type: Schema.Types.ObjectId,
       ref: "Department"
@@ -23,17 +19,27 @@ const payRollEntrySchema: Schema = new Schema(
     },
     status: {
       type: Schema.Types.ObjectId,
-      required: true,
       ref: "Status"
     },
+    salarySlips:[
+       {
+        type: Schema.Types.ObjectId,
+        required: true,
+        ref: "SalarySlip"
+      }
+    ],
     startDate: {
       type: Date,
     },
     endDate: {
       type: Date,
     },
-    amount: {
+    totalAmount: {
       type: Number,
+    },
+    approved: {
+      type: Boolean,
+      default:false
     }
   },
   {
@@ -41,5 +47,5 @@ const payRollEntrySchema: Schema = new Schema(
   },
 );
 
-const payRollEntryModel = model<IPayRollEntry & Document>('PayRollEntry', payRollEntrySchema);
-export default payRollEntryModel;
+const payRollModel = model<IPayRoll & Document>('PayRoll', payRollSchema);
+export default payRollModel;

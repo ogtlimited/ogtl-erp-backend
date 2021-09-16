@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { ObjectId } from 'mongodb';
 import isEmpty from 'lodash/isEmpty';
 import { HttpException } from '@/exceptions/HttpException';
@@ -31,6 +32,18 @@ export const officeQueryGenerator = queryParams => {
     return officeQuery;
   } else if (queryParams.departmentId) {
     officeQuery = { departmentId: new ObjectId(queryParams.departmentId) };
+  } else if (queryParams.projectId) {
+    officeQuery = { projectId: new ObjectId(queryParams.projectId) };
+  }
+  return officeQuery;
+};
+
+export const attendanceofficeQueryGenerator = queryParams => {
+  let officeQuery: any = {};
+  if (isEmpty(queryParams)) {
+    return officeQuery;
+  } else if (queryParams.departmentId) {
+    officeQuery = { department: new ObjectId(queryParams.departmentId) };
   } else if (queryParams.projectId) {
     officeQuery = { projectId: new ObjectId(queryParams.projectId) };
   }

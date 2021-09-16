@@ -8,7 +8,9 @@ import employeeModel  from '@models/employee/employee.model';
 import { isEmpty } from '@utils/util';
 import {getWorkTime}  from '@/utils/attendanceCalculator';
 import {ObjectId} from 'mongodb'
-import { officeQueryGenerator } from '@/utils/payrollUtil';
+import { attendanceofficeQueryGenerator, officeQueryGenerator } from '@/utils/payrollUtil';
+import deductionModel from '@/models/payroll/deduction.model';
+import deductionTypeModel from '@/models/payroll/deductionType.model';
 // const moment = require('moment');
 
 
@@ -18,22 +20,25 @@ class AttendanceTypeService {
   public async findAllDepartmentAttendance(query): Promise<any> {
     const payload = []
     const {startOfMonth, endOfMonth} = query
-    const officeQuery = officeQueryGenerator(query)
-    const employees = await employeeModel.find(officeQuery, {ogid: 1, first_name:1, last_name:1, profile_pic:1, _id:1})
+    const officeQuery = attendanceofficeQueryGenerator(query)
+    const employees = await employeeModel.find(officeQuery, {ogid: 1, first_name:1, last_name:1, profile_pic:1, gender: 1, designation:1, _id:1}).populate('designation')
+    console.log(employees);
+    
+    //consider the possilibty of random ObjectID causing an error......
     for (let index = 0; index < employees.length; index++) {
       const employee = {...employees[index].toObject(),attendance:null};
       const employeeAttendance = await this.attendanceTypes.aggregate(
         [
           {
             '$match': {
-          'ogId': employee.ogid, 
+          'employeeId': employee._id, 
           '$or': [
+            {
+              'departmentId': new ObjectId(query.departmentId)
+            },
             {
               'projectId': new ObjectId(query.projectId) 
             },
-            {
-              'departmentId': new ObjectId(query.departmentId)
-            }
           ],  
             'createdAt': {
               '$gte': new Date(startOfMonth), 
@@ -93,6 +98,7 @@ class AttendanceTypeService {
           throw new HttpException(404, 'employee not found')
         }
         attendanceTypeData.shiftTypeId = employee.default_shift;
+        attendanceTypeData.employeeId = employee._id;
         const attendance = await this.attendanceTypes.create(attendanceTypeData);
         // const allEmployeeAttendance = await this.findAllEmployeeAttendance(attendanceTypeData.ogId, {departmentId: attendanceTypeData.departmentId})
         return {attendance};
@@ -118,11 +124,12 @@ class AttendanceTypeService {
       },
       { new: true })
     
-    // // return workTimeResult;
-    // if(workTimeResult.timeDeductions > 0)
-    // {
-    //   const deductions = await deductionModel.create({employeeId: attendanceRecord.employeeId, deductionTypeId: attendanceRecord.shiftTypeId.deductionTypeId, quantity: workTimeResult.timeDeductions })
-    // }
+    // return workTimeResult;
+    if(workTimeResult.timeDeductions > 0)
+    {
+     const deductionType = await deductionTypeModel.findOne({title:"lateness"})
+     await deductionModel.create({employeeId: attendanceRecord.employeeId, deductionTypeId: deductionType._id, amount: deductionType.amount })
+    }
     return updateRecord;
   }
   

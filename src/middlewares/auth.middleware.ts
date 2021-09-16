@@ -9,7 +9,9 @@ import EmployeeModel  from '@models/employee/employee.model';
 const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
   try {
     const Authorization = req.header('Authorization').split('Bearer ')[1] || null;
-    console.log(req.header)
+    console.log('----------------------------------------------')
+    console.log(Authorization)
+    console.log('Authorization')
     if (Authorization) {
       const secretKey: string = config.get('secretKey');
       const verificationResponse = (await jwt.verify(Authorization, secretKey)) as DataStoredInToken;

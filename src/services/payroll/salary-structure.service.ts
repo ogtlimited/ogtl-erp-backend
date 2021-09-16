@@ -20,7 +20,7 @@ class SalaryStructureService {
 
   public async findById(id: string): Promise<ISalaryStructure> {
     if (isEmpty(id)) throw new HttpException(400, "provide attendance Id");
-    const salaryStructure: ISalaryStructure = await this.salaryStructureModel.findOne({ _id: id }).populate('deductions earnings projectId departmentId' );
+     const salaryStructure: ISalaryStructure = await this.salaryStructureModel.findOne({ _id: id }).populate('deductions earnings projectId departmentId' );
     if (!salaryStructure) throw new HttpException(404, "no record found");
     return salaryStructure;
   }
@@ -81,6 +81,8 @@ class SalaryStructureService {
      throw error
     }
   }
+
+  // public async assignSalaries
 
 //   public async updateIncentiveType(data: CreateSalaryStructureDto): Promise<ISalaryStructure> {
 
