@@ -16,7 +16,7 @@ import IncentiveRoute from './routes/payroll/incentive.route';
 import SalaryStructureRoute from './routes/payroll/salary-structure.route';
 import SalaryStructureAssignmentRoute from './routes/payroll/salary-structure-assignment.route';
 import SalaryComponentRoute from './routes/payroll/salary-component.route';
-import PayRollRoute from './routes/payroll/payroll.route';
+import PayRollEntryRoute from './routes/payroll/payroll-entry.route';
 import SalarySlipRoute from './routes/payroll/salary-slip.route';
 import OnBoardingRoute from './routes/employee-lifecycle/onboarding.route';
 import PromotionRoute from './routes/employee-lifecycle/promotion.route';
@@ -69,7 +69,7 @@ const app = new App([
   new SalaryStructureRoute(),
   new SalaryStructureAssignmentRoute(),
   new SalaryComponentRoute(),
-  new PayRollRoute(),
+  new PayRollEntryRoute(),
   new SalarySlipRoute(),
   new OnBoardingRoute(),
   new PromotionRoute(),

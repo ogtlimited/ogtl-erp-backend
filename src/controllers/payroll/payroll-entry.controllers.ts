@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { NextFunction, Request, Response } from 'express';
-import { CreatePayrollDto } from '@/dtos/payroll/payroll.dto';
-import { IPayRollEntry } from '@/interfaces/payroll/payroll.interface';
-import PayRollEntryService from '@/services/payroll/payroll.service';
+import { CreatePayrollDto } from '@dtos/payroll/payroll-entry.dto';
+import { IPayRollEntry } from '@/interfaces/payroll/payroll-Entry.interface';
+import PayRollEntryService from '@/services/payroll/payroll-entry.service';
 
 class PayRollEntryController {
   public payRollEntryService = new PayRollEntryService();
@@ -29,9 +29,7 @@ class PayRollEntryController {
   public create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const newData: CreatePayrollDto = req.body;
-      console.log(newData);
-      
-      const createdData: IPayRollEntry = await this.payRollEntryService.create(newData, req.query); 
+      const createdData: IPayRollEntry = await this.payRollEntryService.create(newData); 
       res.status(201).json({ data: createdData});
     } catch (error) {  
       next(error);

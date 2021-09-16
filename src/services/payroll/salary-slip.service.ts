@@ -60,7 +60,7 @@ class SalarySlipService {
       }
     }
     await this.salarySlipModel.insertMany(records);
-    return records;
+    return "done";
   }
 
   public async createDepartmentPayroll(data: CreateSalarySlipDto): Promise<any> {
