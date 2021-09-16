@@ -2,27 +2,27 @@
 import { CreatePayrollDto } from '@/dtos/payroll/payroll.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { IPayRoll } from '@/interfaces/payroll/payroll.interface';
-import payRollEntryModel  from '@/models/payroll/payroll.model';
+import payRollModel  from '@/models/payroll/payroll.model';
 import { isEmpty } from '@utils/util';
 import { officeQueryGenerator } from '@/utils/payrollUtil';
 import salarySlipModel from '@/models/payroll/salary-slip.model';
 // import omit from 'lodash/omit'
 
-class PayRollEntryService {
-  public payRollEntryModel = payRollEntryModel;
+class PayRollService {
+  public payRollModel = payRollModel;
 
   public async findAll(): Promise<IPayRoll[]> {
-    const results = await this.payRollEntryModel.find();
+    const results = await this.payRollModel.find();
     return results;
   }
 
   public async findById(id: string): Promise<IPayRoll> {
     if (isEmpty(id)) throw new HttpException(400, "provide Id");
 
-    const payRollEntry: IPayRoll = await this.payRollEntryModel.findOne({ _id: id });
-    if (!payRollEntry) throw new HttpException(404, "no record found");
+    const payRoll: IPayRoll = await this.payRollModel.findOne({ _id: id });
+    if (!payRoll) throw new HttpException(404, "no record found");
 
-    return payRollEntry;
+    return payRoll;
   }
 
   public async create(data: CreatePayrollDto, query): Promise<any> {
@@ -47,11 +47,11 @@ class PayRollEntryService {
       slipConstructor.amount += slip.netPay
       return slip._id
     })
-    await this.payRollEntryModel.create(slipConstructor)
+    await this.payRollModel.create(slipConstructor)
     return 'done';
   }
 
 
 }
 
-export default PayRollEntryService;
+export default PayRollService;
