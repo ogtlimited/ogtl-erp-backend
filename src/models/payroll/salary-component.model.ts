@@ -4,9 +4,10 @@ import { model, Schema, Document } from 'mongoose';
 
 const salaryComponentSchema: Schema = new Schema(
   {
-    status: {
-      type: Schema.Types.ObjectId,
-      ref: "Status"
+    status:{
+      type: String,
+      enum: ["Open","Pending","Rejected","Accepted"],
+      default: "Open"
     },
     projectId: {
       type: Schema.Types.ObjectId,
