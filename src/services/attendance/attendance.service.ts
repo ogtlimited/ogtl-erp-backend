@@ -80,7 +80,7 @@ class AttendanceTypeService {
     // if (query.departmentId) {
     //   dbQuery = {ogId, 'departmentId': query.departmentId , createdAt:{$gte: startOfMonth, $lte: endOfMonth}}
     // }
-    const attendanceTypes = await this.attendanceTypes.find(dbQuery);
+    const attendanceTypes = await this.attendanceTypes.find(dbQuery).populate('employeeId',{first_name:1,last_name:1});
     // console.log(attendanceTypes);
     return attendanceTypes
   }
