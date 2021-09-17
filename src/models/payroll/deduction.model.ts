@@ -11,6 +11,10 @@ const deductionSchema: Schema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Incident"
     },
+    description: {
+      type: String,
+      default: null
+    },
     employeeId: {
         type: Schema.Types.ObjectId,
         rquired: true,
@@ -36,3 +40,4 @@ const deductionSchema: Schema = new Schema(
 
 const deductionModel = model('Deduction', deductionSchema);
 export default deductionModel;
+

@@ -16,7 +16,7 @@ import IncentiveRoute from './routes/payroll/incentive.route';
 import SalaryStructureRoute from './routes/payroll/salary-structure.route';
 import SalaryStructureAssignmentRoute from './routes/payroll/salary-structure-assignment.route';
 import SalaryComponentRoute from './routes/payroll/salary-component.route';
-import PayRollEntryRoute from './routes/payroll/payroll-entry.route';
+import PayRollRoute from './routes/payroll/payroll.route';
 import SalarySlipRoute from './routes/payroll/salary-slip.route';
 import OnBoardingRoute from './routes/employee-lifecycle/onboarding.route';
 import PromotionRoute from './routes/employee-lifecycle/promotion.route';
@@ -45,17 +45,26 @@ import JobApplicantRoute from '@routes/recruitment/jobApplicant.route';
 import TestRoute from '@routes/recruitment/test.route';
 import WarningLetterRoute from '@routes/pip/warningLetter.route';
 import LoanRoute from '@routes/loan/loan.route';
+import TrainingAttendanceRoute from '@routes/training/training-attendance.route';
+import TrainingProgramRoute from '@routes/training/training-program.route';
+import TrainingEventRoute from '@routes/training/training-event.route';
+import TrainingResultRoute from '@routes/training/training-result.route';
 import LoanTypeRoute from '@routes/loan/loan-type.route';
 import LoanApplicationRoute from '@routes/loan/loan-application.route';
 import CoachingFormRoute from './routes/coaching/coachingForm.route';
 import ClientRoute  from '@routes/project/client.route';
 import AssetsRoute from '@routes/assets/assets.route';
 import ProjectRoute from '@routes/project/project.route';
+import RoleRoute from '@routes/role/role.route';
 //import DepartmentRoute from './routes/employee/department.route';
 import scoreCardRoute from './routes/pip/score-cards.route';
 import TerminationRoute from './routes/employee-lifecycle/termination.route';
 
 import DepartmentRoute from './routes/employee/department.route';
+<<<<<<< HEAD
+=======
+import LeaveSettingsRoute from './routes/leave/leave-settings.route';
+>>>>>>> 9ea752a054567b9163c9b2e8d5545028d1e977e1
 
 
 
@@ -72,13 +81,20 @@ const app = new App([
   new SalaryStructureRoute(),
   new SalaryStructureAssignmentRoute(),
   new SalaryComponentRoute(),
-  new PayRollEntryRoute(),
+  new PayRollRoute(),
   new SalarySlipRoute(),
   new OnBoardingRoute(),
   new PromotionRoute(),
   new TransferRoute(),
   new LeaveAllocationRoute(),
   new LeaveApplicationRoute(),
+<<<<<<< HEAD
+=======
+  new LeaveSettingsRoute(),
+  // new LeaveTypeRoutes(),
+  // new LeavePeriodRoute(),
+  // new LeavePolicyRoutes(),
+>>>>>>> 9ea752a054567b9163c9b2e8d5545028d1e977e1
   new BranchRoute(),
   new ContactDetailsRoute(),
   new DesignationRoute(),
@@ -107,9 +123,23 @@ const app = new App([
   new AssetsRoute(),
   new CoachingFormRoute(),
   new scoreCardRoute(),
+<<<<<<< HEAD
   new TerminationRoute(),
   new DepartmentRoute(),
   
+=======
+  new PromotionRoute(),
+  new TerminationRoute(),
+  new DepartmentRoute(),
+  new scoreCardRoute(),
+
+  new TrainingAttendanceRoute(),
+  new TrainingEventRoute(),
+  new TrainingProgramRoute(),
+  new TrainingResultRoute(),
+
+  new RoleRoute()
+>>>>>>> 9ea752a054567b9163c9b2e8d5545028d1e977e1
 ]);
 
 app.listen();

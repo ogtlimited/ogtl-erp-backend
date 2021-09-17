@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import { IsEmail, IsString, IsBoolean, IsEnum, IsNumber, IsOptional } from 'class-validator';
+import { IsEmail, IsString, IsBoolean, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateEmployeeDto {
 
@@ -57,6 +57,9 @@ export class CreateEmployeeDto {
   public employeeType: string;
 
   @IsString()
+  public role: string;
+
+  @IsString()
   public projectId: string;
 
 
@@ -104,6 +107,9 @@ export class UpdateEmployeeDto {
 
   @IsString()
   public employeeType: string;
+
+  @IsString()
+  public role: string;
 
   @IsNumber()
   public permissionLevel: number;

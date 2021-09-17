@@ -21,6 +21,7 @@ class CoachingFormRoute implements Routes {
     private initializeRoutes() {
         this.router.get(`${this.path}`,authMiddleware, this.CoachingFormController.getCoachingForms);
         this.router.get(`${this.path}/:id`,authMiddleware, this.CoachingFormController.getCoachingFormById);
+        this.router.get(`${this.path}/employee/:id`,authMiddleware, this.CoachingFormController.getEmployeeCoachingForms);
         this.router.post(`${this.path}` , authMiddleware, validationMiddleware(CoachingFormDTO, 'body'), this.CoachingFormController.CreateCoachingForm);
         this.router.put(`${this.path}/:id`,authMiddleware, validationMiddleware(CoachingFormUpdateDTO, 'body', true), this.CoachingFormController.updateCoachingForm);
         this.router.delete(`${this.path}/:id`,authMiddleware, this.CoachingFormController.deleteCoachingForm);

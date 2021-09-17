@@ -1,16 +1,27 @@
 /* eslint-disable prettier/prettier */
 
 import projectModel from '@/models/project/project.model';
+import RoleModel from '@/models/role/role.model';
+import EmployeeModel from '@/models/employee/employee.model';
 import { IProject } from '@/interfaces/project-interface/project.interface';
+import { IRole } from '@/interfaces/role/role.interface';
+import { Employee } from '@/interfaces/employee-interface/employee.interface';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { CreateProjectDto, UpdateProjectDto, ApproveProjectDto } from '@/dtos/project/project.dto';
+import {campaignCreationEmail} from '@/utils/email';
+
+const { SocketLabsClient } = require('@socketlabs/email');
 
 class ProjectService {
     public project: any;
+    public employee: any;
+    public role: any;
 
     constructor() {
         this.project = projectModel;
+        this.employee = EmployeeModel;
+        this.role = RoleModel;
     }
 
     public async findAll(param: any = {}): Promise<IProject[]> {
@@ -44,6 +55,28 @@ class ProjectService {
         const findproject = this.findOne(projectId);
         if (!findproject) throw new HttpException(409, "Project not found");
         const updateProject: IProject = await this.project.findByIdAndUpdate(projectId, { Payload }, {new: true});
+        if(updateProject.status === "approved"){
+            const getRoles: IRole = await this.role.find().select('_id')
+            const params = {
+                role_id: {
+                    "$in": getRoles
+                }
+            }
+            const getEmployeeWithRole: Employee = await this.employee.find(params).distinct("company_email")
+            console.log(getEmployeeWithRole)
+            const emailTemplate = campaignCreationEmail(getEmployeeWithRole, "A new campaign created. do the needful")
+            const sclient = await new SocketLabsClient(parseInt(process.env.SOCKETLABS_SERVER_ID), process.env.SOCKETLABS_INJECTION_API_KEY);
+            
+            await sclient.send(emailTemplate).then(
+                (response) => {
+                    console.log(response)
+                },
+                (err) => {
+                    //Handle error making API call
+                    console.log(err);
+                }
+            );
+        }
         return updateProject;
     }
 

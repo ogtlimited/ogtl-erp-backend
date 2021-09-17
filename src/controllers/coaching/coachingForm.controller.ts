@@ -22,6 +22,16 @@ class CoachingFormController {
       next(error);
     }
   };
+  public getEmployeeCoachingForms = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const employeeId: string = req.params.id;
+      const findAllCoachingFormsData: CoachingFormInterface[] = await this.coachingService.findEmployeeCoachingForm(employeeId);
+
+      res.status(200).json({ data: findAllCoachingFormsData, numCoachingForms: findAllCoachingFormsData.length, message: 'All CoachingForms' });
+    } catch (error) {
+      next(error);
+    }
+  };
 
   //creates Coaching
   public CreateCoachingForm = async (req: Request, res: Response, next: NextFunction) => {

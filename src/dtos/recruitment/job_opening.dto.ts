@@ -1,5 +1,4 @@
-import { IsString, IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
-import { Status } from '@interfaces/recruitment/job_opening.interface';
+import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateJobOpeningDto {
   @IsNotEmpty()
@@ -10,12 +9,15 @@ export class CreateJobOpeningDto {
   @IsString()
   public designation_id: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   public project_id: string;
 
-   @IsOptional()
-   @IsString()
+  @IsString()
+  public status: string;
+
+  @IsOptional()
+  @IsString()
   public description: string;
 }
 
@@ -31,12 +33,12 @@ export class UpdateJobOpeningDto {
   @IsString()
   public designation_id: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   public project_id: string;
 
-  @IsEnum(Status)
-  public status: Status;
+  @IsString()
+  public status: string;
 
   @IsOptional()
   @IsString()

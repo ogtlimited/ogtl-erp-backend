@@ -47,6 +47,11 @@ const employeeSchema: Schema = new Schema(
       ref: 'Branch',
       default: null,
     },
+    salaryStructure_id: {
+      type: Schema.Types.ObjectId,
+      ref: 'SalaryStructure',
+      default: null,
+    },
     employeeType: {
       type: String,
       enum: ["Apprentice","Intern","Commission","Contract","Probation","PartTime","FullTime"]
@@ -88,6 +93,11 @@ const employeeSchema: Schema = new Schema(
     warningCount:{
       type: Number,
       default:0,
+    },
+    role_id: {
+      type: Schema.Types.ObjectId,
+      ref: 'Role',
+      default: null,
     },
     isInPIP:{
       type: Boolean,
