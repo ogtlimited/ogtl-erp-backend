@@ -16,7 +16,7 @@ class SalarySlipService {
 
   public async findAll(query): Promise<ISalarySlip[]> {
     const officeQuery = officeQueryGenerator(query)
-    const results = await this.salarySlipModel.find(officeQuery,{employeeId:1,_id:1,netPay:1}).populate('employeeId', {first_name:1, last_name:1, ogid:1, department:1}).populate({path:'employeeId.department'});
+    const results = await this.salarySlipModel.find(officeQuery,{employeeId:1,_id:1,netPay:1}).populate('employeeId', {first_name:1, last_name:1, ogid:1, department:1,company_email:1,middle_name:1,date_of_joining:1}).populate({path:'employeeId.department'});
     return results;
   }
 
@@ -101,7 +101,7 @@ class SalarySlipService {
     if (isEmpty(data)) throw new HttpException(400, "Bad request");
     const departments = await departmentModel.find();
     console.log(departments);
-    
+
     const records = [];
     for (let index = 0; index < departments.length; index++) {
       const department = departments[index];
@@ -114,7 +114,7 @@ class SalarySlipService {
       for (let index = 0; index < employees.length; index++) {
         const employee = employees[index];
         // console.log(employee);
-        
+
         const salarySlipConstructor:any = {
           employeeId: employee._id,
           salaryStructure: employee.salaryStructure_id._id,
