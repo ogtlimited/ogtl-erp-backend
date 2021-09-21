@@ -108,10 +108,13 @@ class AttendanceTypeService {
       
   public async updateAttendance(attendanceData: UpdateAttendanceDto): Promise<any> {
     let attendanceRecord = await this.attendanceTypes.findOne({_id: attendanceData.attendanceId}).populate('shiftTypeId')
-    attendanceRecord = attendanceRecord.toObject()
     if(!attendanceRecord){
       throw new HttpException(404, "not found");
     }
+    if(attendanceRecord.clockOutTime){
+      throw new HttpException(400, "already clocked out!");
+    }
+    attendanceRecord = attendanceRecord.toObject()
     const workTimeResult: any = await getWorkTime(attendanceRecord.clockInTime, attendanceData.clockOutTime, attendanceRecord.shiftTypeId.start_time);
     attendanceRecord.hoursWorked = workTimeResult.hoursWorked
     attendanceRecord.minutesWorked = workTimeResult.minutesWorked 

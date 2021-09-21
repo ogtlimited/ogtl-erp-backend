@@ -106,7 +106,7 @@ class SalarySlipService {
     for (let index = 0; index < departments.length; index++) {
       const department = departments[index];
       // console.log(department);
-      const employees:any = await EmployeeModel.find({department: department._id},{_id:1, salaryStructure_id:1}).populate('salaryStructure_id');
+      const employees:any = await EmployeeModel.find({department: department._id, status: {$eq: "active"}},{_id:1, salaryStructure_id:1}).populate('salaryStructure_id');
       if(employees.length<1)
       {
         continue
