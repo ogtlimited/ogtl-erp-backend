@@ -64,7 +64,7 @@ class SalarySlipService {
     for (let index = 0; index < projects.length; index++) {
       const project = projects[index];
       // console.log(project);
-      const employees:any = await EmployeeModel.find({projectId: project._id},{_id:1, salaryStructure_id:1}).populate('salaryStructure_id');
+      const employees:any = await EmployeeModel.find({projectId: project._id, status: 'active'},{_id:1, salaryStructure_id:1, status:1}).populate('salaryStructure_id');
       console.log(employees[0]);
       // break
       if(employees.length<1)
