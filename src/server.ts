@@ -55,11 +55,13 @@ import CoachingFormRoute from './routes/coaching/coachingForm.route';
 import ClientRoute  from '@routes/project/client.route';
 import AssetsRoute from '@routes/assets/assets.route';
 import ProjectRoute from '@routes/project/project.route';
+import RoleRoute from '@routes/role/role.route';
 //import DepartmentRoute from './routes/employee/department.route';
 import scoreCardRoute from './routes/pip/score-cards.route';
 import TerminationRoute from './routes/employee-lifecycle/termination.route';
 
 import DepartmentRoute from './routes/employee/department.route';
+import LeaveSettingsRoute from './routes/leave/leave-settings.route';
 
 
 
@@ -83,6 +85,7 @@ const app = new App([
   new TransferRoute(),
   new LeaveAllocationRoute(),
   new LeaveApplicationRoute(),
+  new LeaveSettingsRoute(),
   // new LeaveTypeRoutes(),
   // new LeavePeriodRoute(),
   // new LeavePolicyRoutes(),
@@ -122,7 +125,9 @@ const app = new App([
   new TrainingAttendanceRoute(),
   new TrainingEventRoute(),
   new TrainingProgramRoute(),
-  new TrainingResultRoute()
+  new TrainingResultRoute(),
+
+  new RoleRoute()
 ]);
 
 app.listen();

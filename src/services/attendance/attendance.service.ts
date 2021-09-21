@@ -21,6 +21,8 @@ class AttendanceTypeService {
     const payload = []
     const {startOfMonth, endOfMonth} = query
     const officeQuery = attendanceofficeQueryGenerator(query)
+    console.log('----------------')
+    console.log(officeQuery)
     const employees = await employeeModel.find(officeQuery, {ogid: 1, first_name:1, last_name:1, profile_pic:1, gender: 1, designation:1, _id:1}).populate('designation')
     console.log(employees);
     
