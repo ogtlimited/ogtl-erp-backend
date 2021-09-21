@@ -4,7 +4,7 @@ import MaintenanceAndRepairService from '@services/maintenance-report/maintenanc
 import { IMaintenanceAndRepairs } from '@interfaces/maintenance-report/maintenance_repairs.interface';
 import {
   CreateMaintenanceAndRepairDto,
-  UpdateMaintenanceAndRepairDto,
+  UpdateMaintenanceAndRepairDto, UpdateMaintenanceStatus,
 } from '@dtos/maintenance-report/maintenance_repairs.dto';
 
 class MaintenanceAndRepairsController {
@@ -51,6 +51,19 @@ class MaintenanceAndRepairsController {
       const MaintenanceAndRepairsData:UpdateMaintenanceAndRepairDto = req.body;
       const updateMaintenanceAndRepairsData: IMaintenanceAndRepairs = await this.MaintenanceAndRepairsService.updateMaintenanceAndRepair(MaintenanceAndRepairsId,MaintenanceAndRepairsData);
       res.status(200).json({ data: updateMaintenanceAndRepairsData, message: 'Maintenance And Repairs updated.' });
+    }
+    catch (error) {
+      next(error)
+    }
+  }
+
+  //Method for updating Maintenance And Repairs status
+  public updateMaintenanceAndRepairsStatus = async (req, res:Response, next:NextFunction) =>{
+    try {
+      const MaintenanceAndRepairsId:string = req.params.id;
+      const MaintenanceAndRepairsStatus:UpdateMaintenanceStatus = req.body;
+      const updateMaintenanceAndRepairsData: IMaintenanceAndRepairs = await this.MaintenanceAndRepairsService.updateMaintenanceStatus(req.user,MaintenanceAndRepairsId,MaintenanceAndRepairsStatus);
+      res.status(200).json({ data: updateMaintenanceAndRepairsData, message: 'Maintenance And Repairs status updated.' });
     }
     catch (error) {
       next(error)

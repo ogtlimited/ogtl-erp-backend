@@ -5,8 +5,10 @@ import maintenanceAndRepairModel from '@models/maintenance-report/maintenance_re
 import { IMaintenanceAndRepairs } from '@interfaces/maintenance-report/maintenance_repairs.interface';
 import {
   CreateMaintenanceAndRepairDto,
-  UpdateMaintenanceAndRepairDto,
+  UpdateMaintenanceAndRepairDto, UpdateMaintenanceStatus,
 } from '@dtos/maintenance-report/maintenance_repairs.dto';
+import { Designation } from '@interfaces/employee-interface/designation.interface';
+import DesignationModel from '@models/employee/designation.model';
 
 class MaintenanceAndRepairService {
   public MaintenanceAndRepair = maintenanceAndRepairModel;
@@ -37,8 +39,8 @@ class MaintenanceAndRepairService {
   }
 
   //Method for updating Maintenance And Repairs
-  public async updateMaintenanceAndRepair(MaintenanceAndRepairId: string,MaintenanceAndRepairData: UpdateMaintenanceAndRepairDto):Promise<IMaintenanceAndRepairs>{
-    //check if no Maintenance And Repairs data is empty
+  public async updateMaintenanceAndRepair(MaintenanceAndRepairId: string,MaintenanceAndRepairData: UpdateMaintenanceAndRepairDto):Promise<IMaintenanceAndRepairs>{    //check if no Maintenance And Repairs data is empty
+
     if (isEmpty(MaintenanceAndRepairData)) throw new HttpException(400, "Bad request");
     const findMaintenanceAndRepair: IMaintenanceAndRepairs = await this.MaintenanceAndRepair.findOne({_id:MaintenanceAndRepairId})
     if(!findMaintenanceAndRepair) throw new HttpException(409,"Maintenance And Repairs does not exist")
@@ -49,6 +51,29 @@ class MaintenanceAndRepairService {
     if (!updateMaintenanceAndRepairById) throw new HttpException(409, "Maintenance And Repairs could not be updated");
     // return updated Maintenance And Repairs
     return updateMaintenanceAndRepairById;
+  }
+
+  //Method to update maintenance status
+  public async updateMaintenanceStatus(user,maintenanceAndRepairId: string, maintenanceStatus:UpdateMaintenanceStatus):Promise<IMaintenanceAndRepairs>{
+    //check if no Maintenance And Repairs data is empty
+    console.log(maintenanceStatus)
+    const getUserDesignation:Designation = await DesignationModel.findOne({_id:user.designation},{designation:1})
+    if (isEmpty(maintenanceStatus)) throw new HttpException(400, "Bad request");
+
+    const findMaintenanceAndRepair: IMaintenanceAndRepairs = await this.MaintenanceAndRepair.findOne({_id:maintenanceAndRepairId})
+    if(!findMaintenanceAndRepair) throw new HttpException(409,"Maintenance And Repairs does not exist")
+
+    if(getUserDesignation.designation === "Accountant"){
+      await this.MaintenanceAndRepair.findOneAndUpdate({_id: maintenanceAndRepairId}, {$set: {status:"Approved by Accountant"}}, { new: true })
+    }
+    else if(getUserDesignation.designation === "COO"){
+      await this.MaintenanceAndRepair.findOneAndUpdate({_id: maintenanceAndRepairId}, {$set: {status:"Approved by COO"}}, { new: true })
+    }else if(getUserDesignation.designation === "CEO"){
+      await this.MaintenanceAndRepair.findOneAndUpdate({_id: maintenanceAndRepairId}, {$set: {status:"Approved by CEO"}}, { new: true })
+    }else{
+      throw new HttpException(404,"You do not have the authorization to execute this update")
+    }
+    return findMaintenanceAndRepair
   }
 
   //Method for deleting Maintenance And Repairs

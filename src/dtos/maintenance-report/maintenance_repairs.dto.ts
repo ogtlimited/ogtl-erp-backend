@@ -48,7 +48,14 @@ export class UpdateMaintenanceAndRepairDto {
   @IsOptional()
   public type: string
 
+
+}
+
+export class UpdateMaintenanceStatus {
   @IsString()
-  @IsOptional()
+  public _id: string;
+
+  @IsString()
+  @IsNotEmpty()
   public status: string
 }
