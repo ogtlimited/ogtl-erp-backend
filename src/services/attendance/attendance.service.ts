@@ -11,7 +11,7 @@ import {ObjectId} from 'mongodb'
 import { attendanceofficeQueryGenerator, officeQueryGenerator } from '@/utils/payrollUtil';
 import deductionModel from '@/models/payroll/deduction.model';
 import deductionTypeModel from '@/models/payroll/deductionType.model';
-// const moment = require('moment');
+import moment = require('moment');
 
 
 class AttendanceTypeService {
@@ -92,17 +92,29 @@ class AttendanceTypeService {
     return findAttendanceType;
   }
   
-  public async createAttendanceType(attendanceTypeData: ICreateAttendance): Promise<any> {
+  public async createAttendanceType(user, attendanceTypeData: ICreateAttendance): Promise<any> {
         if (isEmpty(attendanceTypeData)) throw new HttpException(400, "Bad request");
-        const employee = await  employeeModel.findOne({ogid: attendanceTypeData.ogId})
-        if(!employee)
-        {
-          throw new HttpException(404, 'employee not found')
+        // const employee = await  employeeModel.findOne({ogid: user.ogid})
+        // if(!employee)
+        // {
+        //   throw new HttpException(404, 'employee not found')
+        // }
+        const startTime = moment().add(1, 'hour')
+        const endOfDay = moment().endOf('day').add(1, 'hour')
+        const existingAttendance = await this.attendanceTypes.exists({
+          employeeId: user._id, 
+          createdAt:{
+            $gte: startTime, 
+            $lte: endOfDay
+          }
+        })
+        if (existingAttendance) {
+          throw new HttpException(400, "already clocked In!")
         }
-        attendanceTypeData.shiftTypeId = employee.default_shift;
-        attendanceTypeData.employeeId = employee._id;
+        attendanceTypeData.shiftTypeId = user.default_shift;
+        attendanceTypeData.employeeId = user._id;
+        attendanceTypeData.ogId = user.ogid;
         const attendance = await this.attendanceTypes.create(attendanceTypeData);
-        // const allEmployeeAttendance = await this.findAllEmployeeAttendance(attendanceTypeData.ogId, {departmentId: attendanceTypeData.departmentId})
         return {attendance};
       } 
       

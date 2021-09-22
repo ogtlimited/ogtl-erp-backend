@@ -44,11 +44,11 @@ class AttendanceController {
     }
   };
 
-  public createAttendance = async (req: Request, res: Response, next: NextFunction) => {
+  public createAttendance = async (req, res: Response, next: NextFunction) => {
     try {
      
       const attendanceData: CreateAttendanceDto = req.body;
-      const createAttendanceData: any = await this.attendanceService.createAttendanceType(attendanceData); 
+      const createAttendanceData: any = await this.attendanceService.createAttendanceType(req.user, attendanceData); 
       res.status(201).json({ data: createAttendanceData});
     } catch (error) {
       next(error);
