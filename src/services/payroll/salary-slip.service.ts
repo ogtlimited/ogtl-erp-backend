@@ -16,7 +16,7 @@ class SalarySlipService {
 
   public async findAll(query): Promise<ISalarySlip[]> {
     const officeQuery = officeQueryGenerator(query)
-    const results = await this.salarySlipModel.find(officeQuery,{employeeId:1,_id:1,netPay:1}).populate('employeeId', {first_name:1, last_name:1, ogid:1, department:1,company_email:1,middle_name:1,date_of_joining:1}).populate({path:'employeeId.department'});
+    const results = await this.salarySlipModel.find(officeQuery,{employeeId:1,_id:1,netPay:1,createdAt:1}).populate('employeeId', {first_name:1, last_name:1, ogid:1, department:1,company_email:1,middle_name:1,date_of_joining:1}).populate({path:'employeeId.department'});
     return results;
   }
 
