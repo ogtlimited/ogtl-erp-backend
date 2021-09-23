@@ -30,7 +30,7 @@ class App {
   public port: string | number;
   public env: string;
 
-  constructor(routes: Routes[]) { 
+  constructor(routes: Routes[]) {
 
     this.app = express();
     this.port = process.env.PORT || 3000;
@@ -60,7 +60,7 @@ class App {
   private connectToDatabase() {
     if (this.env !== 'production') {
       set('debug', true);
-    }    
+    }
     connect(process.env.databaseUrl, dbConnection.options);
   }
 
@@ -145,7 +145,9 @@ class App {
         'swagger/loan/loan-application.yaml',
         'swagger/company/company.yaml',
         'swagger/project/project.yaml',
-        'swagger/project/client.yaml'
+        'swagger/project/client.yaml',
+        'swagger/maintenance-report/maintenanceReport.yaml',
+        'swagger/maintenance-report/maintenanceAndRepairs.yaml'
               ],
     };
 
@@ -172,10 +174,10 @@ class App {
   //     clockOutTime: new Date(2021, 7, Number(num), 18,),
   //     ogId: "850rho199",
   //   }
-  
+
   //   const result: any = await getWorkTime(data.clockInTime, data.clockOutTime);
   //   data.hoursWorked = result.hoursWorked
-  //   data.minutesWorked = result.minutesWorked    
+  //   data.minutesWorked = result.minutesWorked
   //   await attendanceModel.create(data);
 
   //   });
@@ -194,10 +196,10 @@ class App {
   //   //   clockOutTime: new Date(2021, 7, Number(num), 18,),
   //   //   ogId: "850rho199",
   //   // }
-  
+
   //   // const result: any = await getWorkTime(data.clockInTime, data.clockOutTime);
   //   // data.hoursWorked = result.hoursWorked
-  //   // data.minutesWorked = result.minutesWorked    
+  //   // data.minutesWorked = result.minutesWorked
   //   // await attendanceModel.create(data);
   //   // });
   //   // console.log('After job instantiation');
