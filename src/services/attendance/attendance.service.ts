@@ -113,7 +113,7 @@ class AttendanceTypeService {
   public async updateAttendance(user, attendanceData: UpdateAttendanceDto): Promise<any> {
     let attendanceRecord = await this.attendanceTypes.findOne({_id: attendanceData.attendanceId, employeeId: user._id})
     .populate('shiftTypeId')
-    .populate({path: 'employeeId', select:{salaryStructure_id:1}, populate:{path:'salaryStructure_id', model:'SalaryStructure', select:{earnings:1}}})
+    .populate({path: 'employeeId', select:{salaryStructure_id:1}, populate:{path:'salaryStructure_id', model:'SalaryStructure', select:{grossPay:1}}})
     .populate({path:'earnings', model:'SalaryComponent'})
     if(!attendanceRecord){
       throw new HttpException(404, "not found");
@@ -136,22 +136,12 @@ class AttendanceTypeService {
       },
       { new: true })
       
-      
-      // return workTimeResult;
-    const s1: Object[] = await salaryComponentModel.find({_id:{$in:[...attendanceRecord.employeeId.salaryStructure_id.earnings]}},{amount:1})
-    // console.log(s1);
-    const employeeGrossSalary = s1
-    console.log(employeeGrossSalary);
     if(workTimeResult.timeDeductions > 0)
     {
-     let amount = 0
+     let deductionAmount = 0
      const deductionType = await deductionTypeModel.findOne({title:"lateness"})
-     console.log(deductionType.percentage);
-     if(attendanceRecord.employeeId.salaryStructure_id.netpay > 50000)
-     {
-       amount = 7
-     }
-     await deductionModel.create({employeeId: attendanceRecord.employeeId, deductionTypeId: deductionType._id, amount: deductionType.amount })
+     deductionAmount = deductionType.percentage * attendanceRecord.employeeId.salaryStructure_id.grossPay;
+     await deductionModel.create({employeeId: attendanceRecord.employeeId, deductionTypeId: deductionType._id, amount: deductionAmount })
     }
     return updateRecord;
   }
