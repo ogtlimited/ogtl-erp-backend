@@ -53,7 +53,7 @@ import LoanTypeRoute from '@routes/loan/loan-type.route';
 import LoanApplicationRoute from '@routes/loan/loan-application.route';
 import CoachingFormRoute from './routes/coaching/coachingForm.route';
 import ClientRoute  from '@routes/project/client.route';
-import AssetsRoute from '@routes/assets/assets.route';
+import AssetAssignmentRoute from '@/routes/assets/asset-assignment.route';
 import ProjectRoute from '@routes/project/project.route';
 import RoleRoute from '@routes/role/role.route';
 //import DepartmentRoute from './routes/employee/department.route';
@@ -61,11 +61,9 @@ import scoreCardRoute from './routes/pip/score-cards.route';
 import TerminationRoute from './routes/employee-lifecycle/termination.route';
 
 import DepartmentRoute from './routes/employee/department.route';
-<<<<<<< HEAD
-=======
 import LeaveSettingsRoute from './routes/leave/leave-settings.route';
->>>>>>> 9ea752a054567b9163c9b2e8d5545028d1e977e1
-
+import PurchaseOrderRoute from './routes/assets/purchase-order.route';
+import AssetRoute from './routes/assets/assets.route';
 
 
 validateEnv();
@@ -88,13 +86,7 @@ const app = new App([
   new TransferRoute(),
   new LeaveAllocationRoute(),
   new LeaveApplicationRoute(),
-<<<<<<< HEAD
-=======
   new LeaveSettingsRoute(),
-  // new LeaveTypeRoutes(),
-  // new LeavePeriodRoute(),
-  // new LeavePolicyRoutes(),
->>>>>>> 9ea752a054567b9163c9b2e8d5545028d1e977e1
   new BranchRoute(),
   new ContactDetailsRoute(),
   new DesignationRoute(),
@@ -120,14 +112,9 @@ const app = new App([
 
   new ProjectRoute(),
   new ClientRoute(),
-  new AssetsRoute(),
+  new AssetAssignmentRoute(),
   new CoachingFormRoute(),
   new scoreCardRoute(),
-<<<<<<< HEAD
-  new TerminationRoute(),
-  new DepartmentRoute(),
-  
-=======
   new PromotionRoute(),
   new TerminationRoute(),
   new DepartmentRoute(),
@@ -138,8 +125,9 @@ const app = new App([
   new TrainingProgramRoute(),
   new TrainingResultRoute(),
 
-  new RoleRoute()
->>>>>>> 9ea752a054567b9163c9b2e8d5545028d1e977e1
+  new RoleRoute(),
+  new PurchaseOrderRoute(),
+  new AssetRoute()
 ]);
 
 app.listen();
