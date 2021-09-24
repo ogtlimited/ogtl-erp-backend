@@ -28,14 +28,39 @@ export const calculateNetPay = (salaryComponents: Array<any>) => {
 
 export const officeQueryGenerator = queryParams => {
   let officeQuery: any = {};
+  console.log(isEmpty(queryParams));
+  console.log(queryParams);
+  
   if (isEmpty(queryParams)) {
     return officeQuery;
   } else if (queryParams.departmentId) {
-    officeQuery = { departmentId: new ObjectId(queryParams.departmentId) };
+    officeQuery = { 
+      departmentId: new ObjectId(queryParams.departmentId),
+      'createdAt': {
+        '$gte': new Date(queryParams.startOfMonth), 
+        '$lte': new Date(queryParams.endOfMonth)
+      },
+      };
+    return officeQuery
   } else if (queryParams.projectId) {
-    officeQuery = { projectId: new ObjectId(queryParams.projectId) };
+    officeQuery = { 
+      projectId: new ObjectId(queryParams.projectId),
+      'createdAt': {
+        '$gte': new Date(queryParams.startOfMonth), 
+        '$lte': new Date(queryParams.endOfMonth)
+      },
+     };
+    return officeQuery
   }
-  return officeQuery;
+  else{
+    officeQuery = { 
+      'createdAt': {
+        '$gte': new Date(queryParams.startOfMonth), 
+        '$lte': new Date(queryParams.endOfMonth)
+      },
+     };
+    return officeQuery
+  }
 };
 
 export const attendanceofficeQueryGenerator = queryParams => {
