@@ -62,6 +62,8 @@ import TerminationRoute from './routes/employee-lifecycle/termination.route';
 
 import DepartmentRoute from './routes/employee/department.route';
 import LeaveSettingsRoute from './routes/leave/leave-settings.route';
+import MaintenanceReportRoute from '@routes/maintenance-report/maintenance_report.route';
+import MaintenanceAndRepairsRoute from '@routes/maintenance-report/maintenance_repair.route';
 
 
 
@@ -127,7 +129,9 @@ const app = new App([
   new TrainingProgramRoute(),
   new TrainingResultRoute(),
 
-  new RoleRoute()
+  new RoleRoute(),
+  new MaintenanceReportRoute(),
+  new MaintenanceAndRepairsRoute()
 ]);
 
 app.listen();
