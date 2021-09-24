@@ -22,7 +22,7 @@ class AssetRoute implements Routes {
         this.router.get(`${this.path}`,authMiddleware, this.AssetController.getAsset);
         this.router.get(`${this.path}/:id`,authMiddleware, this.AssetController.getAssetById);
         this.router.post(`${this.path}` , [validationMiddleware(CreateAssetDto, 'body'),authMiddleware], this.AssetController.CreateAsset);
-        this.router.put(`${this.path}/:id`, [validationMiddleware(UpdateAssetDto, 'body', true),authMiddleware], this.AssetController.updateAsset);
+        this.router.patch(`${this.path}/:id`, [validationMiddleware(UpdateAssetDto, 'body', true),authMiddleware], this.AssetController.updateAsset);
         this.router.delete(`${this.path}/:id`,authMiddleware ,this.AssetController.deleteAsset);
       }
     }

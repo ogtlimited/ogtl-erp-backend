@@ -39,6 +39,11 @@ const PurchaseOrderSchema : Schema = new Schema(
             required: true,
 
           },
+          manufacturer: {
+            type: String,
+            required: true,
+
+          },
           amount: {
             type: String,
             required: true,
@@ -46,7 +51,8 @@ const PurchaseOrderSchema : Schema = new Schema(
           },
           status: {
             type: String,
-            required: true,
+            enum: ["Draft","Approved by Accountant","Approved By COO","Approved By CEO","Rejected"],
+            default: "Draft"
 
           },
 

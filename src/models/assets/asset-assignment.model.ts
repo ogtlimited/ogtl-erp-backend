@@ -4,14 +4,11 @@ import { model, Schema, Document } from 'mongoose';
 
 const AssetAssignmentSchema: Schema = new Schema(
     {
-        assetName: {
-            type: String,
-            required: true,
-
-          },
+        
           assetId: {
-            type: String,
+            type: Schema.Types.ObjectId,
             required: true,
+            ref : "Asset"
 
           },
           assigned_to: {

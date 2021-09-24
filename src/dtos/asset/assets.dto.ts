@@ -2,9 +2,8 @@
 import {IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateAssetDto{ 
-    @IsNotEmpty()
-    @IsString()
-    public assetId: string;
+
+    
 
     @IsNotEmpty()
     @IsString()
@@ -24,11 +23,11 @@ export class UpdateAssetDto{
     @IsString()
     public _id : string;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     public assetId: string;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     public assetName: string;
 
@@ -36,7 +35,7 @@ export class UpdateAssetDto{
     @IsString()
     public serialNumber : string;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     public assetType : string;
 

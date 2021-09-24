@@ -6,9 +6,7 @@ export class CreateAssetAssignmentDto{
     @IsString()
     public assetId: string;
 
-    @IsNotEmpty()
-    @IsString()
-    public assetName: string;
+   
 
 
     @IsNotEmpty()
@@ -41,31 +39,25 @@ export class UpdateAssetAssignmentDto{
     @IsString()
     public _id : string;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     public assetId: string;
 
 
-
-    @IsNotEmpty()
-    @IsString()
-    public assetName: string;
-
-
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     public assigned_to: string;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     public assigned_by: string;
 
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     public condition: string;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     public warranty: string;
 

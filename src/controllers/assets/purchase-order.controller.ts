@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { NextFunction, Request, Response } from 'express';
-import { CreatePurchaseOrderDto, UpdatePurchaseOrderDto } from '@/dtos/asset/purchase-order.dto';
+import { CreatePurchaseOrderDto, UpdatePurchaseOrderDto, UpdatePurchaseStatus } from '@/dtos/asset/purchase-order.dto';
 import { purchaseOrder } from '@/interfaces/assets/purchase-order.interface';
 import PurchaseOrderService from '@/services/assets/purchase-order.service';
 
@@ -48,6 +48,18 @@ class PurchaseOrderController {
       next(error);
     }
   };
+
+  public updatePurchaseOrderStatus = async (req, res:Response, next:NextFunction) =>{
+    try {
+      const PurchaseOrderId:string = req.params.id;
+      const PurchaseOrderStatus:UpdatePurchaseStatus = req.body;
+      const updatePurchaseOrderData: purchaseOrder = await this.PurchaseOrderService.updatepurchaseOrderStatus(req.user,PurchaseOrderId,PurchaseOrderStatus);
+      res.status(200).json({ data: updatePurchaseOrderData, message: 'Purchase status updated.' });
+    }
+    catch (error) {
+      next(error)
+    }
+  }
   //deletes PurchaseOrder
   public deletePurchaseOrder = async (req: Request, res: Response, next: NextFunction) => {
     try {

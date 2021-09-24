@@ -46,7 +46,7 @@ class AssetService{
 
        const newAssetId = this.generateAssetID()
 
-       const createAssetData: Asset = await this.Assets.create({ AssetData, assetId: newAssetId});
+       const createAssetData: Asset = await this.Assets.create({ ...AssetData, assetId: newAssetId});
        return createAssetData;
      }
 
@@ -59,7 +59,7 @@ class AssetService{
         //Check if data is empty
         if (isEmpty(AssetData)) throw new HttpException(400, "No data provided");
 
-        const updateAssetById: Asset = await this.Assets.findByIdAndUpdate(AssetId,{AssetData});
+        const updateAssetById: Asset = await this.Assets.findByIdAndUpdate(AssetId,AssetData, {new : true});
         if(!updateAssetById) throw new HttpException(409, "Asset doesn't exist");
          return updateAssetById;
    }

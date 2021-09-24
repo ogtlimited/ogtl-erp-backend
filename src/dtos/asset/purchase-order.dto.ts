@@ -1,17 +1,18 @@
 /* eslint-disable prettier/prettier */
-import {IsNotEmpty, IsString } from 'class-validator';
+import {IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreatePurchaseOrderDto{
     @IsNotEmpty()
     @IsString()
     public productName : string;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     public departmentId : string;
 
-    @IsNotEmpty()
+   
     @IsString()
+    @IsOptional()
     public projectId : string;
 
     @IsNotEmpty()
@@ -30,53 +31,54 @@ export class CreatePurchaseOrderDto{
     @IsString()
     public amount : string;
 
-    @IsNotEmpty()
-    @IsString()
-    public purchaseOrderId : string;
 
-    @IsNotEmpty()
-    @IsString()
-    public status : string;
+
 
 }
 export class UpdatePurchaseOrderDto{
     @IsString()
     public _id : string;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     public productName : string;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     public departmentId : string;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     public projectId : string;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     public location : string;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     public manufacturer : string;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     public model : string;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     public amount : string;
 
-    @IsNotEmpty()
-    @IsString()
-    public purchaseOrderId : string;
     
-    @IsNotEmpty()
-    @IsString()
-    public status : string;
+    
+
     
 }
+
+export class UpdatePurchaseStatus {
+    @IsString()
+    public _id: string;
+  
+    @IsString()
+    @IsNotEmpty()
+    public status: string
+  }
+  

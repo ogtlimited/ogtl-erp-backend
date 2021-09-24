@@ -22,7 +22,7 @@ class AssetAssignmentRoute implements Routes {
         this.router.get(`${this.path}`,authMiddleware, this.AssetsController.getAssetAssignment);
         this.router.get(`${this.path}/:id`,authMiddleware, this.AssetsController.getAssetAssignmentById);
         this.router.post(`${this.path}` , [validationMiddleware(CreateAssetAssignmentDto, 'body'),authMiddleware], this.AssetsController.CreateAssetAssignment);
-        this.router.put(`${this.path}/:id`, [validationMiddleware(UpdateAssetAssignmentDto, 'body', true),authMiddleware], this.AssetsController.updateAssetAssignment);
+        this.router.patch(`${this.path}/:id`, [validationMiddleware(UpdateAssetAssignmentDto, 'body', true),authMiddleware], this.AssetsController.updateAssetAssignment);
         this.router.delete(`${this.path}/:id`,authMiddleware ,this.AssetsController.deleteAssetAssignment);
       }
     }
