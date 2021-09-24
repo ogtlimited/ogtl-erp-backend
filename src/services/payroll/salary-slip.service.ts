@@ -16,33 +16,67 @@ class SalarySlipService {
 
   public async findAll(query): Promise<ISalarySlip[]> {
     const officeQuery = officeQueryGenerator(query)
-    const results = await this.salarySlipModel.find(officeQuery).populate('employeeId');
+    const results = await this.salarySlipModel.find(officeQuery,{employeeId:1,_id:1,netPay:1}).populate('employeeId', {first_name:1, last_name:1, ogid:1, department:1,company_email:1,middle_name:1,date_of_joining:1}).populate({path:'employeeId.department'});
     return results;
   }
 
-  public async findById(id: string): Promise<ISalarySlip> {
+  public async findById(id: string): Promise<any> {
     if (isEmpty(id)) throw new HttpException(400, "provide Id");
-
-    const salarySlip: ISalarySlip = await (await this.salarySlipModel.findOne({ _id: id })).populate('deductions salaryStructure employeeId');
+    const employeeSlip: any = {}
+    // const salarySlip: ISalarySlip = await this.salarySlipModel.findOne({ _id: id }).populate('deductions salaryStructure employeeId');
+    const salarySlip: any = await this.salarySlipModel.findOne({ _id: id }).populate({path: 'deductions', populate:{path:'deductionTypeId', model:'DeductionType'}}).populate({path: 'salaryStructure', populate:{path:'earnings', model:'SalaryComponent'}}).populate({path: 'salaryStructure', populate:{path:'deductions', model:'SalaryComponent'}});
+    if (!salarySlip) {
+      throw new HttpException(404, "no record found")
+    }
+    const additionalDeductions: any = {
+      // deductions: []
+      "lateness": 0,
+      "NCNS": 0,
+      "absent":0
+    }
+    if (salarySlip.deductions.length > 1)
+    {
+      for (let index = 0; index < salarySlip.deductions.length; index++) {
+        const deduction = salarySlip.deductions[index];
+        if(!additionalDeductions[deduction.deductionTypeId.title])
+        {
+          additionalDeductions[deduction.deductionTypeId.title] = deduction.deductionTypeId.amount
+          continue
+        }
+        additionalDeductions[deduction.deductionTypeId.title] +=  deduction.deductionTypeId.amount
+      }
+    }
+    // record.salaryStructure = salarySlip.salaryStructure
     if (!salarySlip) throw new HttpException(404, "no record found");
+    employeeSlip.additionalDeductions = additionalDeductions;
+    employeeSlip.salaryStructure = salarySlip.salaryStructure;
+    employeeSlip.netPay = salarySlip.netPay;
+    employeeSlip.createdAt = salarySlip.createdAt;
 
-    return salarySlip;
+    return {employeeSlip};
   }
 
   public async create(data: CreateSalarySlipDto): Promise<any> {
     if (isEmpty(data)) throw new HttpException(400, "Bad request");
     const projects = await projectModel.find();
     const records = [];
+    let wahalaPeople = []
     for (let index = 0; index < projects.length; index++) {
       const project = projects[index];
       // console.log(project);
-      const employees:any = await EmployeeModel.find({project_id: project._id},{_id:1, salaryStructure_id:1}).populate('salaryStructure_id');
+      const employees:any = await EmployeeModel.find({projectId: project._id},{_id:1, salaryStructure_id:1}).populate('salaryStructure_id');
+      console.log(employees[0]);
+      // break
       if(employees.length<1)
       {
         continue
       }
       for (let index = 0; index < employees.length; index++) {
         const employee = employees[index];
+        if(employee.salaryStructure_id == null)
+        {
+          wahalaPeople.push(employee)
+        }
         const salarySlipConstructor:any = {
           employeeId: employee._id,
           salaryStructure: employee.salaryStructure_id._id,
@@ -67,7 +101,7 @@ class SalarySlipService {
     if (isEmpty(data)) throw new HttpException(400, "Bad request");
     const departments = await departmentModel.find();
     console.log(departments);
-    
+
     const records = [];
     for (let index = 0; index < departments.length; index++) {
       const department = departments[index];
@@ -80,7 +114,7 @@ class SalarySlipService {
       for (let index = 0; index < employees.length; index++) {
         const employee = employees[index];
         // console.log(employee);
-        
+
         const salarySlipConstructor:any = {
           employeeId: employee._id,
           salaryStructure: employee.salaryStructure_id._id,

@@ -1,0 +1,138 @@
+tags:
+  - name: maintenanceReport
+    description: maintenanceReport API
+
+paths:
+  # [GET] maintenanceReport
+  /api/maintenanceReport:
+    get:
+      tags:
+        - maintenanceReport
+      summary: Find All maintenanceReports
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+    # [POST] maintenanceReport
+    post:
+      tags:
+        - maintenanceReport
+      summary: Add maintenance report
+      parameters:
+        - name: body
+          in: body
+          description: maintenance report Data
+          required: true
+          schema:
+            $ref: '#/definitions/api/maintenanceReport'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  # [GET] maintenanceReport/id
+  /api/maintenanceReport/{id}:
+    get:
+      tags:
+        - maintenanceReport
+      summary: Find maintenance report By Id
+      parameters:
+        - name: id
+          in: path
+          description: maintenance report Id
+          required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [PATCH] maintenanceReport/id
+    patch:
+      tags:
+        - maintenanceReport
+      summary: Update maintenance report By Id
+      parameters:
+        - name: id
+          in: path
+          description: maintenance report Id
+          required: true
+        - name: body
+          in: body
+          description: maintenance report Data
+          required: true
+          schema:
+            $ref: '#/definitions/api/maintenanceReport'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [DELETE] maintenanceReport/id
+    delete:
+      tags:
+        - maintenanceReport
+      summary: Delete maintenance report By Id
+      parameters:
+        - name: id
+          in: path
+          description: maintenance report Id
+          required: true
+          schema:
+            type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  maintenanceReport:
+    type: object
+    required:
+      - description
+      - date_of_report
+      - created_by
+      - issues
+      - recommendation
+    properties:
+      id:
+        description: maintenanceReport Id
+      description:
+        type: string
+        description: description
+      date_of_report:
+        type: Date
+        description: date of report
+      created_by:
+        type: string
+        description: Created by
+      issues:
+        type: string
+        description: issues
+      recommendation:
+        type: string
+        description: recommendation
+
+schemes:
+  - https
+  - http

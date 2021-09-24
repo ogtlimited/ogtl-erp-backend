@@ -1,0 +1,142 @@
+tags:
+  - name: maintenanceAndRepairs
+    description: maintenanceAndRepairs API
+
+paths:
+  # [GET] maintenanceAndRepairs
+  /api/maintenanceAndRepairs:
+    get:
+      tags:
+        - maintenanceAndRepairs
+      summary: Find All maintenanceAndRepairss
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+    # [POST] maintenanceAndRepairs
+    post:
+      tags:
+        - maintenanceAndRepairs
+      summary: Add maintenance and repairs
+      parameters:
+        - name: body
+          in: body
+          description: maintenance and repairs Data
+          required: true
+          schema:
+            $ref: '#/definitions/api/maintenanceAndRepairs'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  # [GET] maintenanceAndRepairs/id
+  /api/maintenanceAndRepairs/{id}:
+    get:
+      tags:
+        - maintenanceAndRepairs
+      summary: Find maintenance and repairs By Id
+      parameters:
+        - name: id
+          in: path
+          description: maintenance and repairs Id
+          required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [PATCH] maintenanceAndRepairs/id
+    patch:
+      tags:
+        - maintenanceAndRepairs
+      summary: Update maintenance and repairs By Id
+      parameters:
+        - name: id
+          in: path
+          description: maintenance and repairs Id
+          required: true
+        - name: body
+          in: body
+          description: maintenance and repairs Data
+          required: true
+          schema:
+            $ref: '#/definitions/api/maintenanceAndRepairs'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [DELETE] maintenanceAndRepairs/id
+    delete:
+      tags:
+        - maintenanceAndRepairs
+      summary: Delete maintenance and repairs By Id
+      parameters:
+        - name: id
+          in: path
+          description: maintenance and repairs Id
+          required: true
+          schema:
+            type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  maintenanceAndRepairs:
+    type: object
+    required:
+      - asset_id
+      - issue
+      - date_of_maintenance
+      - amount
+      - status
+      - type
+    properties:
+      id:
+        description: maintenanceAndRepairs Id
+      asset_id:
+        type: string
+        description: the asset
+      issue:
+        type: string
+        description: issue
+      date_of_maintenance:
+        type: Date
+        description: Date
+      amount:
+        type: string
+        description: Amount to be spent
+      status:
+        type: string
+        description: status
+      type:
+        type: string
+        description: type
+
+schemes:
+  - https
+  - http

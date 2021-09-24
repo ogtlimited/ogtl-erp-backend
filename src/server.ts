@@ -64,6 +64,9 @@ import DepartmentRoute from './routes/employee/department.route';
 import LeaveSettingsRoute from './routes/leave/leave-settings.route';
 import PurchaseOrderRoute from './routes/assets/purchase-order.route';
 import AssetRoute from './routes/assets/assets.route';
+import MaintenanceReportRoute from '@routes/maintenance-report/maintenance_report.route';
+import MaintenanceAndRepairsRoute from '@routes/maintenance-report/maintenance_repair.route';
+
 
 
 validateEnv();
@@ -127,7 +130,9 @@ const app = new App([
 
   new RoleRoute(),
   new PurchaseOrderRoute(),
-  new AssetRoute()
+  new AssetRoute(),
+  new MaintenanceReportRoute(),
+  new MaintenanceAndRepairsRoute()
 ]);
 
 app.listen();
