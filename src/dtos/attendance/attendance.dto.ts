@@ -4,9 +4,6 @@
 import {IsDateString, IsOptional, IsString } from 'class-validator';
 
 export class CreateAttendanceDto {  
-  @IsString()
-  public ogId: string;
-
   @IsDateString()
   public clockInTime: string;
 

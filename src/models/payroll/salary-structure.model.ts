@@ -46,6 +46,10 @@ const salaryStructureSchema: Schema = new Schema(
       type: Number,
       required: true,
     },
+    grossPay: {
+      type: Number,
+      required: true,
+    },
   },
   {
     timestamps: true,

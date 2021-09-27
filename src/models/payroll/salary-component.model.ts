@@ -50,5 +50,5 @@ const salaryComponentSchema: Schema = new Schema(
   },
 );
 
-const salaryComponentModel = model<ISalaryComponent & Document>('SalaryComponent', salaryComponentSchema);
+const salaryComponentModel = model('SalaryComponent', salaryComponentSchema);
 export default salaryComponentModel;
