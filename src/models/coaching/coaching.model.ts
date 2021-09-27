@@ -32,8 +32,9 @@ const CoachingSchema: Schema = new Schema(
             required: true,
           },
           supervisor: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
             required: true,
+            ref: "Employee",
           },
           way_forward: {
             type: String,
@@ -47,6 +48,9 @@ const CoachingSchema: Schema = new Schema(
             type: String,
             default: "pending",
             enum: ["rejected", "accepted", "pending"],
+          },
+          reason:  {
+            type: String
           },
 
     },

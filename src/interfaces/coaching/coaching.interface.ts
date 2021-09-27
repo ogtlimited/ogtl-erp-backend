@@ -10,6 +10,7 @@ export interface CoachingFormInterface {
   supervisor: string;
   way_forward: string;
   user_response: string;
+  reason: string;
   status: string;
 }
 

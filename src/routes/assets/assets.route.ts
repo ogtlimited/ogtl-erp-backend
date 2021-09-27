@@ -2,14 +2,14 @@
 import { Router } from 'express';
 import { Routes } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
-import { CreateAssetDto, UpdateAssetDto } from '@/dtos/asset/asset.dto';
-import AssetsController from '@/controllers/assets/assets.controller';
 import authMiddleware from '@middlewares/auth.middleware';
+import { CreateAssetDto, UpdateAssetDto } from '@/dtos/asset/assets.dto';
+import AssetController from '@/controllers/assets/assets.controller';
 
-class AssetsRoute implements Routes {
+class AssetRoute implements Routes {
     public path = '/api/assets';
     public router = Router();
-    public AssetsController = new AssetsController();
+    public AssetController = new AssetController();
     
 
 
@@ -19,12 +19,12 @@ class AssetsRoute implements Routes {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}`,authMiddleware, this.AssetsController.getAssets);
-        this.router.get(`${this.path}/:id`,authMiddleware, this.AssetsController.getAssetById);
-        this.router.post(`${this.path}` , [validationMiddleware(CreateAssetDto, 'body'),authMiddleware], this.AssetsController.CreateAsset);
-        this.router.put(`${this.path}/:id`, [validationMiddleware(UpdateAssetDto, 'body', true),authMiddleware], this.AssetsController.updateAsset);
-        this.router.delete(`${this.path}/:id`,authMiddleware ,this.AssetsController.deleteAsset);
+        this.router.get(`${this.path}`,authMiddleware, this.AssetController.getAsset);
+        this.router.get(`${this.path}/:id`,authMiddleware, this.AssetController.getAssetById);
+        this.router.post(`${this.path}` , [validationMiddleware(CreateAssetDto, 'body'),authMiddleware], this.AssetController.CreateAsset);
+        this.router.patch(`${this.path}/:id`, [validationMiddleware(UpdateAssetDto, 'body', true),authMiddleware], this.AssetController.updateAsset);
+        this.router.delete(`${this.path}/:id`,authMiddleware ,this.AssetController.deleteAsset);
       }
     }
 
-    export default AssetsRoute;
+    export default AssetRoute;

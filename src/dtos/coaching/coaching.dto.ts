@@ -62,3 +62,11 @@ export class CoachingFormUpdateDTO {
     @IsString()
     public user_response: string;
 }
+export class CoachingFormUserResponseUpdateDTO {
+
+    @IsString()
+    public user_response: string;
+
+    @IsString()
+    public reason: string;
+}

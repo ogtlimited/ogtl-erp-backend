@@ -5,10 +5,11 @@ import { HttpException } from '@/exceptions/HttpException';
 import deductionModel from '@/models/payroll/deduction.model';
 import { deductionAggBuilder } from '@/utils/pipelineUtils';
 
-export const calculateNetPay = (salaryComponents: Array<any>) => {
+export const calculateNetAndGrossPay = (salaryComponents: Array<any>) => {
   if (salaryComponents.length < 1) {
     throw new HttpException(400, 'please provide earnings and deductions!');
   }
+  const data:any = {}
   let earnings = 0;
   let deductions = 0;
   for (let index = 0; index < salaryComponents.length; index++) {
@@ -22,7 +23,9 @@ export const calculateNetPay = (salaryComponents: Array<any>) => {
   if (earnings < deductions) {
     throw new HttpException(400, 'employee deductions cannot be more than earnings');
   } else {
-    return earnings - deductions;
+    data.netPay =  earnings - deductions;
+    data.grossPay =  earnings;
+    return data
   }
 };
 
@@ -30,12 +33,35 @@ export const officeQueryGenerator = queryParams => {
   let officeQuery: any = {};
   if (isEmpty(queryParams)) {
     return officeQuery;
-  } else if (queryParams.departmentId) {
-    officeQuery = { departmentId: new ObjectId(queryParams.departmentId) };
-  } else if (queryParams.projectId) {
-    officeQuery = { projectId: new ObjectId(queryParams.projectId) };
+  }  
+  if (queryParams.departmentId) {
+    if (queryParams.startOfMonth && queryParams.startOfMonth) {
+      officeQuery.createdAt = {
+        '$gte': new Date(queryParams.startOfMonth), 
+        '$lte': new Date(queryParams.endOfMonth)
+      }
+    }
+    officeQuery.departmentId = new ObjectId(queryParams.departmentId)
+    return officeQuery
+  }  
+  if (queryParams.projectId) {
+    if (queryParams.startOfMonth && queryParams.startOfMonth) {
+    officeQuery.createdAt = {
+      '$gte': new Date(queryParams.startOfMonth), 
+      '$lte': new Date(queryParams.endOfMonth)
+    }}
+    officeQuery.projectId = new ObjectId(queryParams.projectId)
+    return officeQuery
   }
-  return officeQuery;
+  else{
+    officeQuery = { 
+      'createdAt': {
+        '$gte': new Date(queryParams.startOfMonth), 
+        '$lte': new Date(queryParams.endOfMonth)
+      },
+     };
+    return officeQuery
+  }
 };
 
 export const attendanceofficeQueryGenerator = queryParams => {

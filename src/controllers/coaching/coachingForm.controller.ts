@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import { CoachingFormUpdateDTO } from '@/dtos/coaching/coaching.dto';
+import { CoachingFormUpdateDTO, CoachingFormUserResponseUpdateDTO } from '@/dtos/coaching/coaching.dto';
 import { CoachingFormDTO } from '../../dtos/coaching/coaching.dto';
 import { CoachingFormInterface } from '../../interfaces/coaching/coaching.interface';
 import CoachingFormService from '@/services/coaching/coachingForm.service';
@@ -15,8 +15,9 @@ class CoachingFormController {
   //Returns all CoachingForms
   public getCoachingForms = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const findAllCoachingFormsData: CoachingFormInterface[] = await this.coachingService.findAllCoaching();
-
+      console.log(req['user']._id)
+      const userId = req['user']._id
+      const findAllCoachingFormsData: CoachingFormInterface[] = await this.coachingService.findAllCoaching(userId);
       res.status(200).json({ data: findAllCoachingFormsData, numCoachingForms: findAllCoachingFormsData.length, message: 'All CoachingForms' });
     } catch (error) {
       next(error);
@@ -61,6 +62,17 @@ class CoachingFormController {
       const CoachingId: string = req.params.id;
       const CoachingData: CoachingFormUpdateDTO = req.body;
       const updateCoachingData: CoachingFormInterface = await this.coachingService.updateCoachingForm(CoachingId, CoachingData);
+      res.status(200).json({ data: updateCoachingData, message: 'Coaching Updated' });
+    } catch (error) {
+      next(error);
+    }
+  };
+  //update Coaching
+  public updateUserResponserCoachingForm = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const CoachingId: string = req.params.id;
+      const CoachingData: CoachingFormUserResponseUpdateDTO = req.body;
+      const updateCoachingData: CoachingFormInterface = await this.coachingService.updateCoachingFormUserResponse(CoachingId, CoachingData);
       res.status(200).json({ data: updateCoachingData, message: 'Coaching Updated' });
     } catch (error) {
       next(error);
