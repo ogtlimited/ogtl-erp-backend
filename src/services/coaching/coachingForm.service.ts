@@ -4,7 +4,7 @@ import { HttpException } from '@exceptions/HttpException';
 import { CoachingFormInterface } from './../../interfaces/coaching/coaching.interface';
 
 import { isEmpty } from '@utils/util';
-import { CoachingFormDTO, CoachingFormUpdateDTO } from '@/dtos/coaching/coaching.dto';
+import { CoachingFormDTO, CoachingFormUpdateDTO, CoachingFormUserResponseUpdateDTO } from '@/dtos/coaching/coaching.dto';
 
 class CoachingFormService {
     public Coaching = CoachingFormModel;
@@ -12,8 +12,8 @@ class CoachingFormService {
     /**
      *Returns all CoachingForm
      */
-    public async findAllCoaching(): Promise<CoachingFormInterface[]> { 
-        const Coaching: CoachingFormInterface[] = await this.Coaching.find().populate('employee_id');
+    public async findAllCoaching(supervisor): Promise<CoachingFormInterface[]> { 
+        const Coaching: CoachingFormInterface[] = await this.Coaching.find({supervisor: supervisor}).populate('employee_id', 'first_name last_name middle_name ogid');
         return Coaching;
     }
 
@@ -40,7 +40,7 @@ class CoachingFormService {
        if (isEmpty(employeeId)) throw new HttpException(400, "No Id provided");
 
        //find CoachingForm with Id given
-       const findCoachingForm:CoachingFormInterface[] = await this.Coaching.find({ employee_id:employeeId  });
+       const findCoachingForm:CoachingFormInterface[] = await this.Coaching.find({ employee_id: employeeId, status: 'submitted'  }).populate('employee_id supervisor designation', 'first_name last_name middle_name ogid designation');;
 
        if(!findCoachingForm) throw new HttpException(409, "CoachingForm with that Id doesnt exist");
 
@@ -70,6 +70,16 @@ class CoachingFormService {
         if (isEmpty(CoachingFormData)) throw new HttpException(400, "No data provided");
 
         const updateCoachingFormById: CoachingFormInterface = await this.Coaching.findByIdAndUpdate(CoachingFormId,{CoachingFormData});
+        if(!updateCoachingFormById) throw new HttpException(409, "CoachingForm doesn't exist");
+         return updateCoachingFormById;
+    }
+     public async updateCoachingFormUserResponse(CoachingFormId:string,CoachingFormData: CoachingFormUserResponseUpdateDTO)  : Promise<CoachingFormInterface>{
+
+        //Check if data is empty
+        if (isEmpty(CoachingFormData)) throw new HttpException(400, "No data provided");
+
+        const updateCoachingFormById: CoachingFormInterface = await this.Coaching.
+        findByIdAndUpdate(CoachingFormId,{ $set: { user_response: CoachingFormData.user_response, reason: CoachingFormData.reason } });
         if(!updateCoachingFormById) throw new HttpException(409, "CoachingForm doesn't exist");
          return updateCoachingFormById;
     }

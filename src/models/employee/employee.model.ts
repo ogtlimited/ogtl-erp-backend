@@ -94,11 +94,6 @@ const employeeSchema: Schema = new Schema(
       type: Number,
       default:0,
     },
-    role_id: {
-      type: Schema.Types.ObjectId,
-      ref: 'Role',
-      default: null,
-    },
     isInPIP:{
       type: Boolean,
       default: false,
