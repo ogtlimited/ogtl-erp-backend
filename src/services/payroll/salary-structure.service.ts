@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { CreateSalaryStructureDto, UpdateSalaryStructureDto } from '@dtos/payroll/salary-structure.dto';
 import { HttpException } from '@exceptions/HttpException';
-import { ISalaryStructure, IUpdateSalaryStructure } from '@/interfaces/payroll/salary-structure.interface';
+import { ISalaryStructure} from '@/interfaces/payroll/salary-structure.interface';
 import  salaryStructureModel from '@models/payroll/salary-structure.model';
 import { isEmpty } from '@utils/util';
 import salaryComponentModel from '@/models/payroll/salary-component.model';

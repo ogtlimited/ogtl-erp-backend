@@ -94,7 +94,7 @@ class SalarySlipService {
     if (isEmpty(data)) throw new HttpException(400, "Bad request");
     const projects = await projectModel.find();
     const records = [];
-    let wahalaPeople = []
+    const wahalaPeople = []
     for (let index = 0; index < projects.length; index++) {
       const project = projects[index];
       // console.log(project);

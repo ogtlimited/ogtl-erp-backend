@@ -1,4 +1,4 @@
-const moment = require('moment');
+import moment = require('moment');
 
 interface resultInterface {
   hoursWorked?: Number;
@@ -32,9 +32,8 @@ const calculateLateness = (clock_in_time, resumption_time) => {
 
 const getWorkTime = (userStartTime: any, userEndTime: any, resumptionTime?) => {
   const result: resultInterface = {};
-  const startTime = moment(userStartTime);
-  const endTime = moment(userEndTime);
-  console.log(startTime, endTime);
+  const startTime = moment(userStartTime).subtract(1,"hour");
+  const endTime = moment(userEndTime).subtract(1,"hour");;
 
   const timeDifference = moment.duration(moment(endTime).diff(startTime));
   const { hours, minutes } = timeDifference._data;
@@ -42,7 +41,7 @@ const getWorkTime = (userStartTime: any, userEndTime: any, resumptionTime?) => {
   result.minutesWorked = Number(minutes);
   if (resumptionTime != undefined) {
     const timeDeductions = calculateLateness(startTime.format('hh:mm'), resumptionTime);
-    result.timeDeductions = timeDeductions;
+    result.timeDeductions = Math.round(timeDeductions);
   }
   return result;
 };
