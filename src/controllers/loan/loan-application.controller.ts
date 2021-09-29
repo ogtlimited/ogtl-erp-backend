@@ -24,7 +24,7 @@ class LoanApplicationController {
         // const mongoose = require('mongoose');
         // const models = mongoose.modelNames()
         // console.log('my mongojhghfhgjjhfdf'+models)
-        rbac.can(user.role, 'post:readAll')
+        rbac.can('hr_user', 'post:readAll')
         .then(result => {
             if (result) {
                 const findAllLoans: LoanApplication[] = this.loanApplicationService.findAll();
