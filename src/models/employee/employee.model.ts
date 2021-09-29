@@ -81,7 +81,9 @@ const employeeSchema: Schema = new Schema(
       type: String,
     },
     reports_to: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'Employee',
+      default: null
     },
     status: {
       type: String,

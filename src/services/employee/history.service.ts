@@ -42,7 +42,7 @@ class HistoryService{
             if(findHistory && findHistory._id != HistoryId) throw new HttpException(409, `Employee ${HistoryData.employee_id} History details dont exist`);
         }
 
-        const updateHistoryData: History = await this.Historys.findByIdAndUpdate(HistoryId,{HistoryData})
+        const updateHistoryData: History = await this.Historys.findByIdAndUpdate(HistoryId,HistoryData,{new:true})
         if(!updateHistoryData) throw new HttpException(409, "details could not be updated");
         return updateHistoryData;
     }

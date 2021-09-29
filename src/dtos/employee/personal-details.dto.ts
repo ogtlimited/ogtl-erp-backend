@@ -2,16 +2,18 @@
 import { IsDateString, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreatePersonalDetailsDto{
-  @IsOptional()
-  @IsString()
-  public _id: string;
+    @IsOptional()
+    @IsString()
+    public _id: string;
 
     @IsNotEmpty()
     @IsString()
         public employee_id: string;
 
     @IsString()
-        public passport_number: string;
+        public means_of_identification: string;
+    @IsString()
+        public id_number: string;
 
     @IsDateString()
         public date_of_issue: Date;
@@ -41,7 +43,10 @@ export class UpdatePersonalDetailsDto{
         public employee_id: string;
 
     @IsString()
-        public passport_number: string;
+    public means_of_identification: string;
+
+    @IsString()
+    public id_number: string;
 
     @IsDateString()
         public date_of_issue: Date;
