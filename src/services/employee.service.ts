@@ -30,8 +30,8 @@ class EmployeeService {
 
     const findEmployee: Employee = await this.Employees.findOne({ email: EmployeeData.company_email });
     if (findEmployee) throw new HttpException(409, `Your email ${EmployeeData.company_email} already exists`);
-
-    const hashedPassword = await bcrypt.hash(EmployeeData.password, 10);
+    const randomstring = Math.random().toString(36).slice(2);
+    const hashedPassword = await bcrypt.hash(randomstring, 10);
     const newOgid = this.generateOGID();
     if(!EmployeeData.department){
       EmployeeData.department = null;
