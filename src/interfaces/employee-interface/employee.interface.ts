@@ -8,6 +8,7 @@ export interface Employee {
     department: any;
     password: string;
     designation: string;
+    reports_to:string;
     first_name: string;
     branch:string;
     employeeType:string;

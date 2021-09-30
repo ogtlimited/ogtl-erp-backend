@@ -45,7 +45,7 @@ class EmergencyContactService{
             if(findEmergencyContact && findEmergencyContact._id != EmergencyContactId) throw new HttpException(409, `Employee ${EmergencyContactData.employee_id} Emergency Contact details dont exist`);
         }
 
-        const updateEmergencyContactData: EmergencyContact = await this.EmergencyContacts.findByIdAndUpdate(EmergencyContactId,{EmergencyContactData})
+        const updateEmergencyContactData: EmergencyContact = await this.EmergencyContacts.findByIdAndUpdate(EmergencyContactId,EmergencyContactData ,{new:true})
         if(!updateEmergencyContactData) throw new HttpException(409, "details could not be updated");
         return updateEmergencyContactData;
     }

@@ -11,8 +11,12 @@ const personalDetailsSchema: Schema = new Schema(
                 required: true,
                 ref: "Employee",
             },
-      passport_number: {
+      means_of_identification: {
         type: String,
+        enum: ["NIN","International Passport","Drivers License"]
+      },
+      id_number:{
+        type: String
       },
         date_of_issue: {
             type: Date,

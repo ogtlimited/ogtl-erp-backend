@@ -42,7 +42,7 @@ class SalaryDetailsService{
         const findSalaryDetails: SalaryDetail = await this.SalaryDetails.findOne({employee_id: SalaryDetailData.employee_id});
 
         if(findSalaryDetails){
-          const updateSalaryDetailsData: SalaryDetail = await this.SalaryDetails.findByIdAndUpdate(SalaryDetailData._id,{SalaryDetailData})
+          const updateSalaryDetailsData: SalaryDetail = await this.SalaryDetails.findByIdAndUpdate(SalaryDetailData._id,SalaryDetailData, {new:true})
           if(!updateSalaryDetailsData) throw new HttpException(409, "details could not be updated");
           return updateSalaryDetailsData;
         }

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsString,IsNotEmpty } from 'class-validator';
+import { IsString,IsNotEmpty,IsOptional } from 'class-validator';
 
 export class CreateShiftTypeDto {
   @IsNotEmpty()
@@ -20,15 +20,15 @@ export class UpdateShiftTypeDto {
   @IsString()
   public _id: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   public shift_name: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   public start_time: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   public end_time: string;
 }

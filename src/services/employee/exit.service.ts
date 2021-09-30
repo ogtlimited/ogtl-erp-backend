@@ -25,7 +25,7 @@ class ExitService{
      public async findExitById(ExitId: string) : Promise<Exit>{
         if (isEmpty(ExitId)) throw new HttpException(400, "No Id provided");
        //find Exit Details with Id given
-     
+
        const findExit: Exit = await this.Exits.findOne({_id:ExitId}).populate('employee_id');
 
        if(!findExit) throw new HttpException(409, "Details with that Id dont exist");
@@ -38,7 +38,7 @@ class ExitService{
     //create new Exit details
 
     public async createExit(ExitData:CreateExitDto) : Promise<Exit>{
-    
+
         if (isEmpty(ExitData)) throw new HttpException(400, "No data provided");
 
         //check if employee already provided Exit details
@@ -50,7 +50,7 @@ class ExitService{
             const date2 = moment(ExitData.resignation_letter_date);
             const result = date1.diff(date2,"days");
             console.log(result);
-         
+
         if(findExit) throw new HttpException(409, `Employee ${ExitData.employee_id} already Resigned`);
         if(result>=28){
             const createExitData = await this.Exits.create(ExitData);
@@ -61,16 +61,16 @@ class ExitService{
                     {new : true}
                 );
             }
-    
+
             return createExitData;
         }
 
-        
+
             throw new HttpException(409, "Notice days must be greater than 28 days");
-        
-        
-        
-        
+
+
+
+
     }
 
     //Updates Exit Details
@@ -83,19 +83,19 @@ class ExitService{
             if(findExit && findExit._id != ExitId) throw new HttpException(409, `Employee ${ExitData.employee_id} Exit details dont exist`);
         }
 
-        const updateExitData: Exit = await this.Exits.findByIdAndUpdate(ExitId,{ExitData})
+        const updateExitData: Exit = await this.Exits.findByIdAndUpdate(ExitId,ExitData,{new:true})
         if(!updateExitData) throw new HttpException(409, "details could not be updated");
         return updateExitData;
     }
 
-    
+
     //deletes Exit Details
 
     public async deleteExit(ExitId:string): Promise<Exit>{
         const deleteExitById: Exit = await this.Exits.findByIdAndDelete(ExitId);
         if(!deleteExitById) throw new HttpException(409, "Details don't exist");
-        return deleteExitById; 
-      
+        return deleteExitById;
+
 
     }
 
