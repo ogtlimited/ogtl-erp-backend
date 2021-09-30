@@ -61,8 +61,8 @@ import scoreCardRoute from './routes/pip/score-cards.route';
 import TerminationRoute from './routes/employee-lifecycle/termination.route';
 
 import DepartmentRoute from './routes/employee/department.route';
-
-
+import NotificationRoute from '@routes/notification/notification.route';
+const socketio = require('socket.io');
 
 validateEnv();
 
@@ -125,7 +125,9 @@ const app = new App([
   new TrainingProgramRoute(),
   new TrainingResultRoute(),
 
-  new RoleRoute()
+  new RoleRoute(),
+  new NotificationRoute()
 ]);
 
-app.listen();
+const server = app.listen();
+app.socketConnection(server)

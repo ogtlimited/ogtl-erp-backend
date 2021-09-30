@@ -19,6 +19,9 @@ import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
 import * as cron from 'node-cron';
+const socketio = require('socket.io');
+const redis = require('redis');
+const client = redis.createClient();
 import attendanceModel  from '@models/attendance/attendance.model';
 // import {getWorkTime, calculateLateness}  from '@/utils/attendanceCalculator';
 if (process.env.NODE_ENV !== "production") {
@@ -41,16 +44,53 @@ class App {
     this.initializeRoutes(routes);
     this.initializeSwagger();
     this.initializeErrorHandling();
+    this.redisConnection();
     // this.initializeCron();
   }
 
+  public socketConnection(server)
+  {
+      const io = socketio(server, {
+          cors: {
+            origin: '*',
+          }
+      });
+
+      io.on('connection', socket => {
+          console.log('Socket: client connected')
+          socket.on('notification', (data) => {
+              client.lrange(data, 0, -1, function(err, reply) {
+                  socket.emit("messages", reply)
+              });
+          })
+
+          socket.on('clear_notification', (data) => {
+            client.del(data, function(err, reply) {
+                socket.emit("cleared_messages", reply)
+            });
+        })
+
+          socket.on('disconnect', (data) => {
+              console.log('Client disconnected')
+          })
+        
+      })
+  }
+
+  public redisConnection()
+  {
+    client.on('connect', function() {
+      console.log('Connected!');
+    });
+  }
   public listen() {
-    this.app.listen(this.port, () => {
+    const server = this.app.listen(this.port, () => {
       logger.info(`=================================`);
       logger.info(`======= ENV: ${this.env} =======`);
       logger.info(`🚀 App listening on the port ${this.port}`);
       logger.info(`=================================`);
     });
+    return server
   }
 
   public getServer() {
