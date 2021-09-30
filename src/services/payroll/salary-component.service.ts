@@ -28,7 +28,7 @@ class SalaryComponentService {
   public async create(data: CreateSalaryComponentDto): Promise<ISalaryComponent> {
     try {
       if (isEmpty(data)) throw new HttpException(400, "Bad request");
-      const createdata = await this.salaryComponentModel.create(data);
+      const createdata:any = await this.salaryComponentModel.create(data);
       return createdata;
     } catch (error) {
       if (error.code === 11000) {

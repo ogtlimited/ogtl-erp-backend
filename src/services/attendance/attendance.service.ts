@@ -13,6 +13,9 @@ import deductionModel from '@/models/payroll/deduction.model';
 import deductionTypeModel from '@/models/payroll/deductionType.model';
 import moment = require('moment');
 import salaryComponentModel from '@/models/payroll/salary-component.model';
+import projectModel from '@/models/project/project.model';
+import departmentModel from '@/models/department/department.model';
+import EmployeeModel from '@models/employee/employee.model';
 
 
 class AttendanceTypeService {
@@ -111,6 +114,8 @@ class AttendanceTypeService {
       } 
       
   public async updateAttendance(user, attendanceData: UpdateAttendanceDto): Promise<any> {
+    // const data = await this.generateAttendance("project")
+    // return data
     let attendanceRecord = await this.attendanceTypes.findOne({_id: attendanceData.attendanceId, employeeId: user._id})
     .populate('shiftTypeId')
     .populate({path: 'employeeId', select:{salaryStructure_id:1}, populate:{path:'salaryStructure_id', model:'SalaryStructure', select:{grossPay:1}}})
@@ -146,6 +151,80 @@ class AttendanceTypeService {
     return updateRecord;
   }
   
+  public async generateAttendance(query = "project"){
+    try {
+      const startOfYesterday =  moment().subtract(1, 'day').startOf('day').add(59, "minutes")
+      const endOfYesterday =  moment().subtract(1, 'day').endOf('day').add(1, "hour")
+
+      //deductions
+      const latenessDeduction = await deductionTypeModel.findOne({title:"lateness"})
+      const ncnsDeduction = await deductionTypeModel.findOne({title:"NCNS"})
+
+      //fetch all employees
+      const employees = await EmployeeModel.find({status: {$eq: "active"}}, {_id:1, salaryStructure_id:1})
+      .populate({path:'salaryStructure_id', select:{grossPay:1, netPay:1}})
+      const employeesDeductions = []
+      // const attendances = []
+      // const peopleWeyShow = []
+      // const bastards = []
+
+      for (let index = 0; index < employees.length; index++) {
+        let employee:any = employees[index];
+        employee = employee.toObject();
+        
+        const employeeAttendance = await this.attendanceTypes.findOne({employeeId: employee._id, createdAt:{$gte: startOfYesterday, $lte:endOfYesterday}})
+        .populate('shiftTypeId')
+        
+        // NCNS for employees who do not have an attendance or clocked in without clocking out.
+        let deductionAmount = 0
+
+        // eslint-disable-next-line prefer-const
+        let deductionsConstructor:any = {}
+        let latenessConstructor:any = {}
+
+        if (employeeAttendance == null || employeeAttendance.clockOutTime ==  null) {
+          deductionAmount = ncnsDeduction.percentage * employee.salaryStructure_id.grossPay;
+          deductionsConstructor.employeeId= employee._id,
+          deductionsConstructor.deductionTypeId= ncnsDeduction._id,
+          deductionsConstructor.amount= deductionAmount,
+          employeesDeductions.push(deductionsConstructor)
+          continue
+        }
+
+        // workTime calaculation
+        const workTimeResult: any = await getWorkTime(employeeAttendance.clockInTime, employeeAttendance.clockOutTime, employeeAttendance.shiftTypeId.start_time);
+
+        //lateness 
+        if(workTimeResult.timeDeductions > 0)
+        {
+          
+          deductionAmount = latenessDeduction.percentage * employee.salaryStructure_id.grossPay;
+          latenessConstructor.employeeId= employee._id,
+          latenessConstructor.deductionTypeId= latenessDeduction._id,
+          latenessConstructor.amount= deductionAmount,
+          employeesDeductions.push(latenessConstructor)
+        }
+
+        //incomplete hours
+        if (workTimeResult.hoursWorked < 8) {
+          const workTimeDeficit = 8 - workTimeResult.hoursWorked 
+          deductionAmount = Math.floor(((employee.salaryStructure_id.grossPay/22)/8)) * workTimeDeficit;
+          deductionsConstructor.employeeId= employee._id,
+          deductionsConstructor.description= "incompleteHours",
+          deductionsConstructor.amount= deductionAmount,      
+          employeesDeductions.push(deductionsConstructor)
+          continue
+        }
+
+      }
+    await deductionModel.insertMany(employeesDeductions);
+    return "done"
+     
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
 }
 
   

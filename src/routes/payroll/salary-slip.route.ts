@@ -15,6 +15,7 @@ class SalarySlipRoute implements Routes {
       this.initializeRoutes();
     }
 
+    //remember to add auths!
     private initializeRoutes() {
         this.router.get(`${this.path}`,[], this.salarySlipController.findAll);
         this.router.get(`${this.path}/:id`, [], this.salarySlipController.findById);
