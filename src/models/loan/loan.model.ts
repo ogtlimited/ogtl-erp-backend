@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { Loan } from '@interfaces/loan/loan.interface';
-import { model, Schema, Document } from 'mongoose';
+import mongoose, { model, Schema, Document } from 'mongoose';
+import NotificationHelper from '@utils/helper/notification.helper'
 
-const loanSchema: Schema = new Schema(
+const loanSchema: Schema = new mongoose.Schema(
   {
     applicant_id: {
       type: Schema.Types.ObjectId,
@@ -72,6 +73,12 @@ const loanSchema: Schema = new Schema(
     timestamps: true,
   },
 );
+
+loanSchema.post('save', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "SAVE").exec()
+});
 
 const LoanModel = model<Loan & Document>('Loan', loanSchema);
 export default LoanModel;

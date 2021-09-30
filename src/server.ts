@@ -61,13 +61,14 @@ import scoreCardRoute from './routes/pip/score-cards.route';
 import TerminationRoute from './routes/employee-lifecycle/termination.route';
 
 import DepartmentRoute from './routes/employee/department.route';
+import NotificationRoute from '@routes/notification/notification.route';
+const socketio = require('socket.io');
+
 import LeaveSettingsRoute from './routes/leave/leave-settings.route';
 import PurchaseOrderRoute from './routes/assets/purchase-order.route';
 import AssetRoute from './routes/assets/assets.route';
 import MaintenanceReportRoute from '@routes/maintenance-report/maintenance_report.route';
 import MaintenanceAndRepairsRoute from '@routes/maintenance-report/maintenance_repair.route';
-
-
 
 validateEnv();
 
@@ -132,7 +133,9 @@ const app = new App([
   new PurchaseOrderRoute(),
   new AssetRoute(),
   new MaintenanceReportRoute(),
-  new MaintenanceAndRepairsRoute()
+  new MaintenanceAndRepairsRoute(),
+  new NotificationRoute()
 ]);
 
-app.listen();
+const server = app.listen();
+app.socketConnection(server)

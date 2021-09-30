@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 export interface INotification {
-    document_id: string;
+    document_name: string;
     subject: string;
     send_alert_on: string;
     sender: string;

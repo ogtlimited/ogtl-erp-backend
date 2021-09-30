@@ -19,6 +19,16 @@ const campaignCreationEmail = (email, body) => {
   return { from, to, subject, textBody, messageType }
 }
 
+const emailTemplate = (email_subject, message, receiver) => {
+  const from = 'hr@outsourceglobal.com'
+  const to = receiver
+  const subject = email_subject
+  const textBody = message
+  const messageType = 'basic'
 
-exports.campaignCreationEmail = campaignCreationEmail
+  return { from, to, subject, textBody, messageType }
+}
+
+
+export { campaignCreationEmail, emailTemplate };
 // exports.transporter = transporter
