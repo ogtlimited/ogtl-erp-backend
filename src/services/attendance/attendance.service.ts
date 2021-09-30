@@ -8,8 +8,14 @@ import employeeModel  from '@models/employee/employee.model';
 import { isEmpty } from '@utils/util';
 import {getWorkTime}  from '@/utils/attendanceCalculator';
 import {ObjectId} from 'mongodb'
-import { officeQueryGenerator } from '@/utils/payrollUtil';
-// const moment = require('moment');
+import { attendanceofficeQueryGenerator, officeQueryGenerator } from '@/utils/payrollUtil';
+import deductionModel from '@/models/payroll/deduction.model';
+import deductionTypeModel from '@/models/payroll/deductionType.model';
+import moment = require('moment');
+import salaryComponentModel from '@/models/payroll/salary-component.model';
+import projectModel from '@/models/project/project.model';
+import departmentModel from '@/models/department/department.model';
+import EmployeeModel from '@models/employee/employee.model';
 
 
 class AttendanceTypeService {
@@ -18,22 +24,23 @@ class AttendanceTypeService {
   public async findAllDepartmentAttendance(query): Promise<any> {
     const payload = []
     const {startOfMonth, endOfMonth} = query
-    const officeQuery = officeQueryGenerator(query)
-    const employees = await employeeModel.find(officeQuery, {ogid: 1, first_name:1, last_name:1, profile_pic:1, _id:1})
+    const officeQuery = attendanceofficeQueryGenerator(query)
+    const employees = await employeeModel.find(officeQuery, {ogid: 1, first_name:1, last_name:1, profile_pic:1, gender: 1, designation:1, _id:1}).populate('designation')
+    //consider the possilibty of random ObjectID causing an error......
     for (let index = 0; index < employees.length; index++) {
       const employee = {...employees[index].toObject(),attendance:null};
       const employeeAttendance = await this.attendanceTypes.aggregate(
         [
           {
             '$match': {
-          'ogId': employee.ogid, 
+          'employeeId': employee._id, 
           '$or': [
+            {
+              'departmentId': new ObjectId(query.departmentId)
+            },
             {
               'projectId': new ObjectId(query.projectId) 
             },
-            {
-              'departmentId': new ObjectId(query.departmentId)
-            }
           ],  
             'createdAt': {
               '$gte': new Date(startOfMonth), 
@@ -73,7 +80,7 @@ class AttendanceTypeService {
     // if (query.departmentId) {
     //   dbQuery = {ogId, 'departmentId': query.departmentId , createdAt:{$gte: startOfMonth, $lte: endOfMonth}}
     // }
-    const attendanceTypes = await this.attendanceTypes.find(dbQuery);
+    const attendanceTypes = await this.attendanceTypes.find(dbQuery).populate('employeeId',{first_name:1,last_name:1});
     // console.log(attendanceTypes);
     return attendanceTypes
   }
@@ -85,25 +92,41 @@ class AttendanceTypeService {
     return findAttendanceType;
   }
   
-  public async createAttendanceType(attendanceTypeData: ICreateAttendance): Promise<any> {
+  public async createAttendanceType(user, attendanceTypeData: ICreateAttendance): Promise<any> {
         if (isEmpty(attendanceTypeData)) throw new HttpException(400, "Bad request");
-        const employee = await  employeeModel.findOne({ogid: attendanceTypeData.ogId})
-        if(!employee)
-        {
-          throw new HttpException(404, 'employee not found')
+        const startTime = moment().add(1, 'hour')
+        const endOfDay = moment().endOf('day').add(1, 'hour')
+        const existingAttendance = await this.attendanceTypes.exists({
+          employeeId: user._id, 
+          createdAt:{
+            $gte: startTime, 
+            $lte: endOfDay
+          }
+        })
+        if (existingAttendance) {
+          throw new HttpException(400, "already clocked In!")
         }
-        attendanceTypeData.shiftTypeId = employee.default_shift;
+        attendanceTypeData.shiftTypeId = user.default_shift;
+        attendanceTypeData.employeeId = user._id;
+        attendanceTypeData.ogId = user.ogid;
         const attendance = await this.attendanceTypes.create(attendanceTypeData);
-        // const allEmployeeAttendance = await this.findAllEmployeeAttendance(attendanceTypeData.ogId, {departmentId: attendanceTypeData.departmentId})
         return {attendance};
       } 
       
-  public async updateAttendance(attendanceData: UpdateAttendanceDto): Promise<any> {
-    let attendanceRecord = await this.attendanceTypes.findOne({_id: attendanceData.attendanceId}).populate('shiftTypeId')
-    attendanceRecord = attendanceRecord.toObject()
+  public async updateAttendance(user, attendanceData: UpdateAttendanceDto): Promise<any> {
+    // const data = await this.generateAttendance("project")
+    // return data
+    let attendanceRecord = await this.attendanceTypes.findOne({_id: attendanceData.attendanceId, employeeId: user._id})
+    .populate('shiftTypeId')
+    .populate({path: 'employeeId', select:{salaryStructure_id:1}, populate:{path:'salaryStructure_id', model:'SalaryStructure', select:{grossPay:1}}})
+    .populate({path:'earnings', model:'SalaryComponent'})
     if(!attendanceRecord){
       throw new HttpException(404, "not found");
     }
+    // if(attendanceRecord.clockOutTime){
+    //   throw new HttpException(400, "already clocked out!");
+    // }
+    attendanceRecord = attendanceRecord.toObject()
     const workTimeResult: any = await getWorkTime(attendanceRecord.clockInTime, attendanceData.clockOutTime, attendanceRecord.shiftTypeId.start_time);
     attendanceRecord.hoursWorked = workTimeResult.hoursWorked
     attendanceRecord.minutesWorked = workTimeResult.minutesWorked 
@@ -117,16 +140,93 @@ class AttendanceTypeService {
         $set: attendanceRecord
       },
       { new: true })
-    
-    // // return workTimeResult;
-    // if(workTimeResult.timeDeductions > 0)
-    // {
-    //   const deductions = await deductionModel.create({employeeId: attendanceRecord.employeeId, deductionTypeId: attendanceRecord.shiftTypeId.deductionTypeId, quantity: workTimeResult.timeDeductions })
-    // }
+      
+    if(workTimeResult.timeDeductions > 0)
+    {
+     let deductionAmount = 0
+     const deductionType = await deductionTypeModel.findOne({title:"lateness"})
+     deductionAmount = deductionType.percentage * attendanceRecord.employeeId.salaryStructure_id.grossPay;
+     await deductionModel.create({employeeId: attendanceRecord.employeeId, deductionTypeId: deductionType._id, amount: deductionAmount })
+    }
     return updateRecord;
   }
   
+  public async generateAttendance(query = "project"){
+    try {
+      const startOfYesterday =  moment().subtract(1, 'day').startOf('day').add(59, "minutes")
+      const endOfYesterday =  moment().subtract(1, 'day').endOf('day').add(1, "hour")
+
+      //deductions
+      const latenessDeduction = await deductionTypeModel.findOne({title:"lateness"})
+      const ncnsDeduction = await deductionTypeModel.findOne({title:"NCNS"})
+
+      //fetch all employees
+      const employees = await EmployeeModel.find({status: {$eq: "active"}}, {_id:1, salaryStructure_id:1})
+      .populate({path:'salaryStructure_id', select:{grossPay:1, netPay:1}})
+      const employeesDeductions = []
+      // const attendances = []
+      // const peopleWeyShow = []
+      // const bastards = []
+
+      for (let index = 0; index < employees.length; index++) {
+        let employee:any = employees[index];
+        employee = employee.toObject();
+        
+        const employeeAttendance = await this.attendanceTypes.findOne({employeeId: employee._id, createdAt:{$gte: startOfYesterday, $lte:endOfYesterday}})
+        .populate('shiftTypeId')
+        
+        // NCNS for employees who do not have an attendance or clocked in without clocking out.
+        let deductionAmount = 0
+
+        // eslint-disable-next-line prefer-const
+        let deductionsConstructor:any = {}
+        let latenessConstructor:any = {}
+
+        if (employeeAttendance == null || employeeAttendance.clockOutTime ==  null) {
+          deductionAmount = ncnsDeduction.percentage * employee.salaryStructure_id.grossPay;
+          deductionsConstructor.employeeId= employee._id,
+          deductionsConstructor.deductionTypeId= ncnsDeduction._id,
+          deductionsConstructor.amount= deductionAmount,
+          employeesDeductions.push(deductionsConstructor)
+          continue
+        }
+
+        // workTime calaculation
+        const workTimeResult: any = await getWorkTime(employeeAttendance.clockInTime, employeeAttendance.clockOutTime, employeeAttendance.shiftTypeId.start_time);
+
+        //lateness 
+        if(workTimeResult.timeDeductions > 0)
+        {
+          
+          deductionAmount = latenessDeduction.percentage * employee.salaryStructure_id.grossPay;
+          latenessConstructor.employeeId= employee._id,
+          latenessConstructor.deductionTypeId= latenessDeduction._id,
+          latenessConstructor.amount= deductionAmount,
+          employeesDeductions.push(latenessConstructor)
+        }
+
+        //incomplete hours
+        if (workTimeResult.hoursWorked < 8) {
+          const workTimeDeficit = 8 - workTimeResult.hoursWorked 
+          deductionAmount = Math.floor(((employee.salaryStructure_id.grossPay/22)/8)) * workTimeDeficit;
+          deductionsConstructor.employeeId= employee._id,
+          deductionsConstructor.description= "incompleteHours",
+          deductionsConstructor.amount= deductionAmount,      
+          employeesDeductions.push(deductionsConstructor)
+          continue
+        }
+
+      }
+    await deductionModel.insertMany(employeesDeductions);
+    return "done"
+     
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
 }
 
   
-    export default AttendanceTypeService;
+export default AttendanceTypeService;
+

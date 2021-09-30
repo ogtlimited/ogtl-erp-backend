@@ -6,13 +6,6 @@ export interface ISalaryStructure {
     projectId: String;
     title: String;
     netPay?:Number
+    grossPay?:Number
 }
 
-export interface IUpdateSalaryStructure {
-    deductions?: Array<String>;
-    earnings?: Array<String>;
-    departmentId?: String;
-    projectId?: String;
-    title?: String;
-    netPay?:Number
-}

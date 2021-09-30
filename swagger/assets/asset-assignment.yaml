@@ -1,0 +1,168 @@
+tags:
+  - name: assets
+    description: assets API
+
+
+paths:
+  # [GET] assets
+  /api/assets:
+    get:
+      tags:
+        - assets
+      summary: Find All assets
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+    # [POST] assets
+    post:
+      tags:
+        - assets
+      summary: Add Asset
+      parameters:
+        - name: body
+          in: body
+          description: Asset Data
+          required: true
+          schema:
+            $ref: '#/definitions/api/assets'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  # [GET] assets/id
+  /api/assets/{id}:
+    get:
+      tags:
+        - assets
+      summary: Find Asset By Id
+      parameters:
+        - name: id
+          in: path
+          description: Asset Id
+          required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    #[PUT] assets/id
+    put:
+      tags:
+        - assets
+      summary: Update assets By Id
+      parameters:
+        - name: id
+          in: path
+          description: assets Id
+          required: true
+        - name: body
+          in: body
+          description: assets Data
+          required: true
+          schema:
+            $ref: '#/definitions/assets'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [DELETE] assets/id
+    delete:
+      tags:
+        - assets
+      summary: Delete Asset By Id
+      parameters:
+        - name: id
+          in: path
+          description: Asset Id
+          required: true
+          schema:
+            type: string
+      security:
+        - jwt: []
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  assets:
+    type: object
+    required:
+      
+      - assetName
+      - assigned_to
+      - purchaseDate
+      - manufacturer
+      - model
+      - serialNumber
+      - supplier
+      - condition
+      - warranty
+      - value
+
+    properties:
+      assetId:
+        description: assets Id
+      assetName:
+        type: string
+        description: Asset Name
+      assigned_to:
+        type: string
+        description: Person who asset is assigned to
+      manufacturer:
+        type: string
+        description: Asset manufacturer
+      model:
+        type: string
+        description: Asset model
+      serialNumber:
+        type: string
+        description: Asset Serial Number
+      purchaseDate:
+        type: Date
+        description: date of Asset purchase
+      supplier:
+        type: string
+        description: Person who  supplied asset
+      condition:
+        type: string
+        description: Asset condition
+        enum : ["Fair", "Excellent", "Terrible"]
+      warranty:
+        type: string
+        description: Asset warranty
+        enum : ["6 Months","1 year","More than 1 year"]
+      value:
+        type: string
+        description: Asset Value
+      description:
+        type: string
+        description: Asset description
+
+
+
+schemes:
+  - https
+  - http

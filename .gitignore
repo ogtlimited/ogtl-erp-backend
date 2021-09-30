@@ -122,3 +122,6 @@ dist
 src/controllers/scaffold.controller.ts
 src/routes/scaffold.route.ts
 src/services/scaffold.service.ts
+.idea/vcs.xml
+*.xml
+*.iml

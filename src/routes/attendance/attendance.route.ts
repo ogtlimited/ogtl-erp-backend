@@ -18,11 +18,11 @@ class AttendanceRoute implements Routes {
 
     private initializeRoutes() {
         // this.router.get(`${this.path}`, this.AttendanceController.getAttendances);
-        this.router.get(`${this.path}`, this.AttendanceController.getDepartmentAttendance);
-        this.router.get(`${this.path}/employee/:ogId`, this.AttendanceController.getEmployeeAttendance);
-        this.router.get(`${this.path}/:id`, this.AttendanceController.getAttendanceById);
-        this.router.post(`${this.path}`, validationMiddleware(CreateAttendanceDto, 'body'), this.AttendanceController.createAttendance);
-        this.router.patch(`${this.path}`, validationMiddleware(UpdateAttendanceDto, 'body'), this.AttendanceController.updateAttendance);
+        this.router.get(`${this.path}`,[authMiddleware], this.AttendanceController.getDepartmentAttendance);
+        this.router.get(`${this.path}/employee/:ogId`,[authMiddleware], this.AttendanceController.getEmployeeAttendance);
+        this.router.get(`${this.path}/:id`,[authMiddleware], this.AttendanceController.getAttendanceById);
+        this.router.post(`${this.path}`,[authMiddleware, validationMiddleware(CreateAttendanceDto, 'body')], this.AttendanceController.createAttendance);
+        this.router.patch(`${this.path}`, [ validationMiddleware(UpdateAttendanceDto, 'body')], this.AttendanceController.updateAttendance);
     }
   }
   export default AttendanceRoute;

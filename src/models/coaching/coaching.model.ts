@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { CoachingFormInterface } from '@/interfaces/coaching/coaching.interface';
 import { model, Schema, Document } from 'mongoose';
+import mongoose from 'mongoose';
 
 const CoachingSchema: Schema = new Schema(
     {
@@ -9,9 +10,10 @@ const CoachingSchema: Schema = new Schema(
             type: String,
             required: true,
           },
-          ogid:  {
-            type: String,
+          employee_id: {
+            type: mongoose.Schema.Types.ObjectId,
             required: true,
+            ref: "Employee",
           },
           goals: {
             type: String,
@@ -30,8 +32,9 @@ const CoachingSchema: Schema = new Schema(
             required: true,
           },
           supervisor: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
             required: true,
+            ref: "Employee",
           },
           way_forward: {
             type: String,
@@ -45,6 +48,9 @@ const CoachingSchema: Schema = new Schema(
             type: String,
             default: "pending",
             enum: ["rejected", "accepted", "pending"],
+          },
+          reason:  {
+            type: String
           },
 
     },

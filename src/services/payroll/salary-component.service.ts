@@ -13,13 +13,14 @@ class SalaryComponentService {
 
   public async findAll(query): Promise<ISalaryComponent[]> {
     const dbQuery = officeQueryGenerator(query)
-    const salaryComponents = await this.salaryComponentModel.find(dbQuery);
+    console.log(dbQuery)
+    const salaryComponents = await this.salaryComponentModel.find(dbQuery).populate("projectId departmentId");
     return salaryComponents;
   }
 
   public async findById(id: string): Promise<ISalaryComponent> {
     if (isEmpty(id)) throw new HttpException(400, "provide Id");
-    const salaryComponent: ISalaryComponent = await this.salaryComponentModel.findOne({ _id: id });
+    const salaryComponent: ISalaryComponent = await this.salaryComponentModel.findOne({ _id: id }).populate("projectId departmentId");
     if (!salaryComponent) throw new HttpException(404, "no record found");
     return salaryComponent;
   }
@@ -27,7 +28,7 @@ class SalaryComponentService {
   public async create(data: CreateSalaryComponentDto): Promise<ISalaryComponent> {
     try {
       if (isEmpty(data)) throw new HttpException(400, "Bad request");
-      const createdata = await this.salaryComponentModel.create(data);
+      const createdata:any = await this.salaryComponentModel.create(data);
       return createdata;
     } catch (error) {
       if (error.code === 11000) {

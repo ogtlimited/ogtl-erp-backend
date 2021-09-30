@@ -9,7 +9,7 @@ export class CoachingFormDTO {
     public coaching_type: string;
 
     @IsString()
-    public ogid: string;
+    public employee_id: string;
 
     @IsString()
     public goals: string;
@@ -61,4 +61,12 @@ export class CoachingFormUpdateDTO {
 
     @IsString()
     public user_response: string;
+}
+export class CoachingFormUserResponseUpdateDTO {
+
+    @IsString()
+    public user_response: string;
+
+    @IsString()
+    public reason: string;
 }

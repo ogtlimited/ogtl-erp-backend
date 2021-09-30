@@ -12,7 +12,7 @@ class DepartmentRoute implements Routes {
     public path = '/department';
     public router = Router();
     public DepartmentController = new DepartmentController();
-  
+
     constructor() {
       this.initializeRoutes();
     }

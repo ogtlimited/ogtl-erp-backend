@@ -2,7 +2,8 @@
 export interface PersonalDetail {
     _id: string;
     employee_id: string;
-    passport_number: string;
+    means_of_identification: string;
+    id_number: string;
     date_of_issue: Date;
     valid_upto:  Date;
     date_of_birth: Date;

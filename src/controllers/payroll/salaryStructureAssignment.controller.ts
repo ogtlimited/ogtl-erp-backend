@@ -1,15 +1,16 @@
 /* eslint-disable prettier/prettier */
 import { NextFunction, Request, Response } from 'express';
-import { CreateSalaryStructureAssignmentDto } from '@/dtos/payroll/salary-structure-assignment.dto';
-import { ISalaryStructureAssignment } from '@/interfaces/payroll/salary-structure-assignment.interface';
+// import { CreateSalaryStructureAssignmentDto } from '@/dtos/payroll/salary-structure-assignment.dto';
+// import { ISalaryStructureAssignment } from '@/interfaces/payroll/salary-structure-assignment.interface';
 import SalaryStructureAssignmentService from '@/services/payroll/salary-structure-assignment.service';
+// import EmployeeModel from '@/models/employee/employee.model';
 
 class SalaryStructureAssignmentController {
   public salaryStructureAssignmentService = new SalaryStructureAssignmentService();
   
   public findAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const salaryStructureAssignments = await this.salaryStructureAssignmentService.findAll();
+      const salaryStructureAssignments = await this.salaryStructureAssignmentService.findAll(req.query);
       res.status(200).json({ data: salaryStructureAssignments});
     } catch (error) {
       next(error);
@@ -28,8 +29,8 @@ class SalaryStructureAssignmentController {
 
   public create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const newData: CreateSalaryStructureAssignmentDto = req.body;
-      const createdData: ISalaryStructureAssignment = await this.salaryStructureAssignmentService.create(newData); 
+      const newData = req.body;
+      const createdData = await this.salaryStructureAssignmentService.create(newData); 
       res.status(201).json({ salaryStructureAssignment: createdData});
     } catch (error) {
       next(error);

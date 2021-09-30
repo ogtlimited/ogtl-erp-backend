@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 export interface CoachingFormInterface {
   _id: string;
-  ogid: string;
+  employee_id: string;
   coaching_type: string;
   goals: string;
   incident_date: string;
@@ -10,6 +10,7 @@ export interface CoachingFormInterface {
   supervisor: string;
   way_forward: string;
   user_response: string;
+  reason: string;
   status: string;
 }
 
