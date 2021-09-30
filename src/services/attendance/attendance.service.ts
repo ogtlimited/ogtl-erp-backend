@@ -171,10 +171,6 @@ class AttendanceTypeService {
       for (let index = 0; index < employees.length; index++) {
         let employee:any = employees[index];
         employee = employee.toObject();
-       
-        if (employee._id == "614a6babcf398e7c9cd95425") {
-          bastards.push(employee)
-        }
         
         const employeeAttendance = await this.attendanceTypes.findOne({employeeId: employee._id, createdAt:{$gte: startOfYesterday, $lte:endOfYesterday}})
         .populate('shiftTypeId')
