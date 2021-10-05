@@ -2,6 +2,7 @@
 import { ILeaveAllocation } from '@/interfaces/leave-interface/allocation.interface';
 import mongoose from 'mongoose';
 import { model, Schema, Document } from 'mongoose';
+import NotificationHelper from '@utils/helper/notification.helper';
 
 const allocationSchema : Schema = new Schema (
     {
@@ -20,7 +21,7 @@ const allocationSchema : Schema = new Schema (
         from_date:{
             type: Date,
             required: true,
-        
+
         },
 
         to_date : {
@@ -41,9 +42,23 @@ const allocationSchema : Schema = new Schema (
     {
         timestamps:true
     },
-    
-);
 
+);
+allocationSchema.post('save', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "SAVE").exec()
+});
+allocationSchema.post('update', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "UPDATE").exec()
+});
+allocationSchema.post('delete', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "DELETE").exec()
+});
 const allocationModel = model<ILeaveAllocation & Document>('LeaveAllocation', allocationSchema);
 
 export default allocationModel;
