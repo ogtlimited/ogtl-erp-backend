@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import NotificationHelper from '@/utils/helper/notification.helper';
 import { ITrainingProgram } from '@interfaces/training/training-program.interface';
 import { model, Schema, Document } from 'mongoose';
 
@@ -43,5 +44,10 @@ const TrainingProgramSchema: Schema = new Schema(
   },
 );
 
+TrainingProgramSchema.post('save', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "SAVE").exec()
+});
 const TrainingProgramModel = model<ITrainingProgram & Document>('TrainingProgram', TrainingProgramSchema);
 export default TrainingProgramModel;
