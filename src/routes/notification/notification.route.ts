@@ -21,6 +21,7 @@ class NotificationRoute implements Routes {
     this.router.get(`${this.path}/:notificationId`, authMiddleware, this.notification.getNotification);
     this.router.post(`${this.path}`, [validationMiddleware(NotificationDto, 'body'), authMiddleware], this.notification.createNotification);
     this.router.put(`${this.path}/:notificationId`, authMiddleware, validationMiddleware(PutNotificationDto, 'body'), this.notification.updateNotification);
+    this.router.get(`${this.path}/models/all`, authMiddleware, this.notification.getModelNmaes);
     this.router.delete(`${this.path}/:notificationId`, authMiddleware, this.notification.deleteNotification);
   }
 }

@@ -80,5 +80,11 @@ loanSchema.post('save', function(doc) {
   new NotificationHelper(self.constructor.modelName, "SAVE").exec()
 });
 
+loanSchema.post('delete', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "DELETE").exec()
+});
+
 const LoanModel = model<Loan & Document>('Loan', loanSchema);
 export default LoanModel;
