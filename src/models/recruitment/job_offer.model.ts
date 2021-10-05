@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 
-import { model, Schema, Document } from 'mongoose';
+import mongoose, { model, Schema, Document } from 'mongoose';
+import NotificationHelper from '@utils/helper/notification.helper'
 import { IJobOffer } from '@interfaces/recruitment/job_offer.interface';
 
 const jobOfferSchema: Schema = new Schema({
@@ -35,6 +36,12 @@ const jobOfferSchema: Schema = new Schema({
     type: String,
     default: null,
   },
+});
+
+jobOfferSchema.post('save', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "SAVE").exec()
 });
 
 const jobOfferModel = model<IJobOffer & Document>('JobOffer', jobOfferSchema);

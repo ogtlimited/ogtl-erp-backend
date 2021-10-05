@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import NotificationHelper from '@/utils/helper/notification.helper';
 import { IShiftAssignment } from '@interfaces/shift-interface/shift_assignment.interface';
 import { model, Schema, Document } from 'mongoose';
 
@@ -24,6 +25,11 @@ const shiftAssignmentSchema: Schema = new Schema(
   },
 )
 
+shiftAssignmentSchema.post('save', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "SAVE").exec()
+});
 const shiftAssignmentModel = model<IShiftAssignment & Document>('ShiftAssignment', shiftAssignmentSchema);
 
 export default shiftAssignmentModel;
