@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import NotificationHelper from '@/utils/helper/notification.helper';
 import { ITrainingResult } from '@interfaces/training/training-result.interface';
 import { model, Schema, Document } from 'mongoose';
 
@@ -37,5 +38,10 @@ const TrainingResultSchema: Schema = new Schema(
   },
 );
 
+TrainingResultSchema.post('save', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "SAVE").exec()
+});
 const TrainingResultModel = model<ITrainingResult & Document>('TrainingResult', TrainingResultSchema);
 export default TrainingResultModel;

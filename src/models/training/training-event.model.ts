@@ -70,5 +70,10 @@ const TrainingEventSchema: Schema = new Schema(
   },
 );
 
+TrainingEventSchema.post('save', function(doc) {
+    const self: any = this;
+    console.log(self.constructor.modelName)
+    new NotificationHelper(self.constructor.modelName, "SAVE").exec()
+  });
 const TrainingEventModel = model<ITrainingEvent & Document>('TrainingEvent', TrainingEventSchema);
 export default TrainingEventModel;

@@ -4,12 +4,15 @@ import { NextFunction, Request, Response } from 'express';
 import { NotificationDto, PutNotificationDto } from '@/dtos/notification/notification.dto';
 import { INotification } from '@/interfaces/notification/notification.interface';
 import notificationService from '@/services/notification/notification.service';
+import {modelNames} from '@/utils/schemas'
 
 class NotificationController {
     public notificationService;
+    public models
 
     constructor() {
         this.notificationService = new notificationService();
+        this.models = modelNames()
     }
 
     public getNotifications = async (req: Request, res: Response, next: NextFunction) => {
@@ -29,6 +32,11 @@ class NotificationController {
         } catch (error) {
             next(error);
         }
+    };
+
+    public getModelNmaes = async (req: Request, res: Response, next: NextFunction) => {
+        const model = this.models
+        res.status(200).json({ data: model, message: 'findAll' });
     };
 
     public createNotification = async (req: Request, res: Response, next: NextFunction) => {
