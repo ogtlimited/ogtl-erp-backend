@@ -29,7 +29,7 @@ class NotificationService {
         if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
         const checkIfExist = await this.notification.findOne({document_name: Payload.document_name, send_alert_on: Payload.send_alert_on})
         if (checkIfExist) throw new HttpException(400, "Already exist")
-        let abc = new this.notification(Payload)
+        const abc = new this.notification(Payload)
         const newnotification: INotification = await abc.save(Payload);
         return newnotification;
     }

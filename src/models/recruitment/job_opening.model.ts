@@ -1,4 +1,5 @@
-import { model, Schema, Document } from 'mongoose';
+import mongoose, { model, Schema, Document } from 'mongoose';
+import NotificationHelper from '@utils/helper/notification.helper'
 import { IJobOpening } from '@interfaces/recruitment/job_opening.interface';
 
 const jobOpeningSchema: Schema = new Schema({
@@ -29,6 +30,11 @@ const jobOpeningSchema: Schema = new Schema({
   },
 });
 
+jobOpeningSchema.post('save', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "SAVE").exec()
+});
 const jobOpeningModel = model<IJobOpening & Document>('JobOpening', jobOpeningSchema);
 
 export default jobOpeningModel;
