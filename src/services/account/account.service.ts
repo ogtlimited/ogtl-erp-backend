@@ -52,9 +52,7 @@ class AccountService {
         const PayloadObj = {...Payload, slug: slugify(Payload.account_name)}
         console.log(findaccount)
         const updateaccount: IAccount = await this.account.findByIdAndUpdate(accountId, {$set: PayloadObj }, {new: true});
-        //if(updateaccount){
-            await this.account.update({"ancestors._id": updateaccount._id}, {"$set": {"ancestors.$.account_name": updateaccount.account_name, "ancestors.$.slug": slugify(updateaccount.account_name) }}, {multi: true});
-        //}
+        await this.account.update({"ancestors._id": updateaccount._id}, {"$set": {"ancestors.$.account_name": updateaccount.account_name, "ancestors.$.slug": slugify(updateaccount.account_name) }}, {multi: true});
         return updateaccount;
     }
 
