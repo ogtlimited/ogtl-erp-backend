@@ -33,19 +33,24 @@ export class PutAccountDto {
     @IsString()
     public account_name: string;
 
+    @IsOptional()
     @IsString()
     public account_number: string;
 
+    @IsOptional()
     @IsString()
     public account_type: string;
 
-    @IsBoolean()
-    public is_group: boolean;
-
+    @IsOptional()
     @IsString()
     public currency: string;
 
-    @IsOptional()
+  
+}
+
+export class UpdateAncestoryDto {  
+
+    @IsString()
     public parent: string;
   
 }

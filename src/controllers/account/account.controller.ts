@@ -31,6 +31,16 @@ class AccountController {
         }
     };
 
+    public getdescendants = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const accountId: string = req.params.accountId;
+            const findaccount: IAccount = await this.accountService.findDescendants(accountId);
+            res.status(200).json({ data: findaccount, message: 'findOne' });
+        } catch (error) {
+            next(error);
+        }
+    };
+
     public createaccount = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const Payload: AccountDto = req.body;
@@ -54,11 +64,31 @@ class AccountController {
         }
     };
 
+    public updateAncestory = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const accountId: string = req.params.accountId;
+            const Payload: PutAccountDto = req.body;
+            const updateaccount: IAccount = await this.accountService.updateAncestory(accountId, Payload);
+            res.status(200).json({ data: updateaccount, message: 'updated' });
+        } catch (error) {
+            next(error);
+        }
+    };
+
     public deleteaccount = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const id: string = req.params.accountId;
             const dropaccount: IAccount = await this.accountService.delete(id);
             res.status(200).json({ data: dropaccount, message: 'deleted' });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public getTree = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const findAllaccounts = await this.accountService.tree();
+            res.status(200).json({ data: findAllaccounts, message: 'findAll' });
         } catch (error) {
             next(error);
         }
