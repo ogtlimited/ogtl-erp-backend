@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { ITermination } from '@interfaces/employee-lifecycle/termination.interface';
 import { model, Schema, Document } from 'mongoose';
+import NotificationHelper from '@utils/helper/notification.helper';
 
 const terminationSchema: Schema = new Schema(
   {
@@ -9,7 +10,7 @@ const terminationSchema: Schema = new Schema(
       required: true,
       ref: "Employee"
     },
-    
+
     reason: {
       type: String,
       required: true,
@@ -29,6 +30,23 @@ const terminationSchema: Schema = new Schema(
     timestamps: true,
   },
 );
+
+terminationSchema.post('save', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "SAVE").exec()
+});
+terminationSchema.post('update', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "UPDATE").exec()
+});
+terminationSchema.post('delete', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "DELETE").exec()
+});
+
 
 const terminationModel = model<ITermination & Document>('Termination', terminationSchema);
 export default terminationModel;

@@ -3,6 +3,7 @@
 import { ILeaveApplication } from '@/interfaces/leave-interface/application.interface';
 import mongoose from 'mongoose';
 import { model, Schema, Document } from 'mongoose';
+import NotificationHelper from '@utils/helper/notification.helper';
 
 const applicationSchema : Schema = new Schema (
     {
@@ -53,8 +54,25 @@ const applicationSchema : Schema = new Schema (
     {
         timestamps:true
     },
-    
+
 );
+
+applicationSchema.post('save', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "SAVE").exec()
+});
+applicationSchema.post('update', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "UPDATE").exec()
+});
+applicationSchema.post('delete', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "DELETE").exec()
+});
+
 
 const applicationModel = model<ILeaveApplication & Document>('LeaveApplication', applicationSchema);
 

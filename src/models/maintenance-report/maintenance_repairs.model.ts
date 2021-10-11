@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Document, model, Schema } from 'mongoose';
 import { IMaintenanceAndRepairs } from '@interfaces/maintenance-report/maintenance_repairs.interface';
+import NotificationHelper from '@utils/helper/notification.helper';
 
 const maintenanceAndRepairsSchema: Schema = new Schema(
   {
@@ -35,6 +36,20 @@ const maintenanceAndRepairsSchema: Schema = new Schema(
     timestamps: true,
   },
 )
-
+maintenanceAndRepairsSchema.post('save', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "SAVE").exec()
+});
+maintenanceAndRepairsSchema.post('update', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "UPDATE").exec()
+});
+maintenanceAndRepairsSchema.post('delete', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "DELETE").exec()
+});
 const maintenanceAndRepairModel = model<IMaintenanceAndRepairs & Document>('MaintenanceAndRepair',maintenanceAndRepairsSchema)
 export default maintenanceAndRepairModel
