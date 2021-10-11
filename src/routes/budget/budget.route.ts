@@ -22,7 +22,6 @@ class BudgetRoute implements Routes {
         this.router.patch(`${this.path}/increase/:id`, [authMiddleware, validationMiddleware(IncreaseBudgetDto, 'body')], this.budgetController.increase);
         this.router.patch(`${this.path}/approve/:id`, [authMiddleware], this.budgetController.approve);
         this.router.patch(`${this.path}/:id`, [authMiddleware, validationMiddleware(CreateBudgetDto, 'body')], this.budgetController.update);
-        // this.router.patch(`${this.path}`, validationMiddleware(DTO, 'body'), this.BudgetController.createIncentive);
     }
   }
   export default BudgetRoute;
