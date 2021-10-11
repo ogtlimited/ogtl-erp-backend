@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { model, Schema, Document } from 'mongoose';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
+import NotificationHelper from '@/utils/helper/notification.helper';
 
 const employeeSchema: Schema = new Schema(
   {
@@ -113,7 +114,21 @@ const employeeSchema: Schema = new Schema(
 //   this.month_of_birth = this.dob.getMonth() + 1;
 //   next();
 // });
-
+employeeSchema.post('save', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "SAVE").exec()
+});
+employeeSchema.post('update', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "UPDATE").exec()
+});
+employeeSchema.post('delete', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "DELETE").exec()
+});
 
 const EmployeeModel = model<Employee & Document>('Employee', employeeSchema);
 

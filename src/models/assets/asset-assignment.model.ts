@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import {assetAssignment} from '@/interfaces/assets/asset-assignment.interface';
+import NotificationHelper from '@/utils/helper/notification.helper';
 import { model, Schema, Document } from 'mongoose';
 
 const AssetAssignmentSchema: Schema = new Schema(
@@ -51,6 +52,21 @@ const AssetAssignmentSchema: Schema = new Schema(
     },
 );
 
+AssetAssignmentSchema.post('save', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "SAVE").exec()
+});
+AssetAssignmentSchema.post('update', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "UPDATE").exec()
+});
+AssetAssignmentSchema.post('delete', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "DELETE").exec()
+});
 const AssetAssignmentModel = model<assetAssignment & Document>('AssetsAssignment', AssetAssignmentSchema);
 
 export default AssetAssignmentModel;
