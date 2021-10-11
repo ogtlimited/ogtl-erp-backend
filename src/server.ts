@@ -70,6 +70,10 @@ import AssetRoute from './routes/assets/assets.route';
 import MaintenanceReportRoute from '@routes/maintenance-report/maintenance_report.route';
 import MaintenanceAndRepairsRoute from '@routes/maintenance-report/maintenance_repair.route';
 
+import AccountRoute from '@routes/account/account.route';
+import AccountTypeRoute from '@routes/account/account-type.route';
+
+
 validateEnv();
 
 const app = new App([
@@ -134,8 +138,13 @@ const app = new App([
   new AssetRoute(),
   new MaintenanceReportRoute(),
   new MaintenanceAndRepairsRoute(),
-  new NotificationRoute()
+  new NotificationRoute(),
+
+  new AccountRoute(),
+  new AccountTypeRoute()
 ]);
 
 const server = app.listen();
 app.socketConnection(server)
+
+
