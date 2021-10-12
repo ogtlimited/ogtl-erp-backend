@@ -1,11 +1,12 @@
+/* eslint-disable prettier/prettier */
 import { IAccountType } from '@interfaces/account-interface/account-type.interface';
 
 export const accountType: IAccountType[] = [
   {
-    name: "Accumulated Depreciation"
+    name: "Other Asset"
   },
   {
-    name: "Assets Recieved But Not Billed"
+    name: "Other Current Asset"
   },
   {
     name: "Bank"
@@ -14,55 +15,46 @@ export const accountType: IAccountType[] = [
     name: "Cash"
   },
   {
-    name: "Chargeable"
+    name: "Credit Card"
   },
   {
-    name: "Capital Work In Progress"
+    name: "Other Current Liability"
+  },
+  {
+    name: "Other Liability"
+  },
+  {
+    name: "Long Term Liability"
   },
   {
     name: "Cost Of Goods Sold"
   },
   {
-    name: "Depreciation"
-  },
-  {
     name: "Equity"
   },
   {
-    name: "Expense Account"
+    name: "Expense"
   },
   {
-    name: "Expenses Included In Expense Valuation"
+    name: "Cost of Goods Sold"
   },
   {
-    name: "Expenses Included In Assets Valuation"
-  },
-  {
-    name: "Expenses Included In Valuation"
+    name: "Other Expense"
   },
   {
     name: "Fixed Asset"
   },
   {
-    name: "Income Account"
+    name: "Income"
   },
   {
-    name: "Payable"
+    name: "Other Income"
   },
   {
-    name: "Receiveable"
+    name: "Accounts Payable"
   },
   {
-    name: "Round Off"
-  },
-  {
-    name: "Stock"
-  },
-  {
-    name: "Stock Adjustment"
-  },
-  {
-    name: "Stock Received But Not Billed"
+    name: "Accounts Receiveable"
   },
   {
     name: "Tax"

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { model, Schema, Document } from 'mongoose';
 import { IClient } from '@interfaces/project-interface/client.interface';
 
