@@ -21,7 +21,27 @@ const CompanySchema: Schema = new Schema(
             type: String,
             required: true,
           },
-   
+          bankName: {
+            type: String,
+            required: true,
+          },
+          city: {
+            type: String,
+            required: true,
+          },
+          address:{
+            type: String,
+            required: true,
+          },
+          IBAN: {
+            type: String,
+            required: true,
+          },
+          swiftCode:{
+            type: String,
+            required: true,
+          },
+  
     
     },
     {
