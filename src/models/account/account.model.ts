@@ -21,7 +21,12 @@ const accountchema: Schema = new mongoose.Schema(
     account_type: {
         type: Schema.Types.ObjectId,
         required: function() { return this.is_group === false },
-        ref: 'AccountType'
+        ref: 'Account'
+    },
+    balance: {
+        type: String,
+        required: function() { return this.is_group === false },
+        ref: 'Account'
     },
     currency: {
         type: Schema.Types.ObjectId,

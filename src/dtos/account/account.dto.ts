@@ -21,6 +21,10 @@ export class AccountDto {
 
     @IsOptional()
     @IsString()
+    public balance: string;
+
+    @IsOptional()
+    @IsString()
     public currency: string;
 
     @IsOptional()
@@ -36,6 +40,10 @@ export class PutAccountDto {
     @IsOptional()
     @IsString()
     public account_number: string;
+
+    @IsOptional()
+    @IsString()
+    public balance: string;
 
     @IsOptional()
     @IsString()

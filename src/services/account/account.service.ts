@@ -26,6 +26,13 @@ class AccountService {
         return findaccount;
     }
 
+    public async findByName(accountName: string): Promise<IAccount> {
+        if (isEmpty(accountName)) throw new HttpException(400, "Missing Id Params");
+        const findaccount = this.findAccountByName(accountName);
+        if (!findaccount) throw new HttpException(409, "account not found");
+        return findaccount;
+    }
+
     public async findDescendants(accountId: string): Promise<IAccount> {
         if (isEmpty(accountId)) throw new HttpException(400, "Missing Id Params");
         const findaccount = this.descendants(accountId);
@@ -93,6 +100,17 @@ class AccountService {
         .select({
             "_id": true, 
             "account_name": true,
+            "ancestors.slug": true,
+            "ancestors.account_name": true }).exec();
+        return findAccount;
+    }
+
+    private async findAccountByName(name: string): Promise<IAccount> {
+        const findAccount: IAccount = await this.account.findOne({ slug: name })
+        .select({
+            "_id": true, 
+            "account_name": true,
+            "balance": true,
             "ancestors.slug": true,
             "ancestors.account_name": true }).exec();
         return findAccount;
