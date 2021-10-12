@@ -207,23 +207,6 @@ class App {
       console.log('running task 1am every day');
       const attendanceService = new AttendanceTypeService()
       await attendanceService.generateAttendance("project")
-    //   const d = new Date();
-    //   console.log('At 1 Minutes:', d);
-    //   const num = 23;
-    //   const data: any = {
-    //   employeeId: "612cead8fc13ae35b5000353",
-    //   shiftTypeId: "612ceef7fc13ae57e600012c",
-    //   departmentId: "612ce924fc13ae5329000af8",
-    //   clockInTime: new Date(2021, 7, Number(num), 10,),
-    //   clockOutTime: new Date(2021, 7, Number(num), 18,),
-    //   ogId: "850rho199",
-    // }
-
-    // const result: any = await getWorkTime(data.clockInTime, data.clockOutTime);
-    // data.hoursWorked = result.hoursWorked
-    // data.minutesWorked = result.minutesWorked
-    // await attendanceModel.create(data);
-
     });
 
     task.start()
