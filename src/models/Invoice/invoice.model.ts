@@ -22,6 +22,7 @@ const invoiceSchema: Schema = new Schema(
       required: true,
     },
     paid: {
+      default: 0,
       type: Number,
       required: false,
     },
@@ -41,6 +42,12 @@ const invoiceSchema: Schema = new Schema(
       type: String,
       required: true,
       enum : ["Invoice", "Bill"]
+    },
+    status: {
+      type: String,
+      default: 'Draft',
+      required: true,
+      enum: ['Publish', 'Draft']
     }
   }
 );

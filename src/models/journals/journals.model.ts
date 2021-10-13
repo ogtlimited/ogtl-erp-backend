@@ -26,12 +26,6 @@ const journalSchema: Schema = new Schema(
     date: {
       type: Date,
       required: true,
-    },
-    status: {
-      type: String,
-      default: 'Draft',
-      required: true,
-      enum: ['Publish', 'Draft']
     }
   }
 );

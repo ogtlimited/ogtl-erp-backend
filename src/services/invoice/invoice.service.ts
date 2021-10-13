@@ -63,8 +63,7 @@ class InvoiceService {
         debit: invoiceData.total_amount,
         credit: 0,
         description: '',
-        date: new Date().toISOString(),
-        status: 'Draft'
+        date: new Date().toISOString()
 
        }
        console.log(jData)
@@ -102,8 +101,7 @@ class InvoiceService {
         debit: invoiceData.total_amount - invoiceData.paid,
         credit: invoiceData.paid,
         description: '',
-        date: new Date().toISOString(),
-        status: 'Published'
+        date: new Date().toISOString()
 
        }
        console.log(jData)
