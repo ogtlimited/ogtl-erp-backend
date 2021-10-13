@@ -20,6 +20,9 @@ export class CreateInvoiceDto {
     @IsString()
     public type: string;
 
+    @IsString()
+    public status: string;
+
     @IsArray()
     public productItems: string;
 
@@ -32,6 +35,9 @@ export class UpdateInvoiceDto {
 
     @IsDateString()
     public due_date: string;
+
+    @IsString()
+    public status: string;
 
     @IsOptional()
     @IsArray()

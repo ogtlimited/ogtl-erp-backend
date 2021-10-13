@@ -24,7 +24,4 @@ export class CreateJournalDto {
     @IsDateString()
     public date: string;
 
-    @IsString()
-    public status: string;
-
 }
