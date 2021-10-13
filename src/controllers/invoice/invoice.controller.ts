@@ -52,6 +52,16 @@ class InvoiceController {
       next(error);
     }
   };
+  public updateInvoicePayment = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const InvoiceId: string = req.params.id;
+      const InvoiceData = req.body;
+      const updateInvoiceData: IInvoice = await this.InvoiceService.updateInvoicePayment(InvoiceId, InvoiceData);
+      res.status(200).json({ data: updateInvoiceData, message: 'Invoice Updated' });
+    } catch (error) {
+      next(error);
+    }
+  };
   //deletes Invoice
   public deleteInvoice = async (req: Request, res: Response, next: NextFunction) => {
     try {
