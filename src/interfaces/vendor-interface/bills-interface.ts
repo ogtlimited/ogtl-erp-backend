@@ -1,12 +1,13 @@
 export interface IBills {
   _id: string;
-  number: string;
   vendor: string;
-  billDate: Date;
-  dueDate: Date;
-  reference: string;
-  total: Number;
+  ref: string;
+  bill_date: string;
+  total_amount: number;
+  paid?: number;
+  balance?: number;
+  due_date: string;
+  productItems: string;
+  type: string;
   status: string;
-  // new
-  // journal : Vendor Bill
 }

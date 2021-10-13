@@ -1,32 +1,29 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsNotEmpty, IsDateString, IsNumber } from 'class-validator';
+import { IsString, IsDateString, IsNumber, IsArray } from 'class-validator';
 
 export class CreateBillsDto {
-  @IsNotEmpty()
-  @IsString()
-  public number: string;
 
-  @IsNotEmpty()
   @IsString()
   public vendor: string;
 
-  @IsNotEmpty()
-  @IsDateString()
-  public billDate: Date;
-
-  @IsNotEmpty()
-  @IsDateString()
-  public dueDate: Date;
-
-  @IsNotEmpty()
   @IsString()
-  public reference: string;
+  public ref: string;
 
-  @IsNotEmpty()
+  @IsDateString()
+  public bill_date: string;
+
+  @IsDateString()
+  public due_date: string;
+
+  @IsString()
+  public type: string;
+
+  @IsArray()
+  public productItems: string;
+
   @IsNumber()
-  public total: string;
+  public total_amount: number;
 
-  @IsNotEmpty()
   @IsString()
   public status: string;
 
@@ -36,30 +33,26 @@ export class UpdateBillsDto {
   @IsString()
   public _id: string;
 
-
-  @IsString()
-  public number: string;
-
-
   @IsString()
   public vendor: string;
 
+  @IsString()
+  public ref: string;
 
   @IsDateString()
-  public billDate: Date;
-
+  public bill_date: string;
 
   @IsDateString()
-  public dueDate: Date;
-
+  public due_date: string;
 
   @IsString()
-  public reference: string;
+  public type: string;
 
+  @IsArray()
+  public productItems: string;
 
   @IsNumber()
-  public total: string;
-
+  public total_amount: number;
 
   @IsString()
   public status: string;
