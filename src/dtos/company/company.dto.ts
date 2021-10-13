@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {IsNotEmpty,IsEmail, IsString } from 'class-validator';
 export class CreateCompanyDto{
 
@@ -17,6 +18,32 @@ export class CreateCompanyDto{
     @IsNotEmpty()
     @IsString()
     public abbreviation : string;
+     
+    @IsNotEmpty()
+    @IsString()
+    public bankName : string;
+
+
+    @IsNotEmpty()
+    @IsString()
+    public country : string;
+
+    @IsNotEmpty()
+    @IsString()
+    public city : string;
+
+    @IsNotEmpty()
+    @IsString()
+    public address : string;
+
+    @IsNotEmpty()
+    @IsString()
+    public IBAN : string;
+    
+    @IsNotEmpty()
+    @IsString()
+    public swiftCode: string;
+
 
 
     
@@ -45,5 +72,30 @@ export class UpdateCompanyDto{
     @IsNotEmpty()
     @IsString()
     public abbreviation : string;
+
+    @IsNotEmpty()
+    @IsString()
+    public bankName : string;
+
+
+    @IsNotEmpty()
+    @IsString()
+    public country : string;
+
+    @IsNotEmpty()
+    @IsString()
+    public city : string;
+
+    @IsNotEmpty()
+    @IsString()
+    public address : string;
+
+    @IsNotEmpty()
+    @IsString()
+    public IBAN : string;
+    
+    @IsNotEmpty()
+    @IsString()
+    public swiftCode: string;
 
 }
