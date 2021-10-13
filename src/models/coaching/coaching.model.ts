@@ -2,6 +2,7 @@
 import { CoachingFormInterface } from '@/interfaces/coaching/coaching.interface';
 import { model, Schema, Document } from 'mongoose';
 import mongoose from 'mongoose';
+import NotificationHelper from '@/utils/helper/notification.helper';
 
 const CoachingSchema: Schema = new Schema(
     {
@@ -56,6 +57,21 @@ const CoachingSchema: Schema = new Schema(
     },
 
 );
+CoachingSchema.post('save', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "SAVE").exec()
+});
+CoachingSchema.post('update', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "UPDATE").exec()
+});
+CoachingSchema.post('delete', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "DELETE").exec()
+});
 
 const CoachingFormModel = model<CoachingFormInterface & Document>('CoachingForm', CoachingSchema);
 

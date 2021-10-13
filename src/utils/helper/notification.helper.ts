@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 
-import notificationModel from '@/models/notification/notification.model';
+import notificationModel from '../../models/notification/notification.model';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 const { SocketLabsClient } = require('@socketlabs/email');
-import {emailTemplate} from '@/utils/email';
+import {emailTemplate} from '../email';
 const redis = require('redis');
 const client = redis.createClient();
 

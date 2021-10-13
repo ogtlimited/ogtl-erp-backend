@@ -35,7 +35,7 @@ export const officeQueryGenerator = queryParams => {
     return officeQuery;
   }  
   if (queryParams.departmentId) {
-    if (queryParams.startOfMonth && queryParams.startOfMonth) {
+    if (queryParams.startOfMonth && queryParams.endOfMonth) {
       officeQuery.createdAt = {
         '$gte': new Date(queryParams.startOfMonth), 
         '$lte': new Date(queryParams.endOfMonth)
@@ -45,7 +45,7 @@ export const officeQueryGenerator = queryParams => {
     return officeQuery
   }  
   if (queryParams.projectId) {
-    if (queryParams.startOfMonth && queryParams.startOfMonth) {
+    if (queryParams.startOfMonth && queryParams.endOfMonth) {
     officeQuery.createdAt = {
       '$gte': new Date(queryParams.startOfMonth), 
       '$lte': new Date(queryParams.endOfMonth)
