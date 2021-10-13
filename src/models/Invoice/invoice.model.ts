@@ -15,7 +15,19 @@ const invoiceSchema: Schema = new Schema(
     },
     invoice_date: {
       type: Date,
-      default: null,
+      default: new Date(),
+    },
+    total_amount: {
+      type: Number,
+      required: true,
+    },
+    paid: {
+      type: Number,
+      required: false,
+    },
+    balance: {
+      type: Number,
+      required: false,
     },
     due_date: {
       type: Date,
@@ -26,9 +38,9 @@ const invoiceSchema: Schema = new Schema(
       ref: "ProductService",
     }],
     type: {
-      type: Date,
+      type: String,
       required: true,
-      enum : ["Customer Invoice", "Vendor Bill"]
+      enum : ["Invoice", "Bill"]
     }
   }
 );

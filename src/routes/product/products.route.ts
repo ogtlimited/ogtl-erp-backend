@@ -9,7 +9,7 @@ import { CreateProductServiceDto, UpdateProductServiceDto } from '@/dtos/product
 
 
 class ProductServiceRoute implements Routes {
-    public path = '/ProductService';
+    public path = '/api/product-service';
     public router = Router();
     public ProductServiceController = new ProductServiceController();
   

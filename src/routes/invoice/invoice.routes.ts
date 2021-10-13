@@ -8,7 +8,7 @@ import InvoiceController from '@/controllers/invoice/invoice.controller';
 import { CreateInvoiceDto, UpdateInvoiceDto } from '@/dtos/invoice/invoice.dto';
 
 class InvoiceRoute implements Routes {
-    public path = '/invoice';
+    public path = '/api/invoice';
     public router = Router();
     public InvoiceController = new InvoiceController();
   

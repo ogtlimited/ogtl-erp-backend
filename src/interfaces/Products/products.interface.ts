@@ -2,8 +2,8 @@
 export interface IProductService {
     product:string;
     description: string;
-    rate:string;
-    price: string;
-    tax:string;
+    rate:number;
+    price: number;
+    tax:number;
     units: number;
   }

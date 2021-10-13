@@ -4,7 +4,7 @@ export interface IJournal {
     ref: string;
     date: string;
     description: string;
-    debit: string;
-    credit: string;
+    debit: number;
+    credit: number;
     status: string;
   }

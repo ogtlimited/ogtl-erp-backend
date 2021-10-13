@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import { IsString, IsDate, IsBoolean, IsOptional } from 'class-validator';
+import { IsString, IsDate, IsBoolean, IsOptional,IsNumber } from 'class-validator';
 
 export class AccountDto {  
 
@@ -20,8 +20,8 @@ export class AccountDto {
     public is_group: boolean;
 
     @IsOptional()
-    @IsString()
-    public balance: string;
+    @IsNumber()
+    public balance: number;
 
     @IsOptional()
     @IsString()
@@ -32,7 +32,7 @@ export class AccountDto {
   
 }
 
-export class PutAccountDto {  
+export class PutAccountDto {
 
     @IsString()
     public account_name: string;
@@ -42,8 +42,8 @@ export class PutAccountDto {
     public account_number: string;
 
     @IsOptional()
-    @IsString()
-    public balance: string;
+    @IsNumber()
+    public balance: number;
 
     @IsOptional()
     @IsString()
@@ -56,6 +56,10 @@ export class PutAccountDto {
   
 }
 
+export class PutAccountBalanceDto {
+    @IsNumber()
+    public balance: number;
+}
 export class UpdateAncestoryDto {  
 
     @IsString()

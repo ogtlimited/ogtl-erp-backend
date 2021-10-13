@@ -12,19 +12,19 @@ const productServiceSchema: Schema = new Schema(
       type: String,
     },
     rate: {
-      type: String,
+      type: Number,
       default: null,
     },
     price: {
-      type: String,
+      type: Number,
       required: true,
     },
     units: {
-      type: String,
-      required: true,
+      type: Number,
+      required: false,
     },
     tax: {
-      type: String,
+      type: Number,
       required: true,
     },
   }

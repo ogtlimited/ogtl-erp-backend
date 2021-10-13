@@ -18,20 +18,21 @@ const accountchema: Schema = new mongoose.Schema(
         type: Boolean,
         default: false
     },
-    account_type: {
-        type: Schema.Types.ObjectId,
-        required: function() { return this.is_group === false },
-        ref: 'Account'
-    },
+    // account_type: {
+    //     type: Schema.Types.ObjectId,
+    //     required: function() { return this.is_group === false },
+    //     ref: 'Account'
+    // },
     balance: {
-        type: String,
+        type: Number,
+        default: 0,
         required: function() { return this.is_group === false },
         ref: 'Account'
     },
     currency: {
-        type: Schema.Types.ObjectId,
+        type: String,
         required: function() { return this.is_group === false },
-        ref: 'Currency'
+        enum: ['NGN', 'USD', 'GBP', 'CAD']
     },
     parent: {
         type: Schema.Types.ObjectId,

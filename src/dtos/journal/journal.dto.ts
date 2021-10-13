@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
 
-import { IsString, IsDateString } from 'class-validator';
+import { IsString, IsDateString, IsNumber } from 'class-validator';
 
 export class CreateJournalDto {
 
@@ -12,11 +12,11 @@ export class CreateJournalDto {
     @IsString()
     public ref: string;
 
-    @IsString()
-    public debit: string;
+    @IsNumber()
+    public debit: number;
 
-    @IsString()
-    public credit: string;
+    @IsNumber()
+    public credit: number;
 
     @IsString()
     public description: string;

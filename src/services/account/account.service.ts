@@ -4,7 +4,7 @@ import AccountModel from '@/models/account/account.model';
 import { IAccount } from '@/interfaces/account-interface/account.interface';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
-import { AccountDto, PutAccountDto, UpdateAncestoryDto } from '@/dtos/account/account.dto';
+import { AccountDto, PutAccountBalanceDto, PutAccountDto, UpdateAncestoryDto } from '@/dtos/account/account.dto';
 import {slugify} from '../../utils/slugify'
 
 class AccountService {
@@ -42,7 +42,7 @@ class AccountService {
 
     public async create(Payload: AccountDto): Promise<IAccount> {
         if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
-        let new_account = new this.account(Payload)
+        const new_account = new this.account(Payload)
         try {
             const newaccount: IAccount = await new_account.save();
             this.buildAncestors(new_account._id, new_account.parent)
@@ -60,6 +60,13 @@ class AccountService {
         console.log(findaccount)
         const updateaccount: IAccount = await this.account.findByIdAndUpdate(accountId, {$set: PayloadObj }, {new: true});
         await this.account.update({"ancestors._id": updateaccount._id}, {"$set": {"ancestors.$.account_name": updateaccount.account_name, "ancestors.$.slug": slugify(updateaccount.account_name) }}, {multi: true});
+        return updateaccount;
+    }
+    public async updateBalance(accountId: string, payload: PutAccountBalanceDto): Promise<IAccount> {
+        if (isEmpty(payload)) throw new HttpException(400, "Bad request");
+        const findaccount = this.findOne(accountId);
+        if (!findaccount) throw new HttpException(409, "account not found");
+        const updateaccount: IAccount = await this.account.findByIdAndUpdate(accountId, {$set: payload }, {new: true});
         return updateaccount;
     }
 
@@ -124,9 +131,9 @@ class AccountService {
     }
 
     private async buildAncestors(id: string, parent_id: string): Promise<void> {
-        let ancest = [];
+        const ancest = [];
         try {
-            let parent_category = await this.account.findOne({ "_id":    parent_id },{ "name": 1, "slug": 1, "ancestors": 1 }).exec();
+            const parent_category = await this.account.findOne({ "_id":    parent_id },{ "name": 1, "slug": 1, "ancestors": 1 }).exec();
             if( parent_category ) {
                 const { _id, name, slug } = parent_category;
                 const ancest = [...parent_category.ancestors];

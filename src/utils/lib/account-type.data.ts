@@ -3,63 +3,34 @@ import { IAccountType } from '@interfaces/account-interface/account-type.interfa
 
 export const accountType: IAccountType[] = [
   {
-    name: "Other Asset"
+    name: "Current Asset"
   },
   {
-    name: "Other Current Asset"
+    name: "Non- Current Assets"
   },
   {
-    name: "Bank"
-  },
-  {
-    name: "Cash"
-  },
-  {
-    name: "Credit Card"
-  },
-  {
-    name: "Other Current Liability"
-  },
-  {
-    name: "Other Liability"
+    name: "Current Liability"
   },
   {
     name: "Long Term Liability"
   },
   {
-    name: "Cost Of Goods Sold"
-  },
-  {
     name: "Equity"
   },
   {
-    name: "Expense"
+    name: "Direct Expense"
   },
   {
-    name: "Cost of Goods Sold"
+    name: "Indirect Expense"
   },
-  {
-    name: "Other Expense"
-  },
+
   {
     name: "Fixed Asset"
   },
   {
-    name: "Income"
+    name: "Direct Income"
   },
   {
-    name: "Other Income"
+    name: "Indirect Income"
   },
-  {
-    name: "Accounts Payable"
-  },
-  {
-    name: "Accounts Receiveable"
-  },
-  {
-    name: "Tax"
-  },
-  {
-    name: "Temporary"
-  }
 ];

@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import { IsString, IsNumber } from 'class-validator';
+import { IsString, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateProductServiceDto {
 
@@ -11,12 +11,15 @@ export class CreateProductServiceDto {
     @IsString()
     public description: string;
 
+    @IsOptional()
     @IsNumber()
     public rate: number;
 
+    @IsOptional()
     @IsNumber()
     public price: number;
 
+    @IsOptional()
     @IsNumber()
     public units: number;
 
