@@ -1,8 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsDateString, IsNumber, IsArray } from 'class-validator';
+import { IsString, IsDateString,IsOptional, IsNumber, IsArray } from 'class-validator';
 
 export class CreateBillsDto {
-
   @IsString()
   public vendor: string;
 
@@ -15,14 +14,19 @@ export class CreateBillsDto {
   @IsDateString()
   public due_date: string;
 
-  @IsString()
-  public type: string;
-
   @IsArray()
   public productItems: string;
 
   @IsNumber()
   public total_amount: number;
+
+  @IsOptional()
+  @IsNumber()
+  public paid: number;
+
+  @IsOptional()
+  @IsNumber()
+  public balance: number;
 
   @IsString()
   public status: string;
@@ -45,9 +49,6 @@ export class UpdateBillsDto {
   @IsDateString()
   public due_date: string;
 
-  @IsString()
-  public type: string;
-
   @IsArray()
   public productItems: string;
 
@@ -56,4 +57,10 @@ export class UpdateBillsDto {
 
   @IsString()
   public status: string;
+
+  @IsNumber()
+  public paid: number;
+
+  @IsNumber()
+  public balance: number;
 }

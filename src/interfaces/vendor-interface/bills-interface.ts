@@ -8,6 +8,5 @@ export interface IBills {
   balance?: number;
   due_date: string;
   productItems: string;
-  type: string;
   status: string;
 }
