@@ -28,6 +28,14 @@ export class CreateBudgetDto {
   @IsOptional()
   public projectId: string;
 
+  @IsString()
+  @IsOptional()
+  public title: string;
+
+  @IsString()
+  @IsOptional()
+  public description: string;
+
   @IsNumber()
   public budget: Number;
 
@@ -49,6 +57,14 @@ export class UpdateBudgetDto {
     @IsString()
     @IsOptional()
     public projectId: string;
+
+    @IsString()
+    @IsOptional()
+    public title: string;
+
+    @IsString()
+    @IsOptional()
+    public description: string;
     
     @IsNumber()
     @IsOptional()

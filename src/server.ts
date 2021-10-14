@@ -74,6 +74,8 @@ import AccountRoute from '@routes/account/account.route';
 import AccountTypeRoute from '@routes/account/account-type.route';
 import BudgetRoute from '@routes/budget/budget.route'
 
+import ProcurementRoute from '@/routes/procurement/procurement.route'
+
 
 validateEnv();
 
@@ -143,7 +145,8 @@ const app = new App([
 
   new AccountRoute(),
   new AccountTypeRoute(),
-  new BudgetRoute()
+  new BudgetRoute(),
+  new ProcurementRoute()
 ]);
 
 const server = app.listen();
