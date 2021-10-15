@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import mongoose from "mongoose";
 import { dirname } from 'path';
 import dotenv from "dotenv";
@@ -49,27 +50,27 @@ const importAccountTypes = async () => {
 };
 
 const getLeafNodes = (nodes, result = [], parent = null, parent_data = {}) => {
-  for(var i = 0, length = nodes.length; i < length; i++){
-    let newAccount = new AccountModel(nodes[i])
+  for(let i = 0, length = nodes.length; i < length; i++){
+    const newAccount = new AccountModel(nodes[i])
     if(!nodes[i].child || nodes[i].child.length === 0){
-      let ances = buildAncestors(parent_data)
-      let slug = slugify(nodes[i]["account_name"])
+      const ances = buildAncestors(parent_data)
+      const slug = slugify(nodes[i]["account_name"])
       nodes[i]["slug"] = slug
       nodes[i]["ancestors"] = ances
-      let noChildAccount = new AccountModel(nodes[i])
+      const noChildAccount = new AccountModel(nodes[i])
       noChildAccount["parent"] = parent
       result.push(noChildAccount);
     }else{
       
-      let obj = {}
+      const obj = {}
       obj["account_name"] = nodes[i].account_name
       obj["is_group"] = nodes[i].is_group
       obj["parent"] = parent
-      let ancest = buildAncestors(parent_data)
-      let slug = slugify(obj["account_name"])
+      const ancest = buildAncestors(parent_data)
+      const slug = slugify(obj["account_name"])
       obj["slug"] = slug
       obj["ancestors"] = ancest
-      let childAccount = new AccountModel(obj)
+      const childAccount = new AccountModel(obj)
       result.push(childAccount);
       result = getLeafNodes(nodes[i].child, result, childAccount._id, childAccount);
     }
@@ -92,7 +93,7 @@ const importAccount = async (account) => {
 }
 
 const buildAncestors = (node) => {
-  let ancest = [];
+  const ancest = [];
   try {
       if( node ) {
           const { _id, account_name, slug } = node;

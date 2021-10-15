@@ -5,4 +5,10 @@ export interface Company {
   companyEmail: string;
   logo: string;
   abbreviation: string;
+  bankName : string;
+  country : string;
+  city : string;
+  address : string;
+  IBAN : string;
+  swiftCode: string;
 }

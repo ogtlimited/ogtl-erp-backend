@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export const account = [
     {
         account_name: "Application of Funds (Assets)",

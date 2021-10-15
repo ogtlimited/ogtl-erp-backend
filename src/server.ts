@@ -73,6 +73,9 @@ import MaintenanceAndRepairsRoute from '@routes/maintenance-report/maintenance_r
 import AccountRoute from '@routes/account/account.route';
 import AccountTypeRoute from '@routes/account/account-type.route';
 import BudgetRoute from '@routes/budget/budget.route'
+import ProductServiceRoute from './routes/product/products.route';
+import JournalRoute from './routes/journals/journals.route';
+import InvoiceRoute from './routes/invoice/invoice.routes';
 
 import ProcurementRoute from '@/routes/procurement/procurement.route'
 
@@ -146,7 +149,11 @@ const app = new App([
   new AccountRoute(),
   new AccountTypeRoute(),
   new BudgetRoute(),
-  new ProcurementRoute()
+  new ProcurementRoute(),
+
+  new ProductServiceRoute(),
+  new JournalRoute(),
+  new InvoiceRoute()
 ]);
 
 const server = app.listen();
