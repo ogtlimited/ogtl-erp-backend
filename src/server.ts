@@ -77,6 +77,8 @@ import ProductServiceRoute from './routes/product/products.route';
 import JournalRoute from './routes/journals/journals.route';
 import InvoiceRoute from './routes/invoice/invoice.routes';
 
+import ProcurementRoute from '@/routes/procurement/procurement.route'
+
 
 validateEnv();
 
@@ -147,6 +149,7 @@ const app = new App([
   new AccountRoute(),
   new AccountTypeRoute(),
   new BudgetRoute(),
+  new ProcurementRoute(),
 
   new ProductServiceRoute(),
   new JournalRoute(),
