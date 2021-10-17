@@ -17,17 +17,19 @@ export class CreateInvoiceDto {
     @IsDateString()
     public due_date: string;
 
-    @IsString()
-    public type: string;
-
-    @IsString()
-    public status: string;
-
     @IsArray()
     public productItems: string;
 
     @IsNumber()
     public total_amount: number;
+
+    @IsOptional()
+    @IsNumber()
+    public paid: number;
+
+    @IsOptional()
+    @IsNumber()
+    public balance: number;
 
 }
 

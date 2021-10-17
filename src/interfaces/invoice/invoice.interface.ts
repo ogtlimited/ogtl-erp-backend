@@ -8,5 +8,4 @@ export interface IInvoice {
   balance?: number;
   due_date: string;
   productItems: string;
-  type: string;
 }
