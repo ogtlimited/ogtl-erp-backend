@@ -9,7 +9,7 @@ const budgetSchema: Schema = new Schema(
       type: Number,
       required: true,
     },
-    availableBalanace: {
+    availableBalance: {
       type: Number,
     },
     departmentId: {

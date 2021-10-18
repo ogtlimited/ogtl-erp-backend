@@ -14,11 +14,13 @@ export class CreateProcurementDto {
   @IsNumber()
   public unitCost: Number;
 
-  @IsString()
-  public projectId: string;
+  // @IsString()
+  // @IsOptional()
+  // public projectId: string;
 
-  @IsString()
-  public departmentId: string;
+  // @IsString()
+  // @IsOptional()
+  // public departmentId: string;
 
 }
 

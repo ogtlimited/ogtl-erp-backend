@@ -7,7 +7,7 @@ import { Router } from 'express';
 import authMiddleware from '../../middlewares/auth.middleware';
 
 class ProcurementRoute implements Routes {
-    public path = '/api/budget';
+    public path = '/api/procurement';
     public router = Router();
     public ProcurementController = new ProcurementController();
 
