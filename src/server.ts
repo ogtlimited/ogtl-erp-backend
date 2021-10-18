@@ -76,6 +76,9 @@ import BudgetRoute from '@routes/budget/budget.route'
 import ProductServiceRoute from './routes/product/products.route';
 import JournalRoute from './routes/journals/journals.route';
 import InvoiceRoute from './routes/invoice/invoice.routes';
+import VendorRoute from '@routes/vendor/vendor.route';
+import BillsRoute from '@routes/vendor/bills.route';
+import VendorPaymentRoute from '@routes/vendor/vendor_payment.route';
 
 import ProcurementRoute from '@/routes/procurement/procurement.route'
 
@@ -153,7 +156,11 @@ const app = new App([
 
   new ProductServiceRoute(),
   new JournalRoute(),
-  new InvoiceRoute()
+  new InvoiceRoute(),
+
+  new VendorRoute(),
+  new BillsRoute(),
+  new VendorPaymentRoute()
 ]);
 
 const server = app.listen();
