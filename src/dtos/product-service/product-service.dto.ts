@@ -31,6 +31,9 @@ export class CreateProductServiceDto {
 export class UpdateProductServiceDto {
 
     @IsString()
+    public _id: string;
+
+    @IsString()
     public product: string;
 
     @IsString()
