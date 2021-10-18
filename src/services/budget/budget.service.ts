@@ -4,8 +4,9 @@ import { HttpException } from '@exceptions/HttpException';
 import { IBudget, IIncreaseBudget, IUpdateBudget } from '@/interfaces/budget/budget.interface';
 import budgetModel  from '@models/budget/budget.model';
 import { isEmpty } from '@utils/util';
-import departmentModel from '@/models/department/department.model';
-import projectModel from '@/models/project/project.model';
+import { ObjectId } from 'mongodb';
+// import departmentModel from '@/models/department/department.model';
+// import projectModel from '@/models/project/project.model';
 // import { isValidObjectId } from 'mongoose';
 import { officeQueryGenerator } from '@/utils/payrollUtil';
 import omit from 'lodash/omit'
@@ -72,19 +73,31 @@ class BudgetService {
   }
 
   public async create(req, data: CreateBudgetDto): Promise<IBudget> {
-    const office: any = {}
     const newData: IBudget = data;
+    const existConstrutor:any = {
+      startDate: new Date(newData.startDate),
+      endDate: new Date(newData.endDate)
+    }
     if (data.projectId == null && data.departmentId == null) {
         throw  new HttpException(400, "please provide a department or project");
     }
     if (data.projectId == null) {
-        office.departmentId = data.departmentId;
+      existConstrutor.departmentId = new ObjectId(newData.departmentId)
+    }else{
+      existConstrutor.projectId = new ObjectId(newData.projectId)
     }
+    const budgetExists = await budgetModel.exists(
+      newData
+    )
+    
+    if (budgetExists) {
+      throw  new HttpException(409, "budget already exists");
+    }
+    
     newData.createdBy = req.user._id
-    newData.availableBalance = newData.budget
+    newData.availableBalance = Number(newData.budget)
     let newBudget  = await budgetModel.create(newData)
     newBudget = omit(newBudget.toObject(), ["createdBy", "deleted"]) 
-
     return newBudget;
   }
 

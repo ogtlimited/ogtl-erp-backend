@@ -5,9 +5,6 @@ export class CreateBillsDto {
   @IsString()
   public vendor: string;
 
-  // @IsString()
-  // public ref: string;
-
   @IsOptional()
   @IsDateString()
   public bill_date: string;
@@ -20,10 +17,6 @@ export class CreateBillsDto {
 
   @IsNumber()
   public total_amount: number;
-
-  // @IsOptional()
-  // @IsNumber()
-  // public paid: number;
 
   @IsOptional()
   @IsNumber()
