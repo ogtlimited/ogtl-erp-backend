@@ -21,6 +21,7 @@ const billsSchema: Schema = new Schema({
   paid: {
     type: Number,
     required: false,
+    default: 0,
   },
   balance: {
     type: Number,

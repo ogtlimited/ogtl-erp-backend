@@ -52,6 +52,18 @@ class BillsController {
       next(error);
     }
   };
+
+  public updateBillStatus = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const billId: string = req.params.id;
+      const billData = req.body;
+      const updateBillData: IBills = await this.billService.updateBillStatus(billId, billData);
+      res.status(200).json({ data: updateBillData, message: 'Bill status updated' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public updateBillPayment = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const billId: string = req.params.id;

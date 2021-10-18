@@ -6,7 +6,7 @@ import AccountService from '../account/account.service';
 import JournalService from '../journal/journal.service';
 import billsModel from '@models/vendor/bills.model';
 import { IBills } from '@interfaces/vendor-interface/bills-interface';
-import { CreateBillsDto } from '@dtos/vendor/bills.dto';
+import { CreateBillsDto, UpdateBillsStatus } from '@dtos/vendor/bills.dto';
 
 class BillService {
   public bills = billsModel;
@@ -17,7 +17,7 @@ class BillService {
    *Returns all Bills
    */
   public async findAllBills(): Promise<IBills[]> {
-    return this.bills.find();
+    return this.bills.find().populate('vendor productItems');
   }
 
   /**
@@ -29,7 +29,7 @@ class BillService {
     if (isEmpty(billId)) throw new HttpException(400, "No Id provided");
 
     //find Bills with Id given
-    const findBill:IBills = await this.bills.findOne({ _id:billId  });
+    const findBill:IBills = await this.bills.findOne({ _id:billId  }).populate('vendor productItems');
 
     if(!findBill) throw new HttpException(409, "Bills with that Id doesnt exist");
 
@@ -42,13 +42,12 @@ class BillService {
 
 
   public async createBill(billData: CreateBillsDto) : Promise<IBills>{
-
     //Check if data is empty
     if (isEmpty(billData)) throw new HttpException(400, "No data provided");
-
-    const findBill: IBills = await this.bills.findOne({ref: billData.ref});
-    if(findBill) throw new HttpException(409, `Bill with this ${billData.ref} already exists`);
-    const payable = await this.Account.findByName("accounts-payable")
+    const newRef = BillService.generateRefID()
+    const findBill: IBills = await this.bills.findOne({ref:newRef});
+    if(findBill) throw new HttpException(409, `Bill with this ${newRef} already exists`);
+    const payable = await this.Account.findByName("account-payable")
     const accountUpdate: PutAccountBalanceDto = {
       balance: payable.balance + billData.total_amount,
     }
@@ -56,7 +55,7 @@ class BillService {
     await this.Account.updateBalance(payable._id, accountUpdate)
     const jData = {
       account: payable._id,
-      ref: billData.ref,
+      ref: newRef,
       debit: billData.total_amount,
       credit: 0,
       description: '',
@@ -65,7 +64,7 @@ class BillService {
     }
     console.log(jData)
     await this.Journal.createJournal(jData)
-    return await this.bills.create(billData);
+    return await this.bills.create({...billData,ref:newRef});
   }
 
   /**
@@ -84,7 +83,7 @@ class BillService {
     const updateBillById: IBills = await this.bills.findByIdAndUpdate(BillId,{
       $set: {updateData}
     });
-    const payable = await this.Account.findByName("accounts-payable")
+    const payable = await this.Account.findByName("account-payable")
     const accountUpdate: PutAccountBalanceDto = {
       balance: payable.balance - billData.total_amount,
 
@@ -115,12 +114,24 @@ class BillService {
     return updateBillById;
   }
 
+  public async updateBillStatus(BillId:string,billData:UpdateBillsStatus)  : Promise<IBills>{
+
+    const findBill: IBills = await this.bills.findOne({_id:billData._id});
+    if(findBill) throw new HttpException(409, `Bill with this ${billData._id} already exists`);
+
+    const updateBillById: IBills = await this.bills.findByIdAndUpdate(BillId,{$set: {status:"Published"}}, { new: true });
+    if(!updateBillById) throw new HttpException(409, "Bills status could not be updated");
+    return updateBillById;
+  }
+
   public async deleteBill(BillId:string) : Promise<IBills>{
     const deleteBillById :IBills = await this.bills.findByIdAndDelete(BillId);
     if(!deleteBillById) throw new HttpException(409, "Bills doesn't exist");
     return deleteBillById;
   }
-
+  private static generateRefID(){
+    return "OG"+ Math.floor(1000 + Math.random() * 9000)
+  }
 }
 
 export default BillService;
