@@ -41,6 +41,10 @@ const procurementSchema: Schema = new Schema(
       type: Boolean,
       default: false
     },
+    actedOn:{
+      type: Boolean,
+      default: false
+    },
     Status:{
       type: String,
       enum: ['pending', 'rejected', 'approved']
