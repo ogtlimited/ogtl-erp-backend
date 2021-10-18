@@ -1,15 +1,12 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import { IsString, IsDateString, IsArray, IsNumber, IsOptional } from 'class-validator';
+import { IsString, IsDateString, IsArray, IsNumber, IsOptional, IsNotEmpty } from 'class-validator';
 
 export class CreateInvoiceDto {
   
     @IsString()
     public customer: string;
-
-    @IsString()
-    public ref: string;
 
     @IsDateString()
     public invoice_date: string;
@@ -58,3 +55,12 @@ export class UpdateInvoiceDto {
 
 
 }
+
+export class UpdateInvoiceStatus {
+    @IsString()
+    public _id: string;
+  
+    @IsString()
+    @IsNotEmpty()
+    public status: string
+  }
