@@ -80,6 +80,8 @@ import VendorRoute from '@routes/vendor/vendor.route';
 import BillsRoute from '@routes/vendor/bills.route';
 import VendorPaymentRoute from '@routes/vendor/vendor_payment.route';
 
+import ProcurementRoute from '@/routes/procurement/procurement.route'
+
 
 validateEnv();
 
@@ -150,6 +152,7 @@ const app = new App([
   new AccountRoute(),
   new AccountTypeRoute(),
   new BudgetRoute(),
+  new ProcurementRoute(),
 
   new ProductServiceRoute(),
   new JournalRoute(),

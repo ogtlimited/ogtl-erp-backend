@@ -5,6 +5,8 @@ export interface IBudget{
     departmentId: string;
     projectId: string;
     budget: Number;
+    title: string;
+    description: string;
     availableBalance?: Number;
     approved?: boolean;
     createdBy?: string;
@@ -18,6 +20,8 @@ export interface IBudget{
     departmentId?: string;
     projectId?: string;
     budget?: Number;
+    title?: string;
+    description?: string;
     approved?: boolean;
     createdBy?: string;
     deletedBy?: string;

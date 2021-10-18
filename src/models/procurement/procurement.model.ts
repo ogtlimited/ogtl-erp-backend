@@ -1,16 +1,25 @@
 /* eslint-disable prettier/prettier */
 // import { IAttendance } from '@interfaces/attendance-interface/attendance-interface';
-import { IBudget } from '@/interfaces/budget/budget.interface';
+
+import { IProcurement } from '@/interfaces/procurement/procurement.interface';
 import { model, Schema } from 'mongoose';
 
-const budgetSchema: Schema = new Schema(
+const procurementSchema: Schema = new Schema(
   {
-    budget: {
+    productQuantity: {
       type: Number,
       required: true,
     },
-    availableBalance: {
+    unitCost: {
       type: Number,
+      required: true,
+    },
+    amount: {
+      type: Number,
+      required: true,
+    },
+    productName: {
+      type: String,
     },
     departmentId: {
       type: Schema.Types.ObjectId,
@@ -19,12 +28,6 @@ const budgetSchema: Schema = new Schema(
     projectId: {
       type: Schema.Types.ObjectId,
       ref: "Project"
-    },
-    startDate: {
-      type: Date
-    },
-    endDate: {
-      type: Date
     },
     createdBy:{
         type: Schema.Types.ObjectId,
@@ -38,6 +41,14 @@ const budgetSchema: Schema = new Schema(
       type: Boolean,
       default: false
     },
+    actedOn:{
+      type: Boolean,
+      default: false
+    },
+    Status:{
+      type: String,
+      enum: ['pending', 'rejected', 'approved']
+    },
     deleted:{
       type: Boolean,
       default: false
@@ -48,5 +59,5 @@ const budgetSchema: Schema = new Schema(
   },
 );
 
-const budgetModel = model<IBudget & Document>('Budget', budgetSchema);
-export default budgetModel;
+const procurementModel = model<IProcurement & Document>('Procurement', procurementSchema);
+export default procurementModel;

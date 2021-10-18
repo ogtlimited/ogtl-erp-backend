@@ -32,7 +32,7 @@ class InvoiceService {
        if (isEmpty(InvoiceId)) throw new HttpException(400, "No Id provided");
 
        //find IInvoice with Id given
-       const findInvoice:IInvoice = await this.Invoices.findOne({ _id:InvoiceId  });
+       const findInvoice:IInvoice = await this.Invoices.findOne({ _id:InvoiceId  }).populate('productItems');
 
        if(!findInvoice) throw new HttpException(409, "IInvoice with that Id doesnt exist");
 
