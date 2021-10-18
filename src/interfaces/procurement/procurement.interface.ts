@@ -6,8 +6,8 @@ export class IProcurement {
    productName: String;
    productQuantity: Number;
    unitCost: Number;
-   projectId: String;
-   departmentId: String;
+   projectId?: String;
+   departmentId?: String;
    amount?: Number;
    createdBy?: String;
 

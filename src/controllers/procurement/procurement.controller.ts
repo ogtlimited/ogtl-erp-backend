@@ -42,7 +42,7 @@ class ProcurementController {
 
   public approve = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const approvedprocurement = await this.procurementService.approve(req.params.id); 
+      const approvedprocurement = await this.procurementService.approve(req.query, req.params.id); 
       res.status(200).json({ data: approvedprocurement});
     } catch (error) {  
       console.log(error);
