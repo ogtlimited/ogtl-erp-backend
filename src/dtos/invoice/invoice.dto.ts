@@ -56,3 +56,8 @@ export class UpdateInvoiceDto {
 
 
 }
+
+export class UpdateInvoiceStatusDto {
+    @IsString()
+    public status: string;
+}

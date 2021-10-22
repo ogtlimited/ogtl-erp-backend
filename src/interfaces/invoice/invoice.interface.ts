@@ -9,4 +9,6 @@ export interface IInvoice {
   due_date: string;
   productItems: string;
   type: string;
+  status?: string;
+  paymentStatus?: string;
 }
