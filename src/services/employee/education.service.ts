@@ -18,9 +18,9 @@ class EducationService{
 
   //find education by Id
 
-  public async findEducationById(EducationId: string) : Promise<Education[]>{
+  public async findEducationById(EducationId: string) : Promise<Education>{
     if (isEmpty(EducationId)) throw new HttpException(400, "No Id provided");
-    return this.Educations.find({ employee_id: EducationId });
+    return this.Educations.findOne({ employee_id: EducationId });
 
   }
         //create new education details

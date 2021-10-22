@@ -1,15 +1,22 @@
+/* eslint-disable prettier/prettier */
+import { IPayment } from '../../interfaces/payments/payment-interface';
 import { model, Schema, Document } from 'mongoose';
-import { IVendorPayment } from '@interfaces/vendor-interface/payment-interface';
 
-const vendorPaymentSchema: Schema = new Schema({
+
+const PaymentSchema: Schema = new Schema({
   number: {
     type: String,
     required: true,
   },
-  vendor: {
+  bill: {
     type: Schema.Types.ObjectId,
-    required: true,
-    ref: 'Vendor',
+    required: false,
+    ref: 'Bill',
+  },
+  invoice: {
+    type: Schema.Types.ObjectId,
+    required: false,
+    ref: 'Invoice',
   },
   date: {
     type: Date,
@@ -35,6 +42,6 @@ const vendorPaymentSchema: Schema = new Schema({
   },
 });
 
-const vendorPaymentModel = model<IVendorPayment & Document>('VendorPayment', vendorPaymentSchema);
+const paymentModel = model<IPayment & Document>('Payment', PaymentSchema);
 
-export default vendorPaymentModel;
+export default paymentModel;

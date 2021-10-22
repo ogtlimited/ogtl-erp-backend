@@ -2,6 +2,7 @@
 import { PutAccountBalanceDto } from './../../dtos/account/account.dto';
 
 import { HttpException } from '@exceptions/HttpException';
+import { genRef } from './../../utils/util';
 
 import { isEmpty } from '@utils/util';
 import invoiceModel from '@/models/Invoice/invoice.model';
@@ -59,7 +60,7 @@ class InvoiceService {
        this.Account.updateBalance(receivables._id, accountUpdate)
        const jData = {
         account: receivables._id,
-        ref: invoiceData.ref,
+        ref: genRef(),
         debit: invoiceData.total_amount,
         credit: 0,
         description: '',
@@ -97,7 +98,7 @@ class InvoiceService {
        this.Account.updateBalance(receivables._id, accountUpdate)
        const jData = {
         account: receivables._id,
-        ref: invoiceData.ref,
+        ref: genRef(),
         debit: invoiceData.total_amount - invoiceData.paid,
         credit: invoiceData.paid,
         description: '',
