@@ -20,9 +20,9 @@ class EmergencyContactService{
 
   //finds emergency Contacts  by Id
 
-  public async findEmergencyContactById(EmergencyContactId: string) : Promise<EmergencyContact[]>{
+  public async findEmergencyContactById(EmergencyContactId: string) : Promise<EmergencyContact>{
     if (isEmpty(EmergencyContactId)) throw new HttpException(400, "No Id provided");
-    return this.EmergencyContacts.find({ employee_id: EmergencyContactId });
+    return this.EmergencyContacts.findOne({ employee_id: EmergencyContactId });
   }
 
 

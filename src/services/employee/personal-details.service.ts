@@ -42,7 +42,7 @@ class PersonalDetailsService{
         const findPersonalDetails: PersonalDetail = await this.PersonalDetails.findOne({employee_id: PersonalDetailData.employee_id});
 
         if(findPersonalDetails){
-          const updatePersonalDetailsData: PersonalDetail = await this.PersonalDetails.findByIdAndUpdate(PersonalDetailData._id,PersonalDetailData,{new:true})
+          const updatePersonalDetailsData: PersonalDetail = await this.PersonalDetails.findByIdAndUpdate(PersonalDetailData._id,{PersonalDetailData},{new:true})
           if(!updatePersonalDetailsData) throw new HttpException(409, "details could not be updated");
           return updatePersonalDetailsData;
         }
