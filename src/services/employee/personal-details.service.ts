@@ -34,24 +34,18 @@ class PersonalDetailsService{
   /**
       * Creates new Personal details
       */
-    public async createPersonalDetails(PersonalDetailData:CreatePersonalDetailsDto) : Promise<PersonalDetail>{
-
-        if (isEmpty(PersonalDetailData)) throw new HttpException(400, "No data provided");
-
-        //check if employee already provided Personal details
-        const findPersonalDetails: PersonalDetail = await this.PersonalDetails.findOne({employee_id: PersonalDetailData.employee_id});
-
-        if(findPersonalDetails){
-          const updatePersonalDetailsData: PersonalDetail = await this.PersonalDetails.findByIdAndUpdate(PersonalDetailData._id,PersonalDetailData,{new:true})
-          if(!updatePersonalDetailsData) throw new HttpException(409, "details could not be updated");
-          return updatePersonalDetailsData;
-        }
-        else{
-          return await this.PersonalDetails.create(PersonalDetailData);
-        }
-
-
+  public async createPersonalDetails(PersonalDetailData:CreatePersonalDetailsDto):Promise<PersonalDetail>{
+    if(isEmpty(PersonalDetailData)) throw new HttpException(400,"No data provided");
+    const findPersonalDetails:PersonalDetail = await this.PersonalDetails.findOne({employee_id:PersonalDetailData.employee_id})
+    if(findPersonalDetails){
+      const updatePersonalDetailsData:PersonalDetail = await this.PersonalDetails.findByIdAndUpdate(PersonalDetailData._id,PersonalDetailData,{new:true})
+      if(!updatePersonalDetailsData) throw new HttpException(409, "details could not be updated");
+      return updatePersonalDetailsData;
+    }else{
+      return await this.PersonalDetails.create(PersonalDetailData)
     }
+
+  }
 
     /**
      * Updates PersonalDetails
