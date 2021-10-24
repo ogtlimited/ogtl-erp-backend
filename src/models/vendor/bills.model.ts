@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { model, Schema, Document } from 'mongoose';
 import { IBills } from '@interfaces/vendor-interface/bills-interface';
 

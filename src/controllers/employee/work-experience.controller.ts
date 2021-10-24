@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { NextFunction, Request, Response } from 'express';
 import { CreateWorkExperienceDto,UpdateWorkExperienceDto } from '@/dtos/employee/work-experience.dto';
 import { WorkExperience } from '@/interfaces/employee-interface/work-experience.interface';
@@ -35,7 +36,7 @@ class WorkExperienceController{
    public getWorkExperienceById = async  (req: Request, res: Response, next: NextFunction) => {
        try{
           const WorkExperienceId: string = req.params.id;
-          const findOneWorkExperienceData: WorkExperience = await this.WorkExperienceService.findWorkExperienceById(WorkExperienceId);
+          const findOneWorkExperienceData = await this.WorkExperienceService.findWorkExperienceById(WorkExperienceId);
           res.status(200).json({data:findOneWorkExperienceData, message:"All WorkExperiences"});
        }
        catch(error){

@@ -1,14 +1,18 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsNotEmpty, IsDateString, IsNumber } from 'class-validator';
+import { IsString, IsNotEmpty, IsDateString, IsNumber, IsOptional } from 'class-validator';
 
-export class CreateVendorPaymentDto {
+export class CreatePaymentDto {
   @IsNotEmpty()
   @IsString()
   public number: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  public vendor: string;
+  public bill: string;
+
+  @IsOptional()
+  @IsString()
+  public invoice: string;
 
   @IsNotEmpty()
   @IsDateString()
@@ -22,9 +26,9 @@ export class CreateVendorPaymentDto {
   @IsString()
   public journal: string;
 
-@IsNotEmpty()
+  @IsNotEmpty()
   @IsNumber()
-  public amount: string;
+  public amount: number;
 
   @IsNotEmpty()
   @IsString()
@@ -32,7 +36,7 @@ export class CreateVendorPaymentDto {
 
 }
 
-export class UpdateVendorPaymentDto {
+export class UpdatePaymentDto {
   @IsString()
   public _id: string;
 
@@ -41,8 +45,13 @@ export class UpdateVendorPaymentDto {
   public number: string;
 
 
+  @IsOptional()
   @IsString()
-  public vendor: string;
+  public bill: string;
+
+  @IsOptional()
+  @IsString()
+  public invoice: string;
 
 
   @IsDateString()
@@ -58,7 +67,7 @@ export class UpdateVendorPaymentDto {
 
 
   @IsNumber()
-  public amount: string;
+  public amount: number;
 
 
   @IsString()

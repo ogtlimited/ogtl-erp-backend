@@ -20,7 +20,7 @@ class ClientRoute implements Routes {
     this.router.get(`${this.path}`, this.client.getClients);
     this.router.get(`${this.path}/:clientId`, this.client.getClient);
     this.router.post(`${this.path}`, validationMiddleware(CreateClientDto, 'body'), this.client.createClient);
-    this.router.put(`${this.path}/:clientId`, validationMiddleware(UpdateClientDto, 'body'), this.client.updateClient);
+    this.router.patch(`${this.path}/:clientId`, validationMiddleware(UpdateClientDto, 'body'), this.client.updateClient);
     this.router.delete(`${this.path}/:clientId`, this.client.deleteClient);
   }
 }
