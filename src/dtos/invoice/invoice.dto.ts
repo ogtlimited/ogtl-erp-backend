@@ -56,7 +56,11 @@ export class UpdateInvoiceDto {
 
 }
 
-export class UpdateInvoiceStatusDto {
+export class UpdateInvoiceStatus {
     @IsString()
-    public status: string;
-}
+    public _id: string;
+  
+    @IsString()
+    @IsNotEmpty()
+    public status: string
+  }

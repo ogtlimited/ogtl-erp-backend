@@ -64,20 +64,16 @@ class InvoiceService {
         credit: 0,
         description: '',
         date: new Date().toISOString()
-
        }
        console.log(jData)
        this.Journal.createJournal(jData)
        return  await this.Invoices.create({...invoiceData, ref: newRef});
     
      }
-
      /**
      *Updates existing IInvoice
      */
-
     public async updateInvoicePayment(InvoiceId:string,invoiceData)  : Promise<IInvoice>{
-
         //Check if data is empty
         if (isEmpty(invoiceData)) throw new HttpException(400, "No data provided");
         const invoice = await this.findInvoiceById(InvoiceId)
@@ -91,7 +87,6 @@ class InvoiceService {
         const receivables = await this.Account.findByName("accounts-receivable")
        const accountUpdate: PutAccountBalanceDto = {
            balance: receivables.balance - invoiceData.total_amount,
-
        }
        console.log(accountUpdate)
        this.Account.updateBalance(receivables._id, accountUpdate)
@@ -102,7 +97,6 @@ class InvoiceService {
         credit: invoiceData.paid,
         description: '',
         date: new Date().toISOString()
-
        }
        console.log(jData)
        this.Journal.createJournal(jData)
@@ -110,17 +104,13 @@ class InvoiceService {
          return updateInvoiceById;
    }
      public async updateInvoice(InvoiceId:string,invoiceData)  : Promise<IInvoice>{
-
         //Check if data is empty
         if (isEmpty(invoiceData)) throw new HttpException(400, "No data provided");
-
         const updateInvoiceById: IInvoice = await this.Invoices.findByIdAndUpdate(InvoiceId,{invoiceData});
         if(!updateInvoiceById) throw new HttpException(409, "Invoice doesn't exist");
          return updateInvoiceById;
    }
-
    public async updateInvoiceStatus(InvoiceId:string,InvoiceData:UpdateInvoiceStatus)  : Promise<IInvoice>{
-
     const findInvoice: IInvoice = await this.Invoices.findOne({_id:InvoiceData._id});
     if(findInvoice) throw new HttpException(409, `Invoice with this ${InvoiceData._id} already exists`);
 
