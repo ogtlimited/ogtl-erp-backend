@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+
 export interface IInvoice {
   customer: string;
   ref: string;
