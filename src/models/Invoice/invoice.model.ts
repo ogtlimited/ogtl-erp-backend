@@ -42,7 +42,7 @@ const invoiceSchema: Schema = new Schema(
       type: String,
       default: 'Draft',
       required: true,
-      enum: ['Publish', 'Draft']
+      enum: ['Published', 'Draft']
     }
   }
 );
