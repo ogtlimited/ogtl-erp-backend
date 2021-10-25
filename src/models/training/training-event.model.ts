@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-import NotificationHelper from '@/utils/helper/notification.helper';
 import { ITrainingEvent } from '@interfaces/training/training-event.interface';
 import { model, Schema, Document } from 'mongoose';
 
@@ -72,7 +71,6 @@ const TrainingEventSchema: Schema = new Schema(
 );
 
 TrainingEventSchema.post('save', function(doc) {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self: any = this;
     console.log(self.constructor.modelName)
     new NotificationHelper(self.constructor.modelName, "SAVE").exec()

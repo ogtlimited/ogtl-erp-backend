@@ -1,12 +1,10 @@
-/* eslint-disable prettier/prettier */
-export interface IPayment {
+export interface IVendorPayment {
   _id: string;
   number: string;
   date: Date;
   journal: string;
   paymentMethod: string;
-  bill?: string;
-  invoice?: string;
+  vendor: string;
   amount: Number;
   status: string; //full or partial payment
   //new

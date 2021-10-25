@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { NextFunction, Request, Response } from 'express';
 import { CreateEmergencyContactDto,UpdateEmergencyContactDto } from '@/dtos/employee/emergency-contact.dto';
 import { EmergencyContact } from '@/interfaces/employee-interface/emergency-contact.interface';

@@ -78,10 +78,9 @@ import JournalRoute from './routes/journals/journals.route';
 import InvoiceRoute from './routes/invoice/invoice.routes';
 import VendorRoute from '@routes/vendor/vendor.route';
 import BillsRoute from '@routes/vendor/bills.route';
-
+import VendorPaymentRoute from '@routes/vendor/vendor_payment.route';
 
 import ProcurementRoute from '@/routes/procurement/procurement.route'
-import PaymentRoute from './routes/payments/payment.route';
 
 
 validateEnv();
@@ -161,7 +160,7 @@ const app = new App([
 
   new VendorRoute(),
   new BillsRoute(),
-  new PaymentRoute()
+  new VendorPaymentRoute()
 ]);
 
 const server = app.listen();

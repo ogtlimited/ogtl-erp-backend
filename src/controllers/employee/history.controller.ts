@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { NextFunction, Request, Response } from 'express';
 import { CreateHistoryDto, UpdateHistoryDto } from '@/dtos/employee/history.dto';
 import { History } from '@/interfaces/employee-interface/history.interface';
@@ -37,7 +36,7 @@ class HistoryController{
    public getHistoryById = async  (req: Request, res: Response, next: NextFunction) => {
        try{
           const HistoryId: string = req.params.id;
-          const findOneHistoryData: History[] = await this.HistoryService.findHistoryById(HistoryId);
+          const findOneHistoryData: History = await this.HistoryService.findHistoryById(HistoryId);
           res.status(200).json({data:findOneHistoryData, message:"All Historys"});
        }
        catch(error){
