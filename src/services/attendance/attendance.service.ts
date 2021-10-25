@@ -12,14 +12,17 @@ import { attendanceofficeQueryGenerator, officeQueryGenerator } from '@/utils/pa
 import deductionModel from '@/models/payroll/deduction.model';
 import deductionTypeModel from '@/models/payroll/deductionType.model';
 import moment = require('moment');
-import salaryComponentModel from '@/models/payroll/salary-component.model';
-import projectModel from '@/models/project/project.model';
-import departmentModel from '@/models/department/department.model';
+// import salaryComponentModel from '@/models/payroll/salary-component.model';
+// import projectModel from '@/models/project/project.model';
+// import departmentModel from '@/models/department/department.model';
 import EmployeeModel from '@models/employee/employee.model';
+import applicationModel from '@/models/leave/application.model';
 
 
 class AttendanceTypeService {
-  public attendanceTypes = attendanceModel;
+  private attendanceTypes = attendanceModel;
+  private leaveModel = applicationModel;
+
 
   public async findAllDepartmentAttendance(query): Promise<any> {
     const payload = []
@@ -151,10 +154,13 @@ class AttendanceTypeService {
     return updateRecord;
   }
   
-  public async generateAttendance(query = "project"){
+  public async generateAttendance(){
     try {
       const startOfYesterday =  moment().subtract(1, 'day').startOf('day').add(59, "minutes")
       const endOfYesterday =  moment().subtract(1, 'day').endOf('day').add(1, "hour")
+
+      console.log(startOfYesterday, endOfYesterday, moment());
+      
 
       //deductions
       const latenessDeduction = await deductionTypeModel.findOne({title:"lateness"})
@@ -171,8 +177,14 @@ class AttendanceTypeService {
       for (let index = 0; index < employees.length; index++) {
         let employee:any = employees[index];
         employee = employee.toObject();
-        
-        const employeeAttendance = await this.attendanceTypes.findOne({employeeId: employee._id, createdAt:{$gte: startOfYesterday, $lte:endOfYesterday}})
+
+        const employeeAttendance = await this.attendanceTypes.findOne({
+          employeeId: employee._id, 
+          createdAt:{
+            $gte: startOfYesterday, 
+            $lte:endOfYesterday
+          }
+        })
         .populate('shiftTypeId')
         
         // NCNS for employees who do not have an attendance or clocked in without clocking out.
@@ -180,9 +192,27 @@ class AttendanceTypeService {
 
         // eslint-disable-next-line prefer-const
         let deductionsConstructor:any = {}
-        let latenessConstructor:any = {}
+        const latenessConstructor:any = {}
 
-        if (employeeAttendance == null || employeeAttendance.clockOutTime ==  null) {
+        if (employeeAttendance == null) {
+          const empLeave = await this.leaveModel.findOne({
+            employee_id: employee._id, 
+            from_date: {'$lte': new Date(moment().format('YYYY-MM-DD'))},
+            to_date:{'$gte': new Date(moment().format('YYYY-MM-DD'))}
+          })
+        
+          if(!empLeave){
+            deductionAmount = ncnsDeduction.percentage * employee.salaryStructure_id.grossPay;
+            deductionsConstructor.employeeId= employee._id,
+            deductionsConstructor.deductionTypeId= ncnsDeduction._id,
+            deductionsConstructor.amount= deductionAmount,
+            employeesDeductions.push(deductionsConstructor)
+            continue
+          }
+          continue
+        }
+
+        if (employeeAttendance.clockOutTime ==  null) {
           deductionAmount = ncnsDeduction.percentage * employee.salaryStructure_id.grossPay;
           deductionsConstructor.employeeId= employee._id,
           deductionsConstructor.deductionTypeId= ncnsDeduction._id,
