@@ -109,7 +109,7 @@ class BillService {
     //Check if data is empty
     if (isEmpty(billData)) throw new HttpException(400, "No data provided");
 
-    const updateBillById: IBills = await this.bills.findByIdAndUpdate(BillId,{billData});
+    const updateBillById: IBills = await this.bills.findByIdAndUpdate(BillId,billData, {new:true});
     if(!updateBillById) throw new HttpException(409, "Bills doesn't exist");
     return updateBillById;
   }

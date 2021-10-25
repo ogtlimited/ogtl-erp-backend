@@ -11,7 +11,7 @@ const PaymentSchema: Schema = new Schema({
   bill: {
     type: Schema.Types.ObjectId,
     required: false,
-    ref: 'Bill',
+    ref: 'Bills',
   },
   invoice: {
     type: Schema.Types.ObjectId,
@@ -28,7 +28,6 @@ const PaymentSchema: Schema = new Schema({
   },
   journal: {
     type: Schema.Types.ObjectId,
-    required: true,
     ref: 'Journal',
   },
   amount: {

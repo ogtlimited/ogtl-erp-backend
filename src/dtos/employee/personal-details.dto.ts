@@ -31,7 +31,7 @@ export class CreatePersonalDetailsDto{
         public blood_group: string;
 
   @IsDateString()
-  public date_of_birth: string;
+  public date_of_birth: Date;
 }
 
 export class UpdatePersonalDetailsDto{
@@ -64,7 +64,7 @@ export class UpdatePersonalDetailsDto{
         public blood_group: string;
 
   @IsDateString()
-  public date_of_birth: string;
+  public date_of_birth: Date;
 }
 
 
