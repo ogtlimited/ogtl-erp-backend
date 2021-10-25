@@ -23,7 +23,7 @@ class PaymentService {
 
   //Method for finding all  payment
   public async findAllPayment(): Promise<IPayment[]>{
-    return this.PaymentModel.find();
+    return this.PaymentModel.find().populate('bill invoice journal');
   }
 
   //Method for finding a single  payment
@@ -34,11 +34,11 @@ class PaymentService {
     const findPayment:IPayment = await this.PaymentModel.findOne({_id:ModelId});
     //throw error if  does not exist
     if(!findPayment) throw new HttpException(409,` payment with Id:${ModelId}, does not exist`);
-    //return 
+    //return
     return findPayment;
   }
 
-  //Method for creating 
+  //Method for creating
   public async createPaymentModel(data: CreatePaymentDto): Promise<IPayment>{
     //check if  data is empty
     if (isEmpty(data)) throw new HttpException(400, "Bad request");
@@ -54,15 +54,17 @@ class PaymentService {
 
       }
     }
+    //generate a random id on creation
+    const number = PaymentService.generateNumber()
     //find  using the employee id provided
-    const findPayment: IPayment = await this.PaymentModel.findOne({ number: data.number });
+    const findPayment: IPayment = await this.PaymentModel.findOne({ number: number });
     //throw error if  does exist
     if (findPayment) throw new HttpException(409, ` payment already exists`);
-    // return created 
-    return await this.PaymentModel.create(data);
+    // return created
+    return await this.PaymentModel.create({ ...data ,number});
   }
 
-  //Method for updating 
+  //Method for updating
   public async updatePaymentModel(ModelId: string,ModelData: UpdatePaymentDto):Promise<IPayment>{
     //check if no  data is empty
     if (isEmpty(ModelData)) throw new HttpException(400, "Bad request");
@@ -74,11 +76,11 @@ class PaymentService {
     // @ts-ignore
     const updatePaymentId:IPayment = await this.PaymentModel.findByIdAndUpdate(ModelId,ModelData,{new:true})
     if (!updatePaymentId) throw new HttpException(409, " could not be updated");
-    // return updated 
+    // return updated
     return updatePaymentId;
   }
 
-  //Method for deleting 
+  //Method for deleting
   public async deletePaymentModel(ModelId: string):Promise<IPayment>{
     //find  using the id provided and delete
     const deletePaymentId: IPayment = await this.PaymentModel.findByIdAndDelete(ModelId);
@@ -86,6 +88,9 @@ class PaymentService {
     return deletePaymentId;
   }
 
+  private static generateNumber(){
+    return "OG"+ Math.floor(1000 + Math.random() * 9000)
+  }
 }
 
 
