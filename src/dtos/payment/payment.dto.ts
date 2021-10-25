@@ -22,9 +22,6 @@ export class CreatePaymentDto {
   @IsString()
   public paymentMethod: string;
 
-  @IsNotEmpty()
-  @IsString()
-  public journal: string;
 
   @IsNotEmpty()
   @IsNumber()
