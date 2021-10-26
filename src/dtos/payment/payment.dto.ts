@@ -55,11 +55,7 @@ export class UpdatePaymentDto {
   @IsString()
   public paymentMethod: string;
 
-
-  @IsString()
-  public journal: string;
-
-
+  @IsNotEmpty()
   @IsNumber()
   public amount: number;
 
