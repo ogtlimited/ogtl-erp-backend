@@ -30,7 +30,7 @@ const PaymentSchema: Schema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Journal',
   },
-  amount: {
+  total_amount: {
     type: Number,
     required: true,
   },
@@ -38,7 +38,7 @@ const PaymentSchema: Schema = new Schema({
     type: String,
     required: true,
     enum: ['Draft', 'Published'],
-    default: "Draft"
+    default : 'Draft',
   },
   paymentStatus: {
     type: String,

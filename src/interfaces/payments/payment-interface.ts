@@ -7,7 +7,7 @@ export interface IPayment {
   paymentMethod: string;
   bill?: string;
   invoice?: string;
-  amount: Number;
+  total_amount: Number;
   status: string; //full or partial payment
   //new
   account: string;
