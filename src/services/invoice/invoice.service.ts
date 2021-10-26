@@ -106,7 +106,7 @@ class InvoiceService {
      public async updateInvoice(InvoiceId:string,invoiceData)  : Promise<IInvoice>{
         //Check if data is empty
         if (isEmpty(invoiceData)) throw new HttpException(400, "No data provided");
-        const updateInvoiceById: IInvoice = await this.Invoices.findByIdAndUpdate(InvoiceId,{invoiceData});
+        const updateInvoiceById: IInvoice = await this.Invoices.findByIdAndUpdate(InvoiceId,invoiceData,{new:true});
         if(!updateInvoiceById) throw new HttpException(409, "Invoice doesn't exist");
          return updateInvoiceById;
    }

@@ -32,6 +32,15 @@ export class CreateInvoiceDto {
 
 export class UpdateInvoiceDto {
 
+    @IsString()
+    public customer: string;
+  
+    @IsString()
+    public ref: string;
+  
+    @IsDateString()
+    public invoice_date: string;
+
     @IsDateString()
     public due_date: string;
 
