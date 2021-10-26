@@ -66,6 +66,8 @@ class AccountService {
         if (isEmpty(payload)) throw new HttpException(400, "Bad request");
         const findaccount = this.findOne(accountId);
         if (!findaccount) throw new HttpException(409, "account not found");
+        console.log("paylod",payload);
+        console.log("find account",findaccount,accountId);
         const updateaccount: IAccount = await this.account.findByIdAndUpdate(accountId, {$set: payload }, {new: true});
         return updateaccount;
     }
