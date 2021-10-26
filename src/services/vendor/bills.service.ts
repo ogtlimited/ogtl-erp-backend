@@ -7,6 +7,7 @@ import JournalService from '../journal/journal.service';
 import billsModel from '@models/vendor/bills.model';
 import { IBills } from '@interfaces/vendor-interface/bills-interface';
 import { CreateBillsDto, UpdateBillsStatus } from '@dtos/vendor/bills.dto';
+import moment from 'moment';
 
 class BillService {
   public bills = billsModel;
@@ -44,6 +45,11 @@ class BillService {
   public async createBill(billData: CreateBillsDto) : Promise<IBills>{
     //Check if data is empty
     if (isEmpty(billData)) throw new HttpException(400, "No data provided");
+    const date1 = moment(billData.bill_date).format("L");
+    const date2 = moment(billData.due_date).format("L");
+    if (date1 > date2) {
+      throw new HttpException(409, "Bill date must not be after Due date");
+    }
     const newRef = BillService.generateRefID()
     const findBill: IBills = await this.bills.findOne({ref:newRef});
     if(findBill) throw new HttpException(409, `Bill with this ${newRef} already exists`);
@@ -75,6 +81,11 @@ class BillService {
 
     //Check if data is empty
     if (isEmpty(billData)) throw new HttpException(400, "No data provided");
+    const date1 = moment(billData.bill_date).format("L");
+    const date2 = moment(billData.due_date).format("L");
+    if (date1 > date2) {
+      throw new HttpException(409, "Bill date must not be after Due date");
+    }
     const Bill = await this.findBillById(BillId)
     const updateData = {
       paid: billData.paid,
@@ -130,7 +141,7 @@ class BillService {
     return deleteBillById;
   }
   private static generateRefID(){
-    return "OG"+ Math.floor(1000 + Math.random() * 9000)
+    return "REF"+ Math.floor(1000 + Math.random() * 9000)
   }
 }
 
