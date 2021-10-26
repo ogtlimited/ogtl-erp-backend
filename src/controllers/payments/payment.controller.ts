@@ -30,9 +30,20 @@ class PaymentController {
   }
 
   //Method for creating
-  public createPayment = async (req:Request, res:Response, next:NextFunction) =>{
+  public createDraftPayment = async (req:Request, res:Response, next:NextFunction) =>{
     try {
       const Data:CreatePaymentDto = req.body;
+      const createData: IPayment = await this.PaymentService.saveDraftPayment(Data);
+      res.status(201).json({ data: createData, message: ' payment created.' });
+    }
+    catch (error) {
+      next(error)
+    }
+  }
+  //Method for creating
+  public createPayment = async (req:Request, res:Response, next:NextFunction) =>{
+    try {
+      const Data:UpdatePaymentDto = req.body;
       const createData: IPayment = await this.PaymentService.createPaymentModel(Data);
       res.status(201).json({ data: createData, message: ' payment created.' });
     }

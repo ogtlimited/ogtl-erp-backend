@@ -38,30 +38,44 @@ class PaymentService {
     return findPayment;
   }
 
-  //Method for creating
-  public async createPaymentModel(data: CreatePaymentDto): Promise<IPayment>{
-    //check if  data is empty
+  public async saveDraftPayment(data: CreatePaymentDto): Promise<IPayment>{
     if (isEmpty(data)) throw new HttpException(400, "Bad request");
-    if(data.bill){
-      const bill = this.billS.findBillById(data.bill)
-      if(bill){
-        this.billS.updateBillPayment(data.bill, data);
-      }
-    }else{
-      const invoice = this.invoiceS.findInvoiceById(data.invoice)
-      if(invoice){
-        this.invoiceS.updateInvoicePayment(data.invoice, data);
-
-      }
-    }
-    //generate a random id on creation
-    const number = PaymentService.generateNumber()
-    //find  using the employee id provided
-    const findPayment: IPayment = await this.PaymentModel.findOne({ number: number });
-    //throw error if  does exist
-    if (findPayment) throw new HttpException(409, ` payment already exists`);
-    // return created
+    const number = genRef();
     return await this.PaymentModel.create({ ...data ,number});
+  }
+  
+  //Method for creating
+  public async createPaymentModel(data: UpdatePaymentDto): Promise<IPayment>{
+    //check if  data is empty
+    if(data.status === 'Draft'){
+      return this.updatePaymentModel(data._id, data)
+    }else{
+      const findPayment: IPayment = await this.PaymentModel.findOne({ _id: data._id });
+      if (isEmpty(data)) throw new HttpException(400, "Bad request");
+      if(findPayment.bill){
+        const bill = this.billS.findBillById(findPayment.bill)
+        if(bill){
+         this.billS.updateBillPayment(data.bill, data);
+        }
+      }else{
+        const invoice = this.invoiceS.findInvoiceById(data.invoice)
+        if(invoice){
+         this.invoiceS.updateInvoicePayment(data.invoice, data);
+  
+        }
+      }
+      // //generate a random id on creation
+      // const number = genRef()
+      // //find  using the employee id provided
+      // // const findPayment: IPayment = await this.PaymentModel.findOne({ number: number });
+      // //throw error if  does exist
+      // // if (findPayment) throw new HttpException(409, ` payment already exists`);
+      // // return created
+      const updatedPayment:IPayment = await this.PaymentModel.findByIdAndUpdate(data._id,data,{new:true})
+      // return await this.PaymentModel.create({ ...data ,number});
+      return updatedPayment
+
+    }
   }
 
   //Method for updating

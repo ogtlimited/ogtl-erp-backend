@@ -37,7 +37,12 @@ const PaymentSchema: Schema = new Schema({
   status: {
     type: String,
     required: true,
-    enum: ['Paid', 'Not Paid', 'Half Paid'],
+    enum: ['Draft', 'Published'],
+  },
+  paymentStatus: {
+    type: String,
+    required: true,
+    enum: ['Full Payment', 'Partial Payment'],
   },
 });
 
