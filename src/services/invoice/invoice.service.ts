@@ -88,8 +88,9 @@ class InvoiceService {
        const accountUpdate: PutAccountBalanceDto = {
            balance: receivables.balance - invoiceData.total_amount,
        }
-       console.log(accountUpdate)
-       this.Account.updateBalance(receivables._id, accountUpdate)
+       console.log("account update", accountUpdate)
+       console.log("receievables balance", receivables.balance , invoiceData.total_amount);
+       this.Account.updateBalance(receivables._id, accountUpdate);
        const jData = {
         account: receivables._id,
         ref: invoiceData.ref,

@@ -22,11 +22,13 @@ export class CreatePaymentDto {
 
   @IsNotEmpty()
   @IsNumber()
-  public amount: number;
+  public total_amount: number;
 
   @IsNotEmpty()
   @IsString()
-  public status: string;
+  public paymentStatus: string;
+
+
 
 }
 
@@ -57,9 +59,12 @@ export class UpdatePaymentDto {
 
   @IsNotEmpty()
   @IsNumber()
-  public amount: number;
+  public total_amount: number;
 
 
   @IsString()
   public status: string;
+
+  @IsString()
+  public paymentStatus: string;
 }
