@@ -19,7 +19,7 @@ class PaymentRoute implements Routes {
   private initializeRoutes() {
     this.router.get(`${this.path}`,authMiddleware, this.Payment.getPayments);
     this.router.get(`${this.path}/:id`,authMiddleware, this.Payment.getPaymentById);
-    this.router.post(`${this.path}`, [validationMiddleware(CreatePaymentDto, 'body'),authMiddleware], this.Payment.createDraftPayment);
+    this.router.post(`${this.path}/draft`, [validationMiddleware(CreatePaymentDto, 'body'),authMiddleware], this.Payment.createDraftPayment);
     this.router.post(`${this.path}/published`, [validationMiddleware(UpdatePaymentDto, 'body'),authMiddleware], this.Payment.createPayment);
     this.router.patch(`${this.path}/:id`, [validationMiddleware(UpdatePaymentDto, 'body',true),authMiddleware], this.Payment.updatePayment);
     this.router.delete(`${this.path}/:id`,authMiddleware, this.Payment.deletePayment);
