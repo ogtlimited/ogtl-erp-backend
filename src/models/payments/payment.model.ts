@@ -38,6 +38,7 @@ const PaymentSchema: Schema = new Schema({
     type: String,
     required: true,
     enum: ['Draft', 'Published'],
+    default: "Draft"
   },
   paymentStatus: {
     type: String,
