@@ -6,30 +6,53 @@ export const account = [
         default: true,
         child: [
             {
-                account_name: "Current Assets",
+                account_name: "Current Asset",
                 is_group: true,
                 default: true,
                 child: [
                     {
                         account_name: "Accounts Receivable",
                         is_group: true,
+                        default: true,
+                        child: [
+                            {
+                                account_name: "Account-Receivable",
+                                is_group: false,
+                                default: true,
+                                currency: "NGN",
+                                is_default: true,
+                                account_number: "3054300900",
+                                balance: 0
+                            }
 
-default: true,                    },
+                        ]                  
+                    },
                     {
                         account_name: "Bank Accounts",
                         is_group: true,
-
-default: true,                    },
+                        default: true                    
+                    },
                     {
                         account_name: "Cash In Hand",
                         is_group: true,
                         default: true,
+                        child: [
+                            {
+                                account_name: "Bank and Cash",
+                                is_group: false,
+                                default: true,
+                                currency: "NGN",
+                                is_default: true,
+                                account_number: "3054300900",
+                                balance: 0
+                            }
+
+                        ]
                     },
                     {
                         account_name: "Loan and Advances (Assets)",
                         is_group: true,
-
-default: true,                    },
+                        default: true,                    },
                     {
                         account_name: "Securities and Deposits",
                         is_group: true,
@@ -44,14 +67,34 @@ default: true,                    },
                         account_name: "Tax Assets",
                         is_group: true,
 
-default: true,                    }
+default: true,                    },
+                    {
+                        account_name: "Current Assets",
+                        is_group: false,
+                        default: true,
+                        currency: "NGN",
+                        is_default: true,
+                        account_number: "3054300900",
+                        balance: 0
+                    },
                 ]
             },
             {
-                account_name: "Fixed Assets",
+                account_name: "Fixed Asset",
                 is_group: true,
-
-default: true,            },
+                default: true,  
+                child: [
+                    {
+                        account_name: "Fixed Assets",
+                        is_group: false,
+                        default: true,
+                        currency: "NGN",
+                        is_default: true,
+                        account_number: "3054300900",
+                        balance: 0
+                    }
+                ]
+            },
             {
                 account_name: "Investments",
                 is_group: true,
@@ -77,23 +120,43 @@ default: true,            }
                     {
                         account_name: "Account Payable",
                         is_group: true,
-
-default: true,                    },
+                        default: true,
+                        child: [
+                            {
+                                account_name: "Accounts-Payable",
+                                is_group: false,
+                                default: true,
+                                currency: "NGN",
+                                is_default: true,
+                                account_number: "3054300900",
+                                balance: 0
+                            }
+                        ]   
+                    },
                     {
                         account_name: "Duties and Taxes",
                         is_group: true,
-
-default: true,                    },
+                        default: true
+                    },
                     {
                         account_name: "Loans (Liabilities)",
                         is_group: true,
-
-default: true,                    },
+                        default: true,
+                    },
                     {
                         account_name: "Stock Liabilities",
-                        is_group: true,
-
-default: true,                    }
+                        is_group: true, 
+                        default: true,
+                    },
+                    {
+                        account_name: "Current Liabilities",
+                        is_group: false,
+                        default: true,
+                        currency: "NGN",
+                        is_default: true,
+                        account_number: "3054300900",
+                        balance: 0
+                    }
                 ]
             }
         ]
@@ -145,3 +208,4 @@ default: true,                    }
         ]
     }
 ];
+
