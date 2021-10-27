@@ -50,11 +50,11 @@ export class UpdateBillsDto {
   @IsString()
   public status: string;
 
-  @IsNumber()
-  public paid: number;
-
-  @IsNumber()
-  public balance: number;
+  // @IsNumber()
+  // public paid: number;
+  //
+  // @IsNumber()
+  // public balance: number;
 }
 
 export class UpdateBillsStatus {
