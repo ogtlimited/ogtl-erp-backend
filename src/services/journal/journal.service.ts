@@ -17,7 +17,7 @@ class JournalService {
      *Returns all IJournal
      */
     public async findAllJournal(): Promise<IJournal[]> {
-        const Journal: IJournal[] = await this.JournalService.find();
+        const Journal: IJournal[] = await this.JournalService.find().populate("account");
         return Journal;
     }
 
@@ -30,7 +30,7 @@ class JournalService {
        if (isEmpty(JournalId)) throw new HttpException(400, "No Id provided");
 
        //find IJournal with Id given
-       const Journal:IJournal = await this.JournalService.findOne({ _id:JournalId  });
+       const Journal:IJournal = await this.JournalService.findOne({ _id:JournalId  }).populate("account");;
 
        if(!Journal) throw new HttpException(409, "IJournal with that Id doesnt exist");
 
