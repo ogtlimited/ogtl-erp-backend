@@ -42,12 +42,17 @@ class AccountService {
 
     public async create(Payload: AccountDto): Promise<IAccount> {
         if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
+        Payload.is_default = false
         const new_account = new this.account(Payload)
         try {
             const newaccount: IAccount = await new_account.save();
             this.buildAncestors(new_account._id, new_account.parent)
             return newaccount;
         } catch (err) {
+            if (err.name === 'MongoError' && err.code === 11000) {
+                // Duplicate name
+                throw new HttpException(409, "Account name already exists");
+            }
             throw new HttpException(409, err);
         }
     }
@@ -127,7 +132,7 @@ class AccountService {
 
     private async descendants(id: string): Promise<IAccount> {
         const result = await this.account.find({ "ancestors._id":  id })
-        .select({ "_id": true, "account_name": true })
+        .select({ "_id": true, "account_name": true, "is_group": true, "balance": true })
         .exec();
         return result;
     }

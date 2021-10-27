@@ -8,7 +8,8 @@ const accountchema: Schema = new mongoose.Schema(
   {
     account_name: {
       type: String,
-      required: true
+      required: true,
+      unique: true
     },
     account_number: {
         type: String,
@@ -18,6 +19,10 @@ const accountchema: Schema = new mongoose.Schema(
         type: Boolean,
         default: false
     },
+    is_default: {
+      type: Boolean,
+      default: false
+    },
     // account_type: {
     //     type: Schema.Types.ObjectId,
     //     required: function() { return this.is_group === false },
@@ -26,8 +31,7 @@ const accountchema: Schema = new mongoose.Schema(
     balance: {
         type: Number,
         default: 0,
-        required: function() { return this.is_group === false },
-        ref: 'Account'
+        required: function() { return this.is_group === false }
     },
     currency: {
         type: String,

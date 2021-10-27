@@ -19,6 +19,9 @@ export class AccountDto {
     @IsBoolean()
     public is_group: boolean;
 
+    @IsBoolean()
+    public is_default: boolean;
+
     @IsOptional()
     @IsNumber()
     public balance: number;
