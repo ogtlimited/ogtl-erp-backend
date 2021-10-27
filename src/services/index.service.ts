@@ -19,6 +19,8 @@ import JobOfferService from '@services/recruitment/job_offer.service';
 import TestServices from '@services/recruitment/test.services';
 import AssetService from './assets/assets.service';
 import PurchaseOrderService from './assets/purchase-order.service';
+import InvoiceService from '@services/invoice/invoice.service';
+import PaymentService from '@services/payments/payment.service';
 
 class CombineServices {
   public designationS = new DesignationService();
@@ -40,6 +42,8 @@ class CombineServices {
   public passedTestApplicants = new TestServices()
   public Assets = new AssetService()
   public PurchaseOrder = new PurchaseOrderService()
+  public Invoice = new InvoiceService()
+  public Payments = new PaymentService()
 //   public departmentS = new Department
 
   public async createEmployeeFormSelection(){
@@ -54,7 +58,7 @@ class CombineServices {
     const passedApplicants = await this.passedTestApplicants.findAllPassedTests()
     const allAssets = await this.Assets.findAllAsset()
     const allPurchaseOrders = await this.PurchaseOrder.findAllPurchaseOrders()
-    
+
 
     return {
         shifts: shifts,
@@ -68,7 +72,7 @@ class CombineServices {
         passedApplicants,
         allAssets,
         allPurchaseOrders,
-        
+
     }
   }
 
@@ -104,6 +108,13 @@ class CombineServices {
       workExperience
     }
 
+  }
+
+  public async accountDashboard(){
+    const invoices = await this.Invoice.findAllInvoices()
+    const payments = await this.Payments.findAllPayment()
+
+    return {invoices, payments}
   }
 }
  export default CombineServices
