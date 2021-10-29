@@ -28,6 +28,7 @@ import AttendanceTypeService from '@/services/attendance/attendance.service';
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config({ path: dirname( module.paths[1] ) + "/.env" });
 }
+import moment from 'moment';
 
 class App {
   public app: express.Application;
@@ -203,35 +204,20 @@ class App {
 
   private  initializeCron(){
 
-    const task = cron.schedule('* 1 * * *', async function() {
-      console.log('running task 1am every day');
+    const task = cron.schedule('* 1 * * 1-5', async function() {
       const attendanceService = new AttendanceTypeService()
-      await attendanceService.generateAttendance("project")
-    });
-
-    task.start()
-    // console.log('Before job instantiation');
-    // const job = new CronJob('* 1 * * * *', async function() {
-    //   const d = new Date();
-    //   console.log('At 1 Minutes:', d);
-    //   const num = 23;
-    //   const data: any = {
-    //   employeeId: "612cead8fc13ae35b5000353",
-    //   shiftTypeId: "612ceef7fc13ae57e600012c",
-    //   departmentId: "612ce924fc13ae5329000af8",
-    //   clockInTime: new Date(2021, 7, Number(num), 10,),
-    //   clockOutTime: new Date(2021, 7, Number(num), 18,),
-    //   ogId: "850rho199",
-    // }
-
-    // const result: any = await getWorkTime(data.clockInTime, data.clockOutTime);
-    // data.hoursWorked = result.hoursWorked
-    // data.minutesWorked = result.minutesWorked
-    // await attendanceModel.create(data);
-    // });
-    // console.log('After job instantiation');
-    // job.
-    // console.log('is job running? ', job.running);
+      await attendanceService.generateAttendance()
+    //   console.log('running task 1am every day');
+    //   const day = "saturday" 
+    //   if (day == "saturday" || day == "sunday") {
+    //     console.log("skipping today")
+    //   }else{
+    //     console.log("no loveeeeeeeeeeeeeeeee");
+    //     const attendanceService = new AttendanceTypeService()
+    //     await attendanceService.generateAttendance("project")
+    //   }
+    })
+     task.start()
   }
 }
 

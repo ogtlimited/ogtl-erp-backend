@@ -38,6 +38,15 @@ class IndexController {
       next(e);
     }
   };
+  public getAccountsDashboard = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const getAccountsData = await this.indexS.accountDashboard()
+      res.status(200).json({ getAccountsData, message: 'Accounts data' });
+    }
+    catch (e) {
+      next(e)
+    }
+  }
 }
 
 export default IndexController;

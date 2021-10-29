@@ -120,8 +120,6 @@ export class UpdateEmployeePermissionDto{
 
 export class EmployeeLoginDto {
   @IsString()
-  public ogid: string;
+  public company_email: string;
 
-  @IsString()
-  public password: string;
 }

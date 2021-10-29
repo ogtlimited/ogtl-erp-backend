@@ -38,16 +38,11 @@ const invoiceSchema: Schema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "ProductService",
     }],
-    type: {
-      type: String,
-      required: true,
-      enum : ["Invoice", "Bill"]
-    },
     status: {
       type: String,
       default: 'Draft',
       required: true,
-      enum: ['Publish', 'Draft']
+      enum: ['Published', 'Draft']
     }
   }
 );

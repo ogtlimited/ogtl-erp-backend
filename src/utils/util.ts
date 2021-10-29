@@ -17,3 +17,11 @@ export const isEmpty = (value: string | number | object): boolean => {
     return false;
   }
 };
+export const genRef = () => {
+  const rand = 'xxxx-4xxx-yxxx-xxxx'.replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0,
+      v = c == 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(8);
+  });
+  return 'REFP-' + rand;
+};
