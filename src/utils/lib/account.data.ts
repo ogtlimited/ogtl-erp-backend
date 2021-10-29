@@ -174,8 +174,8 @@ default: true,    },
             {
                 account_name: "Direct Income",
                 is_group: true,
-
-default: true,            },
+                default: true,
+            },
             {
                 account_name: "Indirect Income",
                 is_group: true,
@@ -196,8 +196,8 @@ default: true,            },
                     {
                         account_name: "Stock Expenses",
                         is_group: true,
-
-default: true,                    }
+                        default: true,
+                    }
                 ]
             },
             {
