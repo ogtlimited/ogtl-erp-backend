@@ -19,10 +19,6 @@ const productServiceSchema: Schema = new Schema(
       type: Number,
       required: true,
     },
-    units: {
-      type: Number,
-      required: false,
-    },
     tax: {
       type: Number,
       required: true,

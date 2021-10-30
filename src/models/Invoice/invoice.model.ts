@@ -34,10 +34,13 @@ const invoiceSchema: Schema = new Schema(
       type: Date,
       required: true,
     },
-    productItems:[{
-      type: Schema.Types.ObjectId,
-      ref: "ProductService",
-    }],
+    productItems:[
+      {
+        type: Schema.Types.ObjectId,
+        ref: "ProductService",
+      }
+    ],
+    units: [Number],
     status: {
       type: String,
       default: 'Draft',

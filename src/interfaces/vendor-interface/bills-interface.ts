@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export interface IBills {
   _id: string;
   vendor: string;
@@ -8,5 +9,6 @@ export interface IBills {
   balance?: number;
   due_date: string;
   productItems: string;
+  units: [];
   status: string;
 }

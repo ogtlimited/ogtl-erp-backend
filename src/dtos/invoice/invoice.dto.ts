@@ -24,6 +24,9 @@ export class CreateInvoiceDto {
     @IsNumber()
     public paid: number;
 
+    @IsArray()
+    public units: [];
+
     @IsOptional()
     @IsNumber()
     public balance: number;
@@ -34,6 +37,9 @@ export class UpdateInvoiceDto {
 
     @IsString()
     public customer: string;
+
+    @IsString()
+    public account: string;
   
     @IsString()
     public ref: string;
@@ -57,6 +63,9 @@ export class UpdateInvoiceDto {
     @IsOptional()
     @IsNumber()
     public paid: number;
+
+    @IsArray()
+    public units: [];
 
     @IsOptional()
     @IsNumber()

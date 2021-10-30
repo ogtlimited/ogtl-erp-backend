@@ -9,6 +9,7 @@ export interface IInvoice {
   balance?: number;
   due_date: string;
   productItems: string;
+  units: [];
   type: string;
   status?: string;
   paymentStatus?: string;

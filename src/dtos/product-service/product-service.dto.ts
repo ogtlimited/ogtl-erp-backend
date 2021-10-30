@@ -19,9 +19,7 @@ export class CreateProductServiceDto {
     @IsNumber()
     public price: number;
 
-    @IsOptional()
-    @IsNumber()
-    public units: number;
+
 
     @IsNumber()
     public tax: number;
@@ -45,8 +43,6 @@ export class UpdateProductServiceDto {
     @IsNumber()
     public price: number;
 
-    @IsNumber()
-    public units: number;
 
     @IsNumber()
     public tax: number;

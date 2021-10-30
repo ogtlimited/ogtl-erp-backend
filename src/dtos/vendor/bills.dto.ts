@@ -15,6 +15,9 @@ export class CreateBillsDto {
   @IsArray()
   public productItems: string;
 
+  @IsArray()
+  public units: [];
+
   @IsNumber()
   public total_amount: number;
 
@@ -42,7 +45,10 @@ export class UpdateBillsDto {
   public due_date: string;
 
   @IsArray()
-  public productItems: string;
+  public productItems: [];
+
+  @IsArray()
+  public units: [];
 
   @IsNumber()
   public total_amount: number;
