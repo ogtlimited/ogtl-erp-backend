@@ -1,34 +1,34 @@
 /* eslint-disable prettier/prettier */
 // import { IAttendance } from '@interfaces/attendance-interface/attendance-interface';
-import { IBudget } from '@/interfaces/budget/budget.interface';
+import { IExpenseHead } from '@/interfaces/expense-head/expense-head.interface';
 import { model, Schema } from 'mongoose';
 
-const budgetSchema: Schema = new Schema(
+const expenseHeadSchema: Schema = new Schema(
   {
-    budget: {
+    amount: {
       type: Number,
       required: true,
     },
     availableBalance: {
       type: Number,
     },
-    type: {
+    title: {
       type: String,
-      enum: ["quarterly", "monthly", "yearly"]
     },
-    // departmentId: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "Department"
-    // },
-    // projectId: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "Project"
-    // },
+    departmentId: {
+      type: Schema.Types.ObjectId,
+      ref: "Department"
+    },
+    projectId: {
+      type: Schema.Types.ObjectId,
+      ref: "Project"
+    },
+    budgetId: {
+      type: Schema.Types.ObjectId,
+      ref: "Budget"
+    },
     startDate: {
       type: Date
-    },
-    flagAlert: {
-      type: Number
     },
     endDate: {
       type: Date
@@ -45,10 +45,6 @@ const budgetSchema: Schema = new Schema(
       type: Boolean,
       default: false
     },
-    active:{
-      type: Boolean,
-      default: false
-    },
     deleted:{
       type: Boolean,
       default: false
@@ -59,5 +55,5 @@ const budgetSchema: Schema = new Schema(
   },
 );
 
-const budgetModel = model<IBudget & Document>('Budget', budgetSchema);
-export default budgetModel;
+const expenseHeadModel = model<IExpenseHead & Document>('ExpenseHead', expenseHeadSchema);
+export default expenseHeadModel;
