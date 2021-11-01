@@ -8,6 +8,9 @@ export class CreateInvoiceDto {
     @IsString()
     public customer: string;
 
+    @IsString()
+    public account: string;
+
     @IsDateString()
     public invoice_date: string;
 

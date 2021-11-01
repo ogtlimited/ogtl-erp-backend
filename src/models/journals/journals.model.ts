@@ -16,12 +16,12 @@ const journalSchema: Schema = new Schema(
       type: String,
     },
     debit: {
-      type: String,
-      default: null,
+      type: Number,
+      default: 0,
     },
     credit: {
-      type: String,
-      required: true,
+      type: Number,
+      required: 0,
     },
     date: {
       type: Date,
