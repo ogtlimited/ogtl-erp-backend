@@ -107,12 +107,13 @@ class AccountService {
         ])
 
         return tree
-    } 
+    }
 
     private async findOne(id: string): Promise<IAccount> {
         const findAccount: IAccount = await this.account.findOne({ _id: id })
         .select({
-            "_id": true, 
+            "_id": true,
+            "balance": true,
             "account_name": true,
             "ancestors.slug": true,
             "ancestors.account_name": true }).exec();
@@ -122,7 +123,7 @@ class AccountService {
     private async findAccountByName(name: string): Promise<IAccount> {
         const findAccount: IAccount = await this.account.findOne({ slug: name })
         .select({
-            "_id": true, 
+            "_id": true,
             "account_name": true,
             "balance": true,
             "ancestors.slug": true,
@@ -156,7 +157,7 @@ class AccountService {
         if( id && parent_id )
             this.buildAncestors(id, parent_id)
             const result = await this.account.find({ 'parent': id }).exec();
-        
+
         if(result)
         result.forEach((doc) => {
             this.buildHierarchyAncestors(doc._id, id) } )
