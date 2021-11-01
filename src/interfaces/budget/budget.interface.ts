@@ -1,10 +1,13 @@
 /* eslint-disable prettier/prettier */
+import { IExpenseHead } from "../expense-head/expense-head.interface";
+
+
 export interface IBudget{
     startDate: string;
     endDate: string;
-    departmentId: string;
-    projectId: string;
-    budget: Number;
+    departmentId?: string;
+    projectId?: string;
+    budget?: Number;
     title: string;
     description: string;
     availableBalance?: Number;
@@ -12,6 +15,9 @@ export interface IBudget{
     createdBy?: string;
     deletedBy?: string;
     deleted?: boolean;
+    flagAlert?: Number;
+    expenseHeads?: Array<IExpenseHead>;
+    toObject?: Function;
  }
 
  export interface IUpdateBudget{
@@ -25,6 +31,7 @@ export interface IBudget{
     approved?: boolean;
     createdBy?: string;
     deletedBy?: string;
+    flagAlert?: Number;
     deleted?: boolean;
  }
 
