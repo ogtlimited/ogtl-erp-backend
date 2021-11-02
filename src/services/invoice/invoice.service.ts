@@ -52,11 +52,16 @@ class InvoiceService {
       const findInvoice: IInvoice = await this.Invoices.findOne({ref:newRef});
        if(findInvoice) throw new HttpException(409, `Invoice with this ${newRef} already exists`);
        const receivables = await this.Account.findByName("accounts-receivable")
-       const accountUpdate: PutAccountBalanceDto = {
+       const account = await this.Account.find(invoiceData.account);
+       const updateReceivable: PutAccountBalanceDto = {
            balance: receivables.balance + invoiceData.total_amount,
        }
+       const accountUpdate: PutAccountBalanceDto = {
+           balance: account.balance + invoiceData.total_amount,
+       }
        console.log(accountUpdate)
-       this.Account.updateBalance(receivables._id, accountUpdate)
+       this.Account.updateBalance(receivables._id, updateReceivable)
+       this.Account.updateBalance(account._id, accountUpdate)
        const jData = {
         account: receivables._id,
         ref: newRef,
@@ -77,25 +82,31 @@ class InvoiceService {
         //Check if data is empty
         if (isEmpty(invoiceData)) throw new HttpException(400, "No data provided");
         const invoice = await this.findInvoiceById(InvoiceId)
+        console.log('GET INVOICE', InvoiceId);
+        console.log('GET INVOICE', invoice);
         const updateData = {
-            paid: invoiceData.paid,
-            balance: invoice.total_amount - invoiceData.paid
+            paid: invoice.paid +  invoiceData.total_amount,
+            balance: invoice.total_amount - invoiceData.total_amount - invoice.paid
         }
-        const updateInvoiceById: IInvoice = await this.Invoices.findByIdAndUpdate(InvoiceId,{
-            $set: {updateData}
-        });
+        console.log(updateData)
+        const updateInvoiceById: IInvoice = await this.Invoices.findOneAndUpdate({_id: InvoiceId},{
+            $set: updateData
+        },{new:true}).exec();
+        if(!updateInvoiceById) throw new HttpException(400, "Error updating invoice");
         const receivables = await this.Account.findByName("accounts-receivable")
+        console.log('UPDATE INVOICE', updateInvoiceById)
        const accountUpdate: PutAccountBalanceDto = {
            balance: receivables.balance - invoiceData.total_amount,
        }
-       console.log("account update", accountUpdate)
+       console.log('INVOICE DATA', invoiceData)
+       console.log("account update-----------------", accountUpdate)
        console.log("receievables balance", receivables.balance , invoiceData.total_amount);
        this.Account.updateBalance(receivables._id, accountUpdate);
        const jData = {
         account: receivables._id,
-        ref: invoiceData.ref,
-        debit: invoiceData.total_amount - invoiceData.paid,
-        credit: invoiceData.paid,
+        ref: invoiceData.number,
+        debit: 0,
+        credit: invoiceData.total_amount,
         description: '',
         date: new Date().toISOString()
        }

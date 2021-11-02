@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import {IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
+import {IsArray, IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IExpenseHead } from "../../interfaces/expense-head/expense-head.interface";
 
 /*
     - deprtmentId: ref
@@ -21,12 +22,15 @@ export class CreateBudgetDto {
   public endDate: string;
 
   @IsString()
-  @IsOptional()
-  public departmentId: string;
+  public type: string;
 
-  @IsString()
-  @IsOptional()
-  public projectId: string;
+//   @IsString()
+//   @IsOptional()
+//   public departmentId: string;
+
+//   @IsString()
+//   @IsOptional()
+//   public projectId: string;
 
   @IsString()
   @IsOptional()
@@ -37,7 +41,10 @@ export class CreateBudgetDto {
   public description: string;
 
   @IsNumber()
-  public budget: Number;
+  public flagAlert: Number;
+
+  @IsArray()
+  public expenseHeads: Array<IExpenseHead>;
 
 }
 
