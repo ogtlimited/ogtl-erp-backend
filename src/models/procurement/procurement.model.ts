@@ -25,6 +25,10 @@ const procurementSchema: Schema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Department"
     },
+    expenseHeadId: {
+      type: Schema.Types.ObjectId,
+      ref: "ExpenseHead"
+    },
     projectId: {
       type: Schema.Types.ObjectId,
       ref: "Project"

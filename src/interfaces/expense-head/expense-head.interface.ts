@@ -33,12 +33,10 @@ export interface IExpenseHead{
     amount: Number;
     availableBalance?: Number;
  }
- 
-// export  interface IExpenseHeadItems{
-//    title: String;
-//    amount: Number;
-//    departmentId?: String;
-//    projectId?: String;
-//    flagAlert?: Number;
-//    availableBalance?: Number;
-// }
+
+export  interface IExpenseHeadQuery{
+   departmentId?: String;
+   projectId?: String;
+   startDate?: Object;
+   endDate?: Object;
+}

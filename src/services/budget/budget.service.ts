@@ -11,18 +11,20 @@ import { ObjectId } from 'mongodb';
 import { officeQueryGenerator } from '@/utils/payrollUtil';
 import omit from 'lodash/omit'
 import expenseHeadModel from '@/models/expense-heads/expense-head.model';
+import { IExpenseHead, IExpenseHeadQuery } from "@interfaces/expense-head/expense-head.interface";
+import moment from "moment";
 
 class BudgetService {
   public budgetModel = budgetModel;
 
   public async findAll(query): Promise<IBudget[]> {
-    console.log(query);    
+    console.log(query);
     const officeQuery = officeQueryGenerator(query)
     officeQuery.deleted = false;
     const budgets: any = await this.budgetModel.find(officeQuery,{
         startDate:1,
-        endDate:1, 
-        budget:1, 
+        endDate:1,
+        budget:1,
         availableBalance:1,
         approved:1,
         active:1,
@@ -36,9 +38,9 @@ class BudgetService {
     let budget:IBudget = await this.budgetModel.findOne({_id: id, deleted: false},{
         startDate:1,
         endDate:1,
-        departmentId:1, 
-        projectId:1, 
-        budget:1, 
+        departmentId:1,
+        projectId:1,
+        budget:1,
         availableBalance:1,
         approved:1,
     })
@@ -52,10 +54,10 @@ class BudgetService {
   }
 
 
-  /* 
-  
+  /*
+
   - add budget validation based on type
-  
+
   */
   public async create(req, data: CreateBudgetDto): Promise<IBudget> {
     const newData: IBudget = data;
@@ -63,7 +65,7 @@ class BudgetService {
     //   startDate: new Date(newData.startDate),
     //   endDate: new Date(newData.endDate)
     // }
-    
+
     // if (data.projectId == null && data.departmentId == null) {
     //     throw  new HttpException(400, "please provide a department or project");
     // }
@@ -73,17 +75,17 @@ class BudgetService {
     //   existConstrutor.projectId = new ObjectId(newData.projectId)
     // }
     // console.log(newData);
-    
+
     const budgetExists = await budgetModel.exists(
       newData
     )
-    
+
     if (budgetExists) {
       throw  new HttpException(409, "budget already exists");
     }
 
     let budgetAmount = 0;
-    
+
     for (let index = 0; index < newData.expenseHeads.length; index++) {
       budgetAmount += Number(newData.expenseHeads[index].amount);
     }
@@ -97,11 +99,13 @@ class BudgetService {
       expenseHead.endDate = newData.endDate;
       expenseHead.createdBy = req.user._id;
       expenseHead.budgetId = newBudget._id;
+      // expenseHead.flagAlert = expenseHead.flagAlert;
       return expenseHead;
     })
+    console.log(expenseHeads);
     await expenseHeadModel.insertMany(expenseHeads)
     // console.log(expenseHeads);
-    newBudget = omit(newBudget.toObject(), ["createdBy", "deleted"]) 
+    newBudget = omit(newBudget.toObject(), ["createdBy", "deleted"])
     return newBudget;
   }
 
@@ -148,6 +152,14 @@ class BudgetService {
   public async deleteBudget(id): Promise<String> {
     await budgetModel.deleteOne({_id : id, approved: false, active:false})
     return 'budget deleted'
+  }
+
+  public async getCurrentExpenseHead(query: IExpenseHeadQuery): Promise<IExpenseHead[]>{
+    query.startDate = {$lte: moment().format('YYYY-MM-DD')}
+    query.endDate = {$gte:  moment().format('YYYY-MM-DD')}
+    console.log(query);
+    const expenseHeads = await  expenseHeadModel.find(query)
+    return  expenseHeads
   }
 
 
