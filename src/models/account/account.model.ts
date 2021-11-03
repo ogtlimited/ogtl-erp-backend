@@ -43,6 +43,10 @@ const accountchema: Schema = new mongoose.Schema(
         default: null,
         ref: 'Account'
     },
+    number_prefix: {
+      type: String,
+      required: function() { return this.is_group === true }
+    },
     ancestors: [{
         _id: {
            type: mongoose.Schema.Types.ObjectId,

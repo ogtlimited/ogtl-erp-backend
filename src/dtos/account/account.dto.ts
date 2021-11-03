@@ -32,6 +32,9 @@ export class AccountDto {
 
     @IsOptional()
     public parent: string;
+
+    @IsOptional()
+    public number_prefix: string;
   
 }
 
@@ -55,8 +58,7 @@ export class PutAccountDto {
     @IsOptional()
     @IsString()
     public currency: string;
-
-  
+    
 }
 
 export class PutAccountBalanceDto {
