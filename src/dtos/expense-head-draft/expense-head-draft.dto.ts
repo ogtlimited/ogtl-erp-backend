@@ -4,12 +4,19 @@
 import {IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateExpenseHeadDraftDto {
-
   @IsString()
   public title: string;
 
   @IsNumber()
   public flagAlert: Number;
+
+  @IsString()
+  @IsOptional()
+  public departmentId: string;
+
+  @IsString()
+  @IsOptional()
+  public projectId: string;
 
 }
 

@@ -17,7 +17,7 @@ class ExpenseHeadDraftService {
     console.log(query);
     const officeQuery = officeQueryGenerator(query)
     officeQuery.deleted = false;
-    const drafts = await this.expenseHeadDraftModel.find(officeQuery,{
+    const drafts: IExpenseHeadDraft[] = await this.expenseHeadDraftModel.find(officeQuery,{
       updatedBy:0,
     })
       .populate({
@@ -61,11 +61,11 @@ class ExpenseHeadDraftService {
 
   public async create(req, data: CreateExpenseHeadDraftDto): Promise<IExpenseHeadDraft> {
     try {
-      if (req.query.projectId == null && req.query.departmentId == null) {
+      if (req.body.projectId == null && req.body.departmentId == null) {
         throw  new HttpException(400, "please provide a department or project Id in the query params");
       }
       let officeExists;
-      const officeQuery = officeQueryGenerator(req.query)
+      const officeQuery = officeQueryGenerator(req.body)
       const newData: IExpenseHeadDraft = data;
       if (officeQuery.departmentId){
         officeExists = await departmentModel.exists({_id: officeQuery.departmentId});
