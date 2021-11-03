@@ -29,7 +29,7 @@ class ExpenseHeadDraftService {
         path:"departmentId",
         select:{
           _id:1,
-          title:1
+          department:1
         }
       });
     return drafts;
