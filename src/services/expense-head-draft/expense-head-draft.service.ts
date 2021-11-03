@@ -17,7 +17,7 @@ class ExpenseHeadDraftService {
     console.log(query);
     const officeQuery = officeQueryGenerator(query)
     officeQuery.deleted = false;
-    const drafts = await this.expenseHeadDraftModel.find(officeQuery,{
+    const drafts: IExpenseHeadDraft[] = await this.expenseHeadDraftModel.find(officeQuery,{
       updatedBy:0,
     })
       .populate({

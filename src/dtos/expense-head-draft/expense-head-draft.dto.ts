@@ -4,7 +4,6 @@
 import {IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateExpenseHeadDraftDto {
-
   @IsString()
   public title: string;
 
@@ -18,7 +17,6 @@ export class CreateExpenseHeadDraftDto {
   @IsString()
   @IsOptional()
   public projectId: string;
-
 
 }
 
