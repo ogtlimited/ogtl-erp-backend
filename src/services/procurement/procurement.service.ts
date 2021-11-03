@@ -10,27 +10,33 @@ import { officeQueryGenerator } from '@/utils/payrollUtil';
 import omit from 'lodash/omit'
 import budgetModel from '@/models/budget/budget.model';
 import moment from 'moment';
+import expenseHeadModel from "@models/expense-heads/expense-head.model";
+import exp from "constants";
 
+/* TODO: services
+*  expense head
+*
+*/
 class ProcurementService {
   public procurementModel = procurementModel;
 
   public async findAll(query): Promise<IProcurement[]> {
-    console.log(query);    
+    console.log(query);
     const officeQuery = officeQueryGenerator(query)
     officeQuery.deleted = false;
     const procurements = await this.procurementModel.find(officeQuery,{
         updatedBy:0,
     })
     .populate({
-      path:"projectId", 
+      path:"projectId",
       select:{
-        _id:0, 
+        _id:0,
         project_name:1
       }}).populate({
-        path:"departmentId", 
+        path:"departmentId",
         select:{
-          _id:0, 
-          department:1
+          _id:1,
+          title:1
       }
     });
     return procurements;
@@ -42,14 +48,14 @@ class ProcurementService {
         updatedBy:0
     })
     .populate({
-      path:"projectId", 
+      path:"projectId",
       select:{
-        _id:0, 
+        _id:0,
         project_name:1
       }}).populate({
-        path:"departmentId", 
+        path:"departmentId",
         select:{
-          _id:0, 
+          _id:0,
           department:1
       }
     });
@@ -71,26 +77,31 @@ class ProcurementService {
     }else{
       newData.projectId = req.query.projectId;
     }
-    // console.log(officeQuery);
+
     newData.createdBy = req.user._id
+    newData.expenseHeadId =  req.query.expenseHeadId
     officeQuery.approved = true
-    // new Date(startOfMonth)
-    officeQuery.startDate = {$gte: moment().startOf('year').format('YYYY-MM-DD')}
-    officeQuery.endDate = {$lte:  moment().endOf('year').format('YYYY-MM-DD')}
+    officeQuery._id = req.query.expenseHeadId
 
     newData.amount = Number(newData.unitCost) * Number(newData.productQuantity)
-    const officeBudget = await budgetModel.findOne(officeQuery)
+    const expenseHead = await  expenseHeadModel.findOne(officeQuery, {availableBalance: 1, flagAlert:1, amount:1, budgetId:1});
+    if(newData.amount > expenseHead.availableBalance){
+      throw new HttpException(401, "proposed procurement exceeds current expense head")
+    }
+    const newAvailableBalance = Number(expenseHead.availableBalance) - Number(newData.amount)
+    if(newAvailableBalance > Number(expenseHead.amount) * (Number(expenseHead.flagAlert)/100) ){
+      console.log("exceeding budget!")
+    }
+
+    const officeBudget = await budgetModel.findOne(expenseHead.budgetId)
     if (!officeBudget) {
       throw new HttpException(404, "no approved budget available.")
     }
-    console.log(officeBudget);
-    if (officeBudget.availableBalance < newData.amount) {
-      throw new HttpException(400, "request exceeds available budget")
-    }
 
-    await budgetModel.findByIdAndUpdate({_id: officeBudget._id}, {$set: {availableBalance: Number(officeBudget.availableBalance) - Number(newData.amount) }})
+     await budgetModel.findByIdAndUpdate({_id: officeBudget._id}, {$set: {availableBalance: Number(officeBudget.availableBalance) - Number(newData.amount) }})
+     await expenseHeadModel.findByIdAndUpdate({_id: officeQuery._id}, {$set: {availableBalance: newAvailableBalance }})
     let newprocurement  = await procurementModel.create(newData)
-    newprocurement = omit(newprocurement.toObject(), ["createdBy", "deleted"]) 
+    newprocurement = omit(newprocurement.toObject(), ["createdBy", "deleted"])
 
     return newprocurement;
   }
