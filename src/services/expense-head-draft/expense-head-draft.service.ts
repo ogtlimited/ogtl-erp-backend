@@ -8,7 +8,7 @@ import projectModel from '@/models/project/project.model';
 import { officeQueryGenerator } from '@/utils/payrollUtil';
 import omit from 'lodash/omit'
 import expenseHeadDraftModel from "@models/expense-heads/expense-head.model";
-import { duplicateErrorMessageFormatter } from "../../../dist/utils/mongoDbErrorFormatter";
+import { duplicateErrorMessageFormatter } from "../../utils/mongoDbErrorFormatter";
 
 class ExpenseHeadDraftService {
   public expenseHeadDraftModel = expenseHeadDraftModel;
