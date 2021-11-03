@@ -49,6 +49,31 @@ const importAccountTypes = async () => {
   }
 };
 
+const addNumber = (slug) => {
+  let number_prefix;
+  switch (slug) {
+    case 'accounts-receivable':
+      number_prefix = "1"
+      break;
+    case 'cash-in-hand':
+      number_prefix = "2"
+      break;
+    case 'current-asset':
+      number_prefix = "3"
+      break;
+    case 'fixed-asset':
+      number_prefix = "4"
+      break;
+    case 'account-payable':
+      number_prefix = "5"
+      break;
+    default:
+      number_prefix = "0"
+  }
+
+  return number_prefix
+}
+
 const getLeafNodes = (nodes, result = [], parent = null, parent_data = {}) => {
   for(let i = 0, length = nodes.length; i < length; i++){
     const newAccount = new AccountModel(nodes[i])
@@ -57,8 +82,13 @@ const getLeafNodes = (nodes, result = [], parent = null, parent_data = {}) => {
       const slug = slugify(nodes[i]["account_name"])
       nodes[i]["slug"] = slug
       nodes[i]["ancestors"] = ances
+      
       const noChildAccount = new AccountModel(nodes[i])
       noChildAccount["parent"] = parent
+      noChildAccount.number_prefix = addNumber(slug)
+      if(nodes[i]["account_number"]){
+        noChildAccount["account_number"] = addNumber(nodes[i]["ancestors"][0].slug) + nodes[i]["account_number"]
+      }
       result.push(noChildAccount);
     }else{
       
@@ -71,7 +101,13 @@ const getLeafNodes = (nodes, result = [], parent = null, parent_data = {}) => {
       obj["slug"] = slug
       obj["ancestors"] = ancest
       const childAccount = new AccountModel(obj)
+      childAccount.number_prefix = addNumber(slug)
+      if(nodes[i]["account_number"]){
+        childAccount["account_number"] = addNumber(obj["ancestors"][0].slug) + nodes[i]["account_number"]
+      }
+      
       result.push(childAccount);
+
       result = getLeafNodes(nodes[i].child, result, childAccount._id, childAccount);
     }
   }
@@ -83,7 +119,7 @@ const importAccount = async (account) => {
     const result = getLeafNodes(account);
     await AccountModel.deleteMany();
     await AccountModel.insertMany(result); 
-    //console.log(result);
+    
     process.exit(0);
   } catch (error) {
     console.log("Account not imported", error.message);
@@ -96,9 +132,9 @@ const buildAncestors = (node) => {
   const ancest = [];
   try {
       if( node ) {
-          const { _id, account_name, slug } = node;
+          const { _id, account_name, slug, number_prefix } = node;
           const ancest = [...node.ancestors];
-          ancest.unshift({ _id, account_name, slug })
+          ancest.unshift({ _id, account_name, slug, number_prefix })
           return ancest
       }
   } catch (err) {
