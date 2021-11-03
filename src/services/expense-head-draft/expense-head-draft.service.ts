@@ -61,11 +61,11 @@ class ExpenseHeadDraftService {
 
   public async create(req, data: CreateExpenseHeadDraftDto): Promise<IExpenseHeadDraft> {
     try {
-      if (req.query.projectId == null && req.query.departmentId == null) {
+      if (req.body.projectId == null && req.body.departmentId == null) {
         throw  new HttpException(400, "please provide a department or project Id in the query params");
       }
       let officeExists;
-      const officeQuery = officeQueryGenerator(req.query)
+      const officeQuery = officeQueryGenerator(req.body)
       const newData: IExpenseHeadDraft = data;
       if (officeQuery.departmentId){
         officeExists = await departmentModel.exists({_id: officeQuery.departmentId});
@@ -78,7 +78,7 @@ class ExpenseHeadDraftService {
       if(!officeExists){
         throw  new HttpException(404, "unable to find office")
       }
-
+      console.log('REQ ',req.body);
       newData.createdBy = req.user._id
       let newdraft  = await expenseHeadDraftModel.create(newData)
       newdraft = omit(newdraft.toObject(), ["createdBy", "deleted"])

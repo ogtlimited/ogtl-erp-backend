@@ -11,6 +11,15 @@ export class CreateExpenseHeadDraftDto {
   @IsNumber()
   public flagAlert: Number;
 
+  @IsString()
+  @IsOptional()
+  public departmentId: string;
+
+  @IsString()
+  @IsOptional()
+  public projectId: string;
+
+
 }
 
 export class UpdateExpenseHeadDraftDto {
