@@ -42,7 +42,7 @@ class EmployeesController {
     try {
       console.log(req.body)
       const EmployeeData: CreateMultipleEmployeeDto = req.body;
-      const createEmployeeData: Employee[] = await this.EmployeeService.createMultipleEmployee(EmployeeData);
+      const createEmployeeData = await this.EmployeeService.createMultipleEmployee(EmployeeData);
 
       res.status(201).json({ data: createEmployeeData, message: 'created' });
     } catch (error) {

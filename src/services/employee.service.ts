@@ -41,7 +41,7 @@ class EmployeeService {
 
     return createEmployeeData;
   }
-  public async createMultipleEmployee(EmployeeData: []): Promise<any> {
+  public async createMultipleEmployee(EmployeeData: any): Promise<any> {
     if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
 
     // const findEmployee: Employee = await this.Employees.findOne({ email: EmployeeData.company_email });
