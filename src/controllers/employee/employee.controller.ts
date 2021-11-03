@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { NextFunction, Request, Response } from 'express';
-import { CreateEmployeeDto,UpdateEmployeeDto } from '@dtos/employee/employee.dto';
+import { CreateEmployeeDto,UpdateEmployeeDto, CreateMultipleEmployeeDto } from '@dtos/employee/employee.dto';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
 import EmployeeService from '@services/employee.service';
 
@@ -32,6 +32,17 @@ class EmployeesController {
     try {
       const EmployeeData: CreateEmployeeDto = req.body;
       const createEmployeeData: Employee = await this.EmployeeService.createEmployee(EmployeeData);
+
+      res.status(201).json({ data: createEmployeeData, message: 'created' });
+    } catch (error) {
+      next(error);
+    }
+  };
+  public createMultipleEmployee = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      console.log(req.body)
+      const EmployeeData: CreateMultipleEmployeeDto = req.body;
+      const createEmployeeData: Employee[] = await this.EmployeeService.createMultipleEmployee(EmployeeData);
 
       res.status(201).json({ data: createEmployeeData, message: 'created' });
     } catch (error) {

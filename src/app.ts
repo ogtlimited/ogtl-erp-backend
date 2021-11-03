@@ -101,7 +101,7 @@ class App {
   }
 
   private connectToDatabase() {
-    console.log(process.env.databaseUrl);
+    console.log("MONGODB Connection string ----------------",process.env.databaseUrl);
     if (this.env !== 'production') {
       set('debug', true);
     }

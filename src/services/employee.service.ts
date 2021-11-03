@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import bcrypt from 'bcrypt';
 
-import { CreateEmployeeDto, UpdateEmployeeDto, UpdateEmployeePermissionDto } from '@dtos/employee/employee.dto';
+import { CreateEmployeeDto, UpdateEmployeeDto, UpdateEmployeePermissionDto, CreateMultipleEmployeeDto } from '@dtos/employee/employee.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
 import EmployeeModel from '@models/employee/employee.model';
@@ -38,6 +38,28 @@ class EmployeeService {
     }
 
     const createEmployeeData: Employee = await this.Employees.create({ ...EmployeeData, password: hashedPassword, ogid: newOgid });
+
+    return createEmployeeData;
+  }
+  public async createMultipleEmployee(EmployeeData: []): Promise<any> {
+    if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
+
+    // const findEmployee: Employee = await this.Employees.findOne({ email: EmployeeData.company_email });
+    // if (findEmployee) throw new HttpException(409, `Your email ${EmployeeData.company_email} already exists`);
+    console.log(EmployeeData)
+    const randomstring = Math.random().toString(36).slice(2);
+    const hashedPassword = await bcrypt.hash(randomstring, 10);
+    const newOgid = this.generateOGID();
+    // if(!EmployeeData.department){
+    //   EmployeeData.department = null;
+    // }
+    const formatted = EmployeeData.map((e: any )=> ({
+      ...e,
+      isAdmin: e.isAdmin === 'true' ? true: false,
+      ogid: this.generateOGID()
+    }))
+
+    const createEmployeeData = await this.Employees.insertMany(formatted);
 
     return createEmployeeData;
   }
