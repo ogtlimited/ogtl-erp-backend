@@ -40,6 +40,7 @@ class App {
     this.app = express();
     this.port = process.env.PORT || 3000;
     this.env = process.env.NODE_ENV || 'development';
+    
 
     this.connectToDatabase();
     this.initializeMiddlewares();
@@ -101,7 +102,6 @@ class App {
   }
 
   private connectToDatabase() {
-    console.log("MONGODB Connection string ----------------",process.env.databaseUrl);
     if (this.env !== 'production') {
       set('debug', true);
     }
