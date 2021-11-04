@@ -110,7 +110,7 @@ class App {
 
   private initializeMiddlewares() {
     this.app.use(morgan(config.get('log.format'), { stream }));
-    const allowedOrigins = ['https://erp-api.outsourceglobal.com/api/login', 'https://erp.outsourceglobal.com'];
+    const allowedOrigins = ['https://erp.outsourceglobal.com'];
     const options: cors.CorsOptions = {
       origin: allowedOrigins
     };
