@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import {model,Schema,Document} from "mongoose"
 import { IJobApplicant } from '@interfaces/recruitment/job_applicant.interface';
+import NotificationHelper from '@utils/helper/notification.helper';
 
 const jobApplicantSchema: Schema = new Schema({
   first_name: {
@@ -46,6 +47,22 @@ const jobApplicantSchema: Schema = new Schema({
     default: null
   }
 })
+
+jobApplicantSchema.post('save', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "SAVE").exec()
+});
+jobApplicantSchema.post('update', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "UPDATE").exec()
+});
+jobApplicantSchema.post('delete', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "DELETE").exec()
+});
 
 const jobApplicantModel = model<IJobApplicant & Document>('JobApplicant',jobApplicantSchema)
 

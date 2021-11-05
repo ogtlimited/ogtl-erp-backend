@@ -1,5 +1,6 @@
 import { model, Schema, Document } from 'mongoose';
 import { IVendor } from '@interfaces/vendor-interface/vendor-interface';
+import NotificationHelper from '@utils/helper/notification.helper';
 
 const vendorSchema: Schema = new Schema({
   fullName: {
@@ -39,7 +40,21 @@ const vendorSchema: Schema = new Schema({
     required: true,
   },
 });
-
+vendorSchema.post('save', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "SAVE").exec()
+});
+vendorSchema.post('update', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "UPDATE").exec()
+});
+vendorSchema.post('delete', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "DELETE").exec()
+});
 const vendorModel = model<IVendor & Document>('Vendor', vendorSchema);
 
 export default vendorModel;
