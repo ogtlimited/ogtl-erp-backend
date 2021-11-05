@@ -18,13 +18,12 @@ const exitSchema: Schema = new Schema(
           type: Date,
           required:true,
         },
-    
         reason_for_resignation: {
           type: String,
           required:true,
-          
+
         },
-       
+
     },
 
     {

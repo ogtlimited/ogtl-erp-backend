@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Router } from 'express';
 import { Routes } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
@@ -21,6 +22,11 @@ class ContactDetailsRoute implements Routes {
       `${this.path}`,
       [validationMiddleware(CreateContactDetailsDto, 'body'), authMiddleware],
       this.ContactDetailsController.CreateContactDetails,
+    );
+    this.router.post(
+      `${this.path}/bulk-upload`,
+      [authMiddleware],
+      this.ContactDetailsController.CreateBulkContactDetails,
     );
     this.router.put(
       `${this.path}/:id`,

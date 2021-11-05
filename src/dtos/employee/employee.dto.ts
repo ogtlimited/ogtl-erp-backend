@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import { IsEmail, IsString, IsBoolean, IsNumber, IsOptional } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsEmail, IsString, IsBoolean, IsNumber, IsOptional, ValidateNested } from 'class-validator';
 
 export class CreateEmployeeDto {
 
@@ -34,6 +35,7 @@ export class CreateEmployeeDto {
   @IsString()
   public gender: string;
 
+  @IsOptional()
   @IsString()
   public image: string;
 
@@ -62,7 +64,11 @@ export class CreateEmployeeDto {
 
 
 }
+export class CreateMultipleEmployeeDto {
 
+
+  employees: CreateEmployeeDto[];
+}
 export class UpdateEmployeeDto {
 
   @IsEmail()
