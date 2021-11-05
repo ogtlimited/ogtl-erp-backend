@@ -1,33 +1,20 @@
 /* eslint-disable prettier/prettier */
 // import { IAttendance } from '@interfaces/attendance-interface/attendance-interface';
-
-import { IProcurement } from '@/interfaces/procurement/procurement.interface';
+import { IExpenseHead } from '@/interfaces/expense-head/expense-head.interface';
 import { model, Schema } from 'mongoose';
 
-const procurementSchema: Schema = new Schema(
+const expenseHeadDraftSchema: Schema = new Schema(
   {
-    productQuantity: {
-      type: Number,
-      required: true,
+    flagAlert: {
+      type: Number
     },
-    unitCost: {
-      type: Number,
-      required: true,
-    },
-    amount: {
-      type: Number,
-      required: true,
-    },
-    productName: {
+    title: {
       type: String,
+      unique:true
     },
     departmentId: {
       type: Schema.Types.ObjectId,
       ref: "Department"
-    },
-    expenseHeadId: {
-      type: Schema.Types.ObjectId,
-      ref: "ExpenseHead"
     },
     projectId: {
       type: Schema.Types.ObjectId,
@@ -45,14 +32,6 @@ const procurementSchema: Schema = new Schema(
       type: Boolean,
       default: false
     },
-    actedOn:{
-      type: Boolean,
-      default: false
-    },
-    Status:{
-      type: String,
-      enum: ['pending', 'rejected', 'approved']
-    },
     deleted:{
       type: Boolean,
       default: false
@@ -63,5 +42,5 @@ const procurementSchema: Schema = new Schema(
   },
 );
 
-const procurementModel = model<IProcurement & Document>('Procurement', procurementSchema);
-export default procurementModel;
+const expenseHeadDraftModel = model<IExpenseHead & Document>('ExpenseHeadDraft', expenseHeadDraftSchema);
+export default expenseHeadDraftModel;

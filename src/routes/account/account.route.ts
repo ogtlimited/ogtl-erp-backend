@@ -23,7 +23,7 @@ class AccountRoute implements Routes {
     this.router.get(`${this.path}/descendants/:accountId`, authMiddleware, this.account.getdescendants);
     this.router.put(`${this.path}/update-ancestory/:accountId`, authMiddleware, this.account.updateAncestory);
     this.router.post(`${this.path}`, [validationMiddleware(AccountDto, 'body'), authMiddleware], this.account.createaccount);
-    this.router.put(`${this.path}/:accountId`, authMiddleware, validationMiddleware(PutAccountDto, 'body'), this.account.updateaccount);
+    this.router.patch(`${this.path}/:accountId`, authMiddleware, validationMiddleware(PutAccountDto, 'body'), this.account.updateaccount);
     this.router.delete(`${this.path}/:accountId`, authMiddleware, this.account.deleteaccount);
   }
 }

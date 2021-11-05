@@ -27,20 +27,24 @@ class NotificationHelper {
             const message = findNotification.message
             const receiver = findNotification.receiver_role
             this.sendEmail(subject, message, receiver)
-            this.queueMessage(receiver, message)
+            this.queueMessage(receiver, message, this.modelName)
         }
     }
 
-    public queueMessage(receiver: string[], message: string)
+    public queueMessage(receiver: string[], message: string, model: string)
     {
         for(let i=0; i<receiver.length; i++){
             client.exists(receiver[i], function(err, reply) {
+                let obj = {}
+                obj["message"] = message
+                obj["module"] = model
+                obj["date"] = new Date()
                 if (reply === 1) {
-                    client.lpush(receiver[i], message, (err, reply) => {
+                    client.lpush(receiver[i], JSON.stringify(obj), (err, reply) => {
                         console.log(reply)
                     })
                 } else {
-                    client.lpush(receiver[i], [message], (err, reply) => {
+                    client.lpush(receiver[i], [JSON.stringify(obj)], (err, reply) => {
                         console.log(reply)
                     })
                 }

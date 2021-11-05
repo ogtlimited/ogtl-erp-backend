@@ -12,16 +12,23 @@ const budgetSchema: Schema = new Schema(
     availableBalance: {
       type: Number,
     },
-    departmentId: {
-      type: Schema.Types.ObjectId,
-      ref: "Department"
+    type: {
+      type: String,
+      enum: ["quarterly", "monthly", "yearly"]
     },
-    projectId: {
-      type: Schema.Types.ObjectId,
-      ref: "Project"
-    },
+    // departmentId: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "Department"
+    // },
+    // projectId: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "Project"
+    // },
     startDate: {
       type: Date
+    },
+    flagAlert: {
+      type: Number
     },
     endDate: {
       type: Date
@@ -35,6 +42,10 @@ const budgetSchema: Schema = new Schema(
         ref: "Employee"
     },
     approved:{
+      type: Boolean,
+      default: false
+    },
+    active:{
       type: Boolean,
       default: false
     },

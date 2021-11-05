@@ -1,12 +1,17 @@
+/* eslint-disable prettier/prettier */
 import { NextFunction, Request, Response } from 'express';
 import { CreatePersonalDetailsDto,UpdatePersonalDetailsDto } from '@/dtos/employee/personal-details.dto';
 import { PersonalDetail } from '@/interfaces/employee-interface/personal-details.interface';
 import PersonalDetailsService from '@/services/employee/personal-details.service';
+import EmployeeModel from '@/models/employee/employee.model';
+import { Employee } from '@/interfaces/employee-interface/employee.interface';
+import PersonalDetailsModel  from '@models/employee/personal-details.model';
 
 
 class PersonalDetailsController{
     public PersonalDetailsService = new PersonalDetailsService();
-
+    public Employees =  EmployeeModel
+    public pModel =  PersonalDetailsModel
     //Returns all Personal Details
 
     public getPersonalDetails = async  (req: Request, res: Response, next: NextFunction) => {
@@ -28,6 +33,25 @@ class PersonalDetailsController{
         const PersonalDetailsData: CreatePersonalDetailsDto = req.body;
         const createPersonalDetailsData: PersonalDetail = await this.PersonalDetailsService.createPersonalDetails(PersonalDetailsData);
         res.status(201).json({ data: createPersonalDetailsData, message: 'PersonalDetails succesfully created' });
+    }
+    catch(error){
+     next(error);
+    }
+   };
+
+   public CreateBulkPersonalDetails = async  (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const personalDetailsData = req.body;
+        const newArray = []
+        for (let index = 0; index < personalDetailsData.length; index++) {
+            const findEmployee: Employee = await this.Employees.findOne({ company_email: personalDetailsData[index].company_email }, {_id: 1});
+            newArray.push({
+                ...personalDetailsData[index],
+                employee_id: findEmployee._id
+            })
+        }
+        const results = await this.pModel.insertMany(newArray)
+        res.status(201).json({ data: results, message: 'ContactDetails succesfully created' });
     }
     catch(error){
      next(error);
