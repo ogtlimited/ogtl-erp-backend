@@ -26,7 +26,7 @@ class NotificationHelper {
             const subject = findNotification.subject
             const message = findNotification.message
             const receiver = findNotification.receiver_role
-            //this.sendEmail(subject, message, receiver)
+            this.sendEmail(subject, message, receiver)
             this.queueMessage(receiver, message, this.modelName)
         }
     }
