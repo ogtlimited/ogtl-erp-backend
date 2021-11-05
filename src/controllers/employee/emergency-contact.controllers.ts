@@ -62,7 +62,7 @@ class EmergencyContactController{
    public getEmergencyContactById = async  (req: Request, res: Response, next: NextFunction) => {
     try{
        const EmergencyContactsId: string = req.params.id;
-       const findOneEmergencyContactsData: EmergencyContact = await this.EmergencyContactService.findEmergencyContactById(EmergencyContactsId);
+       const findOneEmergencyContactsData: EmergencyContact[] = await this.EmergencyContactService.findEmergencyContactById(EmergencyContactsId);
        res.status(200).json({data:findOneEmergencyContactsData, message:"All EmergencyContacts"});
     }
     catch(error){
