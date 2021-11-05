@@ -1,12 +1,17 @@
+/* eslint-disable prettier/prettier */
 import { NextFunction, Request, Response } from 'express';
 import { CreateSalaryDetailsDto,UpdateSalaryDetailsDto } from '@/dtos/employee/salary-details.dto';
 import { SalaryDetail } from '@/interfaces/employee-interface/salary-details.interface';
 import SalaryDetailsService from '@/services/employee/salary-details.service';
+import { Employee } from '@/interfaces/employee-interface/employee.interface';
+import EmployeeModel from '@/models/employee/employee.model';
+import  SalaryDetailsModel  from '@models/employee/salary-details.model';
 
 
 class SalaryDetailsController{
     public SalaryDetailsService = new SalaryDetailsService();
-
+    public Employees =  EmployeeModel
+    public sModel =  SalaryDetailsModel
     //Returns all Salary Details
 
     public getSalaryDetails = async  (req: Request, res: Response, next: NextFunction) => {
@@ -28,6 +33,25 @@ class SalaryDetailsController{
         const SalaryDetailsData: CreateSalaryDetailsDto = req.body;
         const createSalaryDetailsData: SalaryDetail = await this.SalaryDetailsService.createSalaryDetails(SalaryDetailsData);
         res.status(201).json({ data: createSalaryDetailsData, message: 'SalaryDetails succesfully created' });
+    }
+    catch(error){
+     next(error);
+    }
+   };
+
+   public CreateBulkCreateSalaryDetails = async  (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const salaryDetailsData = req.body;
+        const newArray = []
+        for (let index = 0; index < salaryDetailsData.length; index++) {
+            const findEmployee: Employee = await this.Employees.findOne({ company_email: salaryDetailsData[index].company_email }, {_id: 1});
+            newArray.push({
+                ...salaryDetailsData[index],
+                employee_id: findEmployee._id
+            })
+        }
+        const results = await this.sModel.insertMany(newArray)
+        res.status(201).json({ data: results, message: 'ContactDetails succesfully created' });
     }
     catch(error){
      next(error);

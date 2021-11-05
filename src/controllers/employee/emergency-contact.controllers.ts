@@ -3,9 +3,14 @@ import { NextFunction, Request, Response } from 'express';
 import { CreateEmergencyContactDto,UpdateEmergencyContactDto } from '@/dtos/employee/emergency-contact.dto';
 import { EmergencyContact } from '@/interfaces/employee-interface/emergency-contact.interface';
 import EmergencyContactService from '@/services/employee/emergency-contact.service';
+import EmployeeModel from '@/models/employee/employee.model';
+import  EmergencyContactModel  from '@models/employee/emergency-contact.model';
+import { Employee } from '@/interfaces/employee-interface/employee.interface';
 
 class EmergencyContactController{
    public EmergencyContactService = new EmergencyContactService();
+   public Employees =  EmployeeModel
+   public eModel =  EmergencyContactModel
 
   //Return all Emergency Contacts
 
@@ -31,7 +36,26 @@ class EmergencyContactController{
         catch(error){
          next(error);
         }
-       };
+    };
+
+    public CreateBulkEmergencyContacts = async  (req: Request, res: Response, next: NextFunction) => {
+        try{
+            const EmergencyContactsData = req.body;
+            const newArray = []
+            for (let index = 0; index < EmergencyContactsData.length; index++) {
+                const findEmployee: Employee = await this.Employees.findOne({ company_email: EmergencyContactsData[index].company_email }, {_id: 1});
+                newArray.push({
+                    ...EmergencyContactsData[index],
+                    employee_id: findEmployee._id
+                })
+            }
+            const results = await this.eModel.insertMany(newArray)
+            res.status(201).json({ data: results, message: 'ContactDetails succesfully created' });
+        }
+        catch(error){
+         next(error);
+        }
+    };
 
 
     // Get Emergency Details with Given Id
