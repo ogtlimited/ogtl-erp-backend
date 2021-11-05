@@ -76,7 +76,7 @@ class App {
           socket.on('disconnect', (data) => {
               console.log('Client disconnected')
           })
-
+        
       })
   }
 
@@ -101,7 +101,6 @@ class App {
   }
 
   private connectToDatabase() {
-    console.log(process.env.databaseUrl);
     if (this.env !== 'production') {
       set('debug', true);
     }
@@ -209,7 +208,7 @@ class App {
       const attendanceService = new AttendanceTypeService()
       await attendanceService.generateAttendance()
     //   console.log('running task 1am every day');
-    //   const day = "saturday"
+    //   const day = "saturday" 
     //   if (day == "saturday" || day == "sunday") {
     //     console.log("skipping today")
     //   }else{
