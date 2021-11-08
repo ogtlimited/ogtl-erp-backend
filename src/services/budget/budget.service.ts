@@ -28,6 +28,7 @@ class BudgetService {
         availableBalance:1,
         approved:1,
         active:1,
+        title:1,
     })
     return budgets;
   }
