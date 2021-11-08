@@ -11,6 +11,11 @@ const billsSchema: Schema = new Schema({
   ref: {
     type: String,
   },
+  account: {
+    type: Schema.Types.ObjectId,
+    ref: "Account",
+    required: true
+  },
   bill_date: {
     type: Date,
     default: new Date(),

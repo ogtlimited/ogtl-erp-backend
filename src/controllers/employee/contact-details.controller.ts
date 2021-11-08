@@ -1,11 +1,18 @@
+/* eslint-disable prettier/prettier */
 import { NextFunction, Request, Response } from 'express';
 import { CreateContactDetailsDto,UpdateContactDetailsDto } from '@/dtos/employee/contact-details.dto';
 import { ContactDetail } from '@/interfaces/employee-interface/contact-details.interface';
 import ContactDetailsService from '@/services/employee/contact-details.service';
+import EmployeeService from '@/services/employee.service';
+import  EmployeeModel  from '@models/employee/employee.model';
+import { Employee } from '@/interfaces/employee-interface/employee.interface';
+import  ContactDetailsModel  from '@models/employee/contact-details.model';
 
 
 class ContactDetailsController{
     public ContactDetailsService = new ContactDetailsService();
+    public Employees =  EmployeeModel
+    public cModel =    ContactDetailsModel
 
     //Returns all Contact Details
 
@@ -28,6 +35,25 @@ class ContactDetailsController{
         const ContactDetailsData: CreateContactDetailsDto = req.body;
         const createContactDetailsData: ContactDetail = await this.ContactDetailsService.createContactDetails(ContactDetailsData);
         res.status(201).json({ data: createContactDetailsData, message: 'ContactDetails succesfully created' });
+    }
+    catch(error){
+     next(error);
+    }
+   };
+
+   public CreateBulkContactDetails = async  (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const ContactDetailsData = req.body;
+        const newArray = []
+        for (let index = 0; index < ContactDetailsData.length; index++) {
+            const findEmployee: Employee = await this.Employees.findOne({ company_email: ContactDetailsData[index].company_email }, {_id: 1});
+            newArray.push({
+                ...ContactDetailsData[index],
+                employee_id: findEmployee._id
+            })
+        }
+        const results = await this.cModel.insertMany(newArray)
+        res.status(201).json({ data: results, message: 'ContactDetails succesfully created' });
     }
     catch(error){
      next(error);

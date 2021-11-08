@@ -45,6 +45,14 @@ class AccountService {
         Payload.is_default = false
         const new_account = new this.account(Payload)
         try {
+            const findaccount = await this.findOne(Payload.parent);
+            if(findaccount){
+                console.log("$$$$$$$$$$$$$$$$$$$$$$$", findaccount)
+                let number = this.addNumber(findaccount.slug)
+                new_account.account_number = number + new_account.account_number
+                console.log(number)
+            }
+           
             const newaccount: IAccount = await new_account.save();
             this.buildAncestors(new_account._id, new_account.parent)
             return newaccount;
@@ -107,12 +115,14 @@ class AccountService {
         ])
 
         return tree
-    } 
+    }
 
     private async findOne(id: string): Promise<IAccount> {
         const findAccount: IAccount = await this.account.findOne({ _id: id })
         .select({
-            "_id": true, 
+            "_id": true,
+            "balance": true,
+            "slug": true,
             "account_name": true,
             "ancestors.slug": true,
             "ancestors.account_name": true }).exec();
@@ -122,7 +132,7 @@ class AccountService {
     private async findAccountByName(name: string): Promise<IAccount> {
         const findAccount: IAccount = await this.account.findOne({ slug: name })
         .select({
-            "_id": true, 
+            "_id": true,
             "account_name": true,
             "balance": true,
             "ancestors.slug": true,
@@ -156,11 +166,37 @@ class AccountService {
         if( id && parent_id )
             this.buildAncestors(id, parent_id)
             const result = await this.account.find({ 'parent': id }).exec();
-        
+
         if(result)
         result.forEach((doc) => {
             this.buildHierarchyAncestors(doc._id, id) } )
     }
+
+    private addNumber (slug) {
+        
+        let number_prefix;
+        switch (slug) {
+          case 'accounts-receivable':
+            number_prefix = "1"
+            break;
+          case 'cash-in-hand':
+            number_prefix = "2"
+            break;
+          case 'current-asset':
+            number_prefix = "3"
+            break;
+          case 'fixed-asset':
+            number_prefix = "4"
+            break;
+          case 'account-payable':
+            number_prefix = "5"
+            break;
+          default:
+            number_prefix = "0"
+        }
+      
+        return number_prefix
+    } 
 }
 
 export default AccountService;

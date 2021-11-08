@@ -40,6 +40,7 @@ class App {
     this.app = express();
     this.port = process.env.PORT || 3000;
     this.env = process.env.NODE_ENV || 'development';
+    
 
     this.connectToDatabase();
     this.initializeMiddlewares();
@@ -76,7 +77,7 @@ class App {
           socket.on('disconnect', (data) => {
               console.log('Client disconnected')
           })
-
+        
       })
   }
 
@@ -101,7 +102,6 @@ class App {
   }
 
   private connectToDatabase() {
-    console.log(process.env.databaseUrl);
     if (this.env !== 'production') {
       set('debug', true);
     }
@@ -110,7 +110,12 @@ class App {
 
   private initializeMiddlewares() {
     this.app.use(morgan(config.get('log.format'), { stream }));
-    this.app.use(cors({ origin: config.get('cors.origin'), credentials: config.get('cors.credentials') }));
+    const allowedOrigins = ['https://erp.outsourceglobal.com', 'http://localhost:3001'];
+    const options: cors.CorsOptions = {
+      origin: allowedOrigins
+    };
+    this.app.use(cors(options))
+    // this.app.use(cors({ origin: config.get('cors.origin'), credentials: config.get('cors.credentials') }));
     this.app.use(hpp());
     this.app.use(helmet());
     this.app.use(compression());
@@ -209,7 +214,7 @@ class App {
       const attendanceService = new AttendanceTypeService()
       await attendanceService.generateAttendance()
     //   console.log('running task 1am every day');
-    //   const day = "saturday"
+    //   const day = "saturday" 
     //   if (day == "saturday" || day == "sunday") {
     //     console.log("skipping today")
     //   }else{

@@ -78,7 +78,7 @@ class ExpenseHeadDraftService {
       if(!officeExists){
         throw  new HttpException(404, "unable to find office")
       }
-
+      console.log('REQ ',req.body);
       newData.createdBy = req.user._id
       let newdraft  = await expenseHeadDraftModel.create(newData)
       newdraft = omit(newdraft.toObject(), ["createdBy", "deleted"])

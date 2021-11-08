@@ -5,6 +5,9 @@ export class CreateBillsDto {
   @IsString()
   public vendor: string;
 
+  @IsString()
+  public account: string;
+
   @IsOptional()
   @IsDateString()
   public bill_date: string;
@@ -31,6 +34,9 @@ export class CreateBillsDto {
 export class UpdateBillsDto {
   @IsString()
   public _id: string;
+
+  @IsString()
+  public account: string;
 
   @IsString()
   public vendor: string;

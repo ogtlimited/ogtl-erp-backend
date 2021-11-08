@@ -28,9 +28,9 @@ class AuthService {
   public async login(EmployeeData: EmployeeLoginDto): Promise<{ token: any; employee: Employee }> {
     if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
     const employee: Employee =  await this.Employees.findOne({ company_email: EmployeeData.company_email }).populate('department designation default_shift projectId');
-
+    console.log('AUTH SERVICE', employee)
     if (!employee) throw new HttpException(409, `This ogid ${EmployeeData.company_email} does not exist`);
-    console.log(employee)
+    console.log('AUTH SERVICE',employee)
     // const isPasswordMatching: boolean = await bcrypt.compare(EmployeeData.password, employee.password);
 
     // if (!isPasswordMatching) throw new HttpException(409, "You're password not matching");

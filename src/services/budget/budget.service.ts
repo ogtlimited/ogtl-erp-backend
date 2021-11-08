@@ -28,7 +28,7 @@ class BudgetService {
         availableBalance:1,
         approved:1,
         active:1,
-        title: 1,
+        title:1,
     })
     // budgets - budgets.toObject()
     return budgets;
