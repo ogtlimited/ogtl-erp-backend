@@ -1,32 +1,39 @@
 /* eslint-disable prettier/prettier */
 // import { IAttendance } from '@interfaces/attendance-interface/attendance-interface';
-import { IExpenseHead } from '@/interfaces/expense-head/expense-head.interface';
+// import { IExpenseHead } from '@/interfaces/expense-head/expense-head.interface';
 import { model, Schema } from 'mongoose';
+import { IExpenseHead } from '@/interfaces/expense-head/expense-head.interface';
 
-const expenseHeadDraftSchema: Schema = new Schema(
+const expenseHeadSchema: Schema = new Schema(
   {
-    flagAlert: {
-      type: Number
-    },
-    title: {
-      type: String,
-      unique:true
-    },
-    departmentId: {
+    expenseHeadDraftId: {
       type: Schema.Types.ObjectId,
-      ref: "Department"
+      required: true,
+      ref: "ExpenseHeadDraft"
     },
-    projectId: {
+    budgetId: {
       type: Schema.Types.ObjectId,
-      ref: "Project"
+      ref: "Budget"
+    },
+    availableBalance: {
+      type: Number,
+    },
+    amount: {
+      type: Number,
+    },
+    startDate: {
+      type: Date
+    },
+    endDate: {
+      type: Date
     },
     createdBy:{
-        type: Schema.Types.ObjectId,
-        ref: "Employee"
+      type: Schema.Types.ObjectId,
+      ref: "Employee"
     },
     updatedBy:{
-        type: Schema.Types.ObjectId,
-        ref: "Employee"
+      type: Schema.Types.ObjectId,
+      ref: "Employee"
     },
     approved:{
       type: Boolean,
@@ -42,5 +49,5 @@ const expenseHeadDraftSchema: Schema = new Schema(
   },
 );
 
-const expenseHeadDraftModel = model<IExpenseHead & Document>('ExpenseHeadDraft', expenseHeadDraftSchema);
-export default expenseHeadDraftModel;
+const expenseHeadModel = model<IExpenseHead & Document>('ExpenseHead', expenseHeadSchema);
+export default expenseHeadModel;

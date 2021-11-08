@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
 export interface IExpenseHead{
-    startDate: String;
-    endDate: String;
+    startDate?: String;
+    endDate?: String;
     departmentId?: String;
     projectId?: String;
     budgetId: String;
-    title: String;
+    title?: String;
     availableBalance?: Number;
     amount?: Number;
     approved?: Boolean;
@@ -13,6 +13,7 @@ export interface IExpenseHead{
     deletedBy?: String;
     deleted?: Boolean;
     flagAlert?: Number;
+  expenseHeadDraftId?:String;
  }
 
  export interface IUpdateExpenseHead{

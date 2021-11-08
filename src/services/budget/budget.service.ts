@@ -10,7 +10,7 @@ import { ObjectId } from 'mongodb';
 // import { isValidObjectId } from 'mongoose';
 import { officeQueryGenerator } from '@/utils/payrollUtil';
 import omit from 'lodash/omit'
-import expenseHeadModel from '@/models/expense-heads/expense-head.model';
+import expenseHeadModel from '@models/expense-heads/expense-head.model';
 import { IExpenseHead, IExpenseHeadQuery } from "@interfaces/expense-head/expense-head.interface";
 import moment from "moment";
 
@@ -28,7 +28,9 @@ class BudgetService {
         availableBalance:1,
         approved:1,
         active:1,
+        title: 1,
     })
+    // budgets - budgets.toObject()
     return budgets;
   }
 
@@ -43,13 +45,36 @@ class BudgetService {
         budget:1,
         availableBalance:1,
         approved:1,
+        expenseHeadDraftId: 1
     })
     if (!budget) {
       throw new HttpException(404, "no record found")
     }
 
     budget = budget.toObject()
-    budget.expenseHeads = await expenseHeadModel.find({budgetId: id}, projections).populate({path: "projectId", select:{project_name:1}}).populate({path: "departmentId", select:{title:1}})
+    budget.expenseHeads = await expenseHeadModel.find({budgetId: id}, projections).populate({
+      path: "expenseHeadDraftId",
+      select:{
+        createdBy:0,
+        __v:0
+      },
+      populate:{
+      path:'departmentId',
+        model:'Department',
+    }
+    })
+      .populate({
+        path: "expenseHeadDraftId",
+        select:{
+          createdBy:0,
+          __v:0
+        },
+        populate:{
+          path:'projectId',
+          model:'Project',
+          select:{project_name:1}
+        }
+      })
     return budget;
   }
 
@@ -99,12 +124,12 @@ class BudgetService {
       expenseHead.endDate = newData.endDate;
       expenseHead.createdBy = req.user._id;
       expenseHead.budgetId = newBudget._id;
-      // expenseHead.flagAlert = expenseHead.flagAlert;
+      // expenseHead.expenseHeadDraftId = expenseHead.expenseHeadDraftId;
+      // console.log(expenseHead);
       return expenseHead;
     })
     console.log(expenseHeads);
-    await expenseHeadModel.insertMany(expenseHeads)
-    // console.log(expenseHeads);
+    await expenseHeadModel.insertMany(newData.expenseHeads)
     newBudget = omit(newBudget.toObject(), ["createdBy", "deleted"])
     return newBudget;
   }
