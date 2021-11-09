@@ -6,8 +6,7 @@ import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 const { SocketLabsClient } = require('@socketlabs/email');
 import {emailTemplate} from '../email';
-import server  from '../../server'
-const socketio = require('socket.io');
+const { Socket } = require("@/utils/socket");
 const redis = require('redis');
 const client = redis.createClient();
 
@@ -31,24 +30,21 @@ class NotificationHelper {
             const subject = findNotification.subject
             const message = findNotification.message
             const receiver = findNotification.receiver_role
-            this.sendEmail(subject, message, receiver)
+            //this.sendEmail(subject, message, receiver)
             this.queueMessage(receiver, message, this.modelName, subject)
         }
     }
 
     public emitEvent(data)
     {
-        const io = socketio(server);
-        io.on('connection', socket => {
-            socket.emit("messages", data)
-        })
+        Socket.emit("messages", data)
     }
 
 
     public queueMessage(receiver: string[], message: string, model: string, subject: string)
     {
+        let obj = {}
         for(let i=0; i<receiver.length; i++){
-            let obj = {}
             obj["message"] = message
             obj["module"] = model
             obj["date"] = new Date()
@@ -65,10 +61,9 @@ class NotificationHelper {
                     })
                 }
             });
-            this.emitEvent(JSON.stringify(obj))
             this.persistEmail(subject, message, receiver[i], model)
-            
         }
+        this.emitEvent(JSON.stringify(obj))
     }
 
     private async sendEmail(subject: string, message: string, receiver: string[]){

@@ -169,7 +169,7 @@ const app = new App([
 ]);
 
 const server = app.listen();
-app.socketConnection(server)
+app.socketInstance(server)
 export default server
 
 
