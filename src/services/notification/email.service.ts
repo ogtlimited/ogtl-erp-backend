@@ -22,12 +22,12 @@ class EmailService {
         if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
         const findEmail = this.findOne(emailId);
         if (!findEmail) throw new HttpException(409, "notification not found");
-        const updatedEmail: IEmail = await this.emailModel.findOneAndUpdate({email_id: emailId}, {$set:Payload}, {new: true});
+        const updatedEmail: IEmail = await this.emailModel.findByIdAndUpdate(emailId, {$set: { is_read: Payload.is_read } }, {new: true});
         return updatedEmail;
     }
 
     private async findOne(email_id: string): Promise<IEmail> {
-        const findEmail: IEmail = await this.emailModel.findOne({ email_id: email_id });
+        const findEmail: IEmail = await this.emailModel.findOne({ _id: email_id });
         return findEmail;
     }
 }
