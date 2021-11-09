@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { model, Schema, Document } from 'mongoose';
 import { IBills } from '@interfaces/vendor-interface/bills-interface';
+import NotificationHelper from '@utils/helper/notification.helper';
 
 const billsSchema: Schema = new Schema({
   vendor: {
@@ -50,7 +51,21 @@ const billsSchema: Schema = new Schema({
     default: 'Draft',
   },
 });
-
+billsSchema.post('save', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "SAVE").exec()
+});
+billsSchema.post('update', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "UPDATE").exec()
+});
+billsSchema.post('delete', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "DELETE").exec()
+});
 const billsModel = model<IBills & Document>('Bills', billsSchema);
 
 export default billsModel;
