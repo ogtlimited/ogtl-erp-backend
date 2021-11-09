@@ -23,15 +23,16 @@ class NotificationHelper {
         this.email = Email;
     }
 
-    public async exec() 
+    public async exec()
     {
         const findNotification = await this.notificationModel.findOne({ document_name: this.modelName, send_alert_on: this.status, disabled: false })
         if(findNotification){
             const subject = findNotification.subject
             const message = findNotification.message
             const receiver = findNotification.receiver_role
-            //this.sendEmail(subject, message, receiver)
-            this.queueMessage(receiver, message, this.modelName, subject)
+            const sender = findNotification.sender
+            this.sendEmail(subject, message, receiver)
+            this.queueMessage(receiver, message, this.modelName, subject,sender)
         }
     }
 
@@ -41,7 +42,7 @@ class NotificationHelper {
     }
 
 
-    public queueMessage(receiver: string[], message: string, model: string, subject: string)
+    public queueMessage(receiver: string[], message: string, model: string, subject: string, sender: string)
     {
         let obj = {}
         for(let i=0; i<receiver.length; i++){
@@ -49,11 +50,11 @@ class NotificationHelper {
             obj["module"] = model
             obj["date"] = new Date()
             client.exists(receiver[i], function(err, reply) {
-                
+
                 if (reply === 1) {
                     client.lpush(receiver[i], JSON.stringify(obj), (err, reply) => {
                         console.log(reply)
-                        
+
                     })
                 } else {
                     client.lpush(receiver[i], [JSON.stringify(obj)], (err, reply) => {
@@ -61,7 +62,8 @@ class NotificationHelper {
                     })
                 }
             });
-            this.persistEmail(subject, message, receiver[i], model)
+            this.persistEmail(subject, message, receiver[i], model, sender)
+
         }
         this.emitEvent(JSON.stringify(obj))
     }
@@ -69,7 +71,7 @@ class NotificationHelper {
     private async sendEmail(subject: string, message: string, receiver: string[]){
         const email = emailTemplate(subject, message, receiver)
         const sclient = await new SocketLabsClient(parseInt(process.env.SOCKETLABS_SERVER_ID), process.env.SOCKETLABS_INJECTION_API_KEY);
-         
+
         await sclient.send(email).then(
             (response) => {
                 console.log(response)
@@ -81,12 +83,13 @@ class NotificationHelper {
         );
     }
 
-    private async persistEmail(subject: string, message: string, receiver: string, module: string){
+    private async persistEmail(subject: string, message: string, receiver: string, module: string, sender: string){
         const Payload = {
             message: message,
             subject: subject,
             email_id: receiver,
-            model_name: module
+            model_name: module,
+            sender: sender
         }
         this.email.create(Payload);
     }

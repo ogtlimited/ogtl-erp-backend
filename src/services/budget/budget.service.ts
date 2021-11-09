@@ -29,6 +29,8 @@ class BudgetService {
         approved:1,
         active:1,
         title:1,
+        flagAlert:1,
+        type:1,
     })
     // budgets - budgets.toObject()
     return budgets;

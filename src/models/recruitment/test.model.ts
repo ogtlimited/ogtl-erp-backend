@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import {model,Schema,Document} from "mongoose"
 import { ITest } from '@interfaces/recruitment/test.interface';
+import NotificationHelper from '@utils/helper/notification.helper';
 
 const testSchema: Schema = new Schema({
   test_type:{
@@ -36,6 +37,21 @@ const testSchema: Schema = new Schema({
     default:null
   }
 })
+testSchema.post('save', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "SAVE").exec()
+});
+testSchema.post('update', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "UPDATE").exec()
+});
+testSchema.post('delete', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "DELETE").exec()
+});
 
 const testModel = model<ITest & Document>('Test',testSchema)
 

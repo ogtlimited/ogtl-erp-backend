@@ -52,16 +52,16 @@ class InvoiceService {
       const findInvoice: IInvoice = await this.Invoices.findOne({ref:newRef});
        if(findInvoice) throw new HttpException(409, `Invoice with this ${newRef} already exists`);
        const receivables = await this.Account.findByName("accounts-receivable")
-       const account = await this.Account.find(invoiceData.account);
+    //    const account = await this.Account.find(invoiceData.account);
        const updateReceivable: PutAccountBalanceDto = {
            balance: receivables.balance + invoiceData.total_amount,
        }
-       const accountUpdate: PutAccountBalanceDto = {
-           balance: account.balance + invoiceData.total_amount,
-       }
-       console.log(accountUpdate)
+    //    const accountUpdate: PutAccountBalanceDto = {
+    //        balance: account.balance + invoiceData.total_amount,
+    //    }
+    //    console.log(accountUpdate)
        this.Account.updateBalance(receivables._id, updateReceivable)
-       this.Account.updateBalance(account._id, accountUpdate)
+    //    this.Account.updateBalance(account._id, accountUpdate)
        const jData = {
         account: receivables._id,
         ref: newRef,
@@ -94,14 +94,19 @@ class InvoiceService {
         },{new:true}).exec();
         if(!updateInvoiceById) throw new HttpException(400, "Error updating invoice");
         const receivables = await this.Account.findByName("accounts-receivable")
+        const paymentAccount = await this.Account.find(invoice.account)
         console.log('UPDATE INVOICE', updateInvoiceById)
        const accountUpdate: PutAccountBalanceDto = {
            balance: receivables.balance - invoiceData.total_amount,
+       }
+       const paymentAccountUpdate: PutAccountBalanceDto = {
+           balance: paymentAccount.balance + invoiceData.total_amount,
        }
        console.log('INVOICE DATA', invoiceData)
        console.log("account update-----------------", accountUpdate)
        console.log("receievables balance", receivables.balance , invoiceData.total_amount);
        this.Account.updateBalance(receivables._id, accountUpdate);
+       this.Account.updateBalance(paymentAccount._id, paymentAccountUpdate);
        const jData = {
         account: receivables._id,
         ref: invoiceData.number,
