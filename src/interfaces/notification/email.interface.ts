@@ -4,5 +4,6 @@ export interface IEmail {
     model_name: string;
     email_id: string;
     is_read: string;
-    subject: string
+    subject: string;
+    sender: string;
 }

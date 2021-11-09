@@ -24,6 +24,10 @@ const emailSchema: Schema = new mongoose.Schema(
         type: String,
         default: null
     },
+    sender: {
+        type: String,
+        default: null
+    },
   },
   {
     timestamps: true,
