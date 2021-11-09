@@ -24,7 +24,7 @@ class EmailController {
 
     public emailRead = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const emailId: string = req.params.emailId;
+            const emailId: string = req.params.id;
             const Payload: EmailDto = req.body;
             const updatedEmail: IEmail = await this.emailService.update(emailId, Payload);
             res.status(200).json({ data: updatedEmail, message: 'updated' });
