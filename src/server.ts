@@ -62,6 +62,7 @@ import TerminationRoute from './routes/employee-lifecycle/termination.route';
 
 import DepartmentRoute from './routes/employee/department.route';
 import NotificationRoute from '@routes/notification/notification.route';
+import EmailRoute from '@routes/notification/email.route';
 const socketio = require('socket.io');
 
 import LeaveSettingsRoute from './routes/leave/leave-settings.route';
@@ -150,6 +151,7 @@ const app = new App([
   new MaintenanceReportRoute(),
   new MaintenanceAndRepairsRoute(),
   new NotificationRoute(),
+  new EmailRoute(),
 
   new AccountRoute(),
   new AccountTypeRoute(),
@@ -168,5 +170,6 @@ const app = new App([
 
 const server = app.listen();
 app.socketConnection(server)
+export default server
 
 

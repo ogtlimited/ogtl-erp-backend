@@ -16,6 +16,7 @@ class AccountService {
 
     public async findAll(): Promise<IAccount[]> {
         const accounts: IAccount[] = await this.account.find();
+        console.log("account", accounts)
         return accounts;
     }
 
@@ -48,7 +49,7 @@ class AccountService {
             const findaccount = await this.findOne(Payload.parent);
             if(findaccount){
                 console.log("$$$$$$$$$$$$$$$$$$$$$$$", findaccount)
-                let number = this.addNumber(findaccount.slug)
+                const number = this.addNumber(findaccount.slug)
                 new_account.account_number = number + new_account.account_number
                 console.log(number)
             }
