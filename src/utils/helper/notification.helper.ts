@@ -1,10 +1,13 @@
 /* eslint-disable prettier/prettier */
 
 import notificationModel from '../../models/notification/notification.model';
+import Email from '@/models/notification/email.model';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 const { SocketLabsClient } = require('@socketlabs/email');
 import {emailTemplate} from '../email';
+import server  from '../../server'
+const socketio = require('socket.io');
 const redis = require('redis');
 const client = redis.createClient();
 
@@ -12,11 +15,13 @@ class NotificationHelper {
     public modelName: any;
     public notificationModel: any;
     public status: any;
+    public email: any
 
     constructor(modelName, status) {
         this.modelName = modelName;
         this.status = status;
         this.notificationModel = notificationModel;
+        this.email = Email;
     }
 
     public async exec() 
@@ -27,21 +32,32 @@ class NotificationHelper {
             const message = findNotification.message
             const receiver = findNotification.receiver_role
             this.sendEmail(subject, message, receiver)
-            this.queueMessage(receiver, message, this.modelName)
+            this.queueMessage(receiver, message, this.modelName, subject)
         }
     }
 
-    public queueMessage(receiver: string[], message: string, model: string)
+    public emitEvent(data)
+    {
+        const io = socketio(server);
+        io.on('connection', socket => {
+            socket.emit("messages", data)
+        })
+    }
+
+
+    public queueMessage(receiver: string[], message: string, model: string, subject: string)
     {
         for(let i=0; i<receiver.length; i++){
+            let obj = {}
+            obj["message"] = message
+            obj["module"] = model
+            obj["date"] = new Date()
             client.exists(receiver[i], function(err, reply) {
-                let obj = {}
-                obj["message"] = message
-                obj["module"] = model
-                obj["date"] = new Date()
+                
                 if (reply === 1) {
                     client.lpush(receiver[i], JSON.stringify(obj), (err, reply) => {
                         console.log(reply)
+                        
                     })
                 } else {
                     client.lpush(receiver[i], [JSON.stringify(obj)], (err, reply) => {
@@ -49,6 +65,9 @@ class NotificationHelper {
                     })
                 }
             });
+            this.emitEvent(JSON.stringify(obj))
+            this.persistEmail(subject, message, receiver[i], model)
+            
         }
     }
 
@@ -65,6 +84,16 @@ class NotificationHelper {
                 console.log(err);
             }
         );
+    }
+
+    private async persistEmail(subject: string, message: string, receiver: string, module: string){
+        const Payload = {
+            message: message,
+            subject: subject,
+            email_id: receiver,
+            model_name: module
+        }
+        this.email.create(Payload);
     }
 }
 
