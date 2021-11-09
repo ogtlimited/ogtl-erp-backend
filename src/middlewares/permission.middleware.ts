@@ -88,7 +88,7 @@ const permissionMiddleware = (dept) => {
                   req.user = findUser;
                   next();
                 }else{
-                  next(new HttpException(401, 'You have insufficient authorization level'));
+                  next(new HttpException(403, 'You have insufficient authorization level'));
                 }
         
               }else if(req.method === 'POST'){
@@ -98,14 +98,14 @@ const permissionMiddleware = (dept) => {
                   req.user = findUser;
                   next();
                 }else{
-                  next(new HttpException(401, 'You have insufficient authorization level'));
+                  next(new HttpException(403, 'You have insufficient authorization level'));
                 }
               }else if(req.method === 'PUT' || req.method === 'PATCH'){
                 if(permission.Update === true){
                   req.user = findUser;
                   next();
                 }else{
-                  next(new HttpException(401, 'You have insufficient authorization level'));
+                  next(new HttpException(403, 'You have insufficient authorization level'));
                 }
         
               }else if(req.method === 'DELETE'){
@@ -119,7 +119,7 @@ const permissionMiddleware = (dept) => {
               }
   
             }else{
-              next(new HttpException(401, 'this route is only accesible to ' + dept + ' users'))
+              next(new HttpException(403, 'this route is only accesible to ' + dept + ' users'))
             }
             // if (findUser) {
             //   req.user = findUser;
@@ -133,7 +133,7 @@ const permissionMiddleware = (dept) => {
           next(new HttpException(404, 'Authentication token missing'));
         }
       } catch (error) {
-        next(new HttpException(401, 'Wrong authentication token'));
+        next(new HttpException(403, 'Wrong authentication token'));
       }
 
   }
