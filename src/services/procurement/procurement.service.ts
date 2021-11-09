@@ -10,7 +10,7 @@ import { officeQueryGenerator } from '@/utils/payrollUtil';
 import omit from 'lodash/omit'
 import budgetModel from '@/models/budget/budget.model';
 import moment from 'moment';
-import expenseHeadModel from "@models/expense-heads/expense-head.model";
+import expenseHeadModel from "@models/expense-heads/expense-head-draft.model";
 import exp from "constants";
 
 /* TODO: services

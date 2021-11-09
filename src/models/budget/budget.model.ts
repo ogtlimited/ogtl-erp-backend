@@ -9,8 +9,15 @@ const budgetSchema: Schema = new Schema(
       type: Number,
       required: true,
     },
+    title: {
+      type: String,
+      required: true,
+    },
     availableBalance: {
       type: Number,
+    },
+    title: {
+      type: String,
     },
     type: {
       type: String,
