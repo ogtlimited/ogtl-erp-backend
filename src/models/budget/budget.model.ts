@@ -16,6 +16,9 @@ const budgetSchema: Schema = new Schema(
     availableBalance: {
       type: Number,
     },
+    title: {
+      type: String,
+    },
     type: {
       type: String,
       enum: ["quarterly", "monthly", "yearly"]
