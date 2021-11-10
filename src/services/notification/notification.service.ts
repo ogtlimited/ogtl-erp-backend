@@ -14,7 +14,7 @@ class NotificationService {
     }
 
     public async findAll(): Promise<INotification[]> {
-        const notifications: INotification[] = await this.notification.find();
+        const notifications: INotification[] = await this.notification.find().populate("");
         return notifications;
     }
 

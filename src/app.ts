@@ -19,12 +19,14 @@ import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
 import * as cron from 'node-cron';
-const socketio = require('socket.io');
+const { io } = require("@/utils/socket");
 const redis = require('redis');
 const client = redis.createClient();
 import attendanceModel  from '@models/attendance/attendance.model';
 import {getWorkTime, calculateLateness}  from '@/utils/attendanceCalculator';
 import AttendanceTypeService from '@/services/attendance/attendance.service';
+import NotificationHelper from './utils/helper/notification.helper';
+
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config({ path: dirname( module.paths[1] ) + "/.env" });
 }
@@ -52,27 +54,28 @@ class App {
     this.initializeCron();
   }
 
-  public socketConnection(server)
+  public socketInstance(server)
   {
-      const io = socketio(server, {
-          cors: {
-            origin: '*',
-          }
+    const serverInstance = server;
+      io.attach(serverInstance, {
+        cors: {
+          origin: '*',
+        }
       });
 
       io.on('connection', socket => {
+        
           console.log('Socket: client connected')
           socket.on('notification', (data) => {
               client.lrange(data, 0, -1, function(err, reply) {
                   socket.emit("messages", reply)
               });
           })
-
           socket.on('clear_notification', (data) => {
             client.del(data, function(err, reply) {
                 socket.emit("cleared_messages", reply)
             });
-        })
+          })
 
           socket.on('disconnect', (data) => {
               console.log('Client disconnected')

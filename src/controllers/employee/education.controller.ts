@@ -34,7 +34,7 @@ class EducationController {
   public getEducationsById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const EducationsId: string = req.params.id;
-      const findOneEducationsData: Education = await this.EducationService.findEducationById(EducationsId);
+      const findOneEducationsData: Education[] = await this.EducationService.findEducationById(EducationsId);
       res.status(200).json({ data: findOneEducationsData, message: 'All Educations' });
     } catch (error) {
       next(error);

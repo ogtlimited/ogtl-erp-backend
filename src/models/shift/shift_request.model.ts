@@ -28,10 +28,20 @@ const shiftRequestSchema: Schema = new Schema(
   },
 );
 
-shiftRequestSchema.post('save', function (doc) {
+shiftRequestSchema.post('save', function(doc) {
   const self: any = this;
-  console.log(self.constructor.modelName);
-  new NotificationHelper(self.constructor.modelName, 'SAVE').exec();
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "SAVE").exec()
+});
+shiftRequestSchema.post('update', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "UPDATE").exec()
+});
+shiftRequestSchema.post('delete', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "DELETE").exec()
 });
 
 const shiftRequestModel = model<IShiftRequest & Document>('ShiftRequest', shiftRequestSchema);

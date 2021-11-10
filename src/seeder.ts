@@ -8,6 +8,7 @@ import AccountModel from './models/account/account.model';
 import {loanType} from './utils/lib/loan-type.data';
 import {accountType} from './utils/lib/account-type.data';
 import {account} from './utils/lib/account.data';
+import DesignationModel  from '@models/employee/designation.model';
 
 dotenv.config({ path: dirname( module.paths[1] ) + "/.env" });
 // console.log(process.env.databaseUrl);
@@ -29,6 +30,19 @@ const importLoanTypes = async () => {
     await loanTypeModel.deleteMany();
     await loanTypeModel.insertMany(loanType);
     console.log("Loan Types imported");
+    process.exit(0);
+  } catch (error) {
+    console.log("Loan Types not imported", error.message);
+    process.exit(1);
+  }
+};
+const createDesignations = async () => {
+  try {
+    // delete previous data | avoid duplication
+    await DesignationModel.create({
+      "designation": "SUPER"
+    });
+   
     process.exit(0);
   } catch (error) {
     console.log("Loan Types not imported", error.message);
@@ -160,3 +174,4 @@ const slugify = (string: string) => {
 importLoanTypes()
 importAccountTypes()
 importAccount(account)
+createDesignations()

@@ -31,7 +31,6 @@ const employeeSchema: Schema = new Schema(
     },
     password:  {
       type: String,
-      required: true,
     },
     designation: {
       type: Schema.Types.ObjectId,

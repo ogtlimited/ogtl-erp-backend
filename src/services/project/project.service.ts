@@ -10,6 +10,7 @@ import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { CreateProjectDto, UpdateProjectDto, ApproveProjectDto } from '@/dtos/project/project.dto';
 import {campaignCreationEmail} from '@/utils/email';
+import { slugify } from '@/utils/slugify';
 
 const { SocketLabsClient } = require('@socketlabs/email');
 
@@ -38,7 +39,11 @@ class ProjectService {
 
     public async create(Payload: CreateProjectDto): Promise<IProject> {
         if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
-        const newProject: IProject = await this.project.create(Payload);
+        const data = {
+            ...Payload,
+            slug: slugify(Payload.project_name)
+        }
+        const newProject: IProject = await this.project.create(data);
         return newProject;
     }
 
