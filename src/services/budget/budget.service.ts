@@ -29,6 +29,8 @@ class BudgetService {
         approved:1,
         active:1,
         title:1,
+        type:1,
+
     })
     // budgets - budgets.toObject()
     return budgets;
@@ -191,5 +193,8 @@ class BudgetService {
 }
 
 export default BudgetService;
+
+
+
 
 
