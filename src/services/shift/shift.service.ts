@@ -5,6 +5,7 @@ import { IShiftType } from '@interfaces/shift-interface/shift_type.interface';
 import shiftTypeModel from '@models/shift/shift_type.model';
 import { isEmpty } from '@utils/util';
 import { SumHours } from '@utils/calculateTimeDifference';
+import { slugify } from '@/utils/slugify';
 
 class shiftTypeService {
   public shiftTypes = shiftTypeModel;
@@ -29,7 +30,11 @@ class shiftTypeService {
     if (findShiftType) throw new HttpException(409, `${shiftTypeData.shift_name} already exists`);
     const result = SumHours(shiftTypeData.end_time,shiftTypeData.start_time)
     if(result < 8) throw new HttpException(409,"Working hours has to be greater than 8");
-    return await this.shiftTypes.create(shiftTypeData);
+    const shift = {
+      ...shiftTypeData,
+      slug: slugify(shiftTypeData.shift_name)
+    }
+    return await this.shiftTypes.create(shift);
   }
 
   public async updateshiftType(shiftTypeId: string, shiftTypeData: UpdateShiftTypeDto): Promise<IShiftType> {
