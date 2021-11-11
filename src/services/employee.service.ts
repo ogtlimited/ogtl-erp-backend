@@ -181,39 +181,37 @@ class EmployeeService {
   }
 
   public async teamLeads() {
-    const teamLeadData: any = await this.Employees.find({ isTeamLead: true }, {company_email: 1, status: 1, projectId: 1, ogid:1}).populate({path: 'projectId', select:{project_name:1}});
+    const teamLeadData: any = await this.Employees.find({ isTeamLead: true }, {
+      company_email: 1,
+      status: 1,
+      projectId: 1,
+      ogid:1,
+      first_name:1,
+      last_name:1,})
+      .populate({
+        path: 'projectId',
+        select:{
+          project_name:1
+        }
+      });
     const teamLeadMembersData = []
     for(let idx = 0; idx < teamLeadData.length; idx++){
       const tl = teamLeadData[idx].toObject()
-      const agg = [
-        {
-          '$match': {
-            'reports_to': new ObjectId(tl._id)
-          }
-        }, {
-          '$group': {
-            '_id': 'totalEmps',
-            'total': {
-              '$sum': 1
-            }
-          }
-        }
-      ];
-      const teamMemberData: any = await this.Employees.aggregate(agg)
-      tl.teamMembers = teamMemberData.length < 1 ? 0 : teamMemberData[0].total
+      const teamMemberData: any = await this.teamMembers(tl._id)
+      tl.teamMembers = teamMemberData
       teamLeadMembersData.push(tl)
     }
     return teamLeadMembersData;
   }
   public async teamMembers(teamLeadID) {
     console.log(teamLeadID);
-    const teamLead:any = this.Employees.findOne({ogid: teamLeadID}, {_id: 1})
+    const teamLead:any = await this.Employees.findOne({_id: teamLeadID}, {_id: 1, first_name:1, last_name:1, company_email:1, ogid:1})
     if (!teamLead){
       throw  new HttpException(404, "lead does not exist")
     }
-
-    // const teamMembers =
-    return await this.Employees.find({reports_to: teamLead._id})
+    console.log(teamLead);
+    console.log(teamLead['_id']);
+    return await this.Employees.find({reports_to: teamLeadID}, {_id: 1, first_name:1, last_name:1, company_email:1, ogid:1})
 
   }
 }
