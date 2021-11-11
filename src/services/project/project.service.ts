@@ -26,7 +26,7 @@ class ProjectService {
     }
 
     public async findAll(param: any = {}): Promise<IProject[]> {
-        const projects: IProject[] = await this.project.find(param);
+        const projects: IProject[] = await this.project.find(param).populate("manager quality_analyst");
         return projects;
     }
 
