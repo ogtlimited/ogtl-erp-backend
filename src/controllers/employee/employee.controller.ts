@@ -62,6 +62,27 @@ class EmployeesController {
     }
   };
 
+
+
+
+  public teamLeads = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const leads = await this.EmployeeService.teamLeads();
+      res.status(200).json({ data: leads});
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  // public teamMembers = async (req: Request, res: Response, next: NextFunction) => {
+  //   try {
+  //     const leads = await this.EmployeeService.teamMembers(req.query.ogid);
+  //     res.status(200).json({ data: leads});
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // };
+
   public deleteEmployee = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const EmployeeId: string = req.params.id;

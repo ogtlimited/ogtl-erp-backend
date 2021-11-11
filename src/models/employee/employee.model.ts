@@ -66,11 +66,11 @@ const employeeSchema: Schema = new Schema(
     },
     isTeamLead: {
       type: Boolean,
-      required: true,
+      default: false
     },
     isSupervisor: {
       type: Boolean,
-      required: true,
+      default: false
     },
     gender: {
       type: String,

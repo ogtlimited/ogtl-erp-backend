@@ -18,6 +18,7 @@ export interface IBudget{
     flagAlert?: Number;
     expenseHeads?: Array<IExpenseHead>;
     toObject?: Function;
+    status?: string
  }
 
  export interface IUpdateBudget{
@@ -33,6 +34,7 @@ export interface IBudget{
     deletedBy?: string;
     flagAlert?: Number;
     deleted?: boolean;
+   status?: string
  }
 
  export interface IIncreaseBudget{
@@ -40,4 +42,3 @@ export interface IBudget{
     budget?: Number;
     availableBalance?: Number;
  }
- 
