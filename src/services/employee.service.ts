@@ -9,6 +9,7 @@ import DesignationModel from '@models/employee/designation.model';
 import departmentModel from '@/models/department/department.model';
 import shiftTypeModel from '@models/shift/shift_type.model';
 import projectModel from '@/models/project/project.model';
+import { ObjectId } from "mongodb";
 
 import { IProject } from './../interfaces/project-interface/project.interface';
 import { Designation } from './../interfaces/employee-interface/designation.interface';
@@ -180,13 +181,14 @@ class EmployeeService {
   }
 
   public async teamLeads() {
-    const teamLeadData: any = await this.Employees.find({ isTeamLead: true }, {company_email: 1, status: 1, projectId: 1}).populate({path: 'projectId', select:{project_name:1}});
+    const teamLeadData: any = await this.Employees.find({ isTeamLead: true }, {company_email: 1, status: 1, projectId: 1, ogid:1}).populate({path: 'projectId', select:{project_name:1}});
+    const teamLeadMembersData = []
     for(let idx = 0; idx < teamLeadData.length; idx++){
       const tl = teamLeadData[idx].toObject()
       const agg = [
         {
           '$match': {
-            'reports_to': tl._id
+            'reports_to': new ObjectId(tl._id)
           }
         }, {
           '$group': {
@@ -198,22 +200,18 @@ class EmployeeService {
         }
       ];
       const teamMemberData: any = await this.Employees.aggregate(agg)
-      tl.teamMembers = teamMemberData[0].total
-      console.log(tl);
-      teamLeadData[idx] = tl
-      // console.log(tl);
-      // console.log(tl.company_email);
-
+      tl.teamMembers = teamMemberData.length < 1 ? 0 : teamMemberData[0].total
+      teamLeadMembersData.push(tl)
     }
-    return teamLeadData;
+    return teamLeadMembersData;
   }
   public async teamMembers(teamLeadID) {
-
+    console.log(teamLeadID);
     const teamLead:any = this.Employees.findOne({ogid: teamLeadID}, {_id: 1})
     if (!teamLead){
       throw  new HttpException(404, "lead does not exist")
     }
-    console.log(teamLead._id, teamLead);
+
     // const teamMembers =
     return await this.Employees.find({reports_to: teamLead._id})
 
