@@ -9,6 +9,10 @@ const projectSchema: Schema = new Schema(
       required: true,
       unique: true,
     },
+    slug: {
+      type: String,
+      required: true,
+    },
     client_id: {
       type: Schema.Types.ObjectId,
       ref: 'Client',

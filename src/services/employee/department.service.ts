@@ -4,6 +4,7 @@ import { isEmpty } from '@utils/util';
 import  {IDepartment}  from '@/interfaces/employee-interface/department.interface';
 import { CreateDepartmentDto,UpdateDepartmentDto } from '@/dtos/employee/department.dto';
 import  departmentModel  from '@models/department/department.model';
+import { slugify } from '@/utils/slugify';
 
 
 
@@ -51,7 +52,11 @@ public async findDepartmentById(DepartmentId:string) : Promise<IDepartment>{
        const findDepartment: IDepartment = await this.Departments.findOne({Department: DepartmentData.department});
        if(findDepartment) throw new HttpException(409, `Department ${DepartmentData.department} already exists`);
 
-       const createDepartmentData: IDepartment = await this.Departments.create(DepartmentData);
+       const data = {
+         ...DepartmentData,
+         slug: slugify(DepartmentData.department)
+       }
+       const createDepartmentData: IDepartment = await this.Departments.create(data);
        return createDepartmentData;
      }
 

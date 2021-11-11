@@ -9,6 +9,10 @@ const shiftTypeSchema: Schema = new Schema(
       type: String,
       required: true
     },
+    slug: {
+      type: String,
+      required: true
+    },
     start_time: {
       type: String,
       default: null,
