@@ -64,6 +64,14 @@ const employeeSchema: Schema = new Schema(
       type: Boolean,
       required: true,
     },
+    isTeamLead: {
+      type: Boolean,
+      default: false
+    },
+    isSupervisor: {
+      type: Boolean,
+      default: false
+    },
     gender: {
       type: String,
       enum: ["male", "female"],

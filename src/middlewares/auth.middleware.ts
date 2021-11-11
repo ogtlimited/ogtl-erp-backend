@@ -10,13 +10,13 @@ const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFun
   try {
     const Authorization = req.header('Authorization').split('Bearer ')[1] || null;
     console.log('----------------------------------------------')
-    console.log(Authorization)
     console.log('Authorization')
+    console.log(Authorization)
     if (Authorization) {
       const secretKey: string = config.get('secretKey');
       const verificationResponse = (await jwt.verify(Authorization, secretKey)) as DataStoredInToken;
       const userId = verificationResponse._id;
-      
+
       const findUser = await EmployeeModel.findById(userId).populate('salaryStructure_id', {netPay:1});
       if (findUser && findUser.status === 'active') {
         req.user = findUser;
@@ -28,7 +28,7 @@ const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFun
       next(new HttpException(404, 'Authentication token missing'));
     }
   } catch (error) {
-    console.log(error)
+    console.log(error, "issue")
     next(new HttpException(401, 'Wrong authentication token'));
   }
 };

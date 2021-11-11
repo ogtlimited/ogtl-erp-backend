@@ -20,6 +20,8 @@ class EmployeesRoute implements Routes {
   private initializeRoutes() {
     this.router.get(`${this.path}`,authMiddleware, this.employeesController.getEmployees);
     this.router.get(`${this.path}/:id`,authMiddleware, this.employeesController.getEmployeeById);
+    this.router.get(`${this.path}/all/team-leads`,authMiddleware, this.employeesController.teamLeads);
+    this.router.get(`${this.path}/all/team-leads/members`,authMiddleware, this.employeesController.teamMembers);
     this.router.post(`${this.path}`, validationMiddleware(CreateEmployeeDto, 'body'), this.employeesController.createEmployee);
     this.router.post(`${this.path}/bulk-upload`,  this.employeesController.createMultipleEmployee);
     this.router.put(`${this.path}/:id`, validationMiddleware(CreateEmployeeDto, 'body', true), this.employeesController.updateEmployee);

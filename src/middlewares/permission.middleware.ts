@@ -90,7 +90,7 @@ const permissionMiddleware = (dept) => {
                 }else{
                   next(new HttpException(403, 'You have insufficient authorization level'));
                 }
-        
+
               }else if(req.method === 'POST'){
                 console.log('POST REQUEST !!!!')
                 console.log('Permission', permission)
@@ -107,7 +107,7 @@ const permissionMiddleware = (dept) => {
                 }else{
                   next(new HttpException(403, 'You have insufficient authorization level'));
                 }
-        
+
               }else if(req.method === 'DELETE'){
                 if(permission.Delete === true){
                   req.user = findUser;
@@ -115,9 +115,9 @@ const permissionMiddleware = (dept) => {
                 }else{
                   next(new HttpException(401, 'You have insufficient authorization level'));
                 }
-        
+
               }
-  
+
             }else{
               next(new HttpException(403, 'this route is only accesible to ' + dept + ' users'))
             }

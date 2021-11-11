@@ -118,6 +118,7 @@ class BudgetService {
     }
     newData.createdBy = req.user._id
     newData.budget = budgetAmount
+    newData.status = 'draft'
     newData.availableBalance = Number(newData.budget)
     let newBudget  = await budgetModel.create(newData)
     const expenseHeads = newData.expenseHeads.map((expenseHead) => {
@@ -136,14 +137,18 @@ class BudgetService {
     return newBudget;
   }
 
-  public async approve(id): Promise<any> {
+  public async approve(req, id): Promise<any> {
+    // console.log(req.user.designation.designation);
+    if(req.user.designation.designation != "SUPER"){
+        req.query = {status: "draft"}
+    }
     const approvebudget  = await budgetModel.findOneAndUpdate({_id:id}, {
-        $set: {approved: true, active:true}
+        $set: req.query
     })
     if (!approvebudget) {
         throw  new HttpException(400, "please provide valid budget Id");
     }
-    return "budget approved";
+    return req.query.status == 'draft' ? "budget in draft" : `budget ${req.query.status}`;
   }
 
   public async update( id, updateData: UpdateBudgetDto): Promise<IBudget> {
