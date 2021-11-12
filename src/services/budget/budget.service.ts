@@ -31,6 +31,7 @@ class BudgetService {
         title:1,
         flagAlert:1,
         type:1,
+        status:1
     })
     // budgets - budgets.toObject()
     return budgets;
@@ -47,6 +48,7 @@ class BudgetService {
         budget:1,
         availableBalance:1,
         approved:1,
+        status:1,
         expenseHeadDraftId: 1
     })
     if (!budget) {
