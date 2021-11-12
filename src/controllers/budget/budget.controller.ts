@@ -51,7 +51,7 @@ class BudgetController {
 
   public approve = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const approvedBudget = await this.budgetService.approve(req.params.id);
+      const approvedBudget = await this.budgetService.approve(req, req.params.id);
       res.status(200).json({ data: approvedBudget});
     } catch (error) {
       console.log(error);

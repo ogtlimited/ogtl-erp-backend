@@ -19,6 +19,10 @@ const budgetSchema: Schema = new Schema(
       type: String,
       enum: ["quarterly", "monthly", "yearly"]
     },
+    status: {
+      type: String,
+      enum: ["draft", "rejected", "approved"]
+    },
     // departmentId: {
     //   type: Schema.Types.ObjectId,
     //   ref: "Department"
@@ -43,10 +47,6 @@ const budgetSchema: Schema = new Schema(
     updatedBy:{
         type: Schema.Types.ObjectId,
         ref: "Employee"
-    },
-    approved:{
-      type: Boolean,
-      default: false
     },
     active:{
       type: Boolean,
