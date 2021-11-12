@@ -138,7 +138,6 @@ class BudgetService {
   }
 
   public async approve(req, id): Promise<any> {
-    // console.log(req.user.designation.designation);
     if(req.user.designation.designation != "SUPER"){
         req.query = {status: "draft"}
     }
