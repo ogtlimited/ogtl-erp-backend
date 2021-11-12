@@ -25,14 +25,14 @@ class EmployeeService {
   public Shift = shiftTypeModel;
 
   public async findAllEmployee(): Promise<Employee[]> {
-    const Employees: Employee[] = await this.Employees.find().populate('default_shift designation department branch projectId');
+    const Employees: Employee[] = await this.Employees.find().populate('default_shift designation department branch projectId reports_to');
     return Employees;
   }
 
   public async findEmployeeById(EmployeeId: string): Promise<Employee> {
     if (isEmpty(EmployeeId)) throw new HttpException(400, "You're not EmployeeId");
 
-    const findEmployee: Employee = await this.Employees.findOne({ _id: EmployeeId }).populate("default_shift department designation branch projectId");
+    const findEmployee: Employee = await this.Employees.findOne({ _id: EmployeeId }).populate("default_shift department designation branch projectId reports_to");
     if (!findEmployee) throw new HttpException(409, "You're not Employee");
 
     return findEmployee;
