@@ -35,10 +35,6 @@ export class CreateProjectDto {
 
   @IsNotEmpty()
   @IsString()
-  public number_of_employees: number;
-
-  @IsNotEmpty()
-  @IsString()
   public billing_structure: string;
 
   @IsNotEmpty()
@@ -79,10 +75,6 @@ export class UpdateProjectDto {
 
     @IsString()
     public hours_of_operation: number;
-
-    @IsNotEmpty()
-    @IsString()
-    public type_of_employees: string;
 
     @IsNotEmpty()
     @IsDateString()

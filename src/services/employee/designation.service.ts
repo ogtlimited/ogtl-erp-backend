@@ -4,6 +4,7 @@ import { isEmpty } from '@utils/util';
 import { Designation } from '@/interfaces/employee-interface/designation.interface';
 import { CreateDesignationDto,UpdateDesignationDto } from '@/dtos/employee/designation.dto';
 import DesignationModel from '@models/employee/designation.model';
+import { slugify } from '@/utils/slugify';
 
 
 class DesignationService{
@@ -49,8 +50,11 @@ public async findDesignationById(DesignationId:string) : Promise<Designation>{
 
        const findDesignation: Designation = await this.Designations.findOne({Designation: DesignationData.designation});
        if(findDesignation) throw new HttpException(409, `Designation ${DesignationData.designation} already exists`);
-
-       const createDesignationData: Designation = await this.Designations.create(DesignationData);
+       const data = {
+        ...DesignationData,
+        slug: slugify(DesignationData.designation)
+      }
+       const createDesignationData: Designation = await this.Designations.create(data);
        return createDesignationData;
      }
 

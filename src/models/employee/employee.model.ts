@@ -31,7 +31,6 @@ const employeeSchema: Schema = new Schema(
     },
     password:  {
       type: String,
-      required: true,
     },
     designation: {
       type: Schema.Types.ObjectId,
@@ -64,6 +63,14 @@ const employeeSchema: Schema = new Schema(
     isAdmin: {
       type: Boolean,
       required: true,
+    },
+    isTeamLead: {
+      type: Boolean,
+      default: false
+    },
+    isSupervisor: {
+      type: Boolean,
+      default: false
     },
     gender: {
       type: String,
