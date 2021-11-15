@@ -20,6 +20,7 @@ const projectSchema: Schema = new Schema(
     type: {
       type: String,
       required: true,
+      enum: ['domestic', 'foreign'],
     },
     objectives: {
       type: String,
@@ -27,10 +28,6 @@ const projectSchema: Schema = new Schema(
     },
     hours_of_operation: {
       type: Number,
-      required: true,
-    },
-    type_of_employees: {
-      type: String,
       required: true,
     },
     start_date: {
