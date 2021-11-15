@@ -67,6 +67,7 @@ const projectSchema: Schema = new Schema(
       type: String,
       required: true,
       enum: ["open", "approved", "rejected", "suspended"],
+      default: "open"
     },
     manager: {
       type: Schema.Types.ObjectId,
