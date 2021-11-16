@@ -17,8 +17,8 @@ class JobApplicantRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, authMiddleware, this.jobApplicantController.getJobApplicants);
-    this.router.get(`${this.path}/:id`, authMiddleware, this.jobApplicantController.getJobApplicantById);
+    this.router.get(`${this.path}`, this.jobApplicantController.getJobApplicants);
+    this.router.get(`${this.path}/:id`,  this.jobApplicantController.getJobApplicantById);
     this.router.get(`${this.path}-accepted`,authMiddleware, this.jobApplicantController.getAcceptedJobApplicants);
     this.router.post(
       `${this.path}`,

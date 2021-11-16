@@ -30,10 +30,10 @@ const applicationSchema : Schema = new Schema (
         },
 
         leave_approver: {
-            type: String,
-            required : true,
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: "Employee",
         },
-
         posting_date: {
             type: Date,
         },

@@ -59,9 +59,11 @@ class AttendanceController {
     try {
      
       const attendanceData: UpdateAttendanceDto = req.body;
+      // console.log(req)
       const createAttendanceData: any = await this.attendanceService.updateAttendance(req.user,attendanceData); 
       res.status(201).json({ data: createAttendanceData});
     } catch (error) {
+      console.log(error, 'ERROR')
       next(error);
     }
   };

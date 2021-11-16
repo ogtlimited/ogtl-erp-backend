@@ -24,9 +24,7 @@ export class CreateLeaveApplicationDTO{
 
     @IsString()
     public reason: string;
-    
-    @IsString()
-    public status: string;
+
 }
 export class UpdateLeaveApplicationDTO{
 

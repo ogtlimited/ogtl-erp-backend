@@ -24,7 +24,15 @@ class LeaveApplicationService {
           path: 'designation',
           model: 'Designation'
       }
-  });
+  })
+  .populate({
+    path: 'leave_approver', 
+    model: 'Employee',
+    populate: {
+        path: 'designation',
+        model: 'Designation'
+    }
+});
     return application;
   }
 
