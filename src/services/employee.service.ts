@@ -104,12 +104,15 @@ class EmployeeService {
       department: this.notEmpty(e.department) ? AllOffices[e.department.toLowerCase()] : null,
       designation: this.notEmpty(e.designation) ? AllDesignations[e.designation.toLowerCase()] : null,
       projectId: this.notEmpty(e.projectId) ? AllOffices[e.projectId.toLowerCase()] : null,
+      company_email: this.notEmpty(e.company_email) ? e.company_email : this.genEmail(e.first_name, e.last_name),
       default_shift: this.notEmpty(e.default_shift) ? AllShifts[e.default_shift.toLowerCase()] : null,
       reports_to: null,
       branch: null,
+      gender: e.gender.toLowerCase(),
       ogid: this.notEmpty(e.ogid) ? e.ogid : this.generateOGID(),
     }));
-    console.log(formatted);
+    console.log(formatted.filter(e => e.gender == ''));
+    console.log('formatted');
 
     const createEmployeeData = await this.Employees.insertMany(formatted);
 
@@ -217,6 +220,9 @@ class EmployeeService {
     console.log(teamLead['_id']);
     return await this.Employees.find({reports_to: teamLeadID}, {_id: 1, first_name:1, last_name:1, company_email:1, ogid:1})
 
+  }
+  genEmail(first_name: string, last_name: string){
+    return first_name.toLowerCase() + '.' + last_name.toLowerCase() + '@outsourceglobal.com'
   }
 }
 

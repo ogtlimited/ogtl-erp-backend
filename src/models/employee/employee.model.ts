@@ -12,7 +12,6 @@ const employeeSchema: Schema = new Schema(
     },
     company_email: {
       type: String,
-      required: true,
       unique: true,
     },
     date_of_joining: {
@@ -54,7 +53,7 @@ const employeeSchema: Schema = new Schema(
     },
     employeeType: {
       type: String,
-      enum: ["Apprentice","Intern","Commission","Contract","Probation","PartTime","FullTime"]
+      enum: ["Apprentice","Intern","Commission","Contract","Probation","PartTime","FullTime", "Corper"]
     },
     first_name: {
       type: String,
