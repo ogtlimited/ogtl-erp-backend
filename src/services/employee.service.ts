@@ -51,9 +51,9 @@ class EmployeeService {
       EmployeeData.department = null;
     }
 
-    let dateOfJoining = moment(EmployeeData['date_of_joining']).add(1, 'M')
-    let endOfyear = moment().endOf('year')
-    let duration = Math.abs(moment(dateOfJoining).diff(endOfyear, 'months', true)).toFixed(0)
+    const dateOfJoining = moment(EmployeeData['date_of_joining']).add(1, 'M')
+    const endOfyear = moment().endOf('year')
+    const duration = Math.abs(moment(dateOfJoining).diff(endOfyear, 'months', true)).toFixed(0)
     EmployeeData.leaveCount = Number(duration) * 2;
     // console.log(dateOfJoining, endOfyear, duration)
     // console.log(endOfyear)

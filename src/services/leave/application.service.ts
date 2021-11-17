@@ -111,7 +111,7 @@ class LeaveApplicationService {
     if(MaxLeave < totalApplied){
       throw  new HttpException(400, "total leave days exceed available leaves")
     }
-    let leaveDiff = MaxLeave - totalApplied;
+    const leaveDiff = MaxLeave - totalApplied;
     const monthAfterOnboarding = this.monthDiff(new Date(user.date_of_joining), new Date());
     // if(user)
     if(totalApplied > 12){

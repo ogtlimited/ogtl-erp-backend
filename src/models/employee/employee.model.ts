@@ -89,6 +89,7 @@ const employeeSchema: Schema = new Schema(
     },
     leaveCount: {
       type: Number,
+      default: 0
     },
     reports_to: {
       type: Schema.Types.ObjectId,
