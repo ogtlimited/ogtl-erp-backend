@@ -78,7 +78,6 @@ const employeeSchema: Schema = new Schema(
     },
     image: {
       type: String,
-
     },
     last_name: {
       type: String,
@@ -87,6 +86,9 @@ const employeeSchema: Schema = new Schema(
     },
     middle_name: {
       type: String,
+    },
+    leaveCount: {
+      type: Number,
     },
     reports_to: {
       type: Schema.Types.ObjectId,
