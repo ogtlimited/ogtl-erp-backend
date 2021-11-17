@@ -58,6 +58,7 @@ class CombineServices {
     const passedApplicants = await this.passedTestApplicants.findAllPassedTests()
     const allAssets = await this.Assets.findAllAsset()
     const allPurchaseOrders = await this.PurchaseOrder.findAllPurchaseOrders()
+    const clientS = await this.clientS.findAll()
 
 
     return {
@@ -72,7 +73,7 @@ class CombineServices {
         passedApplicants,
         allAssets,
         allPurchaseOrders,
-
+       clientS
     }
   }
 
