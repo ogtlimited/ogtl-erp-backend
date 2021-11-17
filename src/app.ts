@@ -6,6 +6,7 @@ import compression from 'compression';
 import { dirname } from 'path';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import fileUpload from 'express-fileupload'
 import config from 'config';
 import express from 'express';
 import helmet from 'helmet';
@@ -125,6 +126,9 @@ class App {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
+    this.app.use(
+      fileUpload()
+    );
   }
 
   private initializeRoutes(routes: Routes[]) {
