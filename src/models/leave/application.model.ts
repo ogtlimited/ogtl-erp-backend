@@ -44,7 +44,7 @@ const applicationSchema : Schema = new Schema (
 
         status: {
             type: String,
-            enum: ['open','approved','rejected','cancelled'],
+            enum: ['open','approved by supervisor','rejected','cancelled', 'approved', 'rejected by supervisor'],
             default : 'open',
         },
 
