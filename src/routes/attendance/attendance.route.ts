@@ -22,7 +22,7 @@ class AttendanceRoute implements Routes {
         this.router.get(`${this.path}/employee/:ogId`,[authMiddleware], this.AttendanceController.getEmployeeAttendance);
         this.router.get(`${this.path}/:id`,[authMiddleware], this.AttendanceController.getAttendanceById);
         this.router.post(`${this.path}`,[authMiddleware, validationMiddleware(CreateAttendanceDto, 'body')], this.AttendanceController.createAttendance);
-        this.router.patch(`${this.path}`, [ validationMiddleware(UpdateAttendanceDto, 'body')], this.AttendanceController.updateAttendance);
+        this.router.patch(`${this.path}`, [authMiddleware, validationMiddleware(UpdateAttendanceDto, 'body')], this.AttendanceController.updateAttendance);
     }
   }
   export default AttendanceRoute;

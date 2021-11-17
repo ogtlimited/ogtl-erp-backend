@@ -10,7 +10,7 @@ import departmentModel from '@/models/department/department.model';
 import shiftTypeModel from '@models/shift/shift_type.model';
 import projectModel from '@/models/project/project.model';
 import { ObjectId } from "mongodb";
-
+import moment from "moment";
 import { IProject } from './../interfaces/project-interface/project.interface';
 import { Designation } from './../interfaces/employee-interface/designation.interface';
 import { IDepartment } from './../interfaces/employee-interface/department.interface';
@@ -39,11 +39,11 @@ class EmployeeService {
     return findEmployee;
   }
 
-  public async createEmployee(EmployeeData: CreateEmployeeDto): Promise<Employee> {
+  public async createEmployee(EmployeeData: CreateEmployeeDto): Promise<any> {
     if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
 
-    const findEmployee: Employee = await this.Employees.findOne({ email: EmployeeData.company_email });
-    if (findEmployee) throw new HttpException(409, `Your email ${EmployeeData.company_email} already exists`);
+    // const findEmployee: Employee = await this.Employees.findOne({ email: EmployeeData.company_email });
+    // if (findEmployee) throw new HttpException(409, `Your email ${EmployeeData.company_email} already exists`);
     const randomstring = Math.random().toString(36).slice(2);
     const hashedPassword = await bcrypt.hash(randomstring, 10);
     const newOgid = this.generateOGID();
@@ -51,8 +51,14 @@ class EmployeeService {
       EmployeeData.department = null;
     }
 
+    const dateOfJoining = moment(EmployeeData['date_of_joining']).add(1, 'M')
+    const endOfyear = moment().endOf('year')
+    const duration = Math.abs(moment(dateOfJoining).diff(endOfyear, 'months', true)).toFixed(0)
+    EmployeeData.leaveCount = Number(duration) * 2;
+    // console.log(dateOfJoining, endOfyear, duration)
+    // console.log(endOfyear)
+    console.log(EmployeeData['leaveCount'])
     const createEmployeeData: Employee = await this.Employees.create({ ...EmployeeData, password: hashedPassword, ogid: newOgid });
-
     return createEmployeeData;
   }
   public async createMultipleEmployee(EmployeeData: any): Promise<any> {
@@ -98,12 +104,15 @@ class EmployeeService {
       department: this.notEmpty(e.department) ? AllOffices[e.department.toLowerCase()] : null,
       designation: this.notEmpty(e.designation) ? AllDesignations[e.designation.toLowerCase()] : null,
       projectId: this.notEmpty(e.projectId) ? AllOffices[e.projectId.toLowerCase()] : null,
+      company_email: this.notEmpty(e.company_email) ? e.company_email : this.genEmail(e.first_name, e.last_name),
       default_shift: this.notEmpty(e.default_shift) ? AllShifts[e.default_shift.toLowerCase()] : null,
       reports_to: null,
       branch: null,
+      gender: e.gender.toLowerCase(),
       ogid: this.notEmpty(e.ogid) ? e.ogid : this.generateOGID(),
     }));
-    console.log(formatted);
+    console.log(formatted.filter(e => e.gender == ''));
+    console.log('formatted');
 
     const createEmployeeData = await this.Employees.insertMany(formatted);
 
@@ -211,6 +220,9 @@ class EmployeeService {
     console.log(teamLead['_id']);
     return await this.Employees.find({reports_to: teamLeadID}, {_id: 1, first_name:1, last_name:1, company_email:1, ogid:1})
 
+  }
+  genEmail(first_name: string, last_name: string){
+    return first_name.toLowerCase() + '.' + last_name.toLowerCase() + '@outsourceglobal.com'
   }
 }
 

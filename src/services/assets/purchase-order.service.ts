@@ -12,7 +12,19 @@ class PurchaseOrderService{
     public PurchaseOrder = PurchaseOrderModel;
 
     public async findAllPurchaseOrders(): Promise<purchaseOrder[]> { 
-        const Asset: purchaseOrder[] = await this.PurchaseOrder.find().populate("location departmentId projectId");
+        const Asset: purchaseOrder[] = await this.PurchaseOrder.find()
+        .populate({path: "projectId",
+        select:{
+          project_name:1,
+        }})
+        .populate({path: "departmentId",
+        select:{
+          department:1,
+        }})
+        .populate({path: "location",
+        select:{
+          branch:1,
+        }});
         return Asset;
         
     }

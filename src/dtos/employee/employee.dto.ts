@@ -61,6 +61,9 @@ export class CreateEmployeeDto {
   @IsString()
   public projectId: string;
 
+  @IsOptional()
+  leaveCount: number;
+
 
 
 }

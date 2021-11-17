@@ -30,10 +30,10 @@ const applicationSchema : Schema = new Schema (
         },
 
         leave_approver: {
-            type: String,
-            required : true,
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: "Employee",
         },
-
         posting_date: {
             type: Date,
         },
@@ -44,7 +44,7 @@ const applicationSchema : Schema = new Schema (
 
         status: {
             type: String,
-            enum: ['open','approved','rejected','cancelled'],
+            enum: ['open','approved by supervisor','rejected','cancelled', 'approved', 'rejected by supervisor'],
             default : 'open',
         },
 

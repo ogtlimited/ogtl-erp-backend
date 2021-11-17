@@ -16,8 +16,8 @@ class JobOpeningRoute implements Routes{
   }
 
   private initializeRoutes(){
-    this.router.get(`${this.path}`,authMiddleware,this.jobOpeningController.getJobOpenings);
-    this.router.get(`${this.path}/:id`,authMiddleware,this.jobOpeningController.getJobOpeningById);
+    this.router.get(`${this.path}`,this.jobOpeningController.getJobOpenings);
+    this.router.get(`${this.path}/:id`,this.jobOpeningController.getJobOpeningById);
     this.router.post(`${this.path}`,[validationMiddleware(CreateJobOpeningDto,'body'),authMiddleware],this.jobOpeningController.createJobOpening);
     this.router.patch(`${this.path}/:id`, [validationMiddleware(UpdateJobOpeningDto, 'body'),authMiddleware], this.jobOpeningController.updateJobOpening);
     this.router.delete(`${this.path}/:id`,authMiddleware,this.jobOpeningController.deleteJobOpening);

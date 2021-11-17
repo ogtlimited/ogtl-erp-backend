@@ -12,7 +12,7 @@ class AssetService{
      *Returns all Asset
      */
     public async findAllAsset(): Promise<Asset[]> { 
-        const Asset: Asset[] = await this.Assets.find();
+        const Asset: Asset[] = await this.Assets.find().populate("assetName");
         return Asset;
         
     }
