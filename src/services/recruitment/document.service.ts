@@ -22,6 +22,8 @@ const mimeTypes = [
     'application/msword',
     'application/pdf',
     'text/csv',
+    'application/mp4',
+    'video/mp4',
     'application/vnd.ms-excel',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     'text/html',
