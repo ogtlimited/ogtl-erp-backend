@@ -26,7 +26,7 @@ class ProjectService {
     }
 
     public async findAll(param: any = {}): Promise<IProject[]> {
-        const projects: IProject[] = await this.project.find(param).populate("manager quality_analyst");
+        const projects: IProject[] = await this.project.find(param).populate("manager quality_analyst client_id creator");
         return projects;
     }
 
@@ -71,7 +71,7 @@ class ProjectService {
             console.log(getEmployeeWithRole)
             const emailTemplate = campaignCreationEmail(getEmployeeWithRole, "A new campaign created. do the needful")
             const sclient = await new SocketLabsClient(parseInt(process.env.SOCKETLABS_SERVER_ID), process.env.SOCKETLABS_INJECTION_API_KEY);
-            
+
             await sclient.send(emailTemplate).then(
                 (response) => {
                     console.log(response)
@@ -92,7 +92,7 @@ class ProjectService {
     }
 
     private async findOne(id: string): Promise<IProject> {
-        const findproject: IProject = await this.project.findOne({ _id: id });
+        const findproject: IProject = await this.project.findOne({ _id: id }).populate("manager quality_analyst client_id creator");
         return findproject;
     }
 }

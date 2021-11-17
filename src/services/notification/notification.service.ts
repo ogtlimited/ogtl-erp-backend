@@ -38,7 +38,7 @@ class NotificationService {
         if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
         const findnotification = this.findOne(notificationId);
         if (!findnotification) throw new HttpException(409, "notification not found");
-        const updatenotification: INotification = await this.notification.findByIdAndUpdate(notificationId, { Payload }, {new: true});
+        const updatenotification: INotification = await this.notification.findByIdAndUpdate(notificationId, Payload , {new: true});
         return updatenotification;
     }
 

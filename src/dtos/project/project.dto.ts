@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsString,IsEnum ,IsDateString,IsNotEmpty} from 'class-validator';
+import { IsString, IsEnum, IsDateString, IsNotEmpty, IsNumber } from 'class-validator';
 import { IProject } from '@interfaces/project-interface/project.interface';
 
 export class CreateProjectDto {
@@ -26,12 +26,15 @@ export class CreateProjectDto {
   public type_of_employees: string;
 
   @IsNotEmpty()
-
   @IsDateString()
   public start_date: Date;
 
   @IsDateString()
   public end_date: Date;
+
+  @IsNotEmpty()
+  @IsNumber()
+  public number_of_employees: number;
 
   @IsNotEmpty()
   @IsString()
@@ -46,9 +49,9 @@ export class CreateProjectDto {
 
   @IsString()
   public creator: string;
-
-  @IsString()
-  public approved: string;
+  //
+  // @IsString()
+  // public status: string;
 
   @IsString()
   public manager: string;
@@ -75,6 +78,10 @@ export class UpdateProjectDto {
 
     @IsString()
     public hours_of_operation: number;
+
+    @IsNotEmpty()
+    @IsString()
+    public type_of_employees: string;
 
     @IsNotEmpty()
     @IsDateString()
@@ -114,4 +121,3 @@ export class UpdateProjectDto {
     public status: string;
 
   }
-  
