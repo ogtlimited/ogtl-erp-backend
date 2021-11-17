@@ -30,6 +30,7 @@ class AttendanceTypeService {
     const officeQuery = attendanceofficeQueryGenerator(query)
     const employees = await employeeModel.find(officeQuery, {ogid: 1, first_name:1, last_name:1, profile_pic:1, gender: 1, designation:1, _id:1}).populate('designation')
     //consider the possilibty of random ObjectID causing an error......
+    // console.log(employees)
     for (let index = 0; index < employees.length; index++) {
       const employee = {...employees[index].toObject(),attendance:null};
       const employeeAttendance = await this.attendanceTypes.aggregate(
@@ -69,9 +70,15 @@ class AttendanceTypeService {
         if (employeeAttendance.length < 1) {
           continue
         }
-        employee.attendance = employeeAttendance[0]
-        payload.push(employee)        
+        employee.attendance = {
+          ...employeeAttendance[0],
+          month: moment(startOfMonth).format('MMMM'),
+          year: moment(startOfMonth).format('YYYY'),
+        }
+        console.log(employee)
+        payload.push(employee)
       }
+
     return payload;
   }
 
@@ -119,16 +126,20 @@ class AttendanceTypeService {
   public async updateAttendance(user, attendanceData: UpdateAttendanceDto): Promise<any> {
     // const data = await this.generateAttendance("project")
     // return data
+    console.log(attendanceData.attendanceId, 'RECORD')
+    console.log(user, 'USER')
     let attendanceRecord = await this.attendanceTypes.findOne({_id: attendanceData.attendanceId, employeeId: user._id})
-    .populate('shiftTypeId')
+    //.populate('shiftTypeId')
     .populate({path: 'employeeId', select:{salaryStructure_id:1}, populate:{path:'salaryStructure_id', model:'SalaryStructure', select:{grossPay:1}}})
     .populate({path:'earnings', model:'SalaryComponent'})
     if(!attendanceRecord){
+      console.log('ERROR')
       throw new HttpException(404, "not found");
     }
-    // if(attendanceRecord.clockOutTime){
-    //   throw new HttpException(400, "already clocked out!");
-    // }
+    console.log('record', attendanceRecord)
+    if(attendanceRecord.clockOutTime){
+      throw new HttpException(400, "already clocked out!");
+    }
     attendanceRecord = attendanceRecord.toObject()
     const workTimeResult: any = await getWorkTime(attendanceRecord.clockInTime, attendanceData.clockOutTime, attendanceRecord.shiftTypeId.start_time);
     attendanceRecord.hoursWorked = workTimeResult.hoursWorked

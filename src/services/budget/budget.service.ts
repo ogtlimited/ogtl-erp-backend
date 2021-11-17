@@ -133,7 +133,7 @@ class BudgetService {
       // console.log(expenseHead);
       return expenseHead;
     })
-    console.log(expenseHeads);
+    console.log(newBudget, newData);
     await expenseHeadModel.insertMany(newData.expenseHeads)
     newBudget = omit(newBudget.toObject(), ["createdBy", "deleted"])
     return newBudget;

@@ -10,6 +10,7 @@ import applicationModel from '@/models/leave/application.model';
 import  allocationModel  from '@/models/leave/allocation.model';
 import  EmployeeService  from '@services/employee.service';
 import { Employee } from '@/interfaces/employee-interface/employee.interface';
+import EmployeeModel from "@models/employee/employee.model";
 
 class LeaveApplicationService {
   public application = applicationModel;
@@ -18,14 +19,59 @@ class LeaveApplicationService {
 
   public async findAllLeaveapplication(): Promise<ILeaveApplication[]> {
     const application: ILeaveApplication[] = await this.application.find().populate({
-      path: 'employee_id', 
+      path: 'employee_id',
       model: 'Employee',
       populate: {
           path: 'designation',
           model: 'Designation'
       }
-  });
+  })
+  .populate({
+    path: 'leave_approver',
+    model: 'Employee',
+    populate: {
+        path: 'designation',
+        model: 'Designation'
+    }
+});
     return application;
+  }
+
+  public async findAllTeamMembersLeave(user): Promise<ILeaveApplication[]> {
+    const leaveApplications = await this.application.find({leave_approver: user._id})
+    return leaveApplications;
+  }
+
+  public async supervisorApproveLeave(id: String, decision, user): Promise<ILeaveApplication> {
+    const leaveApplication = await this.application.findOneAndUpdate({_id: id, leave_approver: user._id, status: {$eq: "open"}}, {
+      $set: {status: `${decision == "true" ? 'approved by supervisor': 'rejected by supervisor'}`}
+    }, {new: true})
+    if(!leaveApplication){
+      throw new HttpException(400, "leave application does not exist")
+    }
+    return leaveApplication;
+  }
+
+  public async HrApproveLeave(id: String, decision): Promise<ILeaveApplication> {
+    const leaveApplication = await this.application.findOneAndUpdate({_id: id,  status: {$eq: "approved by supervisor"}}, {
+      $set: {status: `${decision == "true" ? 'approved': 'rejected'}`}
+    }, {new: true})
+
+    if(!leaveApplication){
+      throw new HttpException(400, "leave application does not exist")
+    }
+    return leaveApplication;
+  }
+
+  public async HrRejectLeave(id: String): Promise<ILeaveApplication> {
+    const leaveApplication = await this.application.findOneAndUpdate({_id: id,  status: {$eq: "approved by supervisor"}}, {
+      $set: {status: 'rejected'}
+    }, {new: true})
+
+    if(!leaveApplication){
+      throw new HttpException(400, "leave application does not exist")
+    }
+    return leaveApplication;
   }
 
   public async findLeaveapplicationById(LeaveapplicationId: string): Promise<ILeaveApplication> {
@@ -36,6 +82,7 @@ class LeaveApplicationService {
 
     return findLeaveapplication;
   }
+
   public async findLeaveapplicationByEmployeeId(LeaveapplicationId: string): Promise<ILeaveApplication> {
     if (isEmpty(LeaveapplicationId)) throw new HttpException(400, "You're not LeaveapplicationId");
 
@@ -45,19 +92,26 @@ class LeaveApplicationService {
     return findLeaveapplication;
   }
 
-  public async createLeaveapplication(LeaveapplicationData: CreateLeaveApplicationDTO): Promise<ILeaveApplication> {
+  public async createLeaveapplication(LeaveapplicationData: ILeaveApplication, user): Promise<ILeaveApplication> {
     if (isEmpty(LeaveapplicationData)) throw new HttpException(400, "Bad request");
     const startDate = new Date(LeaveapplicationData.from_date)
     const endDate = new Date(LeaveapplicationData.to_date)
     if(startDate > endDate) throw new HttpException(400, "Leave end date must be greater than end date");
-    const MaxLeave = 24;
     const date = new Date()
-    const user: Employee = await this.employeeS.findEmployeeById(LeaveapplicationData.employee_id)
+    // const user: Employee = await this.employeeS.findEmployeeById(LeaveapplicationData.employee_id)
+    const MaxLeave = Number(user.leaveCount);
+    console.log(user)
+    LeaveapplicationData.leave_approver = user.reports_to;
+    LeaveapplicationData.employee_id = user._id
     const prevLeaves: ILeaveApplication[] = await this.application.find(
       { employee_id: LeaveapplicationData.employee_id,'createdAt': {
         '$gte': new Date(date.getFullYear().toString()),
       }, });
     const totalApplied = this.getBusinessDatesCount(new Date(LeaveapplicationData.from_date), new Date(LeaveapplicationData.to_date))
+    if(MaxLeave < totalApplied){
+      throw  new HttpException(400, "total leave days exceed available leaves")
+    }
+    let leaveDiff = MaxLeave - totalApplied;
     const monthAfterOnboarding = this.monthDiff(new Date(user.date_of_joining), new Date());
     // if(user)
     if(totalApplied > 12){
@@ -70,6 +124,9 @@ class LeaveApplicationService {
     if(prevLeaves.length == 0){
       // console.log(prevLeaves)
       const createLeaveapplicationData: ILeaveApplication = await this.application.create(LeaveapplicationData);
+      await EmployeeModel.findOneAndUpdate({_id: user._id}, {
+        $set: {leaveCount: leaveDiff }
+      })
       return createLeaveapplicationData;
     }else{
       const getLeaveDays = prevLeaves.map(e => this.getBusinessDatesCount(new Date(e.from_date), new Date(e.to_date)))
@@ -84,10 +141,12 @@ class LeaveApplicationService {
           throw new HttpException(400, "You have used "+ (totalLeaveThisYear) +", you have "+ (MaxLeave -  totalLeaveThisYear )+ " leave left");
         }else{
           const createLeaveapplicationData: ILeaveApplication = await this.application.create(LeaveapplicationData);
+          await EmployeeModel.findOneAndUpdate({_id: user._id}, {
+            $set: {leaveCount: leaveDiff }
+          })
           return createLeaveapplicationData;
         }
       }
-
     }
   }
 
@@ -125,9 +184,15 @@ class LeaveApplicationService {
       return count;
   }
   public monthDiff(dateFrom, dateTo) {
-    return dateTo.getMonth() - dateFrom.getMonth() + 
+    return dateTo.getMonth() - dateFrom.getMonth() +
       (12 * (dateTo.getFullYear() - dateFrom.getFullYear()))
    }
+
+  public async addLeavesForEmployees(): Promise<void>{
+    await this.application.updateMany({status: "active"}, {
+      $inc: {leaveCount: 24}
+    })
+  }
 }
 
 
