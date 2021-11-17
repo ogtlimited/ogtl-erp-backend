@@ -1,4 +1,6 @@
 /* eslint-disable prettier/prettier */
+import LeaveApplicationService from "@services/leave/application.service";
+
 process.env['NODE_CONFIG_DIR'] = __dirname + '/configs';
 
 
@@ -42,7 +44,7 @@ class App {
     this.app = express();
     this.port = process.env.PORT || 3000;
     this.env = process.env.NODE_ENV || 'development';
-    
+
 
     this.connectToDatabase();
     this.initializeMiddlewares();
@@ -64,7 +66,7 @@ class App {
       });
 
       io.on('connection', socket => {
-        
+
           console.log('Socket: client connected')
           socket.on('notification', (data) => {
               client.lrange(data, 0, -1, function(err, reply) {
@@ -80,7 +82,7 @@ class App {
           socket.on('disconnect', (data) => {
               console.log('Client disconnected')
           })
-        
+
       })
   }
 
@@ -217,7 +219,7 @@ class App {
       const attendanceService = new AttendanceTypeService()
       await attendanceService.generateAttendance()
     //   console.log('running task 1am every day');
-    //   const day = "saturday" 
+    //   const day = "saturday"
     //   if (day == "saturday" || day == "sunday") {
     //     console.log("skipping today")
     //   }else{
@@ -226,7 +228,12 @@ class App {
     //     await attendanceService.generateAttendance("project")
     //   }
     })
+    const task2 = cron.schedule('* 1 * * 1-5', async function() {
+      const applicationService = new LeaveApplicationService()
+      await applicationService.addLeavesForEmployees()
+    })
      task.start()
+     task2.start()
   }
 }
 
