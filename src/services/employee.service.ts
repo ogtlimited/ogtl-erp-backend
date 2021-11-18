@@ -101,6 +101,9 @@ class EmployeeService {
     const formatted = EmployeeData.map((e: any) => ({
       ...e,
       isAdmin: e.isAdmin === 'true' ? true : false,
+      isTeamLead: e.isTeamLead === 'true' ? true : false,
+      isSupervisor: e.isSupervisor === 'true' ? true : false,
+      leaveCount: 0,
       department: this.notEmpty(e.department) ? AllOffices[e.department.toLowerCase()] : null,
       designation: this.notEmpty(e.designation) ? AllDesignations[e.designation.toLowerCase()] : null,
       projectId: this.notEmpty(e.projectId) ? AllOffices[e.projectId.toLowerCase()] : null,
