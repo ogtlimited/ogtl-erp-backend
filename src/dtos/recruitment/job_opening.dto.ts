@@ -19,6 +19,10 @@ export class CreateJobOpeningDto {
   @IsOptional()
   @IsString()
   public description: string;
+
+  @IsOptional()
+  @IsString()
+  public location: string;
 }
 
 export class UpdateJobOpeningDto {
@@ -43,4 +47,8 @@ export class UpdateJobOpeningDto {
   @IsOptional()
   @IsString()
   public description: string;
+
+  @IsOptional()
+  @IsString()
+  public location: string;
 }

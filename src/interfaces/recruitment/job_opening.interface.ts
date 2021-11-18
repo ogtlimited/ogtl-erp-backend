@@ -5,4 +5,5 @@ export interface IJobOpening {
   project_id: string;
   status: string;
   description: string;
+  location: string;
 }

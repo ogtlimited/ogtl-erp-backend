@@ -28,6 +28,11 @@ const jobOpeningSchema: Schema = new Schema({
     type: String,
     default: null,
   },
+  location: {
+    type: Schema.Types.ObjectId,
+    ref: 'Branch',
+    default: null,
+  },
 });
 
 
