@@ -136,7 +136,7 @@ class DocumentService {
                 console.log("Bucket has been created already");
             }else{
                 // console.log(data)        
-                console.log('Bucket Created Successfully', data.Location)
+                console.log('Bucket Created Successfully', data);
             }
         })
     }
@@ -149,7 +149,7 @@ class DocumentService {
                     return reject(err);
                 }
                 // console.log(data)
-                console.log(`File uploaded successfully. ${data.Location}`)
+                console.log(`File uploaded successfully. ${data}`)
                 return resolve(data)
             });
         })

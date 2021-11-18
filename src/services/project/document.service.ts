@@ -81,10 +81,10 @@ class DocumentService {
     public async create(Payload: CreateDocumentDto, req: any): Promise<any> {
         if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
         if(!req.files || req.files.length > 1) throw new HttpException(409, "Please upload a file");
-        let file = req.files.document 
+        const file = req.files.document 
         if(!mimeTypes.includes(file.mimetype)) throw new HttpException(409, "Only PNG, JPG, JPEG, GIF files are allowed");
-        let extension = path.extname(file.name)
-        let filename = uuid() + extension
+        const extension = path.extname(file.name)
+        const filename = uuid() + extension
         Payload.file_extension = extension.replace(".", "")
         Payload.file_type = file.mimetype
         Payload.file_name = path.parse(file.name).name
@@ -128,7 +128,7 @@ class DocumentService {
             Bucket: this.BUCKET_NAME,
             CreateBucketConfiguration: {
                 // Set your region here
-                LocationConstraint: "eu-west-2"
+                LocationConstraint: "eu-west-1"
             }
         }
         return params
