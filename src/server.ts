@@ -55,6 +55,9 @@ import CoachingFormRoute from './routes/coaching/coachingForm.route';
 import ClientRoute  from '@routes/project/client.route';
 import AssetAssignmentRoute from '@/routes/assets/asset-assignment.route';
 import ProjectRoute from '@routes/project/project.route';
+import documentRoute from '@routes/project/document.route';
+import JobDocumentRoute from '@routes/recruitment/document.route';
+
 import RoleRoute from '@routes/role/role.route';
 //import DepartmentRoute from './routes/employee/department.route';
 import scoreCardRoute from './routes/pip/score-cards.route';
@@ -165,7 +168,9 @@ const app = new App([
   new VendorRoute(),
   new BillsRoute(),
   new PaymentRoute(),
-  new ExpenseHeadDraftRoute()
+  new ExpenseHeadDraftRoute(),
+  new documentRoute(),
+  new JobDocumentRoute()
 ]);
 
 const server = app.listen();
