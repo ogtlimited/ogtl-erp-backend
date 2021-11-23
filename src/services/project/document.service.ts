@@ -128,7 +128,7 @@ class DocumentService {
             Bucket: this.BUCKET_NAME,
             CreateBucketConfiguration: {
                 // Set your region here
-                LocationConstraint: "eu-west-2"
+                LocationConstraint: "eu-west-1"
             }
         }
         return params
