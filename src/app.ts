@@ -116,7 +116,7 @@ class App {
 
   private initializeMiddlewares() {
     this.app.use(morgan(config.get('log.format'), { stream }));
-    const allowedOrigins = ['https://erp.outsourceglobal.com', 'http://localhost:3001'];
+    const allowedOrigins = ['https://erp.outsourceglobal.com', 'http://localhost:3001', 'https://www.outsourceglobal.com/'];
     const options: cors.CorsOptions = {
       origin: allowedOrigins
     };
