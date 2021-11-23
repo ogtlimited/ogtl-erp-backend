@@ -76,6 +76,76 @@ class CombineServices {
        clientS
     }
   }
+  //For anything relating to Employee creation
+  public async employeeForm(){
+    const acceptedJobOffers = await this.acceptedJobOfferS.findAllAcceptedJobOffers()
+    const employees = await this.employeeS.findAllEmployee()
+    const designations = await this.designationS.findAllDesignations()
+    const projects = await this.projectS.findAll();
+    const departments = await this.departmentS.findAllDepartments()
+    const shifts = await this.shiftS.findAllshiftType()
+    const branches = await this.brancheS.findAllBranches();
+
+    return {
+      acceptedJobOffers,
+      employees,
+      designations,
+      projects,
+      shifts,
+      departments,
+      branches
+    }
+  }
+
+  //For anything relating to shift
+  public async shiftForm(){
+    const shifts = await this.shiftS.findAllshiftType()
+    const employees = await this.employeeS.findAllEmployee()
+
+    return {
+      shifts,
+      employees
+    }
+  }
+  //For anything relating to payroll
+  public async payrollForm(){
+    const departments = await this.departmentS.findAllDepartments()
+    const projects = await this.projectS.findAll();
+    const employees = await this.employeeS.findAllEmployee()
+
+    return {
+      departments,
+      projects,
+      employees
+    }
+  }
+ //For anything relating to recruitment
+  public async recruitmentForm(){
+    const designations = await this.designationS.findAllDesignations()
+    const projects = await this.projectS.findAll();
+    const branches = await this.brancheS.findAllBranches();
+    const jobApplicants = await this.jobApplicantS.findAllJobApplicants()
+    const passedApplicants = await this.passedTestApplicants.findAllPassedTests()
+
+    return {
+      designations,
+      projects,
+      branches,
+      jobApplicants,
+      passedApplicants
+    }
+  }
+
+ //For anything relating to performance
+  public async performanceForm(){
+    const employees = await this.employeeS.findAllEmployee()
+    const designations = await this.designationS.findAllDesignations()
+
+    return {
+      employees,
+      designations
+    }
+  }
 
   public async adminDashboardDate(){
     const projects = await this.projectS.findAll();
