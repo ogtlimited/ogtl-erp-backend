@@ -13,12 +13,12 @@ export const account = [
                 number_prefix: "2",
                 child: [
                     {
-                        account_name: "Accounts Receivable",
+                        account_name: "Account Receivable",
                         is_group: true,
                         default: true,
                         child: [
                             {
-                                account_name: "Account-Receivable",
+                                account_name: "Accounts-Receivable",
                                 is_group: false,
                                 default: true,
                                 currency: "NGN",

@@ -31,6 +31,7 @@ class BudgetService {
         title:1,
         flagAlert:1,
         type:1,
+        status:1
     })
     // budgets - budgets.toObject()
     return budgets;
@@ -47,6 +48,7 @@ class BudgetService {
         budget:1,
         availableBalance:1,
         approved:1,
+        status:1,
         expenseHeadDraftId: 1
     })
     if (!budget) {
@@ -131,14 +133,13 @@ class BudgetService {
       // console.log(expenseHead);
       return expenseHead;
     })
-    console.log(expenseHeads);
+    console.log(newBudget, newData);
     await expenseHeadModel.insertMany(newData.expenseHeads)
     newBudget = omit(newBudget.toObject(), ["createdBy", "deleted"])
     return newBudget;
   }
 
   public async approve(req, id): Promise<any> {
-    // console.log(req.user.designation.designation);
     if(req.user.designation.designation != "SUPER"){
         req.query = {status: "draft"}
     }

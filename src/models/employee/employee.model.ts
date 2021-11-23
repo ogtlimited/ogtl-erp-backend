@@ -12,7 +12,6 @@ const employeeSchema: Schema = new Schema(
     },
     company_email: {
       type: String,
-      required: true,
       unique: true,
     },
     date_of_joining: {
@@ -54,7 +53,7 @@ const employeeSchema: Schema = new Schema(
     },
     employeeType: {
       type: String,
-      enum: ["Apprentice","Intern","Commission","Contract","Probation","PartTime","FullTime"]
+      enum: ["Apprentice","Intern","Commission","Contract","Probation","PartTime","FullTime", "Corper"]
     },
     first_name: {
       type: String,
@@ -78,7 +77,6 @@ const employeeSchema: Schema = new Schema(
     },
     image: {
       type: String,
-
     },
     last_name: {
       type: String,
@@ -87,6 +85,10 @@ const employeeSchema: Schema = new Schema(
     },
     middle_name: {
       type: String,
+    },
+    leaveCount: {
+      type: Number,
+      default: 0
     },
     reports_to: {
       type: Schema.Types.ObjectId,

@@ -12,7 +12,7 @@ class EmployeeTypeService{
     /**
      * returns all employee types
      */
-   
+
     public async findAllEmployeeTypes() : Promise<EmployeeType[]>{
         const EmployeeTypes : EmployeeType[] = await this.EmployeeTypes.find();
         return EmployeeTypes;
@@ -23,27 +23,27 @@ class EmployeeTypeService{
      * Returns EmployeeTypes with Id given
      */
     public async findEmployeeTypeById(EmployeeTypeId:string) : Promise<EmployeeType>{
-   
+
         //Check if Id is empty
         if (isEmpty(EmployeeTypeId)) throw new HttpException(400, "No Id provided");
-    
+
         //find EmployeeType with Id given
         const findEmployeeType:EmployeeType = await this.EmployeeTypes.findOne({ _id:EmployeeTypeId });
-    
+
         if(!findEmployeeType) throw new HttpException(409, "EmployeeType with that Id doesnt exist");
-    
+
         return findEmployeeType;
-    
-       
+
+
         }
 
     /**
-     *Creates a new EmployeeType 
+     *Creates a new EmployeeType
      */
 
 
      public async createEmployeeType(EmployeeTypeData: CreateEmployeeTypeDto) : Promise<EmployeeType>{
-        
+
         //Check if data is empty
        if (isEmpty(EmployeeTypeData)) throw new HttpException(400, "No data provided");
 
@@ -55,7 +55,7 @@ class EmployeeTypeService{
      }
 
      /**
-     *Updates existing EmployeeType 
+     *Updates existing EmployeeType
      */
 
      public async updateEmployeeType(EmployeeTypeId:string,EmployeeTypeData: UpdateEmployeeTypeDto)  : Promise<EmployeeType>{
@@ -66,7 +66,7 @@ class EmployeeTypeService{
         const updateEmployeeTypeById: EmployeeType = await this.EmployeeTypes.findByIdAndUpdate(EmployeeTypeId,{EmployeeTypeData});
         if(!updateEmployeeTypeById) throw new HttpException(409, "EmployeeType doesn't exist");
          return updateEmployeeTypeById;
-   } 
+   }
 
 
      //deletes exsiting EmployeeType

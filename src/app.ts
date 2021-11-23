@@ -1,4 +1,6 @@
 /* eslint-disable prettier/prettier */
+import LeaveApplicationService from "@services/leave/application.service";
+
 process.env['NODE_CONFIG_DIR'] = __dirname + '/configs';
 
 
@@ -6,6 +8,7 @@ import compression from 'compression';
 import { dirname } from 'path';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import fileUpload from 'express-fileupload'
 import config from 'config';
 import express from 'express';
 import helmet from 'helmet';
@@ -42,7 +45,7 @@ class App {
     this.app = express();
     this.port = process.env.PORT || 3000;
     this.env = process.env.NODE_ENV || 'development';
-    
+
 
     this.connectToDatabase();
     this.initializeMiddlewares();
@@ -64,7 +67,7 @@ class App {
       });
 
       io.on('connection', socket => {
-        
+
           console.log('Socket: client connected')
           socket.on('notification', (data) => {
               client.lrange(data, 0, -1, function(err, reply) {
@@ -80,7 +83,7 @@ class App {
           socket.on('disconnect', (data) => {
               console.log('Client disconnected')
           })
-        
+
       })
   }
 
@@ -113,7 +116,7 @@ class App {
 
   private initializeMiddlewares() {
     this.app.use(morgan(config.get('log.format'), { stream }));
-    const allowedOrigins = ['https://erp.outsourceglobal.com', 'http://localhost:3001'];
+    const allowedOrigins = ['https://erp.outsourceglobal.com', 'http://localhost:3001', 'https://www.outsourceglobal.com/'];
     const options: cors.CorsOptions = {
       origin: allowedOrigins
     };
@@ -122,9 +125,12 @@ class App {
     this.app.use(hpp());
     this.app.use(helmet());
     this.app.use(compression());
-    this.app.use(express.json());
+    this.app.use(express.json({limit: '50mb'}));
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
+    this.app.use(
+      fileUpload()
+    );
   }
 
   private initializeRoutes(routes: Routes[]) {
@@ -217,7 +223,7 @@ class App {
       const attendanceService = new AttendanceTypeService()
       await attendanceService.generateAttendance()
     //   console.log('running task 1am every day');
-    //   const day = "saturday" 
+    //   const day = "saturday"
     //   if (day == "saturday" || day == "sunday") {
     //     console.log("skipping today")
     //   }else{
@@ -226,7 +232,12 @@ class App {
     //     await attendanceService.generateAttendance("project")
     //   }
     })
+    const task2 = cron.schedule('* 1 * * 1-5', async function() {
+      const applicationService = new LeaveApplicationService()
+      await applicationService.addLeavesForEmployees()
+    })
      task.start()
+     task2.start()
   }
 }
 

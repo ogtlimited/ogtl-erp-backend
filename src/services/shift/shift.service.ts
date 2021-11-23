@@ -11,7 +11,8 @@ class shiftTypeService {
   public shiftTypes = shiftTypeModel;
 
   public async findAllshiftType(): Promise<IShiftType[]> {
-    return this.shiftTypes.find();
+   
+     return this.shiftTypes.find();
   }
 
   public async findshiftTypeById(shiftTypeId: string): Promise<IShiftType> {

@@ -30,7 +30,6 @@ const accountchema: Schema = new mongoose.Schema(
     // },
     balance: {
         type: Number,
-        default: 0,
         required: function() { return this.is_group === false }
     },
     currency: {

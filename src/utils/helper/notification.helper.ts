@@ -38,7 +38,7 @@ class NotificationHelper {
 
     public emitEvent(data)
     {
-        Socket.emit("messages", data)
+        Socket.emit("messages", [data])
     }
 
 
