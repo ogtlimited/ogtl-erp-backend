@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 const nodemailer = require("nodemailer");
 const { SocketLabsClient } = require('@socketlabs/email');
 const Email = ('@/models/notification/email.model');

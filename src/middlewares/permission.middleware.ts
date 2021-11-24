@@ -32,7 +32,7 @@ const READ = 1; // 001 3
 const WRITE = 2; // 001
 const UPDATE = 3; // 001
 const DELETE = 4; // 001
-const APPROVE = 5; // 001
+// const APPROVE = 5; // 001
 
 export class userPermissions{
     permission: any;
@@ -69,9 +69,7 @@ const permissionMiddleware = (dept) => {
           const verificationResponse = (await jwt.verify(Authorization, secretKey)) as DataStoredInToken;
           const userId = verificationResponse._id;
           const findUser = await (await employeeModel.findById(userId).populate('department designation')).toObject();
-          // const department = await departmentModel.findById(userId).populate('department');
           const userDept = findUser.department
-          // console.log(findUser, 'role 72');
           console.log(findUser.department);
           console.log(findUser.designation);
           if(findUser.designation['designation'] === "SUPER"){

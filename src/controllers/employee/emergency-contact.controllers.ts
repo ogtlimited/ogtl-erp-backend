@@ -43,14 +43,14 @@ class EmergencyContactController{
             const EmergencyContactsData = req.body;
             const newArray = []
             for (let index = 0; index < EmergencyContactsData.length; index++) {
-                const findEmployee: Employee = await this.Employees.findOne({ company_email: EmergencyContactsData[index].company_email }, {_id: 1});
+                const findEmployee: Employee = await this.Employees.findOne({ ogid: EmergencyContactsData[index].ogid }, {_id: 1});
                 newArray.push({
                     ...EmergencyContactsData[index],
                     employee_id: findEmployee._id
                 })
             }
             const results = await this.eModel.insertMany(newArray)
-            res.status(201).json({ data: results, message: 'ContactDetails succesfully created' });
+            res.status(201).json({ data: results, message: 'Emergency contact details updated succesfully created' });
         }
         catch(error){
          next(error);
