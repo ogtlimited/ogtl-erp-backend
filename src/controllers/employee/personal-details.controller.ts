@@ -42,14 +42,21 @@ class PersonalDetailsController{
    public CreateBulkPersonalDetails = async  (req: Request, res: Response, next: NextFunction) => {
     try{
         const personalDetailsData = req.body;
+        // console.log(personalDetailsData)
         const newArray = []
         for (let index = 0; index < personalDetailsData.length; index++) {
-            const findEmployee: Employee = await this.Employees.findOne({ company_email: personalDetailsData[index].company_email }, {_id: 1});
+            const findEmployee: Employee = await this.Employees.findOne({ ogid: personalDetailsData[index].ogid }, {_id: 1});
             newArray.push({
                 ...personalDetailsData[index],
-                employee_id: findEmployee._id
+                employee_id: findEmployee._id,
+                means_of_identification: personalDetailsData[index]?.means_of_identification === '' ? null : personalDetailsData[index]?.means_of_identification,
+                marital_status: personalDetailsData[index]?.marital_status === '' ? null : personalDetailsData[index]?.marital_status,
+                blood_group: personalDetailsData[index]?.blood_group === '' ? null : personalDetailsData[index]?.blood_group,
+                valid_upto: personalDetailsData[index]?.valid_upto === '' ? null : new Date(personalDetailsData[index]?.valid_upto),
+                date_of_issue: personalDetailsData[index]?.date_of_issue === '' ? null : new Date(personalDetailsData[index]?.date_of_issue),
             })
         }
+        console.log(newArray)
         const results = await this.pModel.insertMany(newArray)
         res.status(201).json({ data: results, message: 'ContactDetails succesfully created' });
     }
@@ -96,6 +103,7 @@ public updatePersonalDetails = async  (req: Request, res: Response, next: NextFu
         }
    
 };
+
 
 
 

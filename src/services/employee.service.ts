@@ -151,8 +151,8 @@ class EmployeeService {
       const hashedPassword = await bcrypt.hash(EmployeeData.password, 10);
       EmployeeData = { ...EmployeeData, password: hashedPassword };
     }
-
-    const updateEmployeeById: Employee = await this.Employees.findByIdAndUpdate(EmployeeId, { EmployeeData });
+    // console.log(emp)
+    const updateEmployeeById: Employee = await this.Employees.findByIdAndUpdate(EmployeeId,  EmployeeData );
     if (!updateEmployeeById) throw new HttpException(409, "You're not Employee");
 
     return updateEmployeeById;
