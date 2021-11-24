@@ -45,11 +45,15 @@ class SalaryDetailsController{
         const newArray = []
         for (let index = 0; index < salaryDetailsData.length; index++) {
             const findEmployee: Employee = await this.Employees.findOne({ company_email: salaryDetailsData[index].company_email }, {_id: 1});
-            newArray.push({
-                ...salaryDetailsData[index],
-                employee_id: findEmployee._id
-            })
+            if(findEmployee){
+                newArray.push({
+                    ...salaryDetailsData[index],
+                    employee_id: findEmployee._id
+                })
+
+            }
         }
+        console.log(newArray)
         const results = await this.sModel.insertMany(newArray)
         res.status(201).json({ data: results, message: 'ContactDetails succesfully created' });
     }
