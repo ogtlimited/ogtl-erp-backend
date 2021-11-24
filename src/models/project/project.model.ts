@@ -70,18 +70,14 @@ const projectSchema: Schema = new Schema(
         ref: 'Employee',
       },
     ],
-    team_leads: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Employee',
-      },
-    ],
-    team_members: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Employee',
-      },
-    ],
+    team_leads: {
+      type: [Schema.Types.ObjectId],
+      ref: 'Employee',
+    },
+    team_members: {
+      type: [Schema.Types.ObjectId],
+      ref: 'Employee',
+    },
   },
   {
     timestamps: true,
