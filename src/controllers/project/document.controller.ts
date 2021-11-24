@@ -56,11 +56,17 @@ class DocumentController {
     };
 
     public updatedocument = async (req: Request, res: Response, next: NextFunction) => {
-        const documentId: string = req.params.documentId;
-        const finddocument: IDocument = await this.documentService.find(documentId);
-        const Payload: UpdateDocumentDto = req.body;
-        const updatedocument: IDocument = this.documentService.update(documentId, Payload);
-        return updatedocument;
+        try {
+            const documentId: string = req.params.documentId;
+            const finddocument: IDocument = await this.documentService.find(documentId);
+            const Payload: UpdateDocumentDto = req.body;
+            const updatedocument: IDocument = await this.documentService.update(documentId, Payload);
+            res.status(200).json({ data: updatedocument});
+          } catch (error) {  
+            console.log(error);
+            next(error);
+          }
+        
             
     };
 

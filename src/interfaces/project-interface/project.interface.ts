@@ -11,9 +11,10 @@ export interface IProject {
   number_of_employees: string;
   billing_structure: string;
   diallers: string;
-  documents: string;
   creator: string;
   status: string;
   manager: string;
   quality_analyst: string;
+  team_leads: string;
+  team_members: string;
 }
