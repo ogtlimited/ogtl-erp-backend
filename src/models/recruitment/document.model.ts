@@ -12,7 +12,7 @@ const recruitmentDocumentSchema: Schema = new Schema(
       type: String,
       required: true,
     },
-    project_id: {
+    job_id: {
       type: Schema.Types.ObjectId,
       ref: 'Project',
     },

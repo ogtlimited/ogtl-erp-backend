@@ -27,7 +27,7 @@ const projectSchema: Schema = new Schema(
       required: true,
     },
     hours_of_operation: {
-      type: Number,
+      type: String,
       required: true,
     },
     start_date: {
@@ -38,7 +38,7 @@ const projectSchema: Schema = new Schema(
       type: Date,
     },
     number_of_employees: {
-      type: Number,
+      type: String,
       required: true,
     },
     billing_structure: {
@@ -50,12 +50,6 @@ const projectSchema: Schema = new Schema(
       type: String,
       enum: ['inhouse', 'external', 'others'],
     },
-    documents: [
-      {
-        type: String,
-        default: null,
-      },
-    ],
     creator: {
       type: Schema.Types.ObjectId,
       ref: 'Employee',
@@ -71,6 +65,18 @@ const projectSchema: Schema = new Schema(
       ref: 'Employee',
     },
     quality_analyst: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Employee',
+      },
+    ],
+    team_leads: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Employee',
+      },
+    ],
+    team_members: [
       {
         type: Schema.Types.ObjectId,
         ref: 'Employee',
