@@ -73,6 +73,16 @@ class IndexController {
       next(error);
     }
   };
+  //for creating new campaignForm
+  public createCampaignForm = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const createCampaignForm = await this.indexS.campaignForm()
+
+      res.status(200).json({ createCampaignForm, message: 'Campaign data result' });
+    } catch (error) {
+      next(error);
+    }
+  };
 
   public getAdminDashboardData = async (req: Request, res: Response, next: NextFunction) => {
     try {

@@ -71,8 +71,8 @@ class ProjectController {
             const projectId: string = req.params.projectId;
             const Payload: ApproveProjectDto = req.body;
             const updateProject: IProject = await this.projectService.update(projectId, Payload);
-            res.status(200).json({ data: updateProject, message: 'findAll'});
-          } catch (error) {  
+            res.status(200).json({ data: updateProject, message: 'Campaign successfully updated.'});
+          } catch (error) {
             console.log(error);
             next(error);
           }
@@ -82,9 +82,9 @@ class ProjectController {
         try {
             const projectId: string = req.params.projectId;
             const Payload: UpdateTeamLeadDto = req.body;
-            const updateProject: IProject = await this.projectService.updateTeamLead(projectId, Payload)  
+            const updateProject: IProject = await this.projectService.updateTeamLead(projectId, Payload)
             res.status(200).json({ data: updateProject});
-          } catch (error) {  
+          } catch (error) {
             console.log(error);
             next(error);
           }
@@ -94,9 +94,9 @@ class ProjectController {
         try {
             const projectId: string = req.params.projectId;
             const Payload: UpdateTeamLeadDto = req.body;
-            const updateProject: IProject = await this.projectService.removeTeamLead(projectId, Payload)  
+            const updateProject: IProject = await this.projectService.removeTeamLead(projectId, Payload)
             res.status(200).json({ data: updateProject});
-          } catch (error) {  
+          } catch (error) {
             console.log(error);
             next(error);
           }
@@ -106,9 +106,9 @@ class ProjectController {
         try {
             const projectId: string = req.params.projectId;
             const Payload: UpdateTeamMembersDto = req.body;
-            const updateProject: IProject = await this.projectService.updateTeamMember(projectId, Payload)  
+            const updateProject: IProject = await this.projectService.updateTeamMember(projectId, Payload)
             res.status(200).json({ data: updateProject});
-          } catch (error) {  
+          } catch (error) {
             console.log(error);
             next(error);
           }
@@ -118,9 +118,9 @@ class ProjectController {
         try {
             const projectId: string = req.params.projectId;
             const Payload: UpdateTeamMembersDto = req.body;
-            const updateProject: IProject = await this.projectService.removeTeamMember(projectId, Payload)  
+            const updateProject: IProject = await this.projectService.removeTeamMember(projectId, Payload)
             res.status(200).json({ data: updateProject});
-          } catch (error) {  
+          } catch (error) {
             console.log(error);
             next(error);
           }
@@ -129,7 +129,6 @@ class ProjectController {
 
     public approveProject = async (req: Request, res: Response, next: NextFunction) => {
         let user = (<any>req).user
-        console.log(user)
         rbac.can(user.designation.designation, 'ceo:super')
         .then(result => {
             if (result) {
