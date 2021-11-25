@@ -107,6 +107,16 @@ class CombineServices {
       employees
     }
   }
+  //For anything relating to campaign
+  public async campaignForm(){
+    const clientS = await this.clientS.findAll()
+    const employees = await this.employeeS.findAllEmployee()
+
+    return {
+      clientS,
+      employees
+    }
+  }
   //For anything relating to payroll
   public async payrollForm(){
     const departments = await this.departmentS.findAllDepartments()
