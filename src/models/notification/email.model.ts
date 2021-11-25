@@ -10,7 +10,7 @@ const emailSchema: Schema = new mongoose.Schema(
     },
     model_name: {
         type: String,
-        required: true
+        default: null
     },
     email_id: {
         type: String,
