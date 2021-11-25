@@ -51,7 +51,7 @@ class ProjectService {
         if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
         const findproject = this.findOne(projectId);
         if (!findproject) throw new HttpException(409, "Project not found");
-        const updateProject: IProject = await this.project.findByIdAndUpdate(projectId, { Payload }, {new: true});
+        const updateProject: IProject = await this.project.findByIdAndUpdate(projectId, Payload, {new: true});
         return updateProject;
     }
 
@@ -103,7 +103,7 @@ class ProjectService {
         if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
         const findproject = this.findOne(projectId);
         if (!findproject) throw new HttpException(409, "Project not found");
-        const updateProject: IProject = await this.project.findByIdAndUpdate(projectId, { Payload }, {new: true});
+        const updateProject: IProject = await this.project.findByIdAndUpdate(projectId, Payload, {new: true});
         if(updateProject.status === "approved"){
             const getRoles: IRole = await this.role.find().select('_id')
             const params = {
