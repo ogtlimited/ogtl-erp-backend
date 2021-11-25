@@ -23,7 +23,7 @@ const mimeTypes = [
     'image/jpeg',
     'image/jpg',
     'image/gif',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     'application/msword',
     'application/pdf',
     'text/csv',
@@ -34,7 +34,7 @@ const mimeTypes = [
     'application/rtf'
 ]
 
-const imageMimeTypes = [     
+const imageMimeTypes = [
     'image/png',
     'image/jpeg',
     'image/jpg',
@@ -81,7 +81,7 @@ class DocumentService {
     public async create(Payload: CreateDocumentDto, req: any): Promise<any> {
         if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
         if(!req.files || req.files.length > 1) throw new HttpException(409, "Please upload a file");
-        const file = req.files.document 
+        const file = req.files.document
         if(!mimeTypes.includes(file.mimetype)) throw new HttpException(409, "Only PNG, JPG, JPEG, GIF files are allowed");
         const extension = path.extname(file.name)
         const filename = uuid() + extension
@@ -135,12 +135,12 @@ class DocumentService {
     }
 
     private createBucket(): any {
-        this.s3.createBucket(this.params, function(err, data) {
+        this.s3.createBucket(this.params, function(err, data: any) {
             if (err && err.statusCode == 409){
                 console.log("Bucket has been created already");
             }else{
-                // console.log(data)        
-                console.log('Bucket Created Successfully', data.Location)
+                // console.log(data)
+                console.log('Bucket Created Successfully', data)
             }
         })
     }
@@ -158,7 +158,7 @@ class DocumentService {
             });
         })
     }
-    
+
 }
 
 export default DocumentService;
