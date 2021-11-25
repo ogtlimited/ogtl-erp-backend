@@ -1,4 +1,7 @@
+/* eslint-disable prettier/prettier */
 const nodemailer = require("nodemailer");
+const { SocketLabsClient } = require('@socketlabs/email');
+import Email from "@models/notification/email.model";
 
 // let transporter = nodemailer.createTransport({
 //     host: "smtp.gmail.com.email",
@@ -29,6 +32,29 @@ const emailTemplate = (email_subject, message, receiver) => {
   return { from, to, subject, textBody, messageType }
 }
 
+const sendEmail = async (email_subject, message, receiver, sender) => {
+  const email = emailTemplate(email_subject, message, receiver)
+  const sclient = await new SocketLabsClient(parseInt(process.env.SOCKETLABS_SERVER_ID), process.env.SOCKETLABS_INJECTION_API_KEY);
 
-export { campaignCreationEmail, emailTemplate };
+  await sclient.send(email).then(
+      (response) => {
+        const Payload = {
+          message: message,
+          subject: email_subject,
+          email_id: receiver,
+          model_name: "",
+          sender: sender
+        }
+        Email.create(Payload);
+        console.log(response)
+      },
+      (err) => {
+          //Handle error making API call
+          console.log(err);
+      }
+  );
+}
+
+
+export { campaignCreationEmail, emailTemplate, sendEmail };
 // exports.transporter = transporter

@@ -17,7 +17,7 @@ const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFun
       const verificationResponse = (await jwt.verify(Authorization, secretKey)) as DataStoredInToken;
       const userId = verificationResponse._id;
 
-      const findUser = await EmployeeModel.findById(userId).populate('salaryStructure_id', {netPay:1});
+      const findUser = await EmployeeModel.findById(userId).populate('salaryStructure_id designation department', {netPay:1, designation:1});
       if (findUser && findUser.status === 'active') {
         req.user = findUser;
         next();

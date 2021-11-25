@@ -29,7 +29,7 @@ class AuthService {
     if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
     const employee: Employee =  await this.Employees.findOne({ company_email: EmployeeData.company_email }).populate('department designation default_shift projectId');
     console.log('AUTH SERVICE', employee)
-    if (!employee) throw new HttpException(409, `This ogid ${EmployeeData.company_email} does not exist`);
+    if (!employee) throw new HttpException(409, `This email ${EmployeeData.company_email} does not exist`);
     console.log('AUTH SERVICE',employee)
     // const isPasswordMatching: boolean = await bcrypt.compare(EmployeeData.password, employee.password);
 

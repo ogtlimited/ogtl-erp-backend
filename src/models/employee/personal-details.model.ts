@@ -13,15 +13,18 @@ const personalDetailsSchema: Schema = new Schema(
             },
       means_of_identification: {
         type: String,
-        enum: ["NIN","International Passport","Drivers License"]
+        default: null,
+        enum: ["NIN","International Passport","Drivers License","Voters Card","Student ID","National Youth Service", null]
       },
       id_number:{
         type: String
       },
         date_of_issue: {
+            default: null,
             type: Date,
         },
         valid_upto: {
+            default: null,
             type: Date,
         },
         place_of_issue: {
@@ -29,11 +32,13 @@ const personalDetailsSchema: Schema = new Schema(
         },
         marital_status: {
             type: String,
-            enum: ["single", "married", "divorced", "widowed"],
+            default: null,
+            enum: ["single", "married", "divorced", "widowed", null],
         },
         blood_group: {
             type: String,
-            enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+            default: null,
+            enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", null],
         },
     },
 

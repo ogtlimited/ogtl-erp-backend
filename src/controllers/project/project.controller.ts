@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 
 import { NextFunction, Request, Response } from 'express';
-import { CreateProjectDto, UpdateProjectDto, ApproveProjectDto } from '@/dtos/project/project.dto';
+import { CreateProjectDto, UpdateProjectDto, ApproveProjectDto, UpdateTeamMembersDto, UpdateTeamLeadDto } from '@/dtos/project/project.dto';
 import { IProject } from '@/interfaces/project-interface/project.interface';
 import ProjectService from '@/services/project/project.service';
 import {opts} from '@/utils/rbac-opts';
@@ -67,48 +67,86 @@ class ProjectController {
     };
 
     public updateProject = async (req: Request, res: Response, next: NextFunction) => {
-        let user = (<any>req).user
-        
-        const projectId: string = req.params.projectId;
-        const findProject: IProject = await this.projectService.find(projectId);
-        rbac.can('coo', 'coo:*', {userId: user._id, ownerId: findProject.creator, status: findProject.status['enum']})
-        .then(result => {
-            if (result) {
-                const projectId: string = req.params.projectId;
-                const Payload: ApproveProjectDto = req.body;
-                const updateProject: IProject = this.projectService.update(projectId, Payload);
-                return updateProject;
-            } else {
-                res.status(200).json({ data: "Not permitted", message: 'findAll' });
-            }
-        })
-        .then(data => {
-            res.status(200).json({ data: data, message: 'status updated' });
-        })
-        .catch(err => {
-            next(err);
-        })
+        try {
+            const projectId: string = req.params.projectId;
+            const Payload: ApproveProjectDto = req.body;
+            const updateProject: IProject = await this.projectService.update(projectId, Payload);
+            res.status(200).json({ data: updateProject, message: 'Campaign successfully updated.'});
+          } catch (error) {
+            console.log(error);
+            next(error);
+          }
     };
+
+    public addProjectTeamLead = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const projectId: string = req.params.projectId;
+            const Payload: UpdateTeamLeadDto = req.body;
+            const updateProject: IProject = await this.projectService.updateTeamLead(projectId, Payload)
+            res.status(200).json({ data: updateProject});
+          } catch (error) {
+            console.log(error);
+            next(error);
+          }
+    };
+
+    public removeProjectTeamLead = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const projectId: string = req.params.projectId;
+            const Payload: UpdateTeamLeadDto = req.body;
+            const updateProject: IProject = await this.projectService.removeTeamLead(projectId, Payload)
+            res.status(200).json({ data: updateProject});
+          } catch (error) {
+            console.log(error);
+            next(error);
+          }
+    };
+
+    public addProjectTeamMembers = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const projectId: string = req.params.projectId;
+            const Payload: UpdateTeamMembersDto = req.body;
+            const updateProject: IProject = await this.projectService.updateTeamMember(projectId, Payload)
+            res.status(200).json({ data: updateProject});
+          } catch (error) {
+            console.log(error);
+            next(error);
+          }
+    };
+
+    public removeProjectTeamMembers = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const projectId: string = req.params.projectId;
+            const Payload: UpdateTeamMembersDto = req.body;
+            const updateProject: IProject = await this.projectService.removeTeamMember(projectId, Payload)
+            res.status(200).json({ data: updateProject});
+          } catch (error) {
+            console.log(error);
+            next(error);
+          }
+    };
+
 
     public approveProject = async (req: Request, res: Response, next: NextFunction) => {
         let user = (<any>req).user
-        rbac.can('ceo', 'ceo:super')
+        rbac.can(user.designation.designation, 'ceo:super')
         .then(result => {
             if (result) {
                 const projectId: string = req.params.projectId;
                 const Payload: ApproveProjectDto = req.body;
                 const updateProject: IProject = this.projectService.update(projectId, Payload);
-                return updateProject;
+                return updateProject
             } else {
-                res.status(200).json({ data: "Not permitted", message: 'findAll' });
+                res.status(403).json({ data: "Access denied"});
             }
         })
         .then(data => {
-            res.status(200).json({ data: data, message: 'status updated' });
+            res.status(200).json({ data: data});
         })
         .catch(err => {
             next(err);
         })
+        
     };
 
     public deleteProject = async (req: Request, res: Response, next: NextFunction) => {
