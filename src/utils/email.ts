@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 const nodemailer = require("nodemailer");
 const { SocketLabsClient } = require('@socketlabs/email');
-const Email = ('@/models/notification/email.model');
+import Email from "@models/notification/email.model";
 
 // let transporter = nodemailer.createTransport({
 //     host: "smtp.gmail.com.email",
