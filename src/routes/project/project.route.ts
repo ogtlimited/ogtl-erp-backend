@@ -21,7 +21,7 @@ class ProjectRoute implements Routes {
     this.router.get(`${this.path}/:projectId`, this.project.getProject);
     this.router.post(`${this.path}`, validationMiddleware(CreateProjectDto, 'body'), this.project.createProject);
     this.router.put(`${this.path}/:projectId`, validationMiddleware(UpdateProjectDto, 'body'), this.project.updateProject);
-    this.router.put(`${this.path}/approve/:projectId`, validationMiddleware(ApproveProjectDto, 'body'), this.project.approveProject);
+    this.router.patch(`${this.path}/approve/:projectId`, validationMiddleware(ApproveProjectDto, 'body'), this.project.approveProject);
     this.router.patch(`${this.path}/add-team-lead/:projectId`, validationMiddleware(UpdateTeamLeadDto, 'body'), this.project.addProjectTeamLead);
     this.router.patch(`${this.path}/remove-team-lead/:projectId`, validationMiddleware(UpdateTeamLeadDto, 'body'), this.project.removeProjectTeamLead);
     this.router.patch(`${this.path}/add-team-member/:projectId`, validationMiddleware(UpdateTeamMembersDto, 'body'), this.project.addProjectTeamMembers);
