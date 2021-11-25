@@ -87,7 +87,7 @@ import BillsRoute from '@routes/vendor/bills.route';
 import ProcurementRoute from '@/routes/procurement/procurement.route'
 import PaymentRoute from './routes/payments/payment.route';
 import ExpenseHeadDraftRoute from "@routes/expense-head/expense-head.route";
-import TaskRoute from "@routes/task/task.route";
+
 
 validateEnv();
 
@@ -170,8 +170,7 @@ const app = new App([
   new PaymentRoute(),
   new ExpenseHeadDraftRoute(),
   new documentRoute(),
-  new JobDocumentRoute(),
-  new TaskRoute()
+  new JobDocumentRoute()
 ]);
 
 const server = app.listen();
