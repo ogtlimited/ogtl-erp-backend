@@ -9,7 +9,7 @@ import { Employee } from '@/interfaces/employee-interface/employee.interface';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { CreateProjectDto, UpdateProjectDto, ApproveProjectDto, UpdateTeamLeadDto, UpdateTeamMembersDto } from '@/dtos/project/project.dto';
-import {campaignCreationEmail} from '@/utils/email';
+import {campaignCreationEmail} from '@utils/email';
 import { slugify } from '@/utils/slugify';
 
 const { SocketLabsClient } = require('@socketlabs/email');
@@ -103,7 +103,7 @@ class ProjectService {
         if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
         const findproject = this.findOne(projectId);
         if (!findproject) throw new HttpException(409, "Project not found");
-        const updateProject: IProject = await this.project.findByIdAndUpdate(projectId,  Payload , {new: true});
+        const updateProject: IProject = await this.project.findByIdAndUpdate(projectId, Payload, {new: true});
         if(updateProject.status === "approved"){
             const getRoles: IRole = await this.role.find().select('_id')
             const params = {
@@ -136,7 +136,7 @@ class ProjectService {
     }
 
     private async findOne(id: string): Promise<IProject> {
-        const findproject: IProject = await this.project.findOne({ _id: id }).populate("manager quality_analyst client_id creator team_leads team_members")
+        const findproject: IProject = await this.project.findOne({ _id: id }).populate("manager quality_analyst client_id creator");
         return findproject;
     }
 }
