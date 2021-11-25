@@ -9,7 +9,7 @@ import { Employee } from '@/interfaces/employee-interface/employee.interface';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { CreateProjectDto, UpdateProjectDto, ApproveProjectDto, UpdateTeamLeadDto, UpdateTeamMembersDto } from '@/dtos/project/project.dto';
-import {campaignCreationEmail} from '@/utils/email';
+import {campaignCreationEmail} from '@utils/email';
 import { slugify } from '@/utils/slugify';
 
 const { SocketLabsClient } = require('@socketlabs/email');
