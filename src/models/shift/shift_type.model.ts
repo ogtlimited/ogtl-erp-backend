@@ -14,12 +14,10 @@ const shiftTypeSchema: Schema = new Schema(
       required: true
     },
     start_time: {
-      type: String,
-      default: null,
+      type: Date
     },
     end_time: {
-      type: String,
-      default: null,
+      type: Date
     },
   },
   {
