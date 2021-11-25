@@ -26,7 +26,13 @@ class ProjectService {
     }
 
     public async findAll(param: any = {}): Promise<IProject[]> {
-        const projects: IProject[] = await this.project.find(param).populate("manager quality_analyst client_id creator team_leads team_members");
+        const projects: IProject[] = await this.project.find(param).populate("manager quality_analyst client_id creator team_leads").populate({ 
+            path: 'team_members',
+            populate: {
+              path: 'designation',
+              model: 'Designation'
+            } 
+         });
         return projects;
     }
 
