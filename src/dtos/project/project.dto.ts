@@ -54,7 +54,9 @@ export class CreateProjectDto {
 }
 
 export class UpdateProjectDto {
-    
+  @IsOptional()
+  public _id: string;
+
     @IsOptional()
     public project_name: string;
 

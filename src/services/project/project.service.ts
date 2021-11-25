@@ -136,7 +136,13 @@ class ProjectService {
     }
 
     private async findOne(id: string): Promise<IProject> {
-        const findproject: IProject = await this.project.findOne({ _id: id }).populate("manager quality_analyst client_id creator");
+        const findproject: IProject = await this.project.findOne({ _id: id }).populate("manager quality_analyst client_id creator team_leads").populate({
+          path: 'team_members',
+          populate: {
+            path: 'designation',
+            model: 'Designation'
+          }
+        });
         return findproject;
     }
 }
