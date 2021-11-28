@@ -150,6 +150,8 @@ class CombineServices {
   public async performanceForm(){
     const employees = await this.employeeS.findAllEmployee()
     const designations = await this.designationS.findAllDesignations()
+    const departments = await this.departmentS.findAllDepartments()
+
 
     return {
       employees,
