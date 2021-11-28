@@ -39,13 +39,13 @@ class App {
   public app: express.Application;
   public port: string | number;
   public env: string;
-
+  
   constructor(routes: Routes[]) {
 
     this.app = express();
     this.port = process.env.PORT || 3000;
     this.env = process.env.NODE_ENV || 'development';
-
+    
 
     this.connectToDatabase();
     this.initializeMiddlewares();
