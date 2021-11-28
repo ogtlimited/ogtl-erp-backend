@@ -67,36 +67,24 @@ class ProjectController {
     };
 
     public updateProject = async (req: Request, res: Response, next: NextFunction) => {
-        let user = (<any>req).user
-        
-        const projectId: string = req.params.projectId;
-        const findProject: IProject = await this.projectService.find(projectId);
-        rbac.can('coo', 'coo:*', {userId: user._id, ownerId: findProject.creator, status: findProject.status['enum']})
-        .then(result => {
-            if (result) {
-                const projectId: string = req.params.projectId;
-                const Payload: ApproveProjectDto = req.body;
-                const updateProject: IProject = this.projectService.update(projectId, Payload);
-                return updateProject;
-            } else {
-                res.status(200).json({ data: "Not permitted", message: 'findAll' });
-            }
-        })
-        .then(data => {
-            res.status(200).json({ data: data, message: 'status updated' });
-        })
-        .catch(err => {
-            next(err);
-        })
+        try {
+            const projectId: string = req.params.projectId;
+            const Payload: ApproveProjectDto = req.body;
+            const updateProject: IProject = await this.projectService.update(projectId, Payload);
+            res.status(200).json({ data: updateProject, message: 'Campaign successfully updated.'});
+          } catch (error) {
+            console.log(error);
+            next(error);
+          }
     };
 
     public addProjectTeamLead = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const projectId: string = req.params.projectId;
             const Payload: UpdateTeamLeadDto = req.body;
-            const updateProject: IProject = await this.projectService.updateTeamLead(projectId, Payload)  
+            const updateProject: IProject = await this.projectService.updateTeamLead(projectId, Payload)
             res.status(200).json({ data: updateProject});
-          } catch (error) {  
+          } catch (error) {
             console.log(error);
             next(error);
           }
@@ -106,9 +94,9 @@ class ProjectController {
         try {
             const projectId: string = req.params.projectId;
             const Payload: UpdateTeamLeadDto = req.body;
-            const updateProject: IProject = await this.projectService.removeTeamLead(projectId, Payload)  
+            const updateProject: IProject = await this.projectService.removeTeamLead(projectId, Payload)
             res.status(200).json({ data: updateProject});
-          } catch (error) {  
+          } catch (error) {
             console.log(error);
             next(error);
           }
@@ -118,9 +106,9 @@ class ProjectController {
         try {
             const projectId: string = req.params.projectId;
             const Payload: UpdateTeamMembersDto = req.body;
-            const updateProject: IProject = await this.projectService.updateTeamMember(projectId, Payload)  
+            const updateProject: IProject = await this.projectService.updateTeamMember(projectId, Payload)
             res.status(200).json({ data: updateProject});
-          } catch (error) {  
+          } catch (error) {
             console.log(error);
             next(error);
           }
@@ -130,9 +118,9 @@ class ProjectController {
         try {
             const projectId: string = req.params.projectId;
             const Payload: UpdateTeamMembersDto = req.body;
-            const updateProject: IProject = await this.projectService.removeTeamMember(projectId, Payload)  
+            const updateProject: IProject = await this.projectService.removeTeamMember(projectId, Payload)
             res.status(200).json({ data: updateProject});
-          } catch (error) {  
+          } catch (error) {
             console.log(error);
             next(error);
           }
@@ -141,23 +129,24 @@ class ProjectController {
 
     public approveProject = async (req: Request, res: Response, next: NextFunction) => {
         let user = (<any>req).user
-        rbac.can('ceo', 'ceo:super')
+        rbac.can(user.designation.designation, 'ceo:super')
         .then(result => {
             if (result) {
                 const projectId: string = req.params.projectId;
                 const Payload: ApproveProjectDto = req.body;
                 const updateProject: IProject = this.projectService.update(projectId, Payload);
-                return updateProject;
+                return updateProject
             } else {
-                res.status(200).json({ data: "Not permitted", message: 'findAll' });
+                res.status(403).json({ data: "Access denied"});
             }
         })
         .then(data => {
-            res.status(200).json({ data: data, message: 'status updated' });
+            res.status(200).json({ data: data});
         })
         .catch(err => {
             next(err);
         })
+        
     };
 
     public deleteProject = async (req: Request, res: Response, next: NextFunction) => {

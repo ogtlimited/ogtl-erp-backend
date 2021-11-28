@@ -33,6 +33,7 @@
       "@utils/*": ["utils/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.json", ".env", "src/seeder.ts", "src/seeder.ts", "src/utils/email.js", "src/seeder.mjs"],
+  "include": ["src/**/*.ts", "src/**/*.json", ".env", "src/seeder.ts", "src/seeder.ts",
+    "src/utils/email", "src/seeder.mjs"],
   "exclude": ["node_modules"]
 }
