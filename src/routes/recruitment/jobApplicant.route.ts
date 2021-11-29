@@ -22,12 +22,12 @@ class JobApplicantRoute implements Routes {
     this.router.get(`${this.path}-accepted`,authMiddleware, this.jobApplicantController.getAcceptedJobApplicants);
     this.router.post(
       `${this.path}`,
-      [validationMiddleware(CreateJobApplicantDto, 'body'), authMiddleware],
+      [validationMiddleware(CreateJobApplicantDto, 'body')],
       this.jobApplicantController.createJobApplicant,
     );
     this.router.patch(
       `${this.path}/:id`,
-      [validationMiddleware(UpdateJobApplicantDto, 'body'), authMiddleware],
+      [validationMiddleware(UpdateJobApplicantDto, 'body')],
       this.jobApplicantController.updateJobApplicant,
     );
     this.router.delete(`${this.path}/:id`, authMiddleware, this.jobApplicantController.deleteJobApplicant);
