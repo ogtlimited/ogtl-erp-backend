@@ -39,13 +39,13 @@ class App {
   public app: express.Application;
   public port: string | number;
   public env: string;
-
+  
   constructor(routes: Routes[]) {
 
     this.app = express();
     this.port = process.env.PORT || 3000;
     this.env = process.env.NODE_ENV || 'development';
-
+    
 
     this.connectToDatabase();
     this.initializeMiddlewares();
@@ -116,17 +116,26 @@ class App {
 
   private initializeMiddlewares() {
     this.app.use(morgan(config.get('log.format'), { stream }));
-    const allowedOrigins = ['https://erp.outsourceglobal.com', 'http://localhost:3001', 'https://www.outsourceglobal.com/'];
+    const allowedOrigins = [
+     'https://erp.outsourceglobal.com',
+     'https://erp.outsourceglobal.com',
+     'http://localhost:3001',
+     'http://localhost:3002/',
+     'https://8029-102-91-5-194.ngrok.io',
+     'https://www.outsourceglobal.com',
+     'https://outsourceglobal.com'
+    ];
     const options: cors.CorsOptions = {
       origin: allowedOrigins
     };
-    this.app.use(cors(options))
+    this.app.use(cors());
+    // this.app.use(cors(options))
     // this.app.use(cors({ origin: config.get('cors.origin'), credentials: config.get('cors.credentials') }));
     this.app.use(hpp());
     this.app.use(helmet());
     this.app.use(compression());
     this.app.use(express.json({limit: '50mb'}));
-    this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(express.urlencoded({ extended: true, limit: '50mb' }));
     this.app.use(cookieParser());
     this.app.use(
       fileUpload()

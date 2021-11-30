@@ -11,7 +11,7 @@ import  allocationModel  from '@/models/leave/allocation.model';
 import  EmployeeService  from '@services/employee.service';
 import { Employee } from '@/interfaces/employee-interface/employee.interface';
 import EmployeeModel from "@models/employee/employee.model";
-
+import leaveCount from './leave.json'
 class LeaveApplicationService {
   public application = applicationModel;
   public allocationM = allocationModel;
@@ -162,6 +162,31 @@ class LeaveApplicationService {
 
     return updateLeaveapplicationById;
   }
+  public async updateLeaveCount(){
+    try{
+      // const salaryDetailsData = req.body;
+      const newArray = []
+      for (let index = 0; index < leaveCount.length; index++) {
+          const findEmployee: Employee = await EmployeeModel
+          .findOneAndUpdate({ ogid: leaveCount[index].ogid },
+             {$set: {'leaveCount': leaveCount[index].leaveCount}});
+          if(findEmployee){
+              newArray.push(findEmployee)
+
+          }
+      }
+      console.log(newArray)
+      // const results = await EmployeeModel.updateMany({type: '_id'}, newArray)
+      // await EmployeeModel.updateMany({_id: {$in: [...newArray['employee_id']]}},{$set: {leaveCount: {$in: [...]}}})
+   
+      // console.log(results)
+      // res.status(201).json({ data: results, message: 'ContactDetails succesfully created' });
+  }
+  catch(error){
+   console.log(error);
+  }
+  }
+  
 
   public async deleteLeaveapplication(LeaveapplicationId: string): Promise<ILeaveApplication> {
     const deleteLeaveapplicationById: ILeaveApplication = await this.application.findByIdAndDelete(LeaveapplicationId);
@@ -193,6 +218,8 @@ class LeaveApplicationService {
       $inc: {leaveCount: 24}
     })
   }
+
+
 }
 
 
