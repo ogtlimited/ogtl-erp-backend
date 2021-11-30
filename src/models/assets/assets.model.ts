@@ -16,12 +16,13 @@ const AssetSchema : Schema = new Schema({
         ref: "PurchaseOrder",
       
       },
-
+     
     serialNumber: {
         type: String,
         
 
       },
+
 
     assetType :{
         type : String,
