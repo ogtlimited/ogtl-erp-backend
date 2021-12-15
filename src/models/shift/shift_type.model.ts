@@ -21,6 +21,10 @@ const shiftTypeSchema: Schema = new Schema(
       type: String,
       default: null,
     },
+    expectedWorkTime: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,

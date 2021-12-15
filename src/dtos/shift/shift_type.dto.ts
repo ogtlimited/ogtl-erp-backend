@@ -14,6 +14,10 @@ export class CreateShiftTypeDto {
   @IsString()
   public end_time: string;
 
+  @IsNotEmpty()
+  @IsString()
+  public expectedWorkTime: string;
+
 }
 
 export class UpdateShiftTypeDto {
@@ -31,4 +35,8 @@ export class UpdateShiftTypeDto {
   @IsOptional()
   @IsString()
   public end_time: string;
+
+  @IsOptional()
+  @IsString()
+  public expectedWorkTime: string;
 }
