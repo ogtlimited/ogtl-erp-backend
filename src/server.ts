@@ -87,12 +87,14 @@ import BillsRoute from '@routes/vendor/bills.route';
 import ProcurementRoute from '@/routes/procurement/procurement.route'
 import PaymentRoute from './routes/payments/payment.route';
 import ExpenseHeadDraftRoute from "@routes/expense-head/expense-head.route";
+import SalarySettingRoute from "@routes/salary-setting/salary-setting.route";
 
 
 validateEnv();
 
 const app = new App([
   new IndexRoute(),
+  new SalarySettingRoute(),
   new UsersRoute(),
   new AuthRoute(),
   new EmployeesRoute(),

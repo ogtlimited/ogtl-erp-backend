@@ -6,8 +6,6 @@ export class CreateAssetAssignmentDto{
     @IsString()
     public assetId: string;
 
-   
-
 
     @IsNotEmpty()
     @IsString()

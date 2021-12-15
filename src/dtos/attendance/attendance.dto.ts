@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import {IsDateString, IsOptional, IsString } from 'class-validator';
+import {IsArray, IsDateString, IsOptional, IsString} from 'class-validator';
 
-export class CreateAttendanceDto {  
+export class CreateAttendanceDto {
   @IsDateString()
   public clockInTime: string;
 
@@ -16,10 +16,15 @@ export class CreateAttendanceDto {
   public projectId: string;
 }
 
-export class UpdateAttendanceDto {  
+export class CreateBulkAttendanceDto {
+  @IsArray()
+  public attendances: Array<Object>;
+}
+
+export class UpdateAttendanceDto {
   @IsString()
   public attendanceId: string;
-  
+
   @IsDateString()
   public clockOutTime: string;
 }

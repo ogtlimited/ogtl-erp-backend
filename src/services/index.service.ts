@@ -151,6 +151,7 @@ class CombineServices {
     const employees = await this.employeeS.findAllEmployee()
     const designations = await this.designationS.findAllDesignations()
 
+
     return {
       employees,
       designations

@@ -14,13 +14,19 @@ class AssetAssignmentService {
      */
     public async findAllAssetAssignment(): Promise<assetAssignment[]> { 
         const Asset: assetAssignment[] = await this.Asset.find()
+        .populate({path:"assigned_to"})
+        .populate({path:"assigned_by"})
         .populate({path: "assetId",
         populate: {
             path: "assetName",
+            model: "PurchaseOrder",
             
         }
         })
-        .populate("assigned_to assigned_by assetId");
+
+        
+       
+        console.log("Assets", Asset);
         return Asset;
         
     }
