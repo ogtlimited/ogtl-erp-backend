@@ -1,5 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { CreateAttendanceDto, UpdateAttendanceDto } from './../../dtos/attendance/attendance.dto';
+import {
+  CreateAttendanceDto,
+  CreateBulkAttendanceDto,
+  UpdateAttendanceDto
+} from './../../dtos/attendance/attendance.dto';
 import AttendanceController from '@/controllers/attendance/attendance.controller';
 import { Routes } from '@/interfaces/routes.interface';
 import validationMiddleware from '@/middlewares/validation.middleware';
@@ -22,6 +26,7 @@ class AttendanceRoute implements Routes {
         this.router.get(`${this.path}/employee/:ogId`,[authMiddleware], this.AttendanceController.getEmployeeAttendance);
         this.router.get(`${this.path}/:id`,[authMiddleware], this.AttendanceController.getAttendanceById);
         this.router.post(`${this.path}`,[authMiddleware, validationMiddleware(CreateAttendanceDto, 'body')], this.AttendanceController.createAttendance);
+        this.router.post(`${this.path}/bulk`,[authMiddleware, validationMiddleware(CreateBulkAttendanceDto, 'body')], this.AttendanceController.CreateBulkAttendance);
         this.router.patch(`${this.path}`, [authMiddleware, validationMiddleware(UpdateAttendanceDto, 'body')], this.AttendanceController.updateAttendance);
     }
   }
