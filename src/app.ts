@@ -29,7 +29,7 @@ import attendanceModel  from '@models/attendance/attendance.model';
 import {getWorkTime, calculateLateness}  from '@/utils/attendanceCalculator';
 import AttendanceTypeService from '@/services/attendance/attendance.service';
 import NotificationHelper from './utils/helper/notification.helper';
-import google from 'googleapis'
+
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config({ path: dirname( module.paths[1] ) + "/.env" });
 }
@@ -54,7 +54,7 @@ class App {
     this.redisConnection();
     // this.initializeCron();
     // this.initializeCron();
-    // google.GoogleApis.
+
   }
 
   public socketInstance(server)
