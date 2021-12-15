@@ -32,7 +32,6 @@
     "envalid": "^7.1.0",
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
-    "googleapis": "^39.2.0",
     "helmet": "^4.6.0",
     "hpp": "^0.2.3",
     "jest": "^27.0.6",
