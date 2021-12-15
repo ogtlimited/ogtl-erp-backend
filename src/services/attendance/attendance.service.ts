@@ -108,12 +108,12 @@ class AttendanceTypeService {
   }
 
   public async bulkAttendanceUpload(attendanceTypeData: IBulkCreateAttendance): Promise<any> {
-    let employeesDeductions = []
-    let employeesAttendance = []
-    for(let employeeData of attendanceTypeData.attendances){
-      let attendanceConstuctor:ICreateAttendance ={}
-      let deductionAmount = 0
-      let result = await this.generatePossibleDeductions(employeeData.companyEmail, employeeData)
+    const employeesDeductions = []
+    const employeesAttendance = []
+    for(const employeeData of attendanceTypeData.attendances){
+      const attendanceConstuctor:ICreateAttendance ={}
+      const deductionAmount = 0
+      const result = await this.generatePossibleDeductions(employeeData.companyEmail, employeeData)
 
       //construct attendance
       attendanceConstuctor.clockInTime = employeeData.clockInTime
@@ -229,10 +229,10 @@ class AttendanceTypeService {
       // eslint-disable-next-line prefer-const
       let deductionsConstructor:any = {}
       const latenessConstructor:any = {}
-      let empHours = moment(attendanceRecord.clockInTime).subtract(1, 'hour').format("HH:mm")
-      let resumptionTime = employee.default_shift['start_time']
-      let workTime = employee.default_shift.expectedWorkTime.split(":")
-      let expectedWorkHours = parseInt(workTime[0])
+      const empHours = moment(attendanceRecord.clockInTime).subtract(1, 'hour').format("HH:mm")
+      const resumptionTime = employee.default_shift['start_time']
+      const workTime = employee.default_shift.expectedWorkTime.split(":")
+      const expectedWorkHours = parseInt(workTime[0])
       const empTimeData = getWorkTime(attendanceRecord.clockInTime, attendanceRecord.clockOutTime, resumptionTime)
       const empLateness: number =  parseInt(String(empTimeData.timeDeductions));
 
@@ -290,7 +290,7 @@ class AttendanceTypeService {
 
       }
 
-      let data = {
+      const data = {
         employeesDeductions,
         employeeId: employee._id,
         totalWorkHours: attendanceRecord.totalHours,

@@ -39,13 +39,12 @@ class App {
   public app: express.Application;
   public port: string | number;
   public env: string;
-  
   constructor(routes: Routes[]) {
 
     this.app = express();
     this.port = process.env.PORT || 3000;
     this.env = process.env.NODE_ENV || 'development';
-    
+
 
     this.connectToDatabase();
     this.initializeMiddlewares();
@@ -54,7 +53,7 @@ class App {
     this.initializeErrorHandling();
     this.redisConnection();
     // this.initializeCron();
-    this.initializeCron();
+    // this.initializeCron();
     // google.GoogleApis.
   }
 
@@ -227,28 +226,28 @@ class App {
     this.app.use(errorMiddleware);
   }
 
-  private  initializeCron(){
+  // private  initializeCron(){
 
-    const task = cron.schedule('* 1 * * 1-5', async function() {
-      const attendanceService = new AttendanceTypeService()
-      await attendanceService.generateAttendance()
-    //   console.log('running task 1am every day');
-    //   const day = "saturday"
-    //   if (day == "saturday" || day == "sunday") {
-    //     console.log("skipping today")
-    //   }else{
-    //     console.log("no loveeeeeeeeeeeeeeeee");
-    //     const attendanceService = new AttendanceTypeService()
-    //     await attendanceService.generateAttendance("project")
-    //   }
-    })
-    const task2 = cron.schedule('* 1 * * 1-5', async function() {
-      const applicationService = new LeaveApplicationService()
-      await applicationService.addLeavesForEmployees()
-    })
-     task.start()
-     task2.start()
-  }
+  //   const task = cron.schedule('* 1 * * 1-5', async function() {
+  //     const attendanceService = new AttendanceTypeService()
+  //     // await attendanceService.generateAttendance()
+  //   //   console.log('running task 1am every day');
+  //   //   const day = "saturday"
+  //   //   if (day == "saturday" || day == "sunday") {
+  //   //     console.log("skipping today")
+  //   //   }else{
+  //   //     console.log("no loveeeeeeeeeeeeeeeee");
+  //   //     const attendanceService = new AttendanceTypeService()
+  //   //     await attendanceService.generateAttendance("project")
+  //   //   }
+  //   })
+  //   const task2 = cron.schedule('* 1 * * 1-5', async function() {
+  //     const applicationService = new LeaveApplicationService()
+  //     await applicationService.addLeavesForEmployees()
+  //   })
+  //    task.start()
+  //    task2.start()
+  // }
 }
 
 export default App;
