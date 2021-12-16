@@ -26,7 +26,7 @@ class EmployeeService {
   public Shift = shiftTypeModel;
 
   public async findAllEmployee(): Promise<Employee[]> {
-    const Employees: Employee[] = await this.Employees.find().populate('default_shift designation department branch projectId reports_to');
+    const Employees: Employee[] = await this.Employees.find().populate('default_shift designation department branch projectId reports_to role');
     return Employees;
   }
 
