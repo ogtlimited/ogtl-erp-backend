@@ -24,7 +24,7 @@ class EmployeesRoute implements Routes {
     this.router.post(`${this.path}`, validationMiddleware(CreateEmployeeDto, 'body'), this.employeesController.createEmployee);
     this.router.post(`${this.path}/bulk-upload`,  this.employeesController.createMultipleEmployee);
     this.router.put(`${this.path}/:id`, validationMiddleware(CreateEmployeeDto, 'body', true), this.employeesController.updateEmployee);
-    this.router.put(`${this.path}/:id`, validationMiddleware(UpdateEmployeeRoleDto, 'body', true), this.employeesController.updateEmployeeRole);
+    this.router.put(`${this.path}/update-role/:id`, validationMiddleware(UpdateEmployeeRoleDto, 'body', true), this.employeesController.updateEmployeeRole);
     this.router.delete(`${this.path}/:id`, this.employeesController.deleteEmployee);
   }
 }
