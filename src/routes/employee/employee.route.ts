@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { Router } from 'express';
-import { CreateEmployeeDto, CreateMultipleEmployeeDto } from '@dtos/employee/employee.dto';
 
-import { CreateUserDto } from '@dtos/users.dto';
+import { CreateEmployeeDto, CreateMultipleEmployeeDto, UpdateEmployeeRoleDto } from '@dtos/employee/employee.dto';
+
 import { Routes } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
 import EmployeesController from '@/controllers/employee/employee.controller';
@@ -24,6 +24,7 @@ class EmployeesRoute implements Routes {
     this.router.post(`${this.path}`, validationMiddleware(CreateEmployeeDto, 'body'), this.employeesController.createEmployee);
     this.router.post(`${this.path}/bulk-upload`,  this.employeesController.createMultipleEmployee);
     this.router.put(`${this.path}/:id`, validationMiddleware(CreateEmployeeDto, 'body', true), this.employeesController.updateEmployee);
+    this.router.put(`${this.path}/:id`, validationMiddleware(UpdateEmployeeRoleDto, 'body', true), this.employeesController.updateEmployeeRole);
     this.router.delete(`${this.path}/:id`, this.employeesController.deleteEmployee);
   }
 }

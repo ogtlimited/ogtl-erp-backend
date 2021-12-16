@@ -126,6 +126,13 @@ export class UpdateEmployeePermissionDto{
   @IsNumber()
   public permissionLevel: number
 }
+export class UpdateEmployeeRoleDto{
+  @IsEmail()
+  public company_email: string;
+
+  @IsString()
+  public role: string
+}
 
 export class EmployeeLoginDto {
   @IsString()

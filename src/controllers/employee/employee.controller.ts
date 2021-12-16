@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
+
 import { NextFunction, Request, Response } from 'express';
-import { CreateEmployeeDto,UpdateEmployeeDto, CreateMultipleEmployeeDto } from '@dtos/employee/employee.dto';
+import { CreateEmployeeDto,UpdateEmployeeDto,UpdateEmployeeRoleDto, CreateMultipleEmployeeDto } from '@dtos/employee/employee.dto';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
 import EmployeeService from '@services/employee.service';
 
@@ -55,6 +56,17 @@ class EmployeesController {
       const EmployeeId: string = req.params.id;
       const EmployeeData: UpdateEmployeeDto = req.body;
       const updateEmployeeData: Employee = await this.EmployeeService.updateEmployee(EmployeeId, EmployeeData);
+
+      res.status(200).json({ data: updateEmployeeData, message: 'updated' });
+    } catch (error) {
+      next(error);
+    }
+  };
+  public updateEmployeeRole = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const EmployeeId: string = req.params.id;
+      const EmployeeData: UpdateEmployeeRoleDto = req.body;
+      const updateEmployeeData: Employee = await this.EmployeeService.updateEmployeeRole(EmployeeId, EmployeeData);
 
       res.status(200).json({ data: updateEmployeeData, message: 'updated' });
     } catch (error) {

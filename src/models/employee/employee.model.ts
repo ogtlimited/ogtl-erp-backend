@@ -51,6 +51,11 @@ const employeeSchema: Schema = new Schema(
       ref: 'SalaryStructure',
       default: null,
     },
+    role: {
+      type: Schema.Types.ObjectId,
+      ref: 'Role',
+      default: null,
+    },
     employeeType: {
       type: String,
       enum: ["Apprentice","Intern","Commission","Contract","Probation","PartTime","FullTime", "Corper"]

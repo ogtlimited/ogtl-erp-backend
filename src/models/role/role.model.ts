@@ -9,14 +9,77 @@ const roleSchema: Schema = new Schema(
             required: true,
             unique: true,
         },
-        description: {
-            type: String,
-            default: null
+        account: {
+            read: {
+                type: Boolean
+            },
+            create: {
+                type: Boolean
+            },
+            update: {
+                type: Boolean
+            },
+            delete: {
+                type: Boolean
+            },
         },
-    },
-    {
-        timestamps: true,
-    },
+        projects: {
+            read: {
+                type: Boolean
+            },
+            create: {
+                type: Boolean
+            },
+            update: {
+                type: Boolean
+            },
+            delete: {
+                type: Boolean
+            },
+        },
+        facility: {
+            read: {
+                type: Boolean
+            },
+            create: {
+                type: Boolean
+            },
+            update: {
+                type: Boolean
+            },
+            delete: {
+                type: Boolean
+            },
+        },
+        hr: {
+            read: {
+                type: Boolean
+            },
+            create: {
+                type: Boolean
+            },
+            update: {
+                type: Boolean
+            },
+            delete: {
+                type: Boolean
+            },
+        },
+        it: {
+            read: {
+                type: Boolean
+            },
+            create: {
+                type: Boolean
+            },
+            update: {
+                type: Boolean
+            },
+            delete: {
+                type: Boolean
+            },
+        },
+    }
 );
 
 const RoleModel = model<IRole & Document>('Role', roleSchema);

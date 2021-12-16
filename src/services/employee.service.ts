@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import bcrypt from 'bcrypt';
 
-import { CreateEmployeeDto, UpdateEmployeeDto, UpdateEmployeePermissionDto, CreateMultipleEmployeeDto } from '@dtos/employee/employee.dto';
+import { CreateEmployeeDto, UpdateEmployeeDto, UpdateEmployeePermissionDto, UpdateEmployeeRoleDto, CreateMultipleEmployeeDto } from '@dtos/employee/employee.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
 import EmployeeModel from '@models/employee/employee.model';
@@ -169,6 +169,24 @@ class EmployeeService {
     const updateEmployeeById: Employee = await this.Employees.findOneAndUpdate(
       { _id: EmployeeId },
       { $set: { permissionLevel: EmployeeData.permissionLevel } },
+      { new: true },
+    );
+
+    if (!updateEmployeeById) throw new HttpException(409, "You're not Employee");
+
+    return updateEmployeeById;
+  }
+  public async updateEmployeeRole(EmployeeId: string, EmployeeData: UpdateEmployeeRoleDto): Promise<Employee> {
+    if (isEmpty(EmployeeData)) throw new HttpException(400, 'Input all required field');
+
+    if (EmployeeData.company_email) {
+      const findEmployee: Employee = await this.Employees.findOne({ email: EmployeeData.company_email });
+      if (findEmployee && findEmployee._id != EmployeeId) throw new HttpException(409, `email not matched`);
+    }
+
+    const updateEmployeeById: Employee = await this.Employees.findOneAndUpdate(
+      { _id: EmployeeId },
+      { $set: { role: EmployeeData.role } },
       { new: true },
     );
 
