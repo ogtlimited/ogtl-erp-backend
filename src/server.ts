@@ -62,7 +62,7 @@ import RoleRoute from '@routes/role/role.route';
 //import DepartmentRoute from './routes/employee/department.route';
 import scoreCardRoute from './routes/pip/score-cards.route';
 import TerminationRoute from './routes/employee-lifecycle/termination.route';
-
+ 
 import DepartmentRoute from './routes/employee/department.route';
 import NotificationRoute from '@routes/notification/notification.route';
 import EmailRoute from '@routes/notification/email.route';
@@ -88,6 +88,7 @@ import ProcurementRoute from '@/routes/procurement/procurement.route'
 import PaymentRoute from './routes/payments/payment.route';
 import ExpenseHeadDraftRoute from "@routes/expense-head/expense-head.route";
 import SalarySettingRoute from "@routes/salary-setting/salary-setting.route";
+import RoleAssignmentRoute from "@routes/role/role-assignment.route";
 
 
 validateEnv();
@@ -172,7 +173,8 @@ const app = new App([
   new PaymentRoute(),
   new ExpenseHeadDraftRoute(),
   new documentRoute(),
-  new JobDocumentRoute()
+  new JobDocumentRoute(),
+  new RoleAssignmentRoute(),
 ]);
 
 const server = app.listen();

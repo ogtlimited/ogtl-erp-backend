@@ -21,6 +21,7 @@ import AssetService from './assets/assets.service';
 import PurchaseOrderService from './assets/purchase-order.service';
 import InvoiceService from '@services/invoice/invoice.service';
 import PaymentService from '@services/payments/payment.service';
+import RoleService from './role/role.service';
 
 class CombineServices {
   public designationS = new DesignationService();
@@ -44,6 +45,7 @@ class CombineServices {
   public PurchaseOrder = new PurchaseOrderService()
   public Invoice = new InvoiceService()
   public Payments = new PaymentService()
+  public Role = new RoleService()
 //   public departmentS = new Department
 
   public async createEmployeeFormSelection(){
@@ -59,6 +61,7 @@ class CombineServices {
     const allAssets = await this.Assets.findAllAsset()
     const allPurchaseOrders = await this.PurchaseOrder.findAllPurchaseOrders()
     const clientS = await this.clientS.findAll()
+    const allRoles = await this.Role.findAll()
 
 
     return {
@@ -73,7 +76,8 @@ class CombineServices {
         passedApplicants,
         allAssets,
         allPurchaseOrders,
-       clientS
+       clientS,
+       allRoles
     }
   }
   //For anything relating to Employee creation
