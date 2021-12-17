@@ -48,6 +48,6 @@ RoleAssignmentSchema.post('delete', function(doc) {
   console.log(self.constructor.modelName)
   new NotificationHelper(self.constructor.modelName, "DELETE").exec()
 });
-const RoleAssignmentModel = model<RoleAssignment & Document>('RolesAssignment', RoleAssignmentSchema);
+const RoleAssignmentModel = model<roleAssignment & Document>('RolesAssignment', RoleAssignmentSchema);
 
 export default RoleAssignmentModel;
