@@ -11,72 +11,92 @@ const roleSchema: Schema = new Schema(
         },
         account: {
             read: {
-                type: Boolean
+                type: Boolean,
+                 default: false
             },
             create: {
-                type: Boolean
+                type: Boolean,
+                 default: false
             },
             update: {
-                type: Boolean
+                type: Boolean,
+                 default: false
             },
             delete: {
-                type: Boolean
+                type: Boolean,
+                 default: false
             },
         },
         projects: {
             read: {
-                type: Boolean
+                type: Boolean,
+                 default: false
             },
             create: {
-                type: Boolean
+                type: Boolean,
+                 default: false
             },
             update: {
-                type: Boolean
+                type: Boolean,
+                 default: false
             },
             delete: {
-                type: Boolean
+                type: Boolean,
+                 default: false
             },
         },
         facility: {
             read: {
-                type: Boolean
+                type: Boolean,
+                 default: false
             },
             create: {
-                type: Boolean
+                type: Boolean,
+                 default: false
             },
             update: {
-                type: Boolean
+                type: Boolean,
+                 default: false
             },
             delete: {
-                type: Boolean
+                type: Boolean,
+                 default: false
             },
         },
         hr: {
             read: {
-                type: Boolean
+                type: Boolean,
+                 default: false
             },
             create: {
-                type: Boolean
+                type: Boolean,
+                 default: false
             },
             update: {
-                type: Boolean
+                type: Boolean,
+                 default: false
             },
             delete: {
-                type: Boolean
+                type: Boolean,
+                 default: false
             },
         },
         it: {
             read: {
-                type: Boolean
+                type: Boolean,
+                 default: false
             },
             create: {
-                type: Boolean
+                type: Boolean,
+                 default: false
             },
             update: {
-                type: Boolean
+                type: Boolean,
+                default: false
             },
             delete: {
-                type: Boolean
+                type: Boolean,
+                default: false
             },
         },
     }
