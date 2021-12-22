@@ -1,9 +1,20 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-this-alias */
+
 import { model, Schema, Document } from 'mongoose';
-import NotificationHelper from '@utils/helper/notification.helper'
+import NotificationHelper from '@utils/helper/notification.helper';
 import { IJobOpening } from '@interfaces/recruitment/job_opening.interface';
 
 const jobOpeningSchema: Schema = new Schema({
   job_title: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: String,
+    required: true,
+  },
+  deadline: {
     type: String,
     required: true,
   },
@@ -24,8 +35,25 @@ const jobOpeningSchema: Schema = new Schema({
     enum: ['CLOSED', 'OPEN'],
     default: 'OPEN',
   },
+  type: {
+    type: String,
+    enum: ['Full Time', 'Part Time'],
+    default: 'Full Time',
+  },
   description: {
     type: String,
+    default: null,
+  },
+  salary: {
+    type: String,
+    default: null,
+  },
+  experience: {
+    type: Number,
+    default: null,
+  },
+  vacancy: {
+    type: Number,
     default: null,
   },
   location: {
@@ -35,21 +63,20 @@ const jobOpeningSchema: Schema = new Schema({
   },
 });
 
-
-jobOpeningSchema.post('save', function(doc) {
+jobOpeningSchema.post('save', function (doc) {
   const self: any = this;
-  console.log(self.constructor.modelName)
-  new NotificationHelper(self.constructor.modelName, "SAVE").exec()
+  console.log(self.constructor.modelName);
+  new NotificationHelper(self.constructor.modelName, 'SAVE').exec();
 });
-jobOpeningSchema.post('update', function(doc) {
+jobOpeningSchema.post('update', function (doc) {
   const self: any = this;
-  console.log(self.constructor.modelName)
-  new NotificationHelper(self.constructor.modelName, "UPDATE").exec()
+  console.log(self.constructor.modelName);
+  new NotificationHelper(self.constructor.modelName, 'UPDATE').exec();
 });
-jobOpeningSchema.post('delete', function(doc) {
+jobOpeningSchema.post('delete', function (doc) {
   const self: any = this;
-  console.log(self.constructor.modelName)
-  new NotificationHelper(self.constructor.modelName, "DELETE").exec()
+  console.log(self.constructor.modelName);
+  new NotificationHelper(self.constructor.modelName, 'DELETE').exec();
 });
 
 const jobOpeningModel = model<IJobOpening & Document>('JobOpening', jobOpeningSchema);

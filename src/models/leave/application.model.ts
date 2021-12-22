@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-this-alias */
 
 import { ILeaveApplication } from '@/interfaces/leave-interface/application.interface';
 import mongoose from 'mongoose';
