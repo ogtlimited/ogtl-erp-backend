@@ -18,7 +18,9 @@ class EmailRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}/:emailId`, this.email.getEmails);
+    this.router.get(`${this.path}/single/:emailId`, this.email.getSingleEmail);
     this.router.put(`${this.path}/:id`, validationMiddleware(EmailDto, 'body'), this.email.emailRead);
+    this.router.delete(`${this.path}/:id`, this.email.deleteEmail);
   }
 }
 

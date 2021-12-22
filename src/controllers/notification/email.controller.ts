@@ -21,6 +21,24 @@ class EmailController {
             next(error);
         }
     };
+    public getSingleEmail = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const emailId: string = req.params.emailId;
+            const email: IEmail = await this.emailService.findOne(emailId);
+            res.status(200).json({ data: email, message: 'one email' });
+        } catch (error) {
+            next(error);
+        }
+    };
+    public deleteEmail = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const emailId: string = req.params.emailId;
+            const email: IEmail = await this.emailService.findOneAndDelete(emailId);
+            res.status(200).json({ data: email, message: 'email deleted succcessfully' });
+        } catch (error) {
+            next(error);
+        }
+    };
 
     public emailRead = async (req: Request, res: Response, next: NextFunction) => {
         try {
