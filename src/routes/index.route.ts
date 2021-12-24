@@ -21,6 +21,7 @@ class IndexRoute implements Routes {
     this.router.get(`${this.path}create-recruitment-form`, this.indexController.createRecruitmentForm);
     this.router.get(`${this.path}create-performance-form`, this.indexController.createPerformanceForm);
     this.router.get(`${this.path}create-campaign-form`, this.indexController.createCampaignForm);
+    this.router.get(`${this.path}create-role-form`, this.indexController.createRoleAssignmentForm);
     this.router.get(`${this.path}admin-dashboard`, this.indexController.getAdminDashboardData);
     this.router.get(`${this.path}profile-dashboard/:id`, this.indexController.getEmployeeFUllData);
     this.router.get(`${this.path}accounts-dashboard`, this.indexController.getAccountsDashboard);
