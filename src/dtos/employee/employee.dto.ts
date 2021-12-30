@@ -127,8 +127,8 @@ export class UpdateEmployeePermissionDto{
   public permissionLevel: number
 }
 export class UpdateEmployeeRoleDto{
-  @IsEmail()
-  public company_email: string;
+  @IsString()
+  public _id: string;
 
   @IsString()
   public role: string

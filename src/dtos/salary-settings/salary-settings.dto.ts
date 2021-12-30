@@ -1,43 +1,41 @@
-import {IsString, IsBoolean, IsNumber, IsOptional} from 'class-validator';
-import {ISalarySetting} from "@interfaces/salary-settings/salary_settings.interface";
+import { IsString, IsBoolean, IsNumber, IsOptional } from 'class-validator';
+import { ISalarySetting } from '@interfaces/salary-settings/salary_settings.interface';
 
-export class CreateSalarySettingDto implements ISalarySetting{
+export class CreateSalarySettingDto implements ISalarySetting {
   @IsString()
-  public title:string;
+  public title: string;
 
   @IsString()
-  public type:string;
+  public type: string;
 
   @IsNumber()
-  public percentage:Number;
+  public percentage: Number;
 
-   @IsNumber()
-  public startRange:Number;
+  @IsNumber()
+  public startRange: Number;
 
-   @IsNumber()
-  public endRange:Number;
+  @IsNumber()
+  public endRange: Number;
 }
 
-export class UpdateSalarySettingDto implements ISalarySetting{
+export class UpdateSalarySettingDto implements ISalarySetting {
   @IsString()
   @IsOptional()
-  public title:string;
+  public title: string;
 
   @IsString()
   @IsOptional()
-  public type:string;
+  public type: string;
 
   @IsNumber()
   @IsOptional()
-  public startRange:Number;
+  public startRange: Number;
 
   @IsNumber()
   @IsOptional()
-  public percentage:Number;
+  public percentage: Number;
 
   @IsNumber()
   @IsOptional()
-  public endRange:Number;
+  public endRange: Number;
 }
-
-

@@ -84,6 +84,17 @@ class IndexController {
     }
   };
 
+//for creating new role Assignment Form
+  public createRoleAssignmentForm = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const createRoleAssignment = await this.indexS.roleAssignmentForm()
+
+      res.status(200).json({ createRoleAssignment, message: 'Role assignment data result' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public getAdminDashboardData = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const getAdminDashboardData = await this.indexS.adminDashboardDate();

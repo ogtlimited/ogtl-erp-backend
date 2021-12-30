@@ -33,7 +33,7 @@ class EmployeeService {
   public async findEmployeeById(EmployeeId: string): Promise<Employee> {
     if (isEmpty(EmployeeId)) throw new HttpException(400, "You're not EmployeeId");
 
-    const findEmployee: Employee = await this.Employees.findOne({ _id: EmployeeId }).populate("default_shift department designation branch projectId reports_to");
+    const findEmployee: Employee = await this.Employees.findOne({ _id: EmployeeId }).populate("default_shift department designation branch projectId reports_to role");
     if (!findEmployee) throw new HttpException(409, "You're not Employee");
 
     return findEmployee;
@@ -179,9 +179,9 @@ class EmployeeService {
   public async updateEmployeeRole(EmployeeId: string, EmployeeData: UpdateEmployeeRoleDto): Promise<Employee> {
     if (isEmpty(EmployeeData)) throw new HttpException(400, 'Input all required field');
 
-    if (EmployeeData.company_email) {
-      const findEmployee: Employee = await this.Employees.findOne({ email: EmployeeData.company_email });
-      if (findEmployee && findEmployee._id != EmployeeId) throw new HttpException(409, `email not matched`);
+    if (EmployeeData._id) {
+      const findEmployee: Employee = await this.Employees.findOne({ _id: EmployeeData._id });
+      if (findEmployee && findEmployee._id != EmployeeId) throw new HttpException(409, `User not Found`);
     }
 
     const updateEmployeeById: Employee = await this.Employees.findOneAndUpdate(
