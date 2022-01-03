@@ -15,9 +15,31 @@ const jobApplicantSchema: Schema = new Schema({
   middle_name: {
     type: String,
   },
+  mobile: {
+    type: String,
+    required: true,
+  },
+  highest_qualification: {
+    type: String,
+    required: true,
+  },
+  certifications: {
+    type: String,
+    required: true,
+  },
+  languages_spoken: {
+    type: Array,
+    required: true,
+  },
+  referal_name: {
+    type: Array,
+  },
   email_address: {
    type:String,
     required: true,
+  },
+  alternate_mobile: {
+   type:String,
   },
   job_opening_id: {
     type: Schema.Types.ObjectId,

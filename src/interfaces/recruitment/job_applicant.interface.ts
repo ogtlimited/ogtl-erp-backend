@@ -1,4 +1,3 @@
-
 export interface IJobApplicant {
   _id: string;
   first_name: string;
@@ -11,4 +10,10 @@ export interface IJobApplicant {
   resume_attachment: string;
   cover_letter?: string;
   video_attachment?: string;
+  mobile: string;
+  alternate_mobile: string;
+  highest_qualification: string;
+  certifications: string;
+  languages_spoken: [];
+  referal_name: string;
 }

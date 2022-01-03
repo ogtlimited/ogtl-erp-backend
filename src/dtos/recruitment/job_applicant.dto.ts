@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import { IsString, IsOptional, IsNotEmpty } from 'class-validator';
+import { IsString, IsOptional, IsNotEmpty, IsArray } from 'class-validator';
 
 export class CreateJobApplicantDto {
   @IsNotEmpty()
@@ -21,11 +21,35 @@ export class CreateJobApplicantDto {
 
   @IsNotEmpty()
   @IsString()
+  public mobile: string;
+
+  @IsOptional()
+  @IsString()
+  public alternate_mobile: string;
+
+  @IsNotEmpty()
+  @IsString()
   public job_opening_id: string;
+
+  @IsNotEmpty()
+  @IsString()
+  public highest_qualification: string;
+
+  @IsNotEmpty()
+  @IsString()
+  public certifications: string;
+
+  @IsNotEmpty()
+  @IsArray()
+  public languages_spoken: [];
 
   @IsOptional()
   @IsString()
   public application_source: string;
+
+  @IsOptional()
+  @IsString()
+  public referal_name: string;
 
   @IsNotEmpty()
   @IsString()
