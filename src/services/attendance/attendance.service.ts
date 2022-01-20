@@ -107,10 +107,11 @@ class AttendanceTypeService {
     return findAttendanceType;
   }
 
-  public async bulkAttendanceUpload(attendanceTypeData: IBulkCreateAttendance): Promise<any> {
+  public async bulkAttendanceUpload(attendanceTypeData): Promise<any> {
     const employeesDeductions = []
     const employeesAttendance = []
-    for(const employeeData of attendanceTypeData.attendances){
+    console.log(attendanceTypeData);
+    for(const employeeData of attendanceTypeData){
       const attendanceConstuctor:ICreateAttendance ={}
       const deductionAmount = 0
       const result = await this.generatePossibleDeductions(employeeData.companyEmail, employeeData)
@@ -221,6 +222,7 @@ class AttendanceTypeService {
           expectedWorkTime:1
         },
       }).populate({path:'salaryStructure_id', select:{grossPay:1, netPay:1}})
+      console.log(employee, 'EMPLOYEE')
 
       employee = employee.toObject();
 

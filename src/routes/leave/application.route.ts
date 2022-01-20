@@ -24,9 +24,10 @@ class LeaveApplicationRoute implements Routes {
     this.router.get(`${this.path}/:id`, authMiddleware, this.leaveApplicationController.getLeaveApplicationById);
     this.router.get(`${this.path}/team-member/all`, authMiddleware, this.leaveApplicationController.findAllTeamMembersLeave);
     this.router.post(`${this.path}`, [validationMiddleware(CreateLeaveApplicationDTO, 'body'),authMiddleware], this.leaveApplicationController.createLeaveApplication);
-    this.router.put(`${this.path}/:id`, [validationMiddleware(UpdateLeaveApplicationDTO, 'body', true), authMiddleware, permissionMiddleware('HR')], this.leaveApplicationController.updateLeaveApplication);
+    this.router.put(`${this.path}/update-leavecount`, [authMiddleware, permissionMiddleware('HR')], this.leaveApplicationController.updateLeaveCount);
     this.router.put(`${this.path}/lead/approve`, [validationMiddleware(UpdateLeaveApplicationDTO, 'body', true), authMiddleware], this.leaveApplicationController.supervisorApproveLeave);
     this.router.put(`${this.path}/hr/approve/:id`, [validationMiddleware(UpdateLeaveApplicationDTO, 'body', true), authMiddleware, permissionMiddleware('HR')], this.leaveApplicationController.hrApproveLeave);
+    this.router.put(`${this.path}/:id`, [validationMiddleware(UpdateLeaveApplicationDTO, 'body', true), authMiddleware, permissionMiddleware('HR')], this.leaveApplicationController.updateLeaveApplication);
     this.router.delete(`${this.path}/:id`,authMiddleware, this.leaveApplicationController.deleteLeaveApplication);
   }
 }
