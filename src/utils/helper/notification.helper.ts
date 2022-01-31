@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
+import  Email  from '@models/notification/email.model';
 
 import notificationModel from '../../models/notification/notification.model';
-import Email from '@/models/notification/email.model';
+
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 const { SocketLabsClient } = require('@socketlabs/email');
@@ -44,7 +45,7 @@ class NotificationHelper {
 
     public queueMessage(receiver: string[], message: string, model: string, subject: string, sender: string)
     {
-        let obj = {}
+        const obj = {}
         for(let i=0; i<receiver.length; i++){
             obj["message"] = message
             obj["module"] = model

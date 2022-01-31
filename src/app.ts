@@ -107,11 +107,11 @@ class App {
     return this.app;
   }
 
-  private connectToDatabase() {
+  private async connectToDatabase() {
     if (this.env !== 'production') {
       set('debug', true);
     }
-    connect(process.env.databaseUrl, dbConnection.options);
+    await connect(process.env.databaseUrl, dbConnection.options);
   }
 
   private initializeMiddlewares() {
