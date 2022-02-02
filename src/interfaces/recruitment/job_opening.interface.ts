@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export interface IJobOpening {
   _id: string;
   job_title: string;
@@ -5,4 +6,11 @@ export interface IJobOpening {
   project_id: string;
   status: string;
   description: string;
+  location: string;
+  date: string;
+  deadline: string;
+  type: string;
+  salary: string;
+  experience: number;
+  vacancy: number;
 }

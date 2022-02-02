@@ -19,7 +19,7 @@ class LoanRoute implements Routes {
   private initializeRoutes() {
     this.router.get(`${this.path}`, authMiddleware, this.loan.getLoans);
     this.router.get(`${this.path}/:loanId`, authMiddleware, this.loan.getLoan);
-    this.router.post(`${this.path}`, [validationMiddleware(LoanDto, 'body'), authMiddleware], this.loan.createLoan);
+    this.router.post(`${this.path}`, [validationMiddleware(LoanDto, 'body')], this.loan.createLoan);
     this.router.put(`${this.path}/:loanId`, authMiddleware, validationMiddleware(PutLoanDto, 'body'), this.loan.updateLoan);
     this.router.delete(`${this.path}/:loanId`, authMiddleware, this.loan.deleteLoan);
   }

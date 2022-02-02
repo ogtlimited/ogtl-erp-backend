@@ -7,7 +7,7 @@ import AttendanceTypeService from '@/services/attendance/attendance.service';
 
 class AttendanceController {
   public attendanceService = new AttendanceTypeService();
-  
+
   // public getAttendances = async (req: Request, res: Response, next: NextFunction) => {
   //   try {
   //     const findAllAttendanceData: IAttendance[] = await this.attendanceService.findAllDepartmentAttendance(req.query);
@@ -46,9 +46,19 @@ class AttendanceController {
 
   public createAttendance = async (req, res: Response, next: NextFunction) => {
     try {
-     
+
       const attendanceData = req.body;
-      const createAttendanceData: any = await this.attendanceService.createAttendanceType(req.user, attendanceData); 
+      const createAttendanceData: any = await this.attendanceService.createAttendanceType(req.user, attendanceData);
+      res.status(201).json({ data: createAttendanceData});
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public CreateBulkAttendance = async (req, res: Response, next: NextFunction) => {
+    try {
+      const attendanceData = req.body;
+      const createAttendanceData: any = await this.attendanceService.bulkAttendanceUpload(attendanceData);
       res.status(201).json({ data: createAttendanceData});
     } catch (error) {
       next(error);
@@ -57,11 +67,13 @@ class AttendanceController {
 
   public updateAttendance = async (req, res: Response, next: NextFunction) => {
     try {
-     
+
       const attendanceData: UpdateAttendanceDto = req.body;
-      const createAttendanceData: any = await this.attendanceService.updateAttendance(req.user,attendanceData); 
+      // console.log(req)
+      const createAttendanceData: any = await this.attendanceService.updateAttendance(req.user,attendanceData);
       res.status(201).json({ data: createAttendanceData});
     } catch (error) {
+      console.log(error, 'ERROR')
       next(error);
     }
   };

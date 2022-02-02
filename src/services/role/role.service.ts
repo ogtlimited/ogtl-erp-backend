@@ -33,9 +33,10 @@ class RoleService {
 
     public async update(roleId: string, Payload: UpdateRoleDto): Promise<IRole> {
         if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
+        console.log(Payload)
         const findrole = this.findOne(roleId);
         if (!findrole) throw new HttpException(409, "Project not found");
-        const updaterole: IRole = await this.role.findByIdAndUpdate(roleId, { Payload }, {new: true});
+        const updaterole: IRole = await this.role.findByIdAndUpdate(roleId,  Payload , {new: true});
         return updaterole;
     }
 

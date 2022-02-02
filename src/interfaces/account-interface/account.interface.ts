@@ -4,6 +4,8 @@ export interface IAccount {
     account_name: string;
     account_number: string;
     is_group: Boolean;
+    is_default: Boolean;
+    number_prefix: string;
     balance: number;
     account_type: string;
     currency: string;

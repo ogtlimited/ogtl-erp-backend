@@ -17,6 +17,11 @@ const invoiceSchema: Schema = new Schema(
       type: Date,
       default: new Date(),
     },
+    account: {
+      type: Schema.Types.ObjectId,
+      ref: "Account",
+      required: true
+    },
     total_amount: {
       type: Number,
       required: true,
@@ -28,26 +33,25 @@ const invoiceSchema: Schema = new Schema(
     },
     balance: {
       type: Number,
+      default: 0,
       required: false,
     },
     due_date: {
       type: Date,
       required: true,
     },
-    productItems:[{
-      type: Schema.Types.ObjectId,
-      ref: "ProductService",
-    }],
-    type: {
-      type: String,
-      required: true,
-      enum : ["Invoice", "Bill"]
-    },
+    productItems:[
+      {
+        type: Schema.Types.ObjectId,
+        ref: "ProductService",
+      }
+    ],
+    units: [Number],
     status: {
       type: String,
       default: 'Draft',
       required: true,
-      enum: ['Publish', 'Draft']
+      enum: ['Published', 'Draft']
     }
   }
 );

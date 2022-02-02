@@ -30,6 +30,16 @@ shiftAssignmentSchema.post('save', function(doc) {
   console.log(self.constructor.modelName)
   new NotificationHelper(self.constructor.modelName, "SAVE").exec()
 });
+shiftAssignmentSchema.post('update', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "UPDATE").exec()
+});
+shiftAssignmentSchema.post('delete', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "DELETE").exec()
+});
 const shiftAssignmentModel = model<IShiftAssignment & Document>('ShiftAssignment', shiftAssignmentSchema);
 
 export default shiftAssignmentModel;

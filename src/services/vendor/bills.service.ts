@@ -7,6 +7,7 @@ import JournalService from '../journal/journal.service';
 import billsModel from '@models/vendor/bills.model';
 import { IBills } from '@interfaces/vendor-interface/bills-interface';
 import { CreateBillsDto, UpdateBillsStatus } from '@dtos/vendor/bills.dto';
+import moment from 'moment';
 
 class BillService {
   public bills = billsModel;
@@ -44,15 +45,27 @@ class BillService {
   public async createBill(billData: CreateBillsDto) : Promise<IBills>{
     //Check if data is empty
     if (isEmpty(billData)) throw new HttpException(400, "No data provided");
+    const date1 = moment(billData.bill_date).format("L");
+    const date2 = moment(billData.due_date).format("L");
+    if (date1 > date2) {
+      throw new HttpException(409, "Bill date must not be after Due date");
+    }
     const newRef = BillService.generateRefID()
     const findBill: IBills = await this.bills.findOne({ref:newRef});
     if(findBill) throw new HttpException(409, `Bill with this ${newRef} already exists`);
     const payable = await this.Account.findByName("account-payable")
-    const accountUpdate: PutAccountBalanceDto = {
+    const account = await this.Account.find(billData.account);
+  console.log("paaaaaaaaaayyyyyy",account)
+    const updatePayable: PutAccountBalanceDto = {
       balance: payable.balance + billData.total_amount,
     }
+    const accountUpdate: PutAccountBalanceDto = {
+      balance: account.balance + billData.total_amount,
+    }
+    console.log("update poayaaaa",updatePayable)
     console.log(accountUpdate)
-    await this.Account.updateBalance(payable._id, accountUpdate)
+    await this.Account.updateBalance(payable._id, updatePayable)
+    await  this.Account.updateBalance(account._id, accountUpdate)
     const jData = {
       account: payable._id,
       ref: newRef,
@@ -75,14 +88,21 @@ class BillService {
 
     //Check if data is empty
     if (isEmpty(billData)) throw new HttpException(400, "No data provided");
+    const date1 = moment(billData.bill_date).format("L");
+    const date2 = moment(billData.due_date).format("L");
+    if (date1 > date2) {
+      throw new HttpException(409, "Bill date must not be after Due date");
+    }
     const Bill = await this.findBillById(BillId)
     const updateData = {
-      paid: billData.paid,
-      balance: Bill.total_amount - billData.paid
+      paid: Bill.paid + billData.total_amount,
+      balance: Bill.total_amount - billData.total_amount - Bill.paid
     }
     const updateBillById: IBills = await this.bills.findByIdAndUpdate(BillId,{
-      $set: {updateData}
-    });
+      $set: updateData
+    },{new:true}).exec();
+    if(!updateBillById) throw new HttpException(400, "Error updating bill");
+
     const payable = await this.Account.findByName("account-payable")
     const accountUpdate: PutAccountBalanceDto = {
       balance: payable.balance - billData.total_amount,
@@ -93,8 +113,8 @@ class BillService {
     const jData = {
       account: payable._id,
       ref: billData.ref,
-      debit: billData.total_amount - billData.paid,
-      credit: billData.paid,
+      debit: 0,
+      credit: billData.total_amount,
       description: '',
       date: new Date().toISOString()
 
@@ -109,7 +129,7 @@ class BillService {
     //Check if data is empty
     if (isEmpty(billData)) throw new HttpException(400, "No data provided");
 
-    const updateBillById: IBills = await this.bills.findByIdAndUpdate(BillId,{billData});
+    const updateBillById: IBills = await this.bills.findByIdAndUpdate(BillId,billData, {new:true});
     if(!updateBillById) throw new HttpException(409, "Bills doesn't exist");
     return updateBillById;
   }
@@ -130,7 +150,7 @@ class BillService {
     return deleteBillById;
   }
   private static generateRefID(){
-    return "OG"+ Math.floor(1000 + Math.random() * 9000)
+    return "REF"+ Math.floor(1000 + Math.random() * 9000)
   }
 }
 

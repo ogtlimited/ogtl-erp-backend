@@ -12,7 +12,6 @@ const employeeSchema: Schema = new Schema(
     },
     company_email: {
       type: String,
-      required: true,
       unique: true,
     },
     date_of_joining: {
@@ -31,7 +30,6 @@ const employeeSchema: Schema = new Schema(
     },
     password:  {
       type: String,
-      required: true,
     },
     designation: {
       type: Schema.Types.ObjectId,
@@ -53,9 +51,14 @@ const employeeSchema: Schema = new Schema(
       ref: 'SalaryStructure',
       default: null,
     },
+    role: {
+      type: Schema.Types.ObjectId,
+      ref: 'Role',
+      default: null,
+    },
     employeeType: {
       type: String,
-      enum: ["Apprentice","Intern","Commission","Contract","Probation","PartTime","FullTime"]
+      enum: ["Apprentice","Intern","Commission","Contract","Probation","PartTime","FullTime", "Corper"]
     },
     first_name: {
       type: String,
@@ -65,13 +68,20 @@ const employeeSchema: Schema = new Schema(
       type: Boolean,
       required: true,
     },
+    isTeamLead: {
+      type: Boolean,
+      default: false
+    },
+    isSupervisor: {
+      type: Boolean,
+      default: false
+    },
     gender: {
       type: String,
       enum: ["male", "female"],
     },
     image: {
       type: String,
-
     },
     last_name: {
       type: String,
@@ -80,6 +90,10 @@ const employeeSchema: Schema = new Schema(
     },
     middle_name: {
       type: String,
+    },
+    leaveCount: {
+      type: Number,
+      default: 0
     },
     reports_to: {
       type: Schema.Types.ObjectId,

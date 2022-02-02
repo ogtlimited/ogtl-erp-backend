@@ -17,3 +17,5 @@ export const isEmpty = (value: string | number | object): boolean => {
     return false;
   }
 };
+
+export const genRef = () => 'REF-' + new Date().getTime();

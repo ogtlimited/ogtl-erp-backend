@@ -19,6 +19,9 @@ import JobOfferService from '@services/recruitment/job_offer.service';
 import TestServices from '@services/recruitment/test.services';
 import AssetService from './assets/assets.service';
 import PurchaseOrderService from './assets/purchase-order.service';
+import InvoiceService from '@services/invoice/invoice.service';
+import PaymentService from '@services/payments/payment.service';
+import RoleService from '@services/role/role.service';
 
 class CombineServices {
   public designationS = new DesignationService();
@@ -40,6 +43,9 @@ class CombineServices {
   public passedTestApplicants = new TestServices()
   public Assets = new AssetService()
   public PurchaseOrder = new PurchaseOrderService()
+  public Invoice = new InvoiceService()
+  public Payments = new PaymentService()
+  public roleS = new RoleService()
 //   public departmentS = new Department
 
   public async createEmployeeFormSelection(){
@@ -54,7 +60,9 @@ class CombineServices {
     const passedApplicants = await this.passedTestApplicants.findAllPassedTests()
     const allAssets = await this.Assets.findAllAsset()
     const allPurchaseOrders = await this.PurchaseOrder.findAllPurchaseOrders()
-    
+    const clientS = await this.clientS.findAll()
+    const roles = await this.roleS.findAll()
+
 
     return {
         shifts: shifts,
@@ -68,7 +76,99 @@ class CombineServices {
         passedApplicants,
         allAssets,
         allPurchaseOrders,
-        
+       clientS
+    }
+  }
+  //For anything relating to Employee creation
+  public async employeeForm(){
+    const acceptedJobOffers = await this.acceptedJobOfferS.findAllAcceptedJobOffers()
+    const employees = await this.employeeS.findAllEmployee()
+    const designations = await this.designationS.findAllDesignations()
+    const projects = await this.projectS.findAll();
+    const departments = await this.departmentS.findAllDepartments()
+    const shifts = await this.shiftS.findAllshiftType()
+    const branches = await this.brancheS.findAllBranches();
+
+    return {
+      acceptedJobOffers,
+      employees,
+      designations,
+      projects,
+      shifts,
+      departments,
+      branches
+    }
+  }
+
+  //For anything relating to shift
+  public async shiftForm(){
+    const shifts = await this.shiftS.findAllshiftType()
+    const employees = await this.employeeS.findAllEmployee()
+
+    return {
+      shifts,
+      employees
+    }
+  }
+  //For anything relating to campaign
+  public async campaignForm(){
+    const clientS = await this.clientS.findAll()
+    const employees = await this.employeeS.findAllEmployee()
+
+    return {
+      clientS,
+      employees
+    }
+  }
+  //For anything relating to payroll
+  public async payrollForm(){
+    const departments = await this.departmentS.findAllDepartments()
+    const projects = await this.projectS.findAll();
+    const employees = await this.employeeS.findAllEmployee()
+
+    return {
+      departments,
+      projects,
+      employees
+    }
+  }
+ //For anything relating to recruitment
+  public async recruitmentForm(){
+    const designations = await this.designationS.findAllDesignations()
+    const projects = await this.projectS.findAll();
+    const branches = await this.brancheS.findAllBranches();
+    const jobApplicants = await this.jobApplicantS.findAllJobApplicants()
+    const passedApplicants = await this.passedTestApplicants.findAllPassedTests()
+
+    return {
+      designations,
+      projects,
+      branches,
+      jobApplicants,
+      passedApplicants
+    }
+  }
+
+ //For anything relating to performance
+  public async performanceForm(){
+    const employees = await this.employeeS.findAllEmployee()
+    const designations = await this.designationS.findAllDesignations()
+
+
+    return {
+      employees,
+      designations
+    }
+  }
+
+  //for anything relating to roles assignment
+  public async roleAssignmentForm(){
+    const employees = await this.employeeS.findAllEmployee()
+    const roles = await  this.roleS.findAll()
+
+    return {
+      employees,
+      roles
     }
   }
 
@@ -104,6 +204,13 @@ class CombineServices {
       workExperience
     }
 
+  }
+
+  public async accountDashboard(){
+    const invoices = await this.Invoice.findAllInvoices()
+    const payments = await this.Payments.findAllPayment()
+
+    return {invoices, payments}
   }
 }
  export default CombineServices

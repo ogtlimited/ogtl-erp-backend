@@ -1,4 +1,6 @@
 /* eslint-disable prettier/prettier */
+import LeaveApplicationService from "@services/leave/application.service";
+
 process.env['NODE_CONFIG_DIR'] = __dirname + '/configs';
 
 
@@ -6,6 +8,7 @@ import compression from 'compression';
 import { dirname } from 'path';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import fileUpload from 'express-fileupload'
 import config from 'config';
 import express from 'express';
 import helmet from 'helmet';
@@ -19,26 +22,29 @@ import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
 import * as cron from 'node-cron';
-const socketio = require('socket.io');
+const { io } = require("@/utils/socket");
 const redis = require('redis');
 const client = redis.createClient();
 import attendanceModel  from '@models/attendance/attendance.model';
 import {getWorkTime, calculateLateness}  from '@/utils/attendanceCalculator';
 import AttendanceTypeService from '@/services/attendance/attendance.service';
+import NotificationHelper from './utils/helper/notification.helper';
+
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config({ path: dirname( module.paths[1] ) + "/.env" });
 }
+import moment from 'moment';
 
 class App {
   public app: express.Application;
   public port: string | number;
   public env: string;
-
   constructor(routes: Routes[]) {
 
     this.app = express();
     this.port = process.env.PORT || 3000;
     this.env = process.env.NODE_ENV || 'development';
+
 
     this.connectToDatabase();
     this.initializeMiddlewares();
@@ -47,35 +53,37 @@ class App {
     this.initializeErrorHandling();
     this.redisConnection();
     // this.initializeCron();
-    this.initializeCron();
+    // this.initializeCron();
+
   }
 
-  public socketConnection(server)
+  public socketInstance(server)
   {
-      const io = socketio(server, {
-          cors: {
-            origin: '*',
-          }
+    const serverInstance = server;
+      io.attach(serverInstance, {
+        cors: {
+          origin: '*',
+        }
       });
 
       io.on('connection', socket => {
+
           console.log('Socket: client connected')
           socket.on('notification', (data) => {
               client.lrange(data, 0, -1, function(err, reply) {
                   socket.emit("messages", reply)
               });
           })
-
           socket.on('clear_notification', (data) => {
             client.del(data, function(err, reply) {
                 socket.emit("cleared_messages", reply)
             });
-        })
+          })
 
           socket.on('disconnect', (data) => {
               console.log('Client disconnected')
           })
-        
+
       })
   }
 
@@ -99,22 +107,39 @@ class App {
     return this.app;
   }
 
-  private connectToDatabase() {
+  private async connectToDatabase() {
     if (this.env !== 'production') {
       set('debug', true);
     }
-    connect(process.env.databaseUrl, dbConnection.options);
+    await connect(process.env.databaseUrl, dbConnection.options);
   }
 
   private initializeMiddlewares() {
     this.app.use(morgan(config.get('log.format'), { stream }));
-    this.app.use(cors({ origin: config.get('cors.origin'), credentials: config.get('cors.credentials') }));
+    const allowedOrigins = [
+     'https://erp.outsourceglobal.com',
+     'https://erp.outsourceglobal.com',
+     'http://localhost:3001',
+     'http://localhost:3002/',
+     'https://8029-102-91-5-194.ngrok.io',
+     'https://www.outsourceglobal.com',
+     'https://outsourceglobal.com'
+    ];
+    const options: cors.CorsOptions = {
+      origin: allowedOrigins
+    };
+    this.app.use(cors());
+    // this.app.use(cors(options))
+    // this.app.use(cors({ origin: config.get('cors.origin'), credentials: config.get('cors.credentials') }));
     this.app.use(hpp());
     this.app.use(helmet());
     this.app.use(compression());
-    this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(express.json({limit: '50mb'}));
+    this.app.use(express.urlencoded({ extended: true, limit: '50mb' }));
     this.app.use(cookieParser());
+    this.app.use(
+      fileUpload()
+    );
   }
 
   private initializeRoutes(routes: Routes[]) {
@@ -201,38 +226,28 @@ class App {
     this.app.use(errorMiddleware);
   }
 
-  private  initializeCron(){
+  // private  initializeCron(){
 
-    const task = cron.schedule('* 1 * * *', async function() {
-      console.log('running task 1am every day');
-      const attendanceService = new AttendanceTypeService()
-      await attendanceService.generateAttendance("project")
-    });
-
-    task.start()
-    // console.log('Before job instantiation');
-    // const job = new CronJob('* 1 * * * *', async function() {
-    //   const d = new Date();
-    //   console.log('At 1 Minutes:', d);
-    //   const num = 23;
-    //   const data: any = {
-    //   employeeId: "612cead8fc13ae35b5000353",
-    //   shiftTypeId: "612ceef7fc13ae57e600012c",
-    //   departmentId: "612ce924fc13ae5329000af8",
-    //   clockInTime: new Date(2021, 7, Number(num), 10,),
-    //   clockOutTime: new Date(2021, 7, Number(num), 18,),
-    //   ogId: "850rho199",
-    // }
-
-    // const result: any = await getWorkTime(data.clockInTime, data.clockOutTime);
-    // data.hoursWorked = result.hoursWorked
-    // data.minutesWorked = result.minutesWorked
-    // await attendanceModel.create(data);
-    // });
-    // console.log('After job instantiation');
-    // job.
-    // console.log('is job running? ', job.running);
-  }
+  //   const task = cron.schedule('* 1 * * 1-5', async function() {
+  //     const attendanceService = new AttendanceTypeService()
+  //     // await attendanceService.generateAttendance()
+  //   //   console.log('running task 1am every day');
+  //   //   const day = "saturday"
+  //   //   if (day == "saturday" || day == "sunday") {
+  //   //     console.log("skipping today")
+  //   //   }else{
+  //   //     console.log("no loveeeeeeeeeeeeeeeee");
+  //   //     const attendanceService = new AttendanceTypeService()
+  //   //     await attendanceService.generateAttendance("project")
+  //   //   }
+  //   })
+  //   const task2 = cron.schedule('* 1 * * 1-5', async function() {
+  //     const applicationService = new LeaveApplicationService()
+  //     await applicationService.addLeavesForEmployees()
+  //   })
+  //    task.start()
+  //    task2.start()
+  // }
 }
 
 export default App;

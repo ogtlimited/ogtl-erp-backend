@@ -55,6 +55,9 @@ import CoachingFormRoute from './routes/coaching/coachingForm.route';
 import ClientRoute  from '@routes/project/client.route';
 import AssetAssignmentRoute from '@/routes/assets/asset-assignment.route';
 import ProjectRoute from '@routes/project/project.route';
+import documentRoute from '@routes/project/document.route';
+import JobDocumentRoute from '@routes/recruitment/document.route';
+
 import RoleRoute from '@routes/role/role.route';
 //import DepartmentRoute from './routes/employee/department.route';
 import scoreCardRoute from './routes/pip/score-cards.route';
@@ -62,6 +65,7 @@ import TerminationRoute from './routes/employee-lifecycle/termination.route';
 
 import DepartmentRoute from './routes/employee/department.route';
 import NotificationRoute from '@routes/notification/notification.route';
+import EmailRoute from '@routes/notification/email.route';
 const socketio = require('socket.io');
 
 import LeaveSettingsRoute from './routes/leave/leave-settings.route';
@@ -78,15 +82,19 @@ import JournalRoute from './routes/journals/journals.route';
 import InvoiceRoute from './routes/invoice/invoice.routes';
 import VendorRoute from '@routes/vendor/vendor.route';
 import BillsRoute from '@routes/vendor/bills.route';
-import VendorPaymentRoute from '@routes/vendor/vendor_payment.route';
+
 
 import ProcurementRoute from '@/routes/procurement/procurement.route'
+import PaymentRoute from './routes/payments/payment.route';
+import ExpenseHeadDraftRoute from "@routes/expense-head/expense-head.route";
+import SalarySettingRoute from "@routes/salary-setting/salary-setting.route";
 
 
 validateEnv();
 
 const app = new App([
   new IndexRoute(),
+  new SalarySettingRoute(),
   new UsersRoute(),
   new AuthRoute(),
   new EmployeesRoute(),
@@ -148,6 +156,7 @@ const app = new App([
   new MaintenanceReportRoute(),
   new MaintenanceAndRepairsRoute(),
   new NotificationRoute(),
+  new EmailRoute(),
 
   new AccountRoute(),
   new AccountTypeRoute(),
@@ -160,10 +169,14 @@ const app = new App([
 
   new VendorRoute(),
   new BillsRoute(),
-  new VendorPaymentRoute()
+  new PaymentRoute(),
+  new ExpenseHeadDraftRoute(),
+  new documentRoute(),
+  new JobDocumentRoute()
 ]);
 
 const server = app.listen();
-app.socketConnection(server)
+app.socketInstance(server)
+export default server
 
 

@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
+
 import { NextFunction, Request, Response } from 'express';
-import { CreateEmployeeDto,UpdateEmployeeDto } from '@dtos/employee/employee.dto';
+import { CreateEmployeeDto,UpdateEmployeeDto,UpdateEmployeeRoleDto, CreateMultipleEmployeeDto } from '@dtos/employee/employee.dto';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
 import EmployeeService from '@services/employee.service';
 
@@ -38,6 +39,17 @@ class EmployeesController {
       next(error);
     }
   };
+  public createMultipleEmployee = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      console.log(req.body)
+      const EmployeeData: CreateMultipleEmployeeDto = req.body;
+      const createEmployeeData = await this.EmployeeService.createMultipleEmployee(EmployeeData);
+
+      res.status(201).json({ data: createEmployeeData, message: 'created' });
+    } catch (error) {
+      next(error);
+    }
+  };
 
   public updateEmployee = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -50,6 +62,38 @@ class EmployeesController {
       next(error);
     }
   };
+  public updateEmployeeRole = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const EmployeeId: string = req.params.id;
+      const EmployeeData: UpdateEmployeeRoleDto = req.body;
+      const updateEmployeeData: Employee = await this.EmployeeService.updateEmployeeRole(EmployeeId, EmployeeData);
+
+      res.status(200).json({ data: updateEmployeeData, message: 'updated' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+
+
+
+  public teamLeads = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const leads = await this.EmployeeService.teamLeads();
+      res.status(200).json({ data: leads});
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  // public teamMembers = async (req: Request, res: Response, next: NextFunction) => {
+  //   try {
+  //     const leads = await this.EmployeeService.teamMembers(req.query.ogid);
+  //     res.status(200).json({ data: leads});
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // };
 
   public deleteEmployee = async (req: Request, res: Response, next: NextFunction) => {
     try {

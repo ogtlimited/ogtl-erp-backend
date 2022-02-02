@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Router } from 'express';
 import { Routes } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
@@ -21,6 +22,11 @@ class SalaryDetailsRoute implements Routes {
       `${this.path}`,
       [validationMiddleware(CreateSalaryDetailsDto, 'body'), authMiddleware],
       this.SalaryDetailsController.CreateSalaryDetails,
+    );
+    this.router.post(
+      `${this.path}/bulk-upload`,
+      [authMiddleware],
+      this.SalaryDetailsController.CreateBulkCreateSalaryDetails,
     );
     this.router.put(
       `${this.path}/:id`,

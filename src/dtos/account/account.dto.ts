@@ -19,6 +19,9 @@ export class AccountDto {
     @IsBoolean()
     public is_group: boolean;
 
+    @IsBoolean()
+    public is_default: boolean;
+
     @IsOptional()
     @IsNumber()
     public balance: number;
@@ -29,6 +32,9 @@ export class AccountDto {
 
     @IsOptional()
     public parent: string;
+
+    @IsOptional()
+    public number_prefix: string;
   
 }
 
@@ -52,8 +58,7 @@ export class PutAccountDto {
     @IsOptional()
     @IsString()
     public currency: string;
-
-  
+    
 }
 
 export class PutAccountBalanceDto {

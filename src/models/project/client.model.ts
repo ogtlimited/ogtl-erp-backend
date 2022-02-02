@@ -13,13 +13,13 @@ const clientSchema :Schema = new Schema(
       required: true,
       unique: true
     },
-    address:[{
+    address:{
       type:String
-    }],
-    contact_phone:[{
+    },
+    contact_phone:{
       type: String,
       required: true
-    }],
+    },
 
     city: {
       type: String,

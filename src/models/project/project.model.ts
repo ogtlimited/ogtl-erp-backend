@@ -9,6 +9,10 @@ const projectSchema: Schema = new Schema(
       required: true,
       unique: true,
     },
+    slug: {
+      type: String,
+      required: true,
+    },
     client_id: {
       type: Schema.Types.ObjectId,
       ref: 'Client',
@@ -16,16 +20,13 @@ const projectSchema: Schema = new Schema(
     type: {
       type: String,
       required: true,
+      enum: ['domestic', 'foreign'],
     },
     objectives: {
       type: String,
       required: true,
     },
     hours_of_operation: {
-      type: Number,
-      required: true,
-    },
-    type_of_employees: {
       type: String,
       required: true,
     },
@@ -37,7 +38,7 @@ const projectSchema: Schema = new Schema(
       type: Date,
     },
     number_of_employees: {
-      type: Number,
+      type: String,
       required: true,
     },
     billing_structure: {
@@ -49,12 +50,6 @@ const projectSchema: Schema = new Schema(
       type: String,
       enum: ['inhouse', 'external', 'others'],
     },
-    documents: [
-      {
-        type: String,
-        default: null,
-      },
-    ],
     creator: {
       type: Schema.Types.ObjectId,
       ref: 'Employee',
@@ -63,6 +58,7 @@ const projectSchema: Schema = new Schema(
       type: String,
       required: true,
       enum: ["open", "approved", "rejected", "suspended"],
+      default: "open"
     },
     manager: {
       type: Schema.Types.ObjectId,
@@ -74,6 +70,14 @@ const projectSchema: Schema = new Schema(
         ref: 'Employee',
       },
     ],
+    team_leads: {
+      type: [Schema.Types.ObjectId],
+      ref: 'Employee',
+    },
+    team_members: {
+      type: [Schema.Types.ObjectId],
+      ref: 'Employee',
+    },
   },
   {
     timestamps: true,

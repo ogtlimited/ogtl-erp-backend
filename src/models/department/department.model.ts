@@ -10,6 +10,10 @@ const departmentSchema: Schema = new Schema(
         type: String,
         required: true,
     },
+    slug: {
+        type: String,
+        required: true,
+    },
   },
   {
     timestamps: true,

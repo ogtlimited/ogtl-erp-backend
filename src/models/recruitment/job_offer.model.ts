@@ -43,6 +43,17 @@ jobOfferSchema.post('save', function(doc) {
   console.log(self.constructor.modelName)
   new NotificationHelper(self.constructor.modelName, "SAVE").exec()
 });
+jobOfferSchema.post('update', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "UPDATE").exec()
+});
+jobOfferSchema.post('delete', function(doc) {
+  const self: any = this;
+  console.log(self.constructor.modelName)
+  new NotificationHelper(self.constructor.modelName, "DELETE").exec()
+});
+
 
 const jobOfferModel = model<IJobOffer & Document>('JobOffer', jobOfferSchema);
 

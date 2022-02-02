@@ -17,5 +17,9 @@ export interface Employee {
     permissionLevel: number;
     warningCount: number;
     isInPIP: boolean
+    isAdmin: boolean
+    isTeamLead: boolean
+    isSupervisor: boolean
+    leaveCount:Number
 
 }

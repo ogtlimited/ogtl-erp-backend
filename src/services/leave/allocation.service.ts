@@ -4,9 +4,9 @@ import allocationModel from '@/models/leave/allocation.model';
 import { ILeaveAllocation } from '@/interfaces/leave-interface/allocation.interface';
 import { HttpException } from '@exceptions/HttpException';
 
-
 import { isEmpty } from '@utils/util';
 import { CreateLeaveAllocationDto, UpdateLeaveAllocationDto } from '@/dtos/Leave/allocation.dto';
+
 
 class LeaveAllocationService {
   public allocation = allocationModel;

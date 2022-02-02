@@ -20,6 +20,39 @@ class LeaveApplicationController {
     }
   };
 
+  public findAllTeamMembersLeave = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const allTeamMembersLeave: ILeaveApplication[] = await this.leaveApplicationService.findAllTeamMembersLeave(req.user);
+      res.status(200).json({ data: allTeamMembersLeave});
+    } catch (error) {
+      next(error);
+    }
+  };
+  public supervisorApproveLeave = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const approveLeave: ILeaveApplication = await this.leaveApplicationService.supervisorApproveLeave(req.query.id, req.query.approve, req.user);
+      res.status(200).json({ data: approveLeave });
+    } catch (error) {
+      next(error);
+    }
+  };
+  public hrApproveLeave = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const approveLeave: ILeaveApplication = await this.leaveApplicationService.HrApproveLeave(req.params.id, req.query.approve);
+      res.status(200).json({ data: approveLeave});
+    } catch (error) {
+      next(error);
+    }
+  };
+  // public hrRejectLeave = async (req: Request, res: Response, next: NextFunction) => {
+  //   try {
+  //     const rejectLeave: ILeaveApplication = await this.leaveApplicationService.HrRejectLeave(req.params.id);
+  //     res.status(200).json({ data: rejectLeave});
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // };
+
   public getLeaveApplicationById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const LeaveApplicationId: string = req.params.id;
@@ -31,11 +64,10 @@ class LeaveApplicationController {
     }
   };
 
-  public createLeaveApplication = async (req: Request, res: Response, next: NextFunction) => {
+  public createLeaveApplication = async (req: any, res: Response, next: NextFunction) => {
     try {
       const LeaveApplicationData: CreateLeaveApplicationDTO = req.body;
-      const createLeaveApplicationData: ILeaveApplication = await this.leaveApplicationService.createLeaveapplication(LeaveApplicationData);
-
+      const createLeaveApplicationData: ILeaveApplication = await this.leaveApplicationService.createLeaveapplication(LeaveApplicationData, req.user);
       res.status(201).json({ data: createLeaveApplicationData, message: 'created' });
     } catch (error) {
       next(error);
@@ -47,6 +79,16 @@ class LeaveApplicationController {
       const LeaveApplicationId: string = req.params.id;
       const LeaveApplicationData: UpdateLeaveApplicationDTO = req.body;
       const updateLeaveApplicationData: ILeaveApplication = await this.leaveApplicationService.updateLeaveapplication(LeaveApplicationId, LeaveApplicationData);
+
+      res.status(200).json({ data: updateLeaveApplicationData, message: 'updated' });
+    } catch (error) {
+      next(error);
+    }
+  };
+  public updateLeaveCount = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const LeaveCountData = req.body;
+      const updateLeaveApplicationData = await this.leaveApplicationService.updateLeaveCount(LeaveCountData);
 
       res.status(200).json({ data: updateLeaveApplicationData, message: 'updated' });
     } catch (error) {

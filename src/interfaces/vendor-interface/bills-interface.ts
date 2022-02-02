@@ -1,5 +1,7 @@
+/* eslint-disable prettier/prettier */
 export interface IBills {
   _id: string;
+  account: string;
   vendor: string;
   ref: string;
   bill_date: string;
@@ -8,5 +10,7 @@ export interface IBills {
   balance?: number;
   due_date: string;
   productItems: string;
+  units: [];
   status: string;
+  paymentStatus?: string;
 }

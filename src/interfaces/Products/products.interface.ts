@@ -6,5 +6,4 @@ export interface IProductService {
     rate:number;
     price: number;
     tax:number;
-    units: number;
   }

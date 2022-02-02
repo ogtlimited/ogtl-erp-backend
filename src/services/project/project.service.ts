@@ -8,8 +8,9 @@ import { IRole } from '@/interfaces/role/role.interface';
 import { Employee } from '@/interfaces/employee-interface/employee.interface';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
-import { CreateProjectDto, UpdateProjectDto, ApproveProjectDto } from '@/dtos/project/project.dto';
-import {campaignCreationEmail} from '@/utils/email';
+import { CreateProjectDto, UpdateProjectDto, ApproveProjectDto, UpdateTeamLeadDto, UpdateTeamMembersDto } from '@/dtos/project/project.dto';
+import {campaignCreationEmail} from '@utils/email';
+import { slugify } from '@/utils/slugify';
 
 const { SocketLabsClient } = require('@socketlabs/email');
 
@@ -25,7 +26,13 @@ class ProjectService {
     }
 
     public async findAll(param: any = {}): Promise<IProject[]> {
-        const projects: IProject[] = await this.project.find(param);
+        const projects: IProject[] = await this.project.find(param).populate("manager quality_analyst client_id creator team_leads").populate({ 
+            path: 'team_members',
+            populate: {
+              path: 'designation',
+              model: 'Designation'
+            } 
+         });
         return projects;
     }
 
@@ -38,7 +45,11 @@ class ProjectService {
 
     public async create(Payload: CreateProjectDto): Promise<IProject> {
         if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
-        const newProject: IProject = await this.project.create(Payload);
+        const data = {
+            ...Payload,
+            slug: slugify(Payload.project_name)
+        }
+        const newProject: IProject = await this.project.create(data);
         return newProject;
     }
 
@@ -46,7 +57,51 @@ class ProjectService {
         if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
         const findproject = this.findOne(projectId);
         if (!findproject) throw new HttpException(409, "Project not found");
-        const updateProject: IProject = await this.project.findByIdAndUpdate(projectId, { Payload }, {new: true});
+        const updateProject: IProject = await this.project.findByIdAndUpdate(projectId, Payload, {new: true});
+        return updateProject;
+    }
+
+    public async updateTeamLead(projectId: string, Payload: UpdateTeamLeadDto): Promise<IProject> {
+        if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
+        const team_leads = await Payload.team_leads
+        const updateProject: IProject = await this.project.findOneAndUpdate(
+            { _id: projectId },
+            { $addToSet: { team_leads: {$each: team_leads } } },
+            {new: true}
+          ).exec();
+        return updateProject;
+    }
+
+    public async removeTeamLead(projectId: string, Payload: UpdateTeamLeadDto): Promise<IProject> {
+        if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
+        const team_leads = await Payload.team_leads
+        const updateProject: IProject = await this.project.update(
+            { _id: projectId },
+            { $pull: { team_leads: { $in: team_leads } } },
+            { multi: true }
+          ).exec();
+        return updateProject;
+    }
+
+    public async updateTeamMember(projectId: string, Payload: UpdateTeamMembersDto): Promise<IProject> {
+        if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
+        const team_members = await Payload.team_members
+        const updateProject: IProject = await this.project.findOneAndUpdate(
+            { _id: projectId },
+            { $addToSet: { team_members: {$each: team_members } } },
+            {new: true}
+          ).exec();
+        return updateProject;
+    }
+
+    public async removeTeamMember(projectId: string, Payload: UpdateTeamMembersDto): Promise<IProject> {
+        if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
+        const team_members = await Payload.team_members
+        const updateProject: IProject = await this.project.update(
+            { _id: projectId },
+            { $pull: { team_members: { $in: team_members } } },
+            { multi: true }
+          ).exec();
         return updateProject;
     }
 
@@ -54,7 +109,7 @@ class ProjectService {
         if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
         const findproject = this.findOne(projectId);
         if (!findproject) throw new HttpException(409, "Project not found");
-        const updateProject: IProject = await this.project.findByIdAndUpdate(projectId, { Payload }, {new: true});
+        const updateProject: IProject = await this.project.findByIdAndUpdate(projectId, Payload, {new: true});
         if(updateProject.status === "approved"){
             const getRoles: IRole = await this.role.find().select('_id')
             const params = {
@@ -66,7 +121,7 @@ class ProjectService {
             console.log(getEmployeeWithRole)
             const emailTemplate = campaignCreationEmail(getEmployeeWithRole, "A new campaign created. do the needful")
             const sclient = await new SocketLabsClient(parseInt(process.env.SOCKETLABS_SERVER_ID), process.env.SOCKETLABS_INJECTION_API_KEY);
-            
+
             await sclient.send(emailTemplate).then(
                 (response) => {
                     console.log(response)
@@ -87,7 +142,13 @@ class ProjectService {
     }
 
     private async findOne(id: string): Promise<IProject> {
-        const findproject: IProject = await this.project.findOne({ _id: id });
+        const findproject: IProject = await this.project.findOne({ _id: id }).populate("manager quality_analyst client_id creator team_leads").populate({
+          path: 'team_members',
+          populate: {
+            path: 'designation',
+            model: 'Designation'
+          }
+        });
         return findproject;
     }
 }

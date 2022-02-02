@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import moment = require('moment');
 
 interface resultInterface {
@@ -17,6 +18,8 @@ const calculateLateness = (clock_in_time, resumption_time) => {
 
   const clock_in = formatDate(clock_in_time);
   const resume = formatDate(resumption_time);
+  console.log(clock_in, resume)
+  console.log(clock_in_time, resumption_time)
   if (clock_in > resume) {
     const calc = (clock_in - resume) / 60 / 60;
     const remainder = ((clock_in - resume) / 60) % 60;
@@ -32,11 +35,11 @@ const calculateLateness = (clock_in_time, resumption_time) => {
 
 const getWorkTime = (userStartTime: any, userEndTime: any, resumptionTime?) => {
   const result: resultInterface = {};
-  const startTime = moment(userStartTime).subtract(1,"hour");
-  const endTime = moment(userEndTime).subtract(1,"hour");;
+  const startTime = moment(userStartTime).subtract(1, 'hour');
+  const endTime = moment(userEndTime).subtract(1, 'hour');
 
   const timeDifference = moment.duration(moment(endTime).diff(startTime));
-  const { hours, minutes } = timeDifference._data;
+  const { hours, minutes } = timeDifference['_data'];
   result.hoursWorked = Number(hours);
   result.minutesWorked = Number(minutes);
   if (resumptionTime != undefined) {
