@@ -17,6 +17,7 @@ class WarningLetterRoute implements Routes {
   private initializeRoutes() {
     this.router.get(`${this.path}`, authMiddleware, this.warningLetterController.getWarningLetters);
     this.router.get(`${this.path}/:id`, authMiddleware, this.warningLetterController.getWarningLetterById);
+    this.router.get(`${this.path}/employee/:id`, authMiddleware, this.warningLetterController.getAllWarningLettersForEmployee);
     this.router.post(
       `${this.path}`,
       [validationMiddleware(CreateWarningLetterDto, 'body'), authMiddleware],
