@@ -21,7 +21,10 @@ class PromotionController {
     try {
       const id: string = req.params.id;
       const data = await this.promotionService.findAllPromotionsForAnEmployee(id);
-      res.status(200).json({ data: data});
+      if(data){
+        res.status(200).json({ data: data});
+      }
+
     } catch (error) {
       next(error);
     }
