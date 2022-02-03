@@ -21,7 +21,10 @@ class WarningLetterController {
     try {
       const employeeId:string = req.params.id;
       const findAllWarningLetters: IWarningLetter[] = await this.warningLetterService.findAllWarningLettersForAnEmployee(employeeId);
-      res.status(200).json({data:findAllWarningLetters, totalWarningLetters: findAllWarningLetters.length, message:"All warning letters"})
+      if(findAllWarningLetters){
+        res.status(200).json({data:findAllWarningLetters, totalWarningLetters: findAllWarningLetters.length, message:"All warning letters"})
+      }
+
     }catch (error) {
       next(error)
     }
