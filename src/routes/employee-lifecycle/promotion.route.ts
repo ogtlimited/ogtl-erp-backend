@@ -18,6 +18,7 @@ class PromotionRoute implements Routes {
     private initializeRoutes() {
       this.router.get(`${this.path}`, authMiddleware, this.promotionController.findAllPromotions);
       this.router.get(`${this.path}/:id`, authMiddleware, this.promotionController.findPromotionById);
+      this.router.get(`${this.path}/employee/:id`, authMiddleware, this.promotionController.findPromotionForAnEmployee);
       this.router.post(`${this.path}`, [ validationMiddleware(CreatePromotionDto, 'body'),authMiddleware], this.promotionController.createPromotion);
       this.router.put(`${this.path}/:id`, [ validationMiddleware(UpdatePromotionDto, 'body'),authMiddleware], this.promotionController.updatePromotion);
       this.router.delete(`${this.path}/:id`,authMiddleware, this.promotionController.deletePromotion);
