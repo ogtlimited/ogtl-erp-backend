@@ -33,10 +33,10 @@ class TerminationController {
 
   public createTermination = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      let user = (<any>req).user
+      const user = (<any>req).user
       const newData: CreateTerminationDto = req.body;
       const createdData: ITermination = await this.TerminationService.createTermination(newData); 
-      this.sendEmail(terminationMessage.subject, terminationMessage.message, user.email)
+      this.sendEmail(terminationMessage.subject, terminationMessage.message, user.company_email)
       res.status(201).json({ data: createdData ,message: "Termination Succesful"});
     } catch (error) {
       next(error);

@@ -32,3 +32,24 @@ export interface ICreateAttendance {
   hoursWorked?: number
   minutesWorked?:Number
 }
+
+export interface IAttendanceDeduction{
+  employeeId: string;
+  deductionTypeId: string;
+  amount: number;
+  description: string
+}
+export interface IPossibleDeductons{
+  employeesDeductions?,
+  employeeId?: string,
+  totalWorkHours?: number,
+  minutesWorked?: Number,
+  departmentId?: string,
+  projectId?: string,
+  shiftTypeId?: IShiftType,
+  ogId?: string
+}
+
+interface IShiftType{
+  _id: string
+}
