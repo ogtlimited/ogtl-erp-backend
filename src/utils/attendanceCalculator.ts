@@ -18,8 +18,8 @@ const calculateLateness = (clock_in_time, resumption_time) => {
 
   const clock_in = formatDate(clock_in_time);
   const resume = formatDate(resumption_time);
-  console.log(clock_in, resume)
-  console.log(clock_in_time, resumption_time)
+  // console.log(clock_in, resume)
+  // console.log(clock_in_time, resumption_time)
   if (clock_in > resume) {
     const calc = (clock_in - resume) / 60 / 60;
     const remainder = ((clock_in - resume) / 60) % 60;
