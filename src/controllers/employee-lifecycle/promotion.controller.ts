@@ -16,6 +16,20 @@ class PromotionController {
     }
   };
 
+  //Method for returning all promotion letters for an employee
+  public findPromotionForAnEmployee = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const id: string = req.params.id;
+      const data = await this.promotionService.findAllPromotionsForAnEmployee(id);
+      if(data){
+        res.status(200).json({ data: data});
+      }
+
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public findPromotionById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id: string = req.params.id;
@@ -29,10 +43,10 @@ class PromotionController {
   public createPromotion = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const newData: CreatePromotionDto = req.body;
-      const createdData: IPromotion = await this.promotionService.createPromotion(newData); 
+      const createdData: IPromotion = await this.promotionService.createPromotion(newData);
       res.status(201).json({ data: createdData,message: "Promotion Succesful"});
     } catch (error) {
-      
+
       next(error);
     }
   };

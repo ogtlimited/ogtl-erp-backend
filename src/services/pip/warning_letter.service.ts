@@ -18,6 +18,14 @@ class WarningLetterService {
     return this.warningLetter.find().populate('employee_id');
   }
 
+  //Method for getting all warning Letters for an individual employee
+  public async findAllWarningLettersForAnEmployee(employeeId: string): Promise<IWarningLetter[]> {
+    //Check if employee id is empty
+    if (isEmpty(employeeId)) throw new HttpException(400, `Employee Id not provided`);
+    //return warning letter
+    return this.warningLetter.find({ employee_id: employeeId }).populate('employee_id');
+  }
+
   //Method for finding an individual warning letter
   public async findWarningLetterById(warningLetterId: string): Promise<IWarningLetter> {
     //Check if no warning letter id is empty
