@@ -27,7 +27,9 @@ const salaryComponentSchema: Schema = new Schema(
     },
     amount: {
       type: Number,
-      required: true,
+    },
+    percentage: {
+      type: Number,
     },
     description: {
       type: String
