@@ -64,10 +64,23 @@ const jobApplicantSchema: Schema = new Schema({
     type: String,
     default: null
   },
-  video_attachment:{
+  rep_sieving_call: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'Employee',
+    default: null,
+  },
+  interview_date: {
     type: String,
     default: null
-  }
+  },
+  interview_status: {
+    type: String,
+    enum: [
+      "Open","Scheduled for interview","Not interested", "Not a graduate", "Not in job location",
+      "Failed screening","Missed call","call back"],
+    default: "Open"
+  },
 })
 
 jobApplicantSchema.post('save', function(doc) {

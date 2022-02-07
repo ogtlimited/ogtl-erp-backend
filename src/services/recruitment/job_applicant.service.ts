@@ -4,9 +4,11 @@ import { IJobApplicant } from '@interfaces/recruitment/job_applicant.interface';
 import { isEmpty } from '@utils/util';
 import { HttpException } from '@exceptions/HttpException';
 import { CreateJobApplicantDto, UpdateJobApplicantDto } from '@dtos/recruitment/job_applicant.dto';
+import EmployeeModel from '@/models/employee/employee.model';
 
 class JobApplicantService {
   public jobApplicant = jobApplicantModel;
+  public EmployeeM = EmployeeModel
 
   //Method for finding all job applicants
   public async findAllJobApplicants(): Promise<IJobApplicant[]>{
@@ -23,7 +25,7 @@ class JobApplicantService {
     //check if no Job applicant id is empty
     if(isEmpty(jobApplicantId)) throw new HttpException(400,`Job applicant with Id:${jobApplicantId}, does not exist`);
     //find Job applicant using the id provided
-    const findJobApplicant:IJobApplicant = await this.jobApplicant.findOne({_id:jobApplicantId}).populate('job_opening_id');
+    const findJobApplicant:IJobApplicant = await this.jobApplicant.findOne({_id:jobApplicantId}).populate('job_opening_id, rep_sieving_call ');
     //throw error if Job applicant does not exist
     if(!findJobApplicant) throw new HttpException(409,`Job applicant with Id:${jobApplicantId}, does not exist`);
     //return Job applicant
@@ -34,8 +36,16 @@ class JobApplicantService {
   public async createJobApplicant(jobApplicantData: CreateJobApplicantDto): Promise<IJobApplicant>{
     //check if no job applicant data is empty
     if (isEmpty(jobApplicantData)) throw new HttpException(400, "Bad request");
+    const employees = await EmployeeModel.find({isRepSiever: true}).select('sievedApplicationCount')
+    console.log(employees, 'EMPLOYEES');
+    employees.sort(function (a, b) {
+        return a.sievedApplicationCount - b.sievedApplicationCount
+    })
+    const min = employees[0]
+    console.log(min, employees, 'MIN EMPLOYEE')
+    const jobApplicant = {...jobApplicantData, rep_sieving_call: min._id }
     // return created job Applicant
-    return await this.jobApplicant.create(jobApplicantData);
+    return await this.jobApplicant.create(jobApplicant);
   }
 
   //Method for updating job Applicant

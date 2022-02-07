@@ -66,6 +66,7 @@ class EmployeesController {
     try {
       const EmployeeId: string = req.params.id;
       const EmployeeData: UpdateEmployeeRoleDto = req.body;
+      console.log(EmployeeData, 'EMPLOYEE FDATA');
       const updateEmployeeData: Employee = await this.EmployeeService.updateEmployeeRole(EmployeeId, EmployeeData);
 
       res.status(200).json({ data: updateEmployeeData, message: 'updated' });

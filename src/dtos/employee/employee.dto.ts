@@ -116,6 +116,11 @@ export class UpdateEmployeeDto {
 
   @IsNumber()
   public permissionLevel: number;
+  
+  @IsBoolean()
+  public isRepSiever: boolean;
+
+
 
 
 }
@@ -132,6 +137,9 @@ export class UpdateEmployeeRoleDto{
 
   @IsString()
   public role: string
+
+  @IsBoolean()
+  public isRepSiever: boolean
 }
 
 export class EmployeeLoginDto {

@@ -182,17 +182,24 @@ class EmployeeService {
     if (EmployeeData._id) {
       const findEmployee: Employee = await this.Employees.findOne({ _id: EmployeeData._id });
       if (findEmployee && findEmployee._id != EmployeeId) throw new HttpException(409, `User not Found`);
-    }
-
+    
+    console.log(EmployeeData, 'ÉMPLOYEE');
+   
     const updateEmployeeById: Employee = await this.Employees.findOneAndUpdate(
       { _id: EmployeeId },
-      { $set: { role: EmployeeData.role } },
+      { $set: 
+        { role: EmployeeData.role,
+          sievedApplicationCount: findEmployee.sievedApplicationCount ? findEmployee.sievedApplicationCount : 0,
+          isRepSiever: EmployeeData.isRepSiever,
+        }
+      },
       { new: true },
     );
 
     if (!updateEmployeeById) throw new HttpException(409, "You're not Employee");
 
     return updateEmployeeById;
+        }
   }
 
   public async deleteEmployee(EmployeeId: string): Promise<Employee> {

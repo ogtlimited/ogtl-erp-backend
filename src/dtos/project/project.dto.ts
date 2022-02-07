@@ -19,7 +19,10 @@ export class CreateProjectDto {
   public objectives: string;
 
   @IsString()
-  public hours_of_operation: string;
+  public shift_start: string;
+
+  @IsString()
+  public shift_end: string;
 
   @IsNotEmpty()
   @IsDateString()

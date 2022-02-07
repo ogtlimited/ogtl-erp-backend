@@ -111,6 +111,14 @@ const employeeSchema: Schema = new Schema(
       type: Number,
       default:0,
     },
+    isRepSiever:{
+      type: Boolean,
+      default: false
+    },
+    sievedApplicationCount:{
+      type: Number,
+      default:0,
+    },
     isInPIP:{
       type: Boolean,
       default: false,
