@@ -14,6 +14,7 @@ import { slugify } from '@/utils/slugify';
 
 const { SocketLabsClient } = require('@socketlabs/email');
 
+
 class ProjectService {
     public project: any;
     public employee: any;
@@ -25,6 +26,36 @@ class ProjectService {
         this.role = RoleModel;
     }
 
+
+    public async findTL(projectList) {
+        const getIds = (arr) => arr.map(e => e._id)
+        try {
+            for (let i = 0; i < projectList.length; i++) {
+                const tl = projectList[i].team_leads;
+                const tm = projectList[i].team_members;
+                const sup = projectList[i].Supervisors;
+                const qa = projectList[i].quality_analyst;
+                const tlrecords = await this.employee.find({ 'company_email': { $in: tl } });
+                const tmrecords = await this.employee.find({ 'company_email': { $in: tm } });
+                const suprecord = await this.employee.find({ 'company_email': { $in: sup } });
+                const qarecord = await this.employee.find({ 'company_email': { $in: qa } });
+                const updateProject: IProject = await this.project.findOneAndUpdate(
+                    { project_name: projectList[i].Campaign_name },
+                    { $set: { 
+                        team_members: getIds(tmrecords),
+                        team_leads: getIds(tlrecords), 
+                        supervisor: getIds(suprecord), 
+                        quality_analyst: getIds(qarecord)
+
+                      } },
+                    {new: true}
+                  ).exec();
+                console.log(updateProject);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     public async findAll(param: any = {}): Promise<IProject[]> {
         const projects: IProject[] = await this.project.find(param).populate("manager quality_analyst client_id creator team_leads").populate({ 
             path: 'team_members',
@@ -51,6 +82,16 @@ class ProjectService {
         }
         const newProject: IProject = await this.project.create(data);
         return newProject;
+    }
+    public async createBulk(projectList) {
+        const projects = projectList.map(e => {
+            return {
+                ...e,
+                slug: slugify(e.Campaign_name)
+            }
+        })
+        await this.project.create(projects)
+
     }
 
     public async update(projectId: string, Payload: UpdateProjectDto): Promise<IProject> {

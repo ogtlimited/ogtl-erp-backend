@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export interface IJobApplicant {
   _id: string;
   first_name: string;
@@ -16,4 +17,7 @@ export interface IJobApplicant {
   certifications: string;
   languages_spoken: [];
   referal_name: string;
+  rep_sieving_call: string;
+  interview_date: string;
+  interview_status: string
 }

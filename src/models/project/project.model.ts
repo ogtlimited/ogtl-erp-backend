@@ -24,18 +24,20 @@ const projectSchema: Schema = new Schema(
     },
     objectives: {
       type: String,
-      required: true,
     },
-    hours_of_operation: {
+    shift_start: {
       type: String,
-      required: true,
+    },
+    shift_end: {
+      type: String,
     },
     start_date: {
       type: Date,
-      required: true,
+      default: Date.now
     },
     end_date: {
       type: Date,
+      default: Date.now
     },
     number_of_employees: {
       type: String,
@@ -60,10 +62,10 @@ const projectSchema: Schema = new Schema(
       enum: ["open", "approved", "rejected", "suspended"],
       default: "open"
     },
-    manager: {
+    supervisor: [{
       type: Schema.Types.ObjectId,
       ref: 'Employee',
-    },
+    }],
     quality_analyst: [
       {
         type: Schema.Types.ObjectId,
