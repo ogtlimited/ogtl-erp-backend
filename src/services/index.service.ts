@@ -22,6 +22,7 @@ import PurchaseOrderService from './assets/purchase-order.service';
 import InvoiceService from '@services/invoice/invoice.service';
 import PaymentService from '@services/payments/payment.service';
 import RoleService from '@services/role/role.service';
+import JobOpeningService from '@services/recruitment/job_opening.service';
 
 class CombineServices {
   public designationS = new DesignationService();
@@ -46,6 +47,7 @@ class CombineServices {
   public Invoice = new InvoiceService()
   public Payments = new PaymentService()
   public roleS = new RoleService()
+  public jobOpeningS = new JobOpeningService()
 //   public departmentS = new Department
 
   public async createEmployeeFormSelection(){
@@ -211,6 +213,21 @@ class CombineServices {
     const payments = await this.Payments.findAllPayment()
 
     return {invoices, payments}
+  }
+
+  public async jobDashboard(){
+    const jobOpenings = await this.jobOpeningS.findAllJobOpenings()
+    const jobOffers = await this.acceptedJobOfferS.findAllAcceptedJobOffers()
+    const employees = await this.employeeS.findAllEmployee()
+    const jobApplicants = await this.jobApplicantS.findAllJobApplicants()
+
+    return {
+      totalJobOpenings: jobOpenings.length,
+      totalJobOffers: jobOffers.length,
+      totalEmployees: employees.length,
+      totalJobApplicants: jobApplicants.length,
+      jobOpenings
+    }
   }
 }
  export default CombineServices

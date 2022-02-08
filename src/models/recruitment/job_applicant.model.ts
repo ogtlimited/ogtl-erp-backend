@@ -68,7 +68,10 @@ const jobApplicantSchema: Schema = new Schema({
     type: String,
     default: null
   }
-})
+},
+  {
+    timestamps: true,
+  },)
 
 jobApplicantSchema.post('save', function(doc) {
   const self: any = this;

@@ -61,7 +61,10 @@ const jobOpeningSchema: Schema = new Schema({
     ref: 'Branch',
     default: null,
   },
-});
+},
+  {
+    timestamps: true,
+  },);
 
 jobOpeningSchema.post('save', function (doc) {
   const self: any = this;
