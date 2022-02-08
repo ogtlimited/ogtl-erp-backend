@@ -81,7 +81,10 @@ const jobApplicantSchema: Schema = new Schema({
       "Failed screening","Missed call","call back"],
     default: "Open"
   },
-})
+},
+  {
+    timestamps: true,
+  })
 
 jobApplicantSchema.post('save', function(doc) {
   const self: any = this;
