@@ -121,6 +121,16 @@ class IndexController {
       next(e)
     }
   }
+
+  public jobDashboard = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const jobData = await this.indexS.jobDashboard()
+      res.status(200).json({ jobData, message: 'Job Dashboard Data' });
+    }
+    catch (e) {
+      next(e)
+    }
+  }
 }
 
 export default IndexController;
