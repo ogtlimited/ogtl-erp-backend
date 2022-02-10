@@ -3,7 +3,7 @@
 
 import { model, Schema, Document } from 'mongoose';
 import NotificationHelper from '@utils/helper/notification.helper';
-import { IJobOpening } from '@interfaces/recruitment/job_opening.interface';
+import { IDefaultJobOpening, IJobOpening } from '@interfaces/recruitment/job_opening.interface';
 
 const jobOpeningSchema: Schema = new Schema({
   job_title: {
@@ -44,10 +44,6 @@ const jobOpeningSchema: Schema = new Schema({
     type: String,
     default: null,
   },
-  salary: {
-    type: String,
-    default: null,
-  },
   experience: {
     type: Number,
     default: null,
@@ -61,6 +57,13 @@ const jobOpeningSchema: Schema = new Schema({
     ref: 'Branch',
     default: null,
   },
+});
+
+const DefaultjobOpeningSchema: Schema = new Schema({
+  job_title: {
+    type: String,
+    required: true,
+  }
 });
 
 jobOpeningSchema.post('save', function (doc) {
@@ -80,5 +83,6 @@ jobOpeningSchema.post('delete', function (doc) {
 });
 
 const jobOpeningModel = model<IJobOpening & Document>('JobOpening', jobOpeningSchema);
+export const defaultJobOpeningModel = model<IDefaultJobOpening & Document>('DefaultJobOpening', DefaultjobOpeningSchema);
 
 export default jobOpeningModel;

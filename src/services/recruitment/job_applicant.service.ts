@@ -44,6 +44,15 @@ class JobApplicantService {
     const min = employees[0]
     console.log(min, employees, 'MIN EMPLOYEE')
     const jobApplicant = {...jobApplicantData, rep_sieving_call: min._id }
+    await EmployeeModel.findOneAndUpdate(
+      { _id: min._id },
+      { $set: 
+        { 
+          sievedApplicationCount: min.sievedApplicationCount + 1,
+        }
+      },
+      { new: true },
+    );
     // return created job Applicant
     return await this.jobApplicant.create(jobApplicant);
   }
