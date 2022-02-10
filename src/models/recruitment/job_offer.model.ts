@@ -36,7 +36,10 @@ const jobOfferSchema: Schema = new Schema({
     type: String,
     default: null,
   },
-});
+},
+  {
+    timestamps: true,
+  },);
 
 jobOfferSchema.post('save', function(doc) {
   const self: any = this;
