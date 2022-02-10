@@ -15,7 +15,7 @@ class TestServices {
 
   //Method for finding all tests where applicants have undergone soft skills and passed
   public async findAllPassedTests(): Promise<ITest[]>{
-    return this.test.find({test_type:"Soft Skills", status:"Passed"}).populate('job_applicant_id hr_user');
+    return this.test.find({status:"Assessment Completed"}).populate('job_applicant_id hr_user');
   }
 
   //Method for finding a single test
@@ -46,7 +46,7 @@ class TestServices {
     if(testData._id){
       //find Test using the test type provided
       const findTest: ITest = await this.test.findOne({ _id: testData._id }).populate('job_applicant_id hr_user ');
-      if(findTest && findTest._id != testId) throw new HttpException(409, `${testData.test_type } already exist`);
+      if(findTest && findTest._id != testId) throw new HttpException(409, `Already exist`);
     }
     //find Test using the id provided and update it
     const updateTestById:ITest = await this.test.findByIdAndUpdate(testId,testData ,{new:true})
