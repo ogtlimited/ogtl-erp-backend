@@ -21,6 +21,10 @@ const jobApplicationsTaskSchema: Schema = new Schema({
   scheduled_for_interview: {
     type: Number,
     default: 0
+  },
+  total_assigned_records: {
+    type: Number,
+    default: 0
   }
 })
 
