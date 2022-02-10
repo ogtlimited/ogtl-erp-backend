@@ -10,7 +10,10 @@ export interface IJobOpening {
   date: string;
   deadline: string;
   type: string;
-  salary: string;
   experience: number;
   vacancy: number;
+}
+export interface IDefaultJobOpening {
+  _id: string;
+  job_title: string;
 }

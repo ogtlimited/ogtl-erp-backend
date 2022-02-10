@@ -100,6 +100,7 @@ class EmployeeService {
     // console.log('ALL Offices', AllOffices)
     const formatted = EmployeeData.map((e: any) => ({
       ...e,
+      status: "active",
       isAdmin: e.isAdmin === 'true' ? true : false,
       isTeamLead: e.isTeamLead === 'true' ? true : false,
       isSupervisor: e.isSupervisor === 'true' ? true : false,
@@ -114,7 +115,7 @@ class EmployeeService {
       gender: e.gender.toLowerCase(),
       ogid: this.notEmpty(e.ogid) ? e.ogid : this.generateOGID(),
     }));
-    console.log(formatted.filter(e => e.gender == ''));
+    console.log(formatted);
     console.log('formatted');
 
     const createEmployeeData = await this.Employees.insertMany(formatted);

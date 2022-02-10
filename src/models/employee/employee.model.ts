@@ -102,6 +102,7 @@ const employeeSchema: Schema = new Schema(
     },
     status: {
       type: String,
+      default: "active",
       enum: ["active", "terminated", "left"]
     },
     permissionLevel: {
