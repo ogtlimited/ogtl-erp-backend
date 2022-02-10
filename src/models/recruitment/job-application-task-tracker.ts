@@ -40,6 +40,6 @@ const jobApplicationsTaskSchema: Schema = new Schema({
 //   new NotificationHelper(self.constructor.modelName, "DELETE").exec()
 // });
 
-const jobApplicantionTaskModel = model<IJobApplicationsTasks & Document>('JobApplicationTask',jobApplicationsTaskSchema)
+const jobApplicationsTaskModel = model<IJobApplicationsTasks & Document>('JobApplicationTask',jobApplicationsTaskSchema)
 
-export default jobApplicantionTaskModel
+export default jobApplicationsTaskModel
