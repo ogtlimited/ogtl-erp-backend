@@ -57,7 +57,10 @@ const jobOpeningSchema: Schema = new Schema({
     ref: 'Branch',
     default: null,
   },
-});
+},
+  {
+    timestamps: true,
+  },);
 
 const DefaultjobOpeningSchema: Schema = new Schema({
   job_title: {

@@ -5,6 +5,7 @@ import { isEmpty } from '@utils/util';
 import { HttpException } from '@exceptions/HttpException';
 import { CreateJobApplicantDto, UpdateJobApplicantDto } from '@dtos/recruitment/job_applicant.dto';
 import EmployeeModel from '@/models/employee/employee.model';
+import jobApplicationsTaskModel from "@models/recruitment/job-application-task-tracker";
 
 class JobApplicantService {
   public jobApplicant = jobApplicantModel;
@@ -54,7 +55,11 @@ class JobApplicantService {
       { new: true },
     );
     // return created job Applicant
-    return await this.jobApplicant.create(jobApplicant);
+    let jobApplication = await this.jobApplicant.create(jobApplicant);
+    await jobApplicationsTaskModel.create({
+      in_house_agent: min._id
+    })
+    return jobApplication
   }
 
   //Method for updating job Applicant
@@ -71,6 +76,11 @@ class JobApplicantService {
     if (!updateJobApplicantById) throw new HttpException(409, "Job Applicant could not be updated");
     // return updated job Applicant
     return updateJobApplicantById;
+  }
+
+  //
+  public async updateJobApplicationProcessingStage(in_house_agent_id: string,jobApplicationProcessingStage):Promise<any>{
+    await jobApplicationsTaskModel.findOneAndUpdate({in_house_agent: in_house_agent_id}, {$inc: {jobApplicationProcessingStage: 1}})
   }
 
   //Method for deleting job Applicant
