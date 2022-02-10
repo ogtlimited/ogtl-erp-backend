@@ -60,9 +60,9 @@ class JobApplicantService {
 
     let startofDay = new Date();
     startofDay.setHours(0,0,0,0);
-
     let endOfDay = new Date();
     endOfDay.setHours(23,59,59,999);
+    
     await jobApplicationsTaskModel.updateOne(
       {created_at: {$gte: startofDay, $lt: endOfDay}},
       {
@@ -97,7 +97,6 @@ class JobApplicantService {
   public async getJobApplicationTasks(in_house_agent_id: string,jobApplicationProcessingStage):Promise<IJobApplicationsTasks[]>{
     let startofDay = new Date();
     startofDay.setHours(0,0,0,0);
-
     let endOfDay = new Date();
     endOfDay.setHours(23,59,59,999);
     return await jobApplicationsTaskModel.find({created_at: {$gte: startofDay, $lt: endOfDay}})
@@ -106,7 +105,6 @@ class JobApplicantService {
   public async getAgentJobApplicationTasks(in_house_agent_id: string,jobApplicationProcessingStage):Promise<IJobApplicationsTasks[]>{
     let startofDay = new Date();
     startofDay.setHours(0,0,0,0);
-
     let endOfDay = new Date();
     endOfDay.setHours(23,59,59,999);
     return await jobApplicationsTaskModel.find({created_at: {$gte: startofDay, $lt: endOfDay}})
