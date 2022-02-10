@@ -51,10 +51,15 @@ const jobApplicantSchema: Schema = new Schema({
     type: String,
     default:null,
   },
+  process_stage:{
+    type: String,
+    enum: ["open","sieving","phone screening","interview scheduled"],
+    default: "open"
+  },
   status:{
     type: String,
-    enum: ["Open","Replied","Rejected","Hold","Accepted"],
-    default: "Open"
+    enum: ["not in location","not a graduate","declined"],
+    default: "open"
   },
   resume_attachment:{
     type: String,
