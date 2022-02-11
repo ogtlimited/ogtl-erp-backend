@@ -6,7 +6,7 @@ import { HttpException } from '@exceptions/HttpException';
 import { CreateJobApplicantDto, UpdateJobApplicantDto } from '@dtos/recruitment/job_applicant.dto';
 import EmployeeModel from '@/models/employee/employee.model';
 import jobApplicationsTaskModel from "@models/recruitment/job-application-task-tracker";
-import {IJobApplicationsTasks} from "@interfaces/recruitment/job-applications-task";
+import { IJobApplicationsTasks } from '@/interfaces/recruitment/job-applications-task';
 
 class JobApplicantService {
   public jobApplicant = jobApplicantModel;
@@ -50,12 +50,21 @@ class JobApplicantService {
     const min = employees[0]
     console.log(min, employees, 'MIN EMPLOYEE')
     const jobApplicant = {...jobApplicantData, rep_sieving_call: min._id }
+    await EmployeeModel.findOneAndUpdate(
+      { _id: min._id },
+      { $set: 
+        { 
+          sievedApplicationCount: min.sievedApplicationCount + 1,
+        }
+      },
+      { new: true },
+    );
     // return created job Applicant
-    let jobApplication = await this.jobApplicant.create(jobApplicant);
+    const jobApplication = await this.jobApplicant.create(jobApplicant);
 
-    let startofDay = new Date();
+    const startofDay = new Date();
     startofDay.setHours(0,0,0,0);
-    let endOfDay = new Date();
+    const endOfDay = new Date();
     endOfDay.setHours(23,59,59,999);
 
     await jobApplicationsTaskModel.updateOne(
@@ -85,14 +94,15 @@ class JobApplicantService {
     return updateJobApplicantById;
   }
 
-  public async updateJobApplicationProcessingStage(in_house_agent_id: string,jobApplicationProcessingStage):Promise<IJobApplicationsTasks>{
-     return await jobApplicationsTaskModel.findOneAndUpdate({in_house_agent: in_house_agent_id}, {$inc: {jobApplicationProcessingStage: 1}})
+  //
+  public async updateJobApplicationProcessingStage(in_house_agent_id: string,jobApplicationProcessingStage):Promise<any>{
+    await jobApplicationsTaskModel.findOneAndUpdate({in_house_agent: in_house_agent_id}, {$inc: {[jobApplicationProcessingStage]: 1}})
   }
 
   public async getJobApplicationTasks(in_house_agent_id: string,jobApplicationProcessingStage):Promise<IJobApplicationsTasks[]>{
-    let startofDay = new Date();
+    const startofDay = new Date();
     startofDay.setHours(0,0,0,0);
-    let endOfDay = new Date();
+    const endOfDay = new Date();
     endOfDay.setHours(23,59,59,999);
     return await jobApplicationsTaskModel.find({created_at: {$gte: startofDay, $lt: endOfDay}})
   }
@@ -100,7 +110,7 @@ class JobApplicantService {
   public async getAgentJobApplicationTasks(in_house_agent_id: string):Promise<IJobApplicationsTasks[]>{
     let startofDay = new Date();
     startofDay.setHours(0,0,0,0);
-    let endOfDay = new Date();
+    const endOfDay = new Date();
     endOfDay.setHours(23,59,59,999);
     return await jobApplicationsTaskModel.find({created_at: {$gte: startofDay, $lt: endOfDay}, in_house_agent: in_house_agent_id})
   }

@@ -41,12 +41,13 @@ class EmployeesController {
   };
   public createMultipleEmployee = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log(req.body)
+      // console.log(req.body)
       const EmployeeData: CreateMultipleEmployeeDto = req.body;
       const createEmployeeData = await this.EmployeeService.createMultipleEmployee(EmployeeData);
 
       res.status(201).json({ data: createEmployeeData, message: 'created' });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   };

@@ -38,16 +38,18 @@ export class CreateJobOpeningDto {
   public type: string;
 
   @IsOptional()
-  @IsString()
-  public salary: string;
-
-  @IsOptional()
   @IsNumber()
   public experience: number;
 
   @IsOptional()
   @IsNumber()
   public vacancy: number;
+}
+export class CreateDefaultJobOpeningDto {
+  @IsNotEmpty()
+  @IsString()
+  public job_title: string;
+
 }
 
 export class UpdateJobOpeningDto {
@@ -89,9 +91,6 @@ export class UpdateJobOpeningDto {
   @IsString()
   public type: string;
 
-  @IsOptional()
-  @IsString()
-  public salary: string;
 
   @IsOptional()
   @IsNumber()
