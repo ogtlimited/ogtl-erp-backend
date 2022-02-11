@@ -81,11 +81,6 @@ export class UpdateJobApplicantDto {
 
   @IsOptional()
   @IsString()
-  public status: string;
-
-
-  @IsOptional()
-  @IsString()
   rep_sieving_call: string;
 
   @IsOptional()
@@ -95,4 +90,8 @@ export class UpdateJobApplicantDto {
   @IsOptional()
   @IsString()
   interview_status: string
+
+  @IsOptional()
+  @IsString()
+  process_stage: string
 }
