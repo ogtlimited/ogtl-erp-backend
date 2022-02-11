@@ -3,6 +3,7 @@ import JobApplicantService from '@services/recruitment/job_applicant.service';
 import { NextFunction, Request, Response } from 'express';
 import { IJobApplicant } from '@interfaces/recruitment/job_applicant.interface';
 import { CreateJobApplicantDto, UpdateJobApplicantDto } from '@dtos/recruitment/job_applicant.dto';
+import {IJobApplicationsTasks} from "@interfaces/recruitment/job-applications-task";
 
 class JobApplicantController {
   public jobApplicantService = new JobApplicantService();
@@ -12,6 +13,16 @@ class JobApplicantController {
     try {
       const findAllJobApplicants: IJobApplicant[] = await this.jobApplicantService.findAllJobApplicants()
       res.status(200).json({data:findAllJobApplicants, totalJobApplicants: findAllJobApplicants.length, message:"All job applicants"})
+    }catch (error) {
+      next(error)
+    }
+  }
+
+  //Method for returning all job applicants
+  public getJobApplicationTasks = async (req:Request, res:Response, next:NextFunction) =>{
+    try {
+      const jobApplicationTasks: IJobApplicationsTasks[] = await this.jobApplicantService.getJobApplicationTasks("", "")
+      res.status(200).json({data:jobApplicationTasks, totalTasks: jobApplicationTasks.length})
     }catch (error) {
       next(error)
     }
@@ -53,11 +64,11 @@ class JobApplicantController {
   }
 
   //Method for updating job Applicant
-  public updateJobApplicant = async (req:Request, res:Response, next:NextFunction) =>{
+  public updateJobApplicant = async (req, res:Response, next:NextFunction) =>{
     try {
       const jobApplicantId:string = req.params.id;
       const jobApplicantData:UpdateJobApplicantDto = req.body;
-      const updateJobApplicantData: IJobApplicant = await this.jobApplicantService.updateJobApplicant(jobApplicantId,jobApplicantData);
+      const updateJobApplicantData: IJobApplicant = await this.jobApplicantService.updateJobApplicant(req.user._id, jobApplicantId,jobApplicantData);
       res.status(200).json({ data: updateJobApplicantData, message: 'Job applicant updated.' });
     }
     catch (error) {

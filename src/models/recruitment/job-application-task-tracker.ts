@@ -26,7 +26,7 @@ const jobApplicationsTaskSchema: Schema = new Schema({
     type: Number,
     default: 0
   }
-})
+},{ timestamps: true})
 
 // jobApplicantionsTaskSchema.post('save', function(doc) {
 //   const self: any = this;

@@ -77,6 +77,7 @@ export class CreateJobApplicantDto {
 }
 export class UpdateJobApplicantDto {
   @IsString()
+  @IsOptional()
   public _id: string;
 
   @IsOptional()
