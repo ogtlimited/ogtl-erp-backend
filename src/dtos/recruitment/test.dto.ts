@@ -117,6 +117,10 @@ export class CreateTestDto {
   @IsString()
   public interviewer_rating: string;
 
+ @IsOptional()
+  @IsString()
+  public interview_status: string;
+
 }
 
 export class UpdateTestDto {
@@ -237,4 +241,8 @@ export class UpdateTestDto {
   @IsOptional()
   @IsString()
   public interviewer_rating: string;
+
+  @IsOptional()
+  @IsString()
+  public interview_status: string;
 }

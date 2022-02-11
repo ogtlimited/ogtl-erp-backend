@@ -56,11 +56,6 @@ const jobApplicantSchema: Schema = new Schema({
     enum: ["open","sieving","phone screening","interview scheduled"],
     default: "open"
   },
-  status:{
-    type: String,
-    enum: ["not in location","not a graduate","declined"],
-    default: "open"
-  },
   resume_attachment:{
     type: String,
     default: null

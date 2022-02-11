@@ -32,5 +32,6 @@ export interface ITest {
   full_screen_mode_always_active?: string;
   mouse_always_in_assessment_window?: string;
   interviewer_rating?:string;
+  interview_status?:string;
 
 }
