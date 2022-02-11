@@ -10,7 +10,11 @@ import {IJobApplicationsTasks} from "@interfaces/recruitment/job-applications-ta
 
 class JobApplicantService {
   public jobApplicant = jobApplicantModel;
-  public EmployeeM = EmployeeModel
+  public Employee = EmployeeModel
+  // privat let startofDay = new Date();
+  // startofDay.setHours(0,0,0,0);
+  // let endOfDay = new Date();
+  // endOfDay.setHours(23,59,59,999);
 
   //Method for finding all job applicants
   public async findAllJobApplicants(): Promise<IJobApplicant[]>{
@@ -53,7 +57,7 @@ class JobApplicantService {
     startofDay.setHours(0,0,0,0);
     let endOfDay = new Date();
     endOfDay.setHours(23,59,59,999);
-    
+
     await jobApplicationsTaskModel.updateOne(
       {created_at: {$gte: startofDay, $lt: endOfDay}},
       {
@@ -93,12 +97,12 @@ class JobApplicantService {
     return await jobApplicationsTaskModel.find({created_at: {$gte: startofDay, $lt: endOfDay}})
   }
 
-  public async getAgentJobApplicationTasks(in_house_agent_id: string,jobApplicationProcessingStage):Promise<IJobApplicationsTasks[]>{
+  public async getAgentJobApplicationTasks(in_house_agent_id: string):Promise<IJobApplicationsTasks[]>{
     let startofDay = new Date();
     startofDay.setHours(0,0,0,0);
     let endOfDay = new Date();
     endOfDay.setHours(23,59,59,999);
-    return await jobApplicationsTaskModel.find({created_at: {$gte: startofDay, $lt: endOfDay}})
+    return await jobApplicationsTaskModel.find({created_at: {$gte: startofDay, $lt: endOfDay}, in_house_agent: in_house_agent_id})
   }
 
 
