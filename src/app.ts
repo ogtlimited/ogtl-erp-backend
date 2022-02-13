@@ -29,6 +29,7 @@ import attendanceModel  from '@models/attendance/attendance.model';
 import {getWorkTime, calculateLateness}  from '@/utils/attendanceCalculator';
 import AttendanceTypeService from '@/services/attendance/attendance.service';
 import NotificationHelper from './utils/helper/notification.helper';
+import EmployeeService from "./services/employee.service";
 
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config({ path: dirname( module.paths[1] ) + "/.env" });
@@ -236,8 +237,14 @@ class App {
       const applicationService = new LeaveApplicationService()
       await applicationService.addLeavesForEmployees()
     })
+
+    const employeeStat = cron.schedule('0 0 1 * *', async function() {
+      const employeeStat = new EmployeeService()
+      await employeeStat.EmployeeRatio()
+    })
      task.start()
      task2.start()
+     employeeStat.start()
   }
 }
 

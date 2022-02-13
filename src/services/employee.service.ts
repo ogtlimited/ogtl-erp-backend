@@ -9,6 +9,7 @@ import DesignationModel from '@models/employee/designation.model';
 import departmentModel from '@/models/department/department.model';
 import shiftTypeModel from '@models/shift/shift_type.model';
 import projectModel from '@/models/project/project.model';
+import EmployeeStatModel from '@/models/employee-stat/employee-stat.model';
 import { ObjectId } from "mongodb";
 import moment from "moment";
 import { IProject } from './../interfaces/project-interface/project.interface';
@@ -16,6 +17,8 @@ import { Designation } from './../interfaces/employee-interface/designation.inte
 import { IDepartment } from './../interfaces/employee-interface/department.interface';
 import { isEmpty } from '@utils/util';
 import { IShiftType } from '@/interfaces/shift-interface/shift_type.interface';
+import TerminationService from './employee-lifecycle/termination.service';
+import { IEmployeeStat } from './../interfaces/employee-stat/employee-stat.interface';
 
 class EmployeeService {
   // eslint-disable-next-line prettier/prettier
@@ -24,10 +27,54 @@ class EmployeeService {
   public Designation = DesignationModel;
   public Project = projectModel;
   public Shift = shiftTypeModel;
+  public employeeStatModel = EmployeeStatModel;
+  public TerminationService = new TerminationService();
+
 
   public async findAllEmployee(): Promise<Employee[]> {
     const Employees: Employee[] = await this.Employees.find().populate('default_shift designation department branch projectId reports_to');
     return Employees;
+  }
+
+  public async findAllEmployeeByMonth(): Promise<Employee[]> {
+    const d = new Date()
+    const month: number = d.getMonth() + 1
+    const year = d.getFullYear() 
+    const Employees: Employee[] = await this.Employees.find({
+      date_of_joining: {
+          $gte: moment(`${year}/${month}`, 'YYYY/MM').startOf('month').format('x'),
+          $lte: moment(`${year}/${month}`, 'YYYY/MM').endOf('month').format('x')
+      }
+  }).populate('default_shift designation department branch ');
+    return Employees;
+  }
+
+  public async EmployeeRatio() {
+    const monthlyEmployeeCount = (await this.findAllEmployeeByMonth()).length
+    const monthlyTermination = (await this.TerminationService.findAllTerminationsByMonth()).length
+    const totalEmployeeCount = (await this.Employees.find()).length
+    const ration = (Math.abs(monthlyEmployeeCount - monthlyTermination)) / totalEmployeeCount
+    const payload = {
+      total_employee_count: monthlyEmployeeCount,
+      total_termination_count: monthlyTermination,
+      ratio: ration
+    }
+    return await EmployeeStatModel.create(payload)
+    
+  }
+
+  public async findEmployeeRatio(): Promise<IEmployeeStat[]> {
+    const d = new Date()
+    const month: number = d.getMonth() + 1
+    const year = d.getFullYear() 
+    const Employees: IEmployeeStat[] = await this.employeeStatModel.find({
+      createdAt: {
+          $gte: moment(`${year}/1}`, 'YYYY/MM').startOf('month').format('x'),
+          $lte: moment(`${year}/${month}`, 'YYYY/MM').endOf('month').format('x')
+      }
+    });
+    return Employees;
+    
   }
 
   public async findEmployeeById(EmployeeId: string): Promise<Employee> {
