@@ -16,9 +16,9 @@ class PayRollRoute implements Routes {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}`, [], this.payRollController.findAll);
-        this.router.get(`${this.path}/:id`, [], this.payRollController.findById);
-        this.router.post(`${this.path}`, [validationMiddleware(CreatePayrollDto, 'body')], this.payRollController.create);
+        this.router.get(`${this.path}`, [authMiddleware], this.payRollController.findAll);
+        this.router.get(`${this.path}/:id`, [authMiddleware], this.payRollController.findById);
+        this.router.post(`${this.path}`, [authMiddleware, validationMiddleware(CreatePayrollDto, 'body')], this.payRollController.create);
         // this.router.patch(`${this.path}`, validationMiddleware(DTO, 'body'), this.payRollController.createIncentive);
     }
   }

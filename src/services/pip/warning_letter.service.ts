@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import warningLetterModel from '@models/pip/warning_letter.model';
 import { IWarningLetter } from '@interfaces/pip-interface/warning_letter.interface';
 import { isEmpty } from '@utils/util';
@@ -5,14 +6,24 @@ import { HttpException } from '@exceptions/HttpException';
 import { CreateWarningLetterDto } from '@dtos/pip/warning_letter.dto';
 import EmployeeModel from '@models/employee/employee.model';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
+import  TerminationService  from '@/services/employee-lifecycle/termination.service';
 
 class WarningLetterService {
   public warningLetter = warningLetterModel;
   public employeeModel = EmployeeModel;
+  public terminationS = new TerminationService()
 
   //Method for getting all warning letters
   public async findAllWarningLetters(): Promise<IWarningLetter[]> {
     return this.warningLetter.find().populate('employee_id');
+  }
+
+  //Method for getting all warning Letters for an individual employee
+  public async findAllWarningLettersForAnEmployee(employeeId: string): Promise<IWarningLetter[]> {
+    //Check if employee id is empty
+    if (isEmpty(employeeId)) throw new HttpException(400, `Employee Id not provided`);
+    //return warning letter
+    return this.warningLetter.find({ employee_id: employeeId }).populate('employee_id');
   }
 
   //Method for finding an individual warning letter
@@ -39,6 +50,14 @@ class WarningLetterService {
         { $set: { warningCount: 3, status: 'terminated' } },
         { new: true },
       );
+      const terminationData = {
+        employee: warningLetterData.employee_id,
+        reason: 'Employee has more than two warning letter',
+        terminationType: 'others',
+        terminationDate: new Date()
+      }
+      this.terminationS.createTermination(terminationData)
+
     } else if (findEmployeeById.warningCount === 1) {
       await this.employeeModel.findOneAndUpdate({ _id: warningLetterData.employee_id }, { $set: { warningCount: 2, isInPIP: true } }, { new: true });
     } else {

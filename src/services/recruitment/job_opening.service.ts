@@ -1,16 +1,25 @@
 /* eslint-disable prettier/prettier */
-import jobOpeningModel from '@models/recruitment/job_opening.model';
-import { IJobOpening } from '@interfaces/recruitment/job_opening.interface';
+import jobOpeningModel, { defaultJobOpeningModel } from '@models/recruitment/job_opening.model';
+import { IJobOpening, IDefaultJobOpening } from '@interfaces/recruitment/job_opening.interface';
 import { isEmpty } from '@utils/util';
 import { HttpException } from '@exceptions/HttpException';
-import { CreateJobOpeningDto, UpdateJobOpeningDto } from '@dtos/recruitment/job_opening.dto';
-
+import { CreateJobOpeningDto,CreateDefaultJobOpeningDto, UpdateJobOpeningDto } from '@dtos/recruitment/job_opening.dto';
+import jobs from './job.json'
 class JobOpeningService {
   public jobOpening = jobOpeningModel;
-
+  public defaultJobOpeningModel = defaultJobOpeningModel;
+  // constructor() {
+  //   const job = jobs.map(j => ({job_title: j}))
+  //   defaultJobOpeningModel.insertMany(job)
+  // }
+ 
   //Method for finding all job openings
   public async findAllJobOpenings(): Promise<IJobOpening[]>{
     return this.jobOpening.find().populate("designation_id project_id location");
+  }
+  //Method for finding all default job openings
+  public async findAllDefaultJobOpenings(): Promise<IDefaultJobOpening[]>{
+    return this.defaultJobOpeningModel.find()
   }
 
   //Method for finding a single job opening
@@ -31,6 +40,14 @@ class JobOpeningService {
     if (isEmpty(jobOpeningData)) throw new HttpException(400, "Bad request");
     // return created job opening
     return await this.jobOpening.create(jobOpeningData);
+  }
+
+  //Method for creating job opening
+  public async createDefaultJobOpening(jobOpeningData: CreateDefaultJobOpeningDto): Promise<IDefaultJobOpening>{
+    //check if no job opening data is empty
+    if (isEmpty(jobOpeningData)) throw new HttpException(400, "Bad request");
+    // return created job opening
+    return await this.defaultJobOpeningModel.create(jobOpeningData);
   }
 
   //Method for updating job opening

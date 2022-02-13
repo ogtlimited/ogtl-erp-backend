@@ -16,6 +16,19 @@ class WarningLetterController {
       next(error)
     }
   }
+//Method for getting all warning letters for an individual employee
+  public getAllWarningLettersForEmployee = async (req:Request, res:Response, next:NextFunction) =>{
+    try {
+      const employeeId:string = req.params.id;
+      const findAllWarningLetters: IWarningLetter[] = await this.warningLetterService.findAllWarningLettersForAnEmployee(employeeId);
+      if(findAllWarningLetters){
+        res.status(200).json({data:findAllWarningLetters, totalWarningLetters: findAllWarningLetters.length, message:"All warning letters"})
+      }
+
+    }catch (error) {
+      next(error)
+    }
+  }
 
   //Method for getting one warning letter
   public getWarningLetterById = async (req:Request, res:Response, next:NextFunction) =>{

@@ -6,6 +6,7 @@ import promotionModel  from '@models/employee-lifecycle/promotion.model';
 import { isEmpty } from '@utils/util';
 import EmployeeModel from '@models/employee/employee.model';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
+import { IWarningLetter } from '@interfaces/pip-interface/warning_letter.interface';
 
 
 class PromotionService {
@@ -16,6 +17,15 @@ class PromotionService {
     const promotions = await this.promotionModel.find().populate("employee newDesignation");
     return promotions;
   }
+
+  //Method for getting all promotion Letters for an individual employee
+  public async findAllPromotionsForAnEmployee(employeeId: string): Promise<IPromotion[]> {
+    //Check if employee id is empty
+    if (isEmpty(employeeId)) throw new HttpException(400, `Employee Id not provided`);
+    //return promotions
+    return this.promotionModel.find({ employee: employeeId }).populate('employee');
+  }
+
 
   public async findPromotionById(id: string): Promise<IPromotion> {
     if (isEmpty(id)) throw new HttpException(400, "provide Id");
@@ -49,7 +59,7 @@ class PromotionService {
 }
 
 public async deletePromotion(PromotionId:string): Promise<IPromotion>{
-  //checks if 
+  //checks if
   const deletePromotionById: IPromotion = await this.promotionModel.findByIdAndDelete(PromotionId);
   if(!deletePromotionById) throw new HttpException(409,"Promotion does not exist");
    return deletePromotionById;

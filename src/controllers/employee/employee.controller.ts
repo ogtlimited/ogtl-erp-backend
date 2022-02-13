@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
+
 import { NextFunction, Request, Response } from 'express';
-import { CreateEmployeeDto,UpdateEmployeeDto, CreateMultipleEmployeeDto } from '@dtos/employee/employee.dto';
+import { CreateEmployeeDto,UpdateEmployeeDto,UpdateEmployeeRoleDto, CreateMultipleEmployeeDto } from '@dtos/employee/employee.dto';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
 import EmployeeService from '@services/employee.service';
 
@@ -49,12 +50,13 @@ class EmployeesController {
   };
   public createMultipleEmployee = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log(req.body)
+      // console.log(req.body)
       const EmployeeData: CreateMultipleEmployeeDto = req.body;
       const createEmployeeData = await this.EmployeeService.createMultipleEmployee(EmployeeData);
 
       res.status(201).json({ data: createEmployeeData, message: 'created' });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   };
@@ -64,6 +66,18 @@ class EmployeesController {
       const EmployeeId: string = req.params.id;
       const EmployeeData: UpdateEmployeeDto = req.body;
       const updateEmployeeData: Employee = await this.EmployeeService.updateEmployee(EmployeeId, EmployeeData);
+
+      res.status(200).json({ data: updateEmployeeData, message: 'updated' });
+    } catch (error) {
+      next(error);
+    }
+  };
+  public updateEmployeeRole = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const EmployeeId: string = req.params.id;
+      const EmployeeData: UpdateEmployeeRoleDto = req.body;
+      console.log(EmployeeData, 'EMPLOYEE FDATA');
+      const updateEmployeeData: Employee = await this.EmployeeService.updateEmployeeRole(EmployeeId, EmployeeData);
 
       res.status(200).json({ data: updateEmployeeData, message: 'updated' });
     } catch (error) {

@@ -85,6 +85,16 @@ class LeaveApplicationController {
       next(error);
     }
   };
+  public updateLeaveCount = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const LeaveCountData = req.body;
+      const updateLeaveApplicationData = await this.leaveApplicationService.updateLeaveCount(LeaveCountData);
+
+      res.status(200).json({ data: updateLeaveApplicationData, message: 'updated' });
+    } catch (error) {
+      next(error);
+    }
+  };
 
   public deleteLeaveApplication = async (req: Request, res: Response, next: NextFunction) => {
     try {

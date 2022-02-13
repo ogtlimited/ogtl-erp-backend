@@ -1,4 +1,5 @@
-import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
+/* eslint-disable prettier/prettier */
+import { IsString, IsNotEmpty, IsOptional, IsDateString, IsNumber } from 'class-validator';
 
 export class CreateJobOpeningDto {
   @IsNotEmpty()
@@ -23,6 +24,32 @@ export class CreateJobOpeningDto {
   @IsOptional()
   @IsString()
   public location: string;
+
+  @IsOptional()
+  @IsDateString()
+  public date: string;
+
+  @IsOptional()
+  @IsDateString()
+  public deadline: string;
+
+  @IsOptional()
+  @IsString()
+  public type: string;
+
+  @IsOptional()
+  @IsNumber()
+  public experience: number;
+
+  @IsOptional()
+  @IsNumber()
+  public vacancy: number;
+}
+export class CreateDefaultJobOpeningDto {
+  @IsNotEmpty()
+  @IsString()
+  public job_title: string;
+
 }
 
 export class UpdateJobOpeningDto {
@@ -51,4 +78,25 @@ export class UpdateJobOpeningDto {
   @IsOptional()
   @IsString()
   public location: string;
+
+  @IsOptional()
+  @IsDateString()
+  public date: string;
+
+  @IsOptional()
+  @IsDateString()
+  public deadline: string;
+
+  @IsOptional()
+  @IsString()
+  public type: string;
+
+
+  @IsOptional()
+  @IsNumber()
+  public experience: number;
+
+  @IsOptional()
+  @IsNumber()
+  public vacancy: number;
 }

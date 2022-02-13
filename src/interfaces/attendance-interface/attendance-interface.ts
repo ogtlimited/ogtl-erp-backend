@@ -14,11 +14,42 @@ export interface IAttendanceCreatedResponse {
     statusId: string;
 }
 
+export interface IBulkCreateAttendance {
+  attendances: Array<ICreateAttendance>;
+}
+
 export interface ICreateAttendance {
-    ogId: string;
-    shiftTypeId?: string;
-    employeeId?: string;
-    clockInTime: string;
-    departmentId?: string;
-    projectId?: string;
+  ogId?: string;
+  companyEmail?: string;
+  shiftTypeId?: string;
+  employeeId?: string;
+  clockInTime?: string;
+  clockOutTime?: String;
+  departmentId?: string;
+  projectId?: string;
+  salaryStructure_id?: any
+  totalHours?: any
+  hoursWorked?: number
+  minutesWorked?:Number
+}
+
+export interface IAttendanceDeduction{
+  employeeId: string;
+  deductionTypeId: string;
+  amount: number;
+  description: string
+}
+export interface IPossibleDeductons{
+  employeesDeductions?,
+  employeeId?: string,
+  totalWorkHours?: number,
+  minutesWorked?: Number,
+  departmentId?: string,
+  projectId?: string,
+  shiftTypeId?: IShiftType,
+  ogId?: string
+}
+
+interface IShiftType{
+  _id: string
 }

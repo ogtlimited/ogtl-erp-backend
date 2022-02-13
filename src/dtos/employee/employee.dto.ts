@@ -116,6 +116,11 @@ export class UpdateEmployeeDto {
 
   @IsNumber()
   public permissionLevel: number;
+  
+  @IsBoolean()
+  public isRepSiever: boolean;
+
+
 
 
 }
@@ -126,9 +131,83 @@ export class UpdateEmployeePermissionDto{
   @IsNumber()
   public permissionLevel: number
 }
+export class UpdateEmployeeRoleDto{
+  @IsString()
+  public _id: string;
+
+  @IsString()
+  public role: string
+
+  @IsBoolean()
+  public isRepSiever: boolean
+}
 
 export class EmployeeLoginDto {
   @IsString()
   public company_email: string;
+
+  @IsOptional()
+  @IsString()
+  public date_of_joining: string;
+
+  @IsOptional()
+  @IsString()
+  public default_shift: string;
+
+  @IsString()
+  @IsOptional()
+  public department: string;
+
+
+  @IsOptional()
+  @IsString()
+  public designation: string;
+
+  @IsOptional()
+  @IsString()
+  public first_name: string;
+
+  @IsOptional()
+  @IsBoolean()
+  public isAdmin: boolean;
+
+  @IsOptional()
+  @IsString()
+  public gender: string;
+
+  @IsOptional()
+  @IsString()
+  public image: string;
+
+  @IsOptional()
+  @IsString()
+  public last_name: string;
+
+  @IsOptional()
+  @IsString()
+  public middle_name: string;
+
+  @IsOptional()
+  @IsString()
+  public reports_to: string;
+
+  @IsOptional()
+  @IsString()
+  public status: string;
+
+  @IsOptional()
+  @IsString()
+  public branch: string;
+
+  @IsOptional()
+  @IsString()
+  public employeeType: string;
+
+  @IsOptional()
+  @IsString()
+  public projectId: string;
+
+  @IsOptional()
+  leaveCount: number;
 
 }

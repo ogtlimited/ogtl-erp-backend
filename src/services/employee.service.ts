@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import bcrypt from 'bcrypt';
 
-import { CreateEmployeeDto, UpdateEmployeeDto, UpdateEmployeePermissionDto, CreateMultipleEmployeeDto } from '@dtos/employee/employee.dto';
+import { CreateEmployeeDto, UpdateEmployeeDto, UpdateEmployeePermissionDto, UpdateEmployeeRoleDto, CreateMultipleEmployeeDto } from '@dtos/employee/employee.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
 import EmployeeModel from '@models/employee/employee.model';
@@ -32,7 +32,7 @@ class EmployeeService {
 
 
   public async findAllEmployee(): Promise<Employee[]> {
-    const Employees: Employee[] = await this.Employees.find().populate('default_shift designation department branch projectId reports_to');
+    const Employees: Employee[] = await this.Employees.find().populate('default_shift designation department branch projectId reports_to role');
     return Employees;
   }
 
@@ -80,7 +80,7 @@ class EmployeeService {
   public async findEmployeeById(EmployeeId: string): Promise<Employee> {
     if (isEmpty(EmployeeId)) throw new HttpException(400, "You're not EmployeeId");
 
-    const findEmployee: Employee = await this.Employees.findOne({ _id: EmployeeId }).populate("default_shift department designation branch projectId reports_to");
+    const findEmployee: Employee = await this.Employees.findOne({ _id: EmployeeId }).populate("default_shift department designation branch projectId reports_to role");
     if (!findEmployee) throw new HttpException(409, "You're not Employee");
 
     return findEmployee;
@@ -147,6 +147,7 @@ class EmployeeService {
     // console.log('ALL Offices', AllOffices)
     const formatted = EmployeeData.map((e: any) => ({
       ...e,
+      status: "active",
       isAdmin: e.isAdmin === 'true' ? true : false,
       isTeamLead: e.isTeamLead === 'true' ? true : false,
       isSupervisor: e.isSupervisor === 'true' ? true : false,
@@ -161,7 +162,7 @@ class EmployeeService {
       gender: e.gender.toLowerCase(),
       ogid: this.notEmpty(e.ogid) ? e.ogid : this.generateOGID(),
     }));
-    console.log(formatted.filter(e => e.gender == ''));
+    console.log(formatted);
     console.log('formatted');
 
     const createEmployeeData = await this.Employees.insertMany(formatted);
@@ -222,6 +223,31 @@ class EmployeeService {
     if (!updateEmployeeById) throw new HttpException(409, "You're not Employee");
 
     return updateEmployeeById;
+  }
+  public async updateEmployeeRole(EmployeeId: string, EmployeeData: UpdateEmployeeRoleDto): Promise<Employee> {
+    if (isEmpty(EmployeeData)) throw new HttpException(400, 'Input all required field');
+
+    if (EmployeeData._id) {
+      const findEmployee: Employee = await this.Employees.findOne({ _id: EmployeeData._id });
+      if (findEmployee && findEmployee._id != EmployeeId) throw new HttpException(409, `User not Found`);
+    
+    console.log(EmployeeData, 'ÉMPLOYEE');
+   
+    const updateEmployeeById: Employee = await this.Employees.findOneAndUpdate(
+      { _id: EmployeeId },
+      { $set: 
+        { role: EmployeeData.role,
+          sievedApplicationCount: findEmployee.sievedApplicationCount ? findEmployee.sievedApplicationCount : 0,
+          isRepSiever: EmployeeData.isRepSiever,
+        }
+      },
+      { new: true },
+    );
+
+    if (!updateEmployeeById) throw new HttpException(409, "You're not Employee");
+
+    return updateEmployeeById;
+        }
   }
 
   public async deleteEmployee(EmployeeId: string): Promise<Employee> {

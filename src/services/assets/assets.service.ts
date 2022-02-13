@@ -26,7 +26,7 @@ class AssetService{
        if (isEmpty(AssetId)) throw new HttpException(400, "No Id provided");
 
        //find Asset with Id given
-       const findAsset:Asset = await this.Assets.findOne({ _id:AssetId  });
+       const findAsset:Asset = await this.Assets.findOne({ _id:AssetId  }).populate("assetName");
 
        if(!findAsset) throw new HttpException(409, "Asset with that Id doesnt exist");
 

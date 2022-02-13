@@ -10,3 +10,7 @@ export interface ILeaveApplication{
     reason: string;
     status?: string;
 }
+export interface ILeaveCount{
+   ogid: string;
+   leaveCount: number
+}

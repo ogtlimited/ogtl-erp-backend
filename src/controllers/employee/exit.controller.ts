@@ -1,7 +1,13 @@
+/* eslint-disable prettier/prettier */
 import { NextFunction, Request, Response } from 'express';
 import { CreateExitDto,UpdateExitDto } from '@/dtos/employee/exit.dto';
 import { Exit } from '@/interfaces/employee-interface/exit.interface';
 import ExitService from '@/services/employee/exit.service';
+import {emailTemplate} from '@utils/email';
+const { SocketLabsClient } = require('@socketlabs/email');
+const { Socket } = require("@/utils/socket");
+const redis = require('redis');
+const client = redis.createClient();
 
 
 class ExitController{
@@ -69,6 +75,21 @@ class ExitController{
         }
    
 };
+
+private async sendEmail(subject: string, message: string, receiver: string[]){
+    const email = emailTemplate(subject, message, receiver)
+    const sclient = await new SocketLabsClient(parseInt(process.env.SOCKETLABS_SERVER_ID), process.env.SOCKETLABS_INJECTION_API_KEY);
+  
+    await sclient.send(email).then(
+        (response) => {
+            console.log(response)
+        },
+        (err) => {
+            //Handle error making API call
+            console.log(err);
+        }
+    );
+   }
 
 }
 export default ExitController;

@@ -84,6 +84,17 @@ class IndexController {
     }
   };
 
+//for creating new role Assignment Form
+  public createRoleAssignmentForm = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const createRoleAssignment = await this.indexS.roleAssignmentForm()
+
+      res.status(200).json({ createRoleAssignment, message: 'Role assignment data result' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public getAdminDashboardData = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const getAdminDashboardData = await this.indexS.adminDashboardDate();
@@ -105,6 +116,16 @@ class IndexController {
     try {
       const getAccountsData = await this.indexS.accountDashboard()
       res.status(200).json({ getAccountsData, message: 'Accounts data' });
+    }
+    catch (e) {
+      next(e)
+    }
+  }
+
+  public jobDashboard = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const jobData = await this.indexS.jobDashboard()
+      res.status(200).json({ jobData, message: 'Job Dashboard Data' });
     }
     catch (e) {
       next(e)

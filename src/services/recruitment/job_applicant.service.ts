@@ -4,9 +4,13 @@ import { IJobApplicant } from '@interfaces/recruitment/job_applicant.interface';
 import { isEmpty } from '@utils/util';
 import { HttpException } from '@exceptions/HttpException';
 import { CreateJobApplicantDto, UpdateJobApplicantDto } from '@dtos/recruitment/job_applicant.dto';
+import EmployeeModel from '@/models/employee/employee.model';
+import jobApplicationsTaskModel from "@models/recruitment/job-application-task-tracker";
+import { IJobApplicationsTasks } from '@/interfaces/recruitment/job-applications-task';
 
 class JobApplicantService {
   public jobApplicant = jobApplicantModel;
+  public EmployeeM = EmployeeModel
 
   //Method for finding all job applicants
   public async findAllJobApplicants(): Promise<IJobApplicant[]>{
@@ -23,7 +27,7 @@ class JobApplicantService {
     //check if no Job applicant id is empty
     if(isEmpty(jobApplicantId)) throw new HttpException(400,`Job applicant with Id:${jobApplicantId}, does not exist`);
     //find Job applicant using the id provided
-    const findJobApplicant:IJobApplicant = await this.jobApplicant.findOne({_id:jobApplicantId}).populate('job_opening_id');
+    const findJobApplicant:IJobApplicant = await this.jobApplicant.findOne({_id:jobApplicantId}).populate('job_opening_id, rep_sieving_call ');
     //throw error if Job applicant does not exist
     if(!findJobApplicant) throw new HttpException(409,`Job applicant with Id:${jobApplicantId}, does not exist`);
     //return Job applicant
@@ -34,8 +38,40 @@ class JobApplicantService {
   public async createJobApplicant(jobApplicantData: CreateJobApplicantDto): Promise<IJobApplicant>{
     //check if no job applicant data is empty
     if (isEmpty(jobApplicantData)) throw new HttpException(400, "Bad request");
+    const employees = await EmployeeModel.find({isRepSiever: true}).select('sievedApplicationCount')
+    console.log(employees, 'EMPLOYEES');
+    employees.sort(function (a, b) {
+        return a.sievedApplicationCount - b.sievedApplicationCount
+    })
+    const min = employees[0]
+    console.log(min, employees, 'MIN EMPLOYEE')
+    const jobApplicant = {...jobApplicantData, rep_sieving_call: min._id }
+    await EmployeeModel.findOneAndUpdate(
+      { _id: min._id },
+      { $set: 
+        { 
+          sievedApplicationCount: min.sievedApplicationCount + 1,
+        }
+      },
+      { new: true },
+    );
     // return created job Applicant
-    return await this.jobApplicant.create(jobApplicantData);
+    const jobApplication = await this.jobApplicant.create(jobApplicant);
+
+    const startofDay = new Date();
+    startofDay.setHours(0,0,0,0);
+    const endOfDay = new Date();
+    endOfDay.setHours(23,59,59,999);
+    
+    await jobApplicationsTaskModel.updateOne(
+      {created_at: {$gte: startofDay, $lt: endOfDay}},
+      {
+        $set: { $inc: {total_assigned_records: 1} },
+        $setOnInsert: { in_house_agent: min._id }
+      },
+      { upsert: true }
+    )
+    return jobApplication
   }
 
   //Method for updating job Applicant
@@ -53,6 +89,28 @@ class JobApplicantService {
     // return updated job Applicant
     return updateJobApplicantById;
   }
+
+  //
+  public async updateJobApplicationProcessingStage(in_house_agent_id: string,jobApplicationProcessingStage):Promise<any>{
+    await jobApplicationsTaskModel.findOneAndUpdate({in_house_agent: in_house_agent_id}, {$inc: {[jobApplicationProcessingStage]: 1}})
+  }
+
+  public async getJobApplicationTasks(in_house_agent_id: string,jobApplicationProcessingStage):Promise<IJobApplicationsTasks[]>{
+    const startofDay = new Date();
+    startofDay.setHours(0,0,0,0);
+    const endOfDay = new Date();
+    endOfDay.setHours(23,59,59,999);
+    return await jobApplicationsTaskModel.find({created_at: {$gte: startofDay, $lt: endOfDay}})
+  }
+
+  public async getAgentJobApplicationTasks(in_house_agent_id: string,jobApplicationProcessingStage):Promise<IJobApplicationsTasks[]>{
+    const startofDay = new Date();
+    startofDay.setHours(0,0,0,0);
+    const endOfDay = new Date();
+    endOfDay.setHours(23,59,59,999);
+    return await jobApplicationsTaskModel.find({created_at: {$gte: startofDay, $lt: endOfDay}})
+  }
+
 
   //Method for deleting job Applicant
   public async deleteJobApplicant(jobApplicantId: string):Promise<IJobApplicant>{

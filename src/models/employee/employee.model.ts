@@ -51,6 +51,11 @@ const employeeSchema: Schema = new Schema(
       ref: 'SalaryStructure',
       default: null,
     },
+    role: {
+      type: Schema.Types.ObjectId,
+      ref: 'Role',
+      default: null,
+    },
     employeeType: {
       type: String,
       enum: ["Apprentice","Intern","Commission","Contract","Probation","PartTime","FullTime", "Corper"]
@@ -97,12 +102,21 @@ const employeeSchema: Schema = new Schema(
     },
     status: {
       type: String,
+      default: "active",
       enum: ["active", "terminated", "left"]
     },
     permissionLevel: {
       type: Number,
     },
     warningCount:{
+      type: Number,
+      default:0,
+    },
+    isRepSiever:{
+      type: Boolean,
+      default: false
+    },
+    sievedApplicationCount:{
       type: Number,
       default:0,
     },

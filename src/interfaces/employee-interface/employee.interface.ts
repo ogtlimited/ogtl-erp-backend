@@ -20,6 +20,8 @@ export interface Employee {
     isAdmin: boolean
     isTeamLead: boolean
     isSupervisor: boolean
-    leaveCount:Number
+    leaveCount: number,
+    isRepSiever: boolean,
+    sievedApplicationCount: number
 
 }

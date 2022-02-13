@@ -26,8 +26,12 @@ class EmailService {
         return updatedEmail;
     }
 
-    private async findOne(email_id: string): Promise<IEmail> {
+    public async findOne(email_id: string): Promise<IEmail> {
         const findEmail: IEmail = await this.emailModel.findOne({ _id: email_id });
+        return findEmail;
+    }
+    public async findOneAndDelete(email_id: string): Promise<IEmail> {
+        const findEmail: IEmail = await this.emailModel.findByIdAndDelete({ _id: email_id });
         return findEmail;
     }
 }

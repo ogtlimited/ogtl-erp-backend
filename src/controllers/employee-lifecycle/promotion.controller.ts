@@ -3,7 +3,12 @@ import { NextFunction, Request, Response } from 'express';
 import { CreatePromotionDto, UpdatePromotionDto } from '@dtos/employee-lifecycle/promotion.dto';
 import { IPromotion } from '@/interfaces/employee-lifecycle/promotion.interface';
 import PromotionService from '@/services/employee-lifecycle/promotion.service';
-
+import {emailTemplate} from '@utils/email';
+import {promotionMessage} from '@utils/message';
+const { SocketLabsClient } = require('@socketlabs/email');
+const { Socket } = require("@/utils/socket");
+const redis = require('redis');
+const client = redis.createClient();
 
 class PromotionController {
   public promotionService = new PromotionService();
@@ -11,6 +16,20 @@ class PromotionController {
     try {
       const data = await this.promotionService.findAllPromotions();
       res.status(200).json({ data: data});
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  //Method for returning all promotion letters for an employee
+  public findPromotionForAnEmployee = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const id: string = req.params.id;
+      const data = await this.promotionService.findAllPromotionsForAnEmployee(id);
+      if(data){
+        res.status(200).json({ data: data});
+      }
+
     } catch (error) {
       next(error);
     }
@@ -28,11 +47,13 @@ class PromotionController {
 
   public createPromotion = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const user = (<any>req).user
       const newData: CreatePromotionDto = req.body;
-      const createdData: IPromotion = await this.promotionService.createPromotion(newData); 
+      const createdData: IPromotion = await this.promotionService.createPromotion(newData);
+      this.sendEmail(promotionMessage.subject, promotionMessage.message, user.company_email)
       res.status(201).json({ data: createdData,message: "Promotion Succesful"});
     } catch (error) {
-      
+
       next(error);
     }
   };
@@ -61,6 +82,21 @@ class PromotionController {
         next(error)
     }
 
+ }
+
+ private async sendEmail(subject: string, message: string, receiver: string[]){
+  const email = emailTemplate(subject, message, receiver)
+  const sclient = await new SocketLabsClient(parseInt(process.env.SOCKETLABS_SERVER_ID), process.env.SOCKETLABS_INJECTION_API_KEY);
+
+  await sclient.send(email).then(
+      (response) => {
+          console.log(response)
+      },
+      (err) => {
+          //Handle error making API call
+          console.log(err);
+      }
+  );
  }
 }
 

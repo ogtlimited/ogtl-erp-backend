@@ -40,7 +40,6 @@ class App {
   public app: express.Application;
   public port: string | number;
   public env: string;
-
   constructor(routes: Routes[]) {
 
     this.app = express();
@@ -55,7 +54,8 @@ class App {
     this.initializeErrorHandling();
     this.redisConnection();
     // this.initializeCron();
-    this.initializeCron();
+    // this.initializeCron();
+
   }
 
   public socketInstance(server)
@@ -108,26 +108,35 @@ class App {
     return this.app;
   }
 
-  private connectToDatabase() {
+  private async connectToDatabase() {
     if (this.env !== 'production') {
       set('debug', true);
     }
-    connect(process.env.databaseUrl, dbConnection.options);
+    await connect(process.env.databaseUrl, dbConnection.options);
   }
 
   private initializeMiddlewares() {
     this.app.use(morgan(config.get('log.format'), { stream }));
-    const allowedOrigins = ['https://erp.outsourceglobal.com', 'http://localhost:3001', 'https://www.outsourceglobal.com/'];
+    const allowedOrigins = [
+     'https://erp.outsourceglobal.com',
+     'https://erp.outsourceglobal.com',
+     'http://localhost:3001',
+     'http://localhost:3002/',
+     'https://8029-102-91-5-194.ngrok.io',
+     'https://www.outsourceglobal.com',
+     'https://outsourceglobal.com'
+    ];
     const options: cors.CorsOptions = {
       origin: allowedOrigins
     };
-    this.app.use(cors(options))
+    this.app.use(cors());
+    // this.app.use(cors(options))
     // this.app.use(cors({ origin: config.get('cors.origin'), credentials: config.get('cors.credentials') }));
     this.app.use(hpp());
     this.app.use(helmet());
     this.app.use(compression());
     this.app.use(express.json({limit: '50mb'}));
-    this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(express.urlencoded({ extended: true, limit: '50mb' }));
     this.app.use(cookieParser());
     this.app.use(
       fileUpload()
@@ -218,11 +227,12 @@ class App {
     this.app.use(errorMiddleware);
   }
 
+
   private  initializeCron(){
 
     const task = cron.schedule('* 1 * * 1-5', async function() {
-      const attendanceService = new AttendanceTypeService()
-      await attendanceService.generateAttendance()
+      // const attendanceService = new AttendanceTypeService()
+      // await attendanceService.generateAttendance()
     //   console.log('running task 1am every day');
     //   const day = "saturday"
     //   if (day == "saturday" || day == "sunday") {
@@ -242,8 +252,8 @@ class App {
       const employeeStat = new EmployeeService()
       await employeeStat.EmployeeRatio()
     })
-     task.start()
-     task2.start()
+    //  task.start()
+    //  task2.start()
      employeeStat.start()
   }
 }

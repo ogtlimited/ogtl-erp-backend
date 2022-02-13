@@ -4,39 +4,129 @@ import { ITest } from '@interfaces/recruitment/test.interface';
 import NotificationHelper from '@utils/helper/notification.helper';
 
 const testSchema: Schema = new Schema({
-  test_type:{
-    type:String,
-    enum:["Phone Screening","Typing Test","Excel Test","Formal Writing","Soft Skills"],
-    required: true
-  },
   job_applicant_id: {
     type: Schema.Types.ObjectId,
     required: true,
     ref: 'JobApplicant',
-    default: null,
+
   },
   status:{
     type: String,
-    enum: ["Passed","Failed"],
-    default: null
-  },
-  score:{
-    type: String,
-    default: null
+
   },
   interview_date: {
     type: Date,
-    default:null
+
   },
   phone_number:{
     type: String,
-    default: null
+
   },
   notes:{
     type:String,
-    default:null
-  }
-})
+
+  },
+  interviewer:{
+    type:String,
+
+  },
+  email_address:{
+    type:String,
+
+  },
+  typing_speed_score:{
+    type: String,
+    default:0
+  },
+  typing_accuracy_score:{
+    type:String,
+    default:0
+  },
+  accent_test_score:{
+    type:String,
+
+  },
+  attention_to_details_test:{
+    type:String,
+
+  },
+  multitasking_skills_test:{
+    type:String,
+
+  },
+  dictation_test:{
+    type:String,
+
+  },
+  professional_writing_email_test:{
+    type:String,
+
+  },
+  send_for_testGorilla_skype_interview:{
+    type:String,
+
+  },
+  testGorilla_invitation_date:{
+    type: Date,
+
+  },
+  assessment_completion_date:{
+    type: Date,
+
+  },
+  stage:{
+    type:String,
+
+  },
+  average_score:{
+    type: String,
+
+  },
+  personality_score:{
+    type: String,
+
+  },
+  attention_to_detail_score:{
+    type: String,
+
+  },
+  communication_score:{
+    type: String,
+
+  },
+  disc_profile_score:{
+    type: String,
+
+  },
+  english_score:{
+    type: String,
+
+  },
+  filed_out_only_once_from_ip_address:{
+    type:String,
+
+  },
+  webcam_enabled:{
+    type:String,
+
+  },
+  full_screen_mode_always_active:{
+    type:String,
+
+  },
+  mouse_always_in_assessment_window:{
+    type:String,
+
+  },
+  interviewer_rating:{
+    type:String,
+
+  },
+
+},
+  {
+    timestamps: true,
+  },)
 testSchema.post('save', function(doc) {
   const self: any = this;
   console.log(self.constructor.modelName)
