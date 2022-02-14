@@ -19,3 +19,5 @@ export const isEmpty = (value: string | number | object): boolean => {
 };
 
 export const genRef = () => 'REF-' + new Date().getTime();
+
+export const generateOGID = () => 'OG' + Math.floor(1000 + Math.random() * 9000);

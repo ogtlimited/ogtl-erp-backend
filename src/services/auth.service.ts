@@ -1,3 +1,4 @@
+import { generateOGID } from './../utils/util';
 /* eslint-disable prettier/prettier */
 import config from 'config';
 import jwt from 'jsonwebtoken';
@@ -33,6 +34,15 @@ class AuthService {
     
     if (!employee) throw new HttpException(409, `This email ${EmployeeData.company_email} does not exist`);
     console.log('AUTH SERVICE',employee)
+    const newEmployee = {
+      companyEmail: EmployeeData.company_email,
+      date_of_joining: new Date(),
+      ogid: generateOGID(),
+      employeeType: "FullTime",
+      first_name: EmployeeData.first_name,
+      last_name: EmployeeData.last_name,
+      status: "active",
+    }
     // const isPasswordMatching: boolean = await bcrypt.compare(EmployeeData.password, employee.password);
 
     // if (!isPasswordMatching) throw new HttpException(409, "You're password not matching");

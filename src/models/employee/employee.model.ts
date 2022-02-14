@@ -66,7 +66,7 @@ const employeeSchema: Schema = new Schema(
     },
     isAdmin: {
       type: Boolean,
-      required: true,
+      required: false,
     },
     isTeamLead: {
       type: Boolean,
