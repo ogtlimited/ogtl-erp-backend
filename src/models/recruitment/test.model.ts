@@ -122,6 +122,10 @@ const testSchema: Schema = new Schema({
     type:String,
 
   },
+  interview_status:{
+    type:String,
+
+  },
 
 },
   {
