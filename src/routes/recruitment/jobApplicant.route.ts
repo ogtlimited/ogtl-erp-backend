@@ -18,6 +18,7 @@ class JobApplicantRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, this.jobApplicantController.getJobApplicants);
+    this.router.get(`${this.path}/tasks`, this.jobApplicantController.getJobApplicationTasks);
     this.router.get(`${this.path}/:id`,  this.jobApplicantController.getJobApplicantById);
     this.router.get(`${this.path}-accepted`,authMiddleware, this.jobApplicantController.getAcceptedJobApplicants);
     this.router.post(
@@ -27,7 +28,7 @@ class JobApplicantRoute implements Routes {
     );
     this.router.patch(
       `${this.path}/:id`,
-      [validationMiddleware(UpdateJobApplicantDto, 'body')],
+      [authMiddleware, validationMiddleware(UpdateJobApplicantDto, 'body')],
       this.jobApplicantController.updateJobApplicant,
     );
     this.router.delete(`${this.path}/:id`, authMiddleware, this.jobApplicantController.deleteJobApplicant);

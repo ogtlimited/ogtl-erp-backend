@@ -17,6 +17,7 @@ class TerminationRoute implements Routes {
 
     private initializeRoutes() {
       this.router.get(`${this.path}`, authMiddleware, this.TerminationController.findAllTerminations);
+      this.router.get(`${this.path}/employee/get-by-month`, this.TerminationController.findAllTerminations);
       this.router.get(`${this.path}/:id`, authMiddleware, this.TerminationController.findTerminationById);
       this.router.post(`${this.path}`, [ validationMiddleware(CreateTerminationDto, 'body'),authMiddleware,], this.TerminationController.createTermination);
       this.router.put(`${this.path}/:id`, [validationMiddleware(UpdateTerminationDto, 'body'),authMiddleware,], this.TerminationController.updateTermination);

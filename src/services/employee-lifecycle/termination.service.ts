@@ -6,6 +6,7 @@ import TerminationModel  from '@models/employee-lifecycle/termination.model';
 import { isEmpty } from '@utils/util';
 import EmployeeModel from '@models/employee/employee.model';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
+import moment from "moment";
 
 
 class TerminationService {
@@ -22,6 +23,19 @@ class TerminationService {
     const findTermination: ITermination = await this.TerminationModel.findOne({ _id: id }).populate("employee");
     if (!findTermination) throw new HttpException(404, "no record found");
     return findTermination;
+  }
+
+  public async findAllTerminationsByMonth(): Promise<ITermination[]> {
+    const d = new Date()
+    const month: number = d.getMonth() + 1
+    const year = d.getFullYear() 
+    const EmployeesTerminated: ITermination[] = await this.TerminationModel.find({
+      date_of_joining: {
+          $gte: moment(`${year}/${month}`, 'YYYY/MM').startOf('month').format('x'),
+          $lte: moment(`${year}/${month}`, 'YYYY/MM').endOf('month').format('x')
+      }
+  }).populate('employee');
+    return EmployeesTerminated;
   }
 
   public async createTermination(data: CreateTerminationDto): Promise<ITermination> {

@@ -21,6 +21,15 @@ class TerminationController {
     }
   };
 
+  public findAllTerminationsByMonth = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const data = await this.TerminationService.findAllTerminationsByMonth();
+      res.status(200).json({ data: data});
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public findTerminationById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id: string = req.params.id;
