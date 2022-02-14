@@ -56,11 +56,11 @@ const jobApplicantSchema: Schema = new Schema({
     enum: ["open","sieving","phone screening","interview scheduled"],
     default: "open"
   },
-  status:{
-    type: String,
-    enum: ["not in location","not a graduate","declined"],
-    default: "open"
-  },
+  // status:{
+  //   type: String,
+  //   enum: ["not in location","not a graduate","declined"],
+  //   default: "open"
+  // },
   resume_attachment:{
     type: String,
     default: null
@@ -76,7 +76,7 @@ const jobApplicantSchema: Schema = new Schema({
     default: null,
   },
   interview_date: {
-    type: String,
+    type: Date,
     default: null
   },
   interview_status: {
@@ -90,6 +90,7 @@ const jobApplicantSchema: Schema = new Schema({
   {
     timestamps: true,
   })
+
 
 jobApplicantSchema.post('save', function(doc) {
   const self: any = this;
