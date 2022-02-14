@@ -29,6 +29,7 @@ import attendanceModel  from '@models/attendance/attendance.model';
 import {getWorkTime, calculateLateness}  from '@/utils/attendanceCalculator';
 import AttendanceTypeService from '@/services/attendance/attendance.service';
 import NotificationHelper from './utils/helper/notification.helper';
+import EmployeeService from "./services/employee.service";
 
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config({ path: dirname( module.paths[1] ) + "/.env" });
@@ -226,28 +227,35 @@ class App {
     this.app.use(errorMiddleware);
   }
 
-  // private  initializeCron(){
 
-  //   const task = cron.schedule('* 1 * * 1-5', async function() {
-  //     const attendanceService = new AttendanceTypeService()
-  //     // await attendanceService.generateAttendance()
-  //   //   console.log('running task 1am every day');
-  //   //   const day = "saturday"
-  //   //   if (day == "saturday" || day == "sunday") {
-  //   //     console.log("skipping today")
-  //   //   }else{
-  //   //     console.log("no loveeeeeeeeeeeeeeeee");
-  //   //     const attendanceService = new AttendanceTypeService()
-  //   //     await attendanceService.generateAttendance("project")
-  //   //   }
-  //   })
-  //   const task2 = cron.schedule('* 1 * * 1-5', async function() {
-  //     const applicationService = new LeaveApplicationService()
-  //     await applicationService.addLeavesForEmployees()
-  //   })
-  //    task.start()
-  //    task2.start()
-  // }
+  private  initializeCron(){
+
+    const task = cron.schedule('* 1 * * 1-5', async function() {
+      // const attendanceService = new AttendanceTypeService()
+      // await attendanceService.generateAttendance()
+    //   console.log('running task 1am every day');
+    //   const day = "saturday"
+    //   if (day == "saturday" || day == "sunday") {
+    //     console.log("skipping today")
+    //   }else{
+    //     console.log("no loveeeeeeeeeeeeeeeee");
+    //     const attendanceService = new AttendanceTypeService()
+    //     await attendanceService.generateAttendance("project")
+    //   }
+    })
+    const task2 = cron.schedule('* 1 * * 1-5', async function() {
+      const applicationService = new LeaveApplicationService()
+      await applicationService.addLeavesForEmployees()
+    })
+
+    const employeeStat = cron.schedule('0 0 1 * *', async function() {
+      const employeeStat = new EmployeeService()
+      await employeeStat.EmployeeRatio()
+    })
+    //  task.start()
+    //  task2.start()
+     employeeStat.start()
+  }
 }
 
 export default App;

@@ -18,6 +18,15 @@ class EmployeesController {
     }
   };
 
+  public getEmployeesByMonthStats = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const findAllEmployeesData = await this.EmployeeService.findEmployeeRatio();
+      res.status(200).json({ employees: findAllEmployeesData, message: 'all employees' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public getEmployeeById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const EmployeeId: string = req.params.id;
