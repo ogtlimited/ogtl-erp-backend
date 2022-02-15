@@ -11,8 +11,6 @@ export class CreateTestDto {
   @IsString()
   public status: string;
 
-  @IsString()
-  public phone_number: string;
 
   @IsOptional()
   @IsString()
@@ -21,10 +19,6 @@ export class CreateTestDto {
   @IsOptional()
   @IsString()
   public interviewer: string;
-
-  @IsOptional()
-  @IsString()
-  public email_address: string;
 
   @IsOptional()
   @IsString()
@@ -134,20 +128,12 @@ export class UpdateTestDto {
 
   @IsOptional()
   @IsString()
-  public phone_number: string;
-
-  @IsOptional()
-  @IsString()
   public notes: string;
 
 
   @IsOptional()
   @IsString()
   public interviewer: string;
-
-  @IsOptional()
-  @IsString()
-  public email_address: string;
 
   @IsOptional()
   @IsString()

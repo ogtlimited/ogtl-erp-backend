@@ -14,10 +14,7 @@ const testSchema: Schema = new Schema({
     type: String,
 
   },
-  phone_number:{
-    type: String,
 
-  },
   notes:{
     type:String,
 
@@ -26,10 +23,7 @@ const testSchema: Schema = new Schema({
     type:String,
 
   },
-  email_address:{
-    type:String,
 
-  },
   typing_speed_score:{
     type: String,
     default:0
