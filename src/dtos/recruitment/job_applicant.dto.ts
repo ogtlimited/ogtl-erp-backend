@@ -27,9 +27,13 @@ export class CreateJobApplicantDto {
   @IsString()
   public alternate_mobile: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   public job_opening_id: string;
+
+  @IsOptional()
+  @IsString()
+  public default_job_opening_id: string;
 
   @IsNotEmpty()
   @IsString()

@@ -10,6 +10,10 @@ export interface Employee {
     designation: string;
     reports_to:string;
     first_name: string;
+    last_name: string;
+    middle_name: string;
+    gender: string;
+    image: string;
     branch:string;
     employeeType:string;
     projectId:string;
