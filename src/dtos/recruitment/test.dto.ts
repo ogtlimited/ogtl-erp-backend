@@ -11,9 +11,6 @@ export class CreateTestDto {
   @IsString()
   public status: string;
 
-  @IsDateString()
-  public interview_date: Date;
-
   @IsString()
   public phone_number: string;
 
@@ -127,17 +124,15 @@ export class UpdateTestDto {
   @IsString()
   public _id: string;
 
-
-
+  @IsOptional()
   @IsString()
   public job_applicant_id: string;
 
+  @IsOptional()
   @IsString()
   public status: string;
 
-  @IsDateString()
-  public interview_date: Date;
-
+  @IsOptional()
   @IsString()
   public phone_number: string;
 

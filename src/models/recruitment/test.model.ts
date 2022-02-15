@@ -14,10 +14,6 @@ const testSchema: Schema = new Schema({
     type: String,
 
   },
-  interview_date: {
-    type: Date,
-
-  },
   phone_number:{
     type: String,
 

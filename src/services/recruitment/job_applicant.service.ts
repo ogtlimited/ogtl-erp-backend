@@ -30,7 +30,7 @@ class JobApplicantService {
 
   //Method for finding all job applicants where status is accepted
   public async findAllAcceptedJobApplicants() : Promise<IJobApplicant[]>{
-    return this.jobApplicant.find({status: "Accepted"}).populate('job_opening_id');
+    return this.jobApplicant.find({interview_status: "Scheduled for interview"}).populate('job_opening_id');
   }
 
   //Method for finding a single job applicant
