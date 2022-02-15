@@ -87,8 +87,7 @@ class JobApplicantService {
     //check if no job Applicant data is empty
     if (isEmpty(jobApplicationUpdateData)) throw new HttpException(400, "Bad request");
 
-    let jobApplication: IJobApplicant
-    jobApplication = await this.jobApplicant.findOne({ _id: jobApplicantId });
+    const jobApplication: IJobApplicant  = await this.jobApplicant.findOne({ _id: jobApplicantId });
     if(!jobApplication) throw new HttpException(404, `${jobApplicationUpdateData._id } does not exist`);
 
     return await this.jobApplicationUpdateHelper(agent_id, jobApplicationUpdateData, jobApplication)
@@ -96,6 +95,7 @@ class JobApplicantService {
   }
 
   private async jobApplicationUpdateHelper(agent_id, jobApplicationUpdateData, jobApplication):Promise<IJobApplicant>{
+    console.log(jobApplicationUpdateData, 'job application');
     if(jobApplicationUpdateData.interview_date){
       const updateJobApplicantById = await  this.jobApplicant.findOneAndUpdate(
         {rep_sieving_call: agent_id, _id:jobApplication._id},
