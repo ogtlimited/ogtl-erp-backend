@@ -5,7 +5,6 @@ export interface ITest {
 
   job_applicant_id: string;
   status: string;
-  interview_date: Date;
   phone_number: string;
   notes?: string;
   interviewer?: string;
