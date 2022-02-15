@@ -5,10 +5,8 @@ export interface ITest {
 
   job_applicant_id: string;
   status: string;
-  phone_number: string;
   notes?: string;
   interviewer?: string;
-  email_address?: string;
   typing_speed_score?: string;
   typing_accuracy_score?: string;
   accent_test_score?: string;
