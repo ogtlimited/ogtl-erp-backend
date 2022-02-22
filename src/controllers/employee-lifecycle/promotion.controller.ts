@@ -86,17 +86,12 @@ class PromotionController {
 
  private async sendEmail(subject: string, message: string, receiver: string[]){
   const email = emailTemplate(subject, message, receiver)
-  const sclient = await new SocketLabsClient(parseInt(process.env.SOCKETLABS_SERVER_ID), process.env.SOCKETLABS_INJECTION_API_KEY);
+  const mailgun = require('mailgun-js') ({apiKey:process.env.MAIL_GUN_KEY, domain:process.env.MAIL_GUN_DOMAIN});
 
-  await sclient.send(email).then(
-      (response) => {
-          console.log(response)
-      },
-      (err) => {
-          //Handle error making API call
-          console.log(err);
-      }
-  );
+  mailgun.messages().send(email, (error, body) => {
+      if(error) console.log(error)
+      else console.log(body);
+  });
  }
 }
 
