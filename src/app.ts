@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import LeaveApplicationService from "@services/leave/application.service";
+
 
 process.env['NODE_CONFIG_DIR'] = __dirname + '/configs';
 
@@ -17,14 +17,15 @@ import morgan from 'morgan';
 import { connect, set } from 'mongoose';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { dbConnection } from '@databases';
+import { dbConnection } from './databases';
 import { Routes } from '@interfaces/routes.interface';
-import errorMiddleware from '@middlewares/error.middleware';
-import { logger, stream } from '@utils/logger';
+import errorMiddleware from './middlewares/error.middleware';
+import { logger, stream } from './utils/logger';
 import * as cron from 'node-cron';
 const { io } = require("@/utils/socket");
 const redis = require('redis');
 const client = redis.createClient();
+import LeaveApplicationService from "@services/leave/application.service";
 import attendanceModel  from '@models/attendance/attendance.model';
 import {getWorkTime, calculateLateness}  from '@/utils/attendanceCalculator';
 import AttendanceTypeService from '@/services/attendance/attendance.service';

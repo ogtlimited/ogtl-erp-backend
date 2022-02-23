@@ -8,8 +8,6 @@ import EmployeeModel from '@/models/employee/employee.model';
 import jobApplicationsTaskModel from "@models/recruitment/job-application-task-tracker";
 import {IJobApplicationsTasks} from '@/interfaces/recruitment/job-applications-task';
 import moment = require('moment');
-
-
 class JobApplicantService {
   public jobApplicant = jobApplicantModel;
   public Employee = EmployeeModel
@@ -24,8 +22,8 @@ class JobApplicantService {
   }
 
   //Method for finding all job applicants
-  public async findAllJobApplicants(): Promise<IJobApplicant[]>{
-    return this.jobApplicant.find().populate('job_opening_id, default_job_opening_id');
+  public async findAllJobApplicants(query: any): Promise<IJobApplicant[]>{
+    return this.jobApplicant.find(query).populate('job_opening_id, default_job_opening_id');
   }
 
   //Method for finding all job applicants where status is accepted
@@ -35,6 +33,7 @@ class JobApplicantService {
 
   //Method for finding a single job applicant
   public async findJobApplicantById(jobApplicantId: string): Promise<IJobApplicant>{
+    
     //check if no Job applicant id is empty
     if(isEmpty(jobApplicantId)) throw new HttpException(400,`Job applicant with Id:${jobApplicantId}, does not exist`);
     //find Job applicant using the id provided

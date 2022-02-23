@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from 'express';
 import { NotificationDto, PutNotificationDto } from '@/dtos/notification/notification.dto';
 import { INotification } from '@/interfaces/notification/notification.interface';
 import notificationService from '@/services/notification/notification.service';
-import {modelNames} from '@/utils/schemas'
+import {modelNames, modelDocumentCount} from '@/utils/schemas'
 
 class NotificationController {
     public notificationService;

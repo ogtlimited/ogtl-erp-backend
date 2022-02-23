@@ -28,6 +28,6 @@ export class UpdateDocumentDto {
     public project_id: string;
 
     @IsNotEmpty()
-    public document: File;
+    public document: any;
   }
   
