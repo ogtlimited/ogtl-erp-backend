@@ -25,15 +25,11 @@ class JobApplicantService {
   public async findAllJobApplicants(query: any): Promise<IJobApplicant[]>{
     return this.jobApplicant.find(query).populate('job_opening_id, default_job_opening_id');
   }
-
-  //Method for finding all job applicants where status is accepted
-  public async findAllAcceptedJobApplicants() : Promise<IJobApplicant[]>{
-    return this.jobApplicant.find({interview_status: "Scheduled for interview"}).populate('job_opening_id, default_job_opening_id');
-  }
+  
 
   //Method for finding a single job applicant
   public async findJobApplicantById(jobApplicantId: string): Promise<IJobApplicant>{
-    
+
     //check if no Job applicant id is empty
     if(isEmpty(jobApplicantId)) throw new HttpException(400,`Job applicant with Id:${jobApplicantId}, does not exist`);
     //find Job applicant using the id provided
