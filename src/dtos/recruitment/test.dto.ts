@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import { IsString, IsDateString, IsOptional, IsNotEmpty } from 'class-validator';
+import { IsString, IsDateString, IsOptional } from 'class-validator';
 
 export class CreateTestDto {
 
