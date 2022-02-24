@@ -52,7 +52,8 @@ class ExitService{
             console.log(result);
 
         if(findExit) throw new HttpException(409, `Employee ${ExitData.employee_id} already Resigned`);
-        if(result>=28){
+        const days = findEmployeeById.isAdmin ? 28 : 14
+        if(result>=days){
             const createExitData = await this.Exits.create(ExitData);
             if(createExitData) {
                 await this.employeeModel.findOneAndUpdate(
@@ -66,7 +67,7 @@ class ExitService{
         }
 
 
-            throw new HttpException(409, "Notice days must be greater than 28 days");
+            throw new HttpException(409, `Notice days must be greater than ${days} days`);
 
 
 
