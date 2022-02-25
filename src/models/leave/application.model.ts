@@ -12,7 +12,12 @@ const applicationSchema : Schema = new Schema (
             type: mongoose.Schema.Types.ObjectId,
             required: true,
             ref: "Employee",
-           },
+        },
+        employee_project_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: "Project",
+        },
 
         leave_type_id:{
                 type: String,

@@ -11,11 +11,6 @@ export class CreateTestDto {
   @IsString()
   public status: string;
 
-  @IsDateString()
-  public interview_date: Date;
-
-  @IsString()
-  public phone_number: string;
 
   @IsOptional()
   @IsString()
@@ -24,10 +19,6 @@ export class CreateTestDto {
   @IsOptional()
   @IsString()
   public interviewer: string;
-
-  @IsOptional()
-  @IsString()
-  public email_address: string;
 
   @IsOptional()
   @IsString()
@@ -117,25 +108,23 @@ export class CreateTestDto {
   @IsString()
   public interviewer_rating: string;
 
+ @IsOptional()
+  @IsString()
+  public interview_status: string;
+
 }
 
 export class UpdateTestDto {
   @IsString()
   public _id: string;
 
-
-
+  @IsOptional()
   @IsString()
   public job_applicant_id: string;
 
+  @IsOptional()
   @IsString()
   public status: string;
-
-  @IsDateString()
-  public interview_date: Date;
-
-  @IsString()
-  public phone_number: string;
 
   @IsOptional()
   @IsString()
@@ -145,10 +134,6 @@ export class UpdateTestDto {
   @IsOptional()
   @IsString()
   public interviewer: string;
-
-  @IsOptional()
-  @IsString()
-  public email_address: string;
 
   @IsOptional()
   @IsString()
@@ -237,4 +222,8 @@ export class UpdateTestDto {
   @IsOptional()
   @IsString()
   public interviewer_rating: string;
+
+  @IsOptional()
+  @IsString()
+  public interview_status: string;
 }

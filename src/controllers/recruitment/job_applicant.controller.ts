@@ -4,14 +4,15 @@ import { NextFunction, Request, Response } from 'express';
 import { IJobApplicant } from '@interfaces/recruitment/job_applicant.interface';
 import { CreateJobApplicantDto, UpdateJobApplicantDto } from '@dtos/recruitment/job_applicant.dto';
 import {IJobApplicationsTasks} from "@interfaces/recruitment/job-applications-task";
-
+import url from 'url';
+const querystring = require('querystring');
 class JobApplicantController {
   public jobApplicantService = new JobApplicantService();
 
   //Method for returning all job applicants
   public getJobApplicants = async (req:Request, res:Response, next:NextFunction) =>{
     try {
-      const findAllJobApplicants: IJobApplicant[] = await this.jobApplicantService.findAllJobApplicants()
+      const findAllJobApplicants: IJobApplicant[] = await this.jobApplicantService.findAllJobApplicants(req.query)
       res.status(200).json({data:findAllJobApplicants, totalJobApplicants: findAllJobApplicants.length, message:"All job applicants"})
     }catch (error) {
       next(error)

@@ -5,11 +5,8 @@ export interface ITest {
 
   job_applicant_id: string;
   status: string;
-  interview_date: Date;
-  phone_number: string;
   notes?: string;
   interviewer?: string;
-  email_address?: string;
   typing_speed_score?: string;
   typing_accuracy_score?: string;
   accent_test_score?: string;
@@ -32,5 +29,6 @@ export interface ITest {
   full_screen_mode_always_active?: string;
   mouse_always_in_assessment_window?: string;
   interviewer_rating?:string;
+  interview_status?:string;
 
 }

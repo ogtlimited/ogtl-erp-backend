@@ -37,7 +37,11 @@ const clientSchema :Schema = new Schema(
     country: {
       type: String,
         required: true
-    }, 
+    },
+    project_id: {
+      type: Schema.Types.ObjectId,
+      ref: 'Project',
+    },
 
     company: {
       type: String,

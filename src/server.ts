@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
-import ShiftAssignmentRoute from '@routes/shift/shiftAssignment';
+
 
 process.env['NODE_CONFIG_DIR'] = __dirname + '/configs';
 
 import 'dotenv/config';
-import App from '@/app';
+import App from './app';
 import AuthRoute from '@routes/auth.route';
 import IndexRoute from '@routes/index.route';
 import UsersRoute from '@routes/users.route';
@@ -39,6 +39,7 @@ import PersonalDetailsRoute from './routes/employee/personal-details.route';
 import SalaryDetailsRoute from './routes/employee/salary-details.route';
 import WorkExperienceRoute from './routes/employee/work-experience.route';
 import ShiftRequestRoute from '@routes/shift/shiftRequest';
+import ShiftAssignmentRoute from '@routes/shift/shiftAssignment';
 import JobOpeningRoute from '@routes/recruitment/jobOpening.route';
 import JobOfferRoute from '@routes/recruitment/jobOffer.route';
 import JobApplicantRoute from '@routes/recruitment/jobApplicant.route';

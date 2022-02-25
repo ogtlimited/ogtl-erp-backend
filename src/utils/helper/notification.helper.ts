@@ -2,10 +2,6 @@
 import  Email  from '@models/notification/email.model';
 
 import notificationModel from '../../models/notification/notification.model';
-
-import { HttpException } from '@exceptions/HttpException';
-import { isEmpty } from '@utils/util';
-const { SocketLabsClient } = require('@socketlabs/email');
 import {emailTemplate} from '../email';
 const { Socket } = require("@/utils/socket");
 const redis = require('redis');
@@ -71,17 +67,14 @@ class NotificationHelper {
 
     private async sendEmail(subject: string, message: string, receiver: string[]){
         const email = emailTemplate(subject, message, receiver)
-        const sclient = await new SocketLabsClient(parseInt(process.env.SOCKETLABS_SERVER_ID), process.env.SOCKETLABS_INJECTION_API_KEY);
+        
+        const mailgun = require('mailgun-js') ({apiKey:process.env.MAIL_GUN_KEY, domain:process.env.MAIL_GUN_DOMAIN});
 
-        await sclient.send(email).then(
-            (response) => {
-                console.log(response)
-            },
-            (err) => {
-                //Handle error making API call
-                console.log(err);
-            }
-        );
+        mailgun.messages().send(email, (error, body) => {
+            if(error) console.log(error)
+            else console.log(body);
+        });
+
     }
 
     private async persistEmail(subject: string, message: string, receiver: string, module: string, sender: string){

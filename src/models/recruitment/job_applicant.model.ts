@@ -47,6 +47,12 @@ const jobApplicantSchema: Schema = new Schema({
     ref: 'JobOpening',
     default: null,
   },
+  default_job_opening_id: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'DefaultJobOpening',
+    default: null,
+  },
   application_source:{
     type: String,
     default:null,

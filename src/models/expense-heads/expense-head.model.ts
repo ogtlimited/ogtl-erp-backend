@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 // import { IAttendance } from '@interfaces/attendance-interface/attendance-interface';
 // import { IExpenseHead } from '@/interfaces/expense-head/expense-head.interface';
-import { model, Schema } from 'mongoose';
+import { model, Schema, Document } from 'mongoose';
 import { IExpenseHead } from '@/interfaces/expense-head/expense-head.interface';
 
 const expenseHeadSchema: Schema = new Schema(

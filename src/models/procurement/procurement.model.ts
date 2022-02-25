@@ -2,7 +2,7 @@
 // import { IAttendance } from '@interfaces/attendance-interface/attendance-interface';
 
 import { IProcurement } from '@/interfaces/procurement/procurement.interface';
-import { model, Schema } from 'mongoose';
+import { model, Schema, Document } from 'mongoose';
 
 const procurementSchema: Schema = new Schema(
   {

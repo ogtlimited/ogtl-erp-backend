@@ -22,14 +22,23 @@ const campaignCreationEmail = (email, body) => {
   return { from, to, subject, textBody, messageType }
 }
 
+// const emailTemplate = (email_subject, message, receiver) => {
+//   const from = 'hr@outsourceglobal.com'
+//   const to = receiver
+//   const subject = email_subject
+//   const textBody = message
+//   const messageType = 'basic'
+
+//   return { from, to, subject, textBody, messageType }
+// }
+
 const emailTemplate = (email_subject, message, receiver) => {
   const from = 'hr@outsourceglobal.com'
   const to = receiver
   const subject = email_subject
-  const textBody = message
-  const messageType = 'basic'
+  const text = message
 
-  return { from, to, subject, textBody, messageType }
+  return { from, to, subject, text }
 }
 
 const sendEmail = async (email_subject, message, receiver, sender) => {

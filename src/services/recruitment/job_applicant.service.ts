@@ -8,8 +8,6 @@ import EmployeeModel from '@/models/employee/employee.model';
 import jobApplicationsTaskModel from "@models/recruitment/job-application-task-tracker";
 import {IJobApplicationsTasks} from '@/interfaces/recruitment/job-applications-task';
 import moment = require('moment');
-
-
 class JobApplicantService {
   public jobApplicant = jobApplicantModel;
   public Employee = EmployeeModel
@@ -24,21 +22,22 @@ class JobApplicantService {
   }
 
   //Method for finding all job applicants
-  public async findAllJobApplicants(): Promise<IJobApplicant[]>{
-    return this.jobApplicant.find().populate('job_opening_id');
+  public async findAllJobApplicants(query: any): Promise<IJobApplicant[]>{
+    return this.jobApplicant.find(query).populate('job_opening_id, default_job_opening_id');
   }
 
   //Method for finding all job applicants where status is accepted
   public async findAllAcceptedJobApplicants() : Promise<IJobApplicant[]>{
-    return this.jobApplicant.find({status: "Accepted"}).populate('job_opening_id');
+    return this.jobApplicant.find({interview_status: "Scheduled for interview"}).populate('job_opening_id, default_job_opening_id');
   }
 
   //Method for finding a single job applicant
   public async findJobApplicantById(jobApplicantId: string): Promise<IJobApplicant>{
+    
     //check if no Job applicant id is empty
     if(isEmpty(jobApplicantId)) throw new HttpException(400,`Job applicant with Id:${jobApplicantId}, does not exist`);
     //find Job applicant using the id provided
-    const findJobApplicant:IJobApplicant = await this.jobApplicant.findOne({_id:jobApplicantId}).populate('job_opening_id, rep_sieving_call ');
+    const findJobApplicant:IJobApplicant = await this.jobApplicant.findOne({_id:jobApplicantId}).populate('job_opening_id, rep_sieving_call, default_job_opening_id ');
     //throw error if Job applicant does not exist
     if(!findJobApplicant) throw new HttpException(409,`Job applicant with Id:${jobApplicantId}, does not exist`);
     //return Job applicant
@@ -68,7 +67,7 @@ class JobApplicantService {
     );
     // return created job Applicant
     const jobApplication = await this.jobApplicant.create(jobApplicant);
-    let existingTask = await jobApplicationsTaskModel.exists({in_house_agent:min._id,  createdAt: {$gte: this.startOfDay, $lt: this.endOfDay}})
+    const existingTask = await jobApplicationsTaskModel.exists({in_house_agent:min._id,  createdAt: {$gte: this.startOfDay, $lt: this.endOfDay}})
     if(existingTask){
       await this.addToAssignedRecords(min._id)
     }else{
@@ -87,8 +86,7 @@ class JobApplicantService {
     //check if no job Applicant data is empty
     if (isEmpty(jobApplicationUpdateData)) throw new HttpException(400, "Bad request");
 
-    let jobApplication: IJobApplicant
-    jobApplication = await this.jobApplicant.findOne({ _id: jobApplicantId });
+    const jobApplication: IJobApplicant  = await this.jobApplicant.findOne({ _id: jobApplicantId });
     if(!jobApplication) throw new HttpException(404, `${jobApplicationUpdateData._id } does not exist`);
 
     return await this.jobApplicationUpdateHelper(agent_id, jobApplicationUpdateData, jobApplication)
@@ -96,8 +94,9 @@ class JobApplicantService {
   }
 
   private async jobApplicationUpdateHelper(agent_id, jobApplicationUpdateData, jobApplication):Promise<IJobApplicant>{
+    console.log(jobApplicationUpdateData, 'job application');
     if(jobApplicationUpdateData.interview_date){
-      let updateJobApplicantById = await  this.jobApplicant.findOneAndUpdate(
+      const updateJobApplicantById = await  this.jobApplicant.findOneAndUpdate(
         {rep_sieving_call: agent_id, _id:jobApplication._id},
         {
           $set: {process_stage: "interview scheduled", interview_status: "Scheduled for interview",  interview_date: jobApplicationUpdateData.interview_date}
@@ -109,7 +108,7 @@ class JobApplicantService {
     }
 
     if(jobApplicationUpdateData.process_stage){
-      let updateJobApplicantById = await  this.jobApplicant.findOneAndUpdate(
+      const updateJobApplicantById = await  this.jobApplicant.findOneAndUpdate(
         {rep_sieving_call: jobApplication.rep_sieving_call, _id:jobApplication._id},
         {
           $set: {process_stage: jobApplicationUpdateData.process_stage}

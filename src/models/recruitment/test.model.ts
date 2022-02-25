@@ -14,14 +14,7 @@ const testSchema: Schema = new Schema({
     type: String,
 
   },
-  interview_date: {
-    type: Date,
 
-  },
-  phone_number:{
-    type: String,
-
-  },
   notes:{
     type:String,
 
@@ -30,10 +23,7 @@ const testSchema: Schema = new Schema({
     type:String,
 
   },
-  email_address:{
-    type:String,
 
-  },
   typing_speed_score:{
     type: String,
     default:0
@@ -119,6 +109,10 @@ const testSchema: Schema = new Schema({
 
   },
   interviewer_rating:{
+    type:String,
+
+  },
+  interview_status:{
     type:String,
 
   },
