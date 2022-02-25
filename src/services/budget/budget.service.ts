@@ -88,8 +88,8 @@ class BudgetService {
   - add budget validation based on type
 
   */
-  public async create(req, data: CreateBudgetDto): Promise<IBudget> {
-    const newData: IBudget = data;
+  public async create(req, data: IBudget): Promise<IBudget> {
+    const newData = data;
     // const existConstrutor:any = {
     //   startDate: new Date(newData.startDate),
     //   endDate: new Date(newData.endDate)

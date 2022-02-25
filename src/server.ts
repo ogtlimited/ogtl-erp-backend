@@ -87,14 +87,12 @@ import BillsRoute from '@routes/vendor/bills.route';
 import ProcurementRoute from '@/routes/procurement/procurement.route'
 import PaymentRoute from './routes/payments/payment.route';
 import ExpenseHeadDraftRoute from "@routes/expense-head/expense-head.route";
-import SalarySettingRoute from "@routes/salary-setting/salary-setting.route";
-
+import EmployeesSalaryRoute from "@routes/payroll/employees-salary.route";
 
 validateEnv();
 
 const app = new App([
   new IndexRoute(),
-  new SalarySettingRoute(),
   new UsersRoute(),
   new AuthRoute(),
   new EmployeesRoute(),
@@ -172,7 +170,8 @@ const app = new App([
   new PaymentRoute(),
   new ExpenseHeadDraftRoute(),
   new documentRoute(),
-  new JobDocumentRoute()
+  new JobDocumentRoute(),
+  new EmployeesSalaryRoute()
 ]);
 
 const server = app.listen();
