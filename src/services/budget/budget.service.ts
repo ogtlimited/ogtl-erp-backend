@@ -89,7 +89,7 @@ class BudgetService {
 
   */
   public async create(req, data: CreateBudgetDto): Promise<IBudget> {
-    const newData: IBudget = data;
+    const newData: any = data;
     // const existConstrutor:any = {
     //   startDate: new Date(newData.startDate),
     //   endDate: new Date(newData.endDate)
