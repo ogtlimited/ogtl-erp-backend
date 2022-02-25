@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 // import { Idepartment } from '@interfaces/department-interface/department-interface';
-import { model, Schema } from 'mongoose';
+import { model, Schema,Document } from 'mongoose';
 import { IDepartment } from '@/interfaces/employee-interface/department.interface';
 import NotificationHelper from '@/utils/helper/notification.helper';
 

@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { ILeaveSettings } from "@/interfaces/leave-interface/leave-settings.interface";
-import { Schema, model } from "mongoose";
+import { Schema, model,Document } from "mongoose";
 
 
 

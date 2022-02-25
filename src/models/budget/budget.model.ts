@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 // import { IAttendance } from '@interfaces/attendance-interface/attendance-interface';
 import { IBudget } from '@/interfaces/budget/budget.interface';
-import { model, Schema } from 'mongoose';
+import { model, Schema, Document } from 'mongoose';
 
 const budgetSchema: Schema = new Schema(
   {
