@@ -23,7 +23,7 @@ class JobApplicantService {
 
   //Method for finding all job applicants
   public async findAllJobApplicants(query: any): Promise<IJobApplicant[]>{
-    return this.jobApplicant.find(query).populate('job_opening_id, default_job_opening_id');
+    return this.jobApplicant.find(query).populate('job_opening_id, default_job_opening_id rep_sieving_call');
   }
   
 
@@ -41,16 +41,21 @@ class JobApplicantService {
   }
 
   //Method for creating job applicant
-  public async createJobApplicant(jobApplicantData: CreateJobApplicantDto): Promise<IJobApplicant>{
+  public async createJobApplicant(jobApplicantData: CreateJobApplicantDto): Promise<any>{
     //check if no job applicant data is empty
     if (isEmpty(jobApplicantData)) throw new HttpException(400, "Bad request");
-    const employees = await EmployeeModel.find({isRepSiever: true}).select('sievedApplicationCount')
-    console.log(employees, 'EMPLOYEES');
+    const jobkey =  jobApplicantData.job_opening_id ? 'job_opening_id': 'default_job_opening_id'
+    const applicant = await this.jobApplicant.find({
+      email_address: jobApplicantData.email_address,
+      [jobkey]: jobApplicantData[jobkey]
+     })
+
+     if(applicant.length > 0) throw new HttpException(409, "You already applied for this position")
+    const employees = await EmployeeModel.find({isRepSiever: true}).select('sievedApplicationCount');
     employees.sort(function (a, b) {
         return a.sievedApplicationCount - b.sievedApplicationCount
     })
     const min = employees[0]
-    console.log(min, employees, 'MIN EMPLOYEE')
     const jobApplicant = {...jobApplicantData, rep_sieving_call: min._id }
     await EmployeeModel.findOneAndUpdate(
       { _id: min._id },

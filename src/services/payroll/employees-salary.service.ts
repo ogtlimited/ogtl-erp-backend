@@ -40,7 +40,7 @@ class EmployeeSalaryService {
   ]
 
   public async findAll(query): Promise<IEmployeesSalary[]> {
-    const employeeSalaries = await employeesSalaryModel.find(query,{employeeId:0})
+    const employeeSalaries = await employeesSalaryModel.find(query).populate('employeeId')
     return employeeSalaries;
   }
 
@@ -69,13 +69,13 @@ class EmployeeSalaryService {
     console.log(data, "data ----> ")
     for(let idx = 0; idx < data.length; idx++){
       console.log("looping bish")
-      let record = data[idx]
+      const record = data[idx]
       const employeeInfo  = await EmployeeModel.findOne({company_email: record.company_email}).populate({path: 'department'});
       if(!employeeInfo){
         nonExistingEmployees.push(record)
         continue
       }
-      let result = await this.salaryGeneratorHelper(record, employeeInfo, salarySetting)
+      const result = await this.salaryGeneratorHelper(record, employeeInfo, salarySetting)
       result.employeeId = employeeInfo._id
       employeesSalary.push(result)
     }
@@ -124,7 +124,7 @@ class EmployeeSalaryService {
       const rates =[21000,54000,129000,224000,560000,1232000]
       for(let i=0; i < this.schema.length; i++){
         if(annualTaxableIncome <= this.schema[i].group){
-          let current = annualTaxableIncome - this.schema[i -1].group;
+          const current = annualTaxableIncome - this.schema[i -1].group;
           return rates[i-1] + current * this.schema[i].percent
         }
       }
