@@ -20,7 +20,6 @@ class JobApplicantRoute implements Routes {
     this.router.get(`${this.path}`, this.jobApplicantController.getJobApplicants);
     this.router.get(`${this.path}/tasks`, this.jobApplicantController.getJobApplicationTasks);
     this.router.get(`${this.path}/:id`,  this.jobApplicantController.getJobApplicantById);
-    this.router.get(`${this.path}-accepted`,authMiddleware, this.jobApplicantController.getAcceptedJobApplicants);
     this.router.post(
       `${this.path}`,
       [validationMiddleware(CreateJobApplicantDto, 'body')],
