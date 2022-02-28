@@ -66,12 +66,12 @@ public async findDepartmentById(DepartmentId:string) : Promise<IDepartment>{
      */
 
      public async updateDepartment(DepartmentId:string,DepartmentData: UpdateDepartmentDto)  : Promise<IDepartment>{
-
+      console.log(DepartmentData)
         //Check if data is empty
         if (isEmpty(DepartmentData)) throw new HttpException(400, "No data provided");
         console.log(DepartmentData)
         const updateDepartmentById: IDepartment = await this.Departments.findByIdAndUpdate({
-            _id: DepartmentData._id
+            _id: DepartmentId
           },
           {
             $set: {department: DepartmentData.department}
