@@ -18,6 +18,7 @@ import deductionTypeModel from '@/models/payroll/deductionType.model';
 import moment = require('moment');
 import EmployeeModel from '@models/employee/employee.model';
 import applicationModel from '@/models/leave/application.model';
+import employeesSalaryModel from "@models/payroll/employees-salary";
 
 
 class AttendanceTypeService {
@@ -113,7 +114,8 @@ class AttendanceTypeService {
     const latenessDeduction = await deductionTypeModel.findOne({title:"lateness"})
     const ncnsDeduction = await deductionTypeModel.findOne({title:"NCNS"})
 
-    for(const employeeData of attendanceTypeData){
+    for(const employeeData of attendanceTypeData.attendances){
+      console.log(employeeData)
       const result = await this.generatePossibleDeductions(employeeData.companyEmail, employeeData, latenessDeduction, ncnsDeduction)
       const attendanceConstructor: ICreateAttendance = AttendanceTypeService.attendanceData(employeeData, result);
 
@@ -216,8 +218,8 @@ class AttendanceTypeService {
       const ncnsDeduction = ncnsDeductionData
       const employeesDeductions = []
       let deductionAmount = 0
-      let deductionsConstructor:IAttendanceDeduction
-      let latenessConstructor:IAttendanceDeduction
+      let deductionsConstructor:any = {}
+      let latenessConstructor:any = {}
 
       let employee:any = await EmployeeModel.findOne({company_email: employeeEmail, status: {$eq: "active"} }, {
         company_email: 1,
@@ -231,8 +233,13 @@ class AttendanceTypeService {
           end_time: 1,
           expectedWorkTime:1
         },
-      }).populate({path:'salaryStructure_id', select:{grossPay:1, netPay:1}})
+      })
+
+      console.log(employee, employeeEmail, employee._id, "employee ---------------------------->1")
+      let employeeSalary: any = await employeesSalaryModel.findOne({employeeId: employee._id})
       employee = employee.toObject();
+      employeeSalary = employeeSalary.toObject()
+      employee.employeeSalary = employeeSalary
 
 
       // const empHours = moment(attendanceRecord.clockInTime).subtract(1, 'hour').format("HH:mm")
@@ -251,7 +258,7 @@ class AttendanceTypeService {
         })
 
         if(!empLeave){
-          deductionAmount = ncnsDeduction.percentage * employee.salaryStructure_id.grossPay;
+          deductionAmount = ncnsDeduction.percentage * employee.employeeSalary.monthlySalary;
           deductionsConstructor.employeeId= employee._id;
           deductionsConstructor.deductionTypeId= ncnsDeduction._id;
           deductionsConstructor.amount= deductionAmount;
@@ -262,7 +269,7 @@ class AttendanceTypeService {
 
       else if (attendanceRecord.clockOutTime ==  null) {
         // console.log(attendanceRecord == null, "attendance record clock out time check");
-        deductionAmount = ncnsDeduction.percentage * employee.salaryStructure_id.grossPay;
+        deductionAmount = ncnsDeduction.percentage * employee.employeeSalary.monthlySalary;
         deductionsConstructor.employeeId= employee._id;
         deductionsConstructor.deductionTypeId= ncnsDeduction._id;
         deductionsConstructor.amount= deductionAmount;
@@ -274,7 +281,7 @@ class AttendanceTypeService {
       else if(attendanceRecord.clockInTime && attendanceRecord.clockOutTime){
 
         if(employeeLateness > 0) {
-          deductionAmount = (latenessDeduction.percentage * employee.salaryStructure_id.grossPay) * employeeLateness;
+          deductionAmount = (latenessDeduction.percentage * employee.employeeSalary.monthlySalary) * employeeLateness;
           // console.log(employeeLateness, deductionAmount, "emp hours  ---------------------->>>>")
           latenessConstructor.employeeId= employee._id
           latenessConstructor.deductionTypeId= latenessDeduction._id
@@ -287,7 +294,7 @@ class AttendanceTypeService {
         //incomplete hours
         if (parseInt(attendanceRecord.totalHours) < expectedWorkHours) {
           const workTimeDeficit = expectedWorkHours - attendanceRecord.totalHours
-          deductionAmount = Math.floor(((employee.salaryStructure_id.grossPay/22)/expectedWorkHours)) * workTimeDeficit;
+          deductionAmount = Math.floor(((employee.employeeSalary.monthlySalary/22)/expectedWorkHours)) * workTimeDeficit;
           deductionsConstructor.employeeId= employee._id
           deductionsConstructor.description= "incompleteHours"
           deductionsConstructor.amount= deductionAmount
