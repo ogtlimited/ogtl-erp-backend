@@ -44,8 +44,8 @@ class EmployeeSalaryService {
     return employeeSalaries;
   }
 
-  public async findById(ogId: string): Promise<IEmployeesSalary> {
-    const employeeSalary: IEmployeesSalary = await this.employeeSalary.findOne({ ogId: ogId });
+  public async findById(id: string): Promise<IEmployeesSalary> {
+    const employeeSalary: IEmployeesSalary = await this.employeeSalary.findOne({ employeeId: id });
     if (!employeeSalary) throw new HttpException(404, "no record found");
     return employeeSalary;
   }
