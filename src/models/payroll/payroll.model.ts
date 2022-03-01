@@ -8,32 +8,6 @@ import { model, Schema, Document } from 'mongoose';
 */
 const payRollSchema: Schema = new Schema(
   {
-   
-    departmentId: {
-      type: Schema.Types.ObjectId,
-      ref: "Department"
-    },
-    projectId: {
-      type: Schema.Types.ObjectId,
-      ref: "Project"
-    },
-    status: {
-      type: Schema.Types.ObjectId,
-      ref: "Status"
-    },
-    salarySlips:[
-       {
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: "SalarySlip"
-      }
-    ],
-    startDate: {
-      type: Date,
-    },
-    endDate: {
-      type: Date,
-    },
     totalAmount: {
       type: Number,
     },
