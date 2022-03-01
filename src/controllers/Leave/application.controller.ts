@@ -19,11 +19,22 @@ class LeaveApplicationController {
       next(error);
     }
   };
-
   public findAllTeamMembersLeave = async (req: any, res: Response, next: NextFunction) => {
     try {
       const allTeamMembersLeave: ILeaveApplication[] = await this.leaveApplicationService.findAllTeamMembersLeave(req.user);
       res.status(200).json({ data: allTeamMembersLeave});
+    } catch (error) {
+      next(error);
+    }
+  };
+
+
+
+  public findAllLeaveapplicationsClient = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const ClientId: string = req.params.id;
+      const allLeaveApplicationClient: ILeaveApplication[] = await this.leaveApplicationService.findAllLeaveapplicationsClient(ClientId);
+      res.status(200).json({ data: allLeaveApplicationClient});
     } catch (error) {
       next(error);
     }
