@@ -19,7 +19,7 @@ class EmployeesSalaryRoute implements Routes {
         this.router.get(`${this.path}`, [authMiddleware], this.EmployeeSalaryController.findAll);
         this.router.get(`${this.path}/:id`,[authMiddleware], this.EmployeeSalaryController.findById);
         this.router.post(`${this.path}`,[authMiddleware], this.EmployeeSalaryController.create);
-        // this.router.patch(`${this.path}`, validationMiddleware(DTO, 'body'), this.salaryStructureAssignmentController.createIncentive);
+        this.router.patch(`${this.path}`, [authMiddleware, validationMiddleware(CreateEmployeeSalaryDto, 'body')], this.EmployeeSalaryController.updateEmployeeSalary);
     }
   }
   export default EmployeesSalaryRoute;

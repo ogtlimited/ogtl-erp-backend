@@ -192,9 +192,7 @@ class SalarySlipService {
     return `${records.length} salary slips created`;
   }
 
-  public async employeeDeductions(id): Promise<any>{
-
-  }
+  // public async employeeDeductions(id): Promise<any>{}
 
 }
 
