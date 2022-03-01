@@ -26,7 +26,7 @@ class CoachingFormService {
        if (isEmpty(CoachingFormId)) throw new HttpException(400, "No Id provided");
 
        //find CoachingForm with Id given
-       const findCoachingForm:CoachingFormInterface = await this.Coaching.findOne({ _id:CoachingFormId  });
+       const findCoachingForm:CoachingFormInterface = await this.Coaching.findOne({ _id:CoachingFormId  }).populate('supervisor');
 
        if(!findCoachingForm) throw new HttpException(409, "CoachingForm with that Id doesnt exist");
 
@@ -40,7 +40,7 @@ class CoachingFormService {
        if (isEmpty(employeeId)) throw new HttpException(400, "No Id provided");
 
        //find CoachingForm with Id given
-       const findCoachingForm:CoachingFormInterface[] = await this.Coaching.find({ employee_id: employeeId, status: 'submitted'  }).populate('employee_id supervisor designation', 'first_name last_name middle_name ogid designation');
+       const findCoachingForm:CoachingFormInterface[] = await this.Coaching.find({ employee_id: employeeId, status: 'submitted'  }).populate({path:'employee_id supervisor',populate:{path:'designation'}})
 
        if(!findCoachingForm) throw new HttpException(409, "CoachingForm with that Id doesnt exist");
 

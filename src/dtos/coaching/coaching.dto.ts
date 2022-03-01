@@ -35,6 +35,10 @@ export class CoachingFormDTO {
 
 export class CoachingFormUpdateDTO {
 
+  @IsOptional()
+  @IsString()
+  public _id: string;
+
     @IsOptional()
     @IsString()
     public coaching_type: string;
