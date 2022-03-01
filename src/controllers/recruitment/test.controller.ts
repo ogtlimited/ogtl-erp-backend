@@ -10,7 +10,7 @@ class TestController {
   //Method for returning all Test
   public getTests = async (req:Request, res:Response, next:NextFunction) =>{
     try {
-      const findAllTest: ITest[] = await this.testService.findAllTests();
+      const findAllTest: ITest[] = await this.testService.findAllTests(req.query);
       res.status(200).json({data:findAllTest, totalTest: findAllTest.length, message:"All Test"})
     }catch (error) {
       next(error)
