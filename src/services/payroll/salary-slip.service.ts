@@ -164,7 +164,6 @@ class SalarySlipService {
     if(today.getDate() != 25){
       throw new HttpException(401, "Cannot generate slip before the 25th!")
     }
-
     const noSalaries = []
     const employeeSalaries = await employeesSalaryModel.find({}).populate(
       {path: 'employeeId', select: {first_name: 1, last_name:1, date_of_joining: 1 }}
