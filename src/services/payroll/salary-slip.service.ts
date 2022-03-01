@@ -71,11 +71,14 @@ class SalarySlipService {
     return [{salarySlips: results}, {total}];
   }
 
-  public async findById(id: string): Promise<any> {
-    if (isEmpty(id)) throw new HttpException(400, "provide Id");
+  public async findById(query): Promise<any> {
+    // if (isEmpty(id)) throw new HttpException(400, "provide Id");
     const employeeSlip: any = {}
     // const salarySlip: ISalarySlip = await this.salarySlipModel.findOne({ _id: id }).populate('deductions salaryStructure employeeId');
-    const salarySlip: any = await this.salarySlipModel.findOne({_id: id})
+    const salarySlip: any = await this.salarySlipModel.findOne({employeeId: query.empId,   createdAt: {
+        $gte: query.startOfMonth,
+        $lte: query.endOfMonth
+      }})
       .populate({path: "projectId", select: {project_name: 1}})
       .populate({path: "departmentId", select: {project_name: 1}})
       .populate({path: 'deductions', populate: {path: 'deductionTypeId', model: 'DeductionType'}})
@@ -180,6 +183,10 @@ class SalarySlipService {
 
     await this.salarySlipModel.insertMany(records);
     return `${records.length} salary slips created`;
+  }
+
+  public async employeeDeductions(id): Promise<any>{
+
   }
 
 }

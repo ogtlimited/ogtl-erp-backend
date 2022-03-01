@@ -8,7 +8,7 @@ import SalarySlipService from '@/services/payroll/salary-slip.service';
 
 class SalarySlipController {
   public salarySlipService = new SalarySlipService();
-  
+
   public findAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const salarySlips = await this.salarySlipService.findAll(req.query);
@@ -20,8 +20,8 @@ class SalarySlipController {
 
   public findById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const id: string = req.params.id;
-      const data = await this.salarySlipService.findById(id);
+      // const id: string = req.params.id;
+      const data = await this.salarySlipService.findById(req.query);
       res.status(200).json({ data: data});
     } catch (error) {
       next(error);
@@ -31,22 +31,22 @@ class SalarySlipController {
   public create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const newData: CreateSalarySlipDto = req.body;
-      const createdData: ISalarySlip = await this.salarySlipService.create(newData); 
+      const createdData: ISalarySlip = await this.salarySlipService.create(newData);
       res.status(201).json({ data: createdData});
     } catch (error) {
-      
+
       next(error);
     }
   };
-  
+
   public createDepartmentPayroll = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const newData: CreateSalarySlipDto = req.body;
-      const createdData: ISalarySlip = await this.salarySlipService.createDepartmentPayroll(newData); 
+      const createdData: ISalarySlip = await this.salarySlipService.createDepartmentPayroll(newData);
       res.status(201).json({ data: createdData});
     } catch (error) {
       console.log(error);
-      
+
       next(error);
     }
   };
