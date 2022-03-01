@@ -9,10 +9,8 @@ const salarySlipSchema: Schema = new Schema(
       required: true,
       ref: "Employee"
     },
-    salaryStructure: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "SalaryStructure"
+    employeeSalary: {
+      type: Object,
     },
     departmentId: {
       type: Schema.Types.ObjectId,
@@ -26,11 +24,6 @@ const salarySlipSchema: Schema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Status"
     },
-    loans: [{
-      type: Schema.Types.ObjectId,
-      ref: "Loans",
-      default:null
-    }],
     deductions: [{
       type: Schema.Types.ObjectId,
       ref: "Deduction",
@@ -55,7 +48,7 @@ const salarySlipSchema: Schema = new Schema(
       ref: 'Employee',
     },
   },
-  
+
   {
     timestamps: true,
   },

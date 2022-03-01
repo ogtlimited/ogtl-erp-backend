@@ -34,9 +34,22 @@ class LeaveApplicationService {
           path: 'designation',
           model: 'Designation',
         },
-      });
+      }).populate({
+        path:'employee_project_id',
+        model : 'Project',
+            });
     return application;
   }
+
+  public async findAllLeaveapplicationsClient(ClientId: string): Promise<ILeaveApplication[]> {
+   
+    const application: ILeaveApplication[] = await this.application
+      .find({employee_project_id : ClientId})
+    
+    return application;
+  }
+
+
 
   public async findAllTeamMembersLeave(user): Promise<ILeaveApplication[]> {
     const leaveApplications = await this.application.find({ leave_approver: user._id });

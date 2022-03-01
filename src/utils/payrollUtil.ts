@@ -33,30 +33,30 @@ export const officeQueryGenerator = queryParams => {
   let officeQuery: any = {};
   if (isEmpty(queryParams)) {
     return officeQuery;
-  }  
+  }
   if (queryParams.departmentId) {
     if (queryParams.startOfMonth && queryParams.endOfMonth) {
       officeQuery.createdAt = {
-        '$gte': new Date(queryParams.startOfMonth), 
+        '$gte': new Date(queryParams.startOfMonth),
         '$lte': new Date(queryParams.endOfMonth)
       }
     }
     officeQuery.departmentId = new ObjectId(queryParams.departmentId)
     return officeQuery
-  }  
+  }
   if (queryParams.projectId) {
     if (queryParams.startOfMonth && queryParams.endOfMonth) {
     officeQuery.createdAt = {
-      '$gte': new Date(queryParams.startOfMonth), 
+      '$gte': new Date(queryParams.startOfMonth),
       '$lte': new Date(queryParams.endOfMonth)
     }}
     officeQuery.projectId = new ObjectId(queryParams.projectId)
     return officeQuery
   }
   else{
-    officeQuery = { 
+    officeQuery = {
       'createdAt': {
-        '$gte': new Date(queryParams.startOfMonth), 
+        '$gte': new Date(queryParams.startOfMonth),
         '$lte': new Date(queryParams.endOfMonth)
       },
      };
@@ -76,20 +76,20 @@ export const attendanceofficeQueryGenerator = queryParams => {
   return officeQuery;
 };
 
-export const calculateEmployeeDeductions = async (employee, month, salaryStructure) => {
+export const calculateEmployeeDeductions = async (employeeId, netPay) => {
   // console.log(employee._id);
 
   const employeeDeductions: any = {
     hasDeductions: false,
     deductionIds: [],
-    totalAmount:0
+    salaryAfterDeductions:0
   };
-  const facetQuery = deductionAggBuilder(employee._id);
+  const facetQuery = deductionAggBuilder(employeeId);
   const deductions: any = await deductionModel.aggregate(facetQuery);
   const { deductionIds, totalDeductions } = deductions[0];
   if (deductionIds.length > 0) {
     employeeDeductions.hasDeductions = true;
-    employeeDeductions.totalAmount = salaryStructure.netPay - totalDeductions[0].sum;
+    employeeDeductions.salaryAfterDeductions = netPay - totalDeductions[0].sum;
     for (let index = 0; index < deductionIds.length; index++) {
       const deduction = deductionIds[index];
       employeeDeductions.deductionIds.push(deduction['_id']);
