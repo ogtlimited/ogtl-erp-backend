@@ -85,7 +85,9 @@ class SalarySlipService {
     if (!salarySlip) {
       throw new HttpException(404, "no record found")
     }
-    const employeeSalary = await employeesSalaryModel.findOne({employeeId: salarySlip.employeeId})
+    // const employeeSalary = await employeesSalaryModel.findOne({employeeId: salarySlip.employeeId}).populate(
+    //   {path: 'employeeId', select: {first_name: 1, last_name:1, date_of_joining: 1 }}
+    // )
     const additionalDeductions: any = {
       // deductions: []
       "lateness": 0,
@@ -110,7 +112,6 @@ class SalarySlipService {
     employeeSlip.netPay = salarySlip.netPay;
     employeeSlip.deductionsBreakDown = salarySlip.deductions
     employeeSlip.createdAt = salarySlip.createdAt;
-
     return {employeeSlip};
   }
 
@@ -159,8 +160,15 @@ class SalarySlipService {
   public async createDepartmentPayroll(data: CreateSalarySlipDto): Promise<any> {
 
     const records = [];
-    // const noSalaries = []
-    const employeeSalaries = await employeesSalaryModel.find({})
+    const today = new Date()
+    if(today.getDate() != 25){
+      throw new HttpException(401, "Cannot generate slip before the 25th!")
+    }
+
+    const noSalaries = []
+    const employeeSalaries = await employeesSalaryModel.find({}).populate(
+      {path: 'employeeId', select: {first_name: 1, last_name:1, date_of_joining: 1 }}
+    )
 
     for (let index = 0; index < employeeSalaries.length; index++) {
       const employeeSalary = employeeSalaries[index];
