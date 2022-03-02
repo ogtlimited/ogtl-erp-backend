@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { NextFunction, Request, Response } from 'express';
 import EmployeeSalaryService from "@services/payroll/employees-salary.service";
+import {CreateEmployeeSalaryDto} from "@dtos/payroll/employees-salary.dto";
 
 
 class EmployeeSalaryController {
@@ -35,6 +36,17 @@ class EmployeeSalaryController {
     }
   };
 
+  public updateEmployeeSalary = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const payload: CreateEmployeeSalaryDto = req.body;
+      console.log(req.params)
+      const empId = req.params.empId
+      const data = await this.salaryStructureAssignmentService.updateEmployeeSalary(payload);
+      res.status(200).json({ data: data});
+    } catch (error) {
+      next(error);
+    }
+  };
 
 }
 

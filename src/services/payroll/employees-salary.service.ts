@@ -129,6 +129,26 @@ class EmployeeSalaryService {
         }
       }
   }
+
+  public async updateEmployeeSalary(payload: CreateEmployeeSalaryDto){
+
+    console.log(payload)
+    if(!payload.employeeId){
+      throw new HttpException(400, "employee Id required")
+    }
+    const updateSalary = await employeesSalaryModel.findOneAndUpdate({employeeId: payload.employeeId},{
+      $set: payload
+    }, {
+      new: true
+    })
+
+    if(!updateSalary){
+      throw new HttpException(404, 'employee salary record does not exist')
+    }
+
+    return updateSalary
+
+  }
 }
 
 export default EmployeeSalaryService;
