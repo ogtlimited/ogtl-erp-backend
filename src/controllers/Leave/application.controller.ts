@@ -12,7 +12,8 @@ class LeaveApplicationController {
 
   public getLeaveApplications = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const findAllLeaveApplicationsData: ILeaveApplication[] = await this.leaveApplicationService.findAllLeaveapplication();
+      const query = req.query
+      const findAllLeaveApplicationsData: ILeaveApplication[] = await this.leaveApplicationService.findAllLeaveapplication(query);
 
       res.status(200).json({ data: findAllLeaveApplicationsData, message: 'findAll' });
     } catch (error) {

@@ -52,7 +52,8 @@ class EmployeeSalaryService {
 
   //remember to validate salary structure and employees for matching project and departments
   public async create(info): Promise<any> {
-    const {data} = info
+    const data = info
+    console.log(info, 'INFO')
     const salarySettingConstructor = {
       basic: 0.3,
       medical: 0.09,
@@ -77,7 +78,20 @@ class EmployeeSalaryService {
       }
       const result = await this.salaryGeneratorHelper(record, employeeInfo, salarySetting)
       result.employeeId = employeeInfo._id
-      employeesSalary.push(result)
+      const existingSalary  = await employeesSalaryModel.findOne({employeeId: result.employeeId});
+      console.log(existingSalary, 'EXISTING');
+      if(existingSalary){
+        const updateSalary = await employeesSalaryModel.findOneAndUpdate({employeeId: existingSalary.employeeId},result, {
+          new: true
+        })
+        console.log(updateSalary, 'EMPLOYEE UPY');
+        if(!updateSalary){
+          throw new HttpException(404, 'employee salary record does not exist')
+        }
+      }else{
+        employeesSalary.push(result)
+      }
+
     }
 
     await employeesSalaryModel.insertMany(employeesSalary)

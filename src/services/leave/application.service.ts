@@ -16,9 +16,9 @@ class LeaveApplicationService {
   public allocationM = allocationModel;
   public employeeS = new EmployeeService();
 
-  public async findAllLeaveapplication(): Promise<ILeaveApplication[]> {
+  public async findAllLeaveapplication(query): Promise<ILeaveApplication[]> {
     const application: ILeaveApplication[] = await this.application
-      .find()
+      .find(query)
       .populate({
         path: 'employee_id',
         model: 'Employee',
@@ -42,10 +42,10 @@ class LeaveApplicationService {
   }
 
   public async findAllLeaveapplicationsClient(ClientId: string): Promise<ILeaveApplication[]> {
-   
+
     const application: ILeaveApplication[] = await this.application
       .find({employee_project_id : ClientId})
-    
+
     return application;
   }
 
