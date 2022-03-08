@@ -23,7 +23,11 @@ class JobApplicantService {
 
   //Method for finding all job applicants
   public async findAllJobApplicants(query: any): Promise<IJobApplicant[]>{
-    return this.jobApplicant.find(query).populate('job_opening_id, default_job_opening_id rep_sieving_call');
+    console.log('ALL JOB APPLICANTS')
+    return this.jobApplicant.find(query)
+    .populate({path:'rep_sieving_call', model: 'Employee'})
+    .populate({path:'job_opening_id'})
+    .populate({path:'default_job_opening_id'})
   }
   
 

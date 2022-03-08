@@ -48,9 +48,9 @@ class LeaveApplicationController {
       next(error);
     }
   };
-  public hrApproveLeave = async (req: Request, res: Response, next: NextFunction) => {
+  public hrApproveLeave = async (req: any, res: Response, next: NextFunction) => {
     try {
-      const approveLeave: ILeaveApplication = await this.leaveApplicationService.HrApproveLeave(req.params.id, req.query.approve);
+      const approveLeave: ILeaveApplication = await this.leaveApplicationService.HrApproveLeave(req.params.id, req.query.approve, req.user);
       res.status(200).json({ data: approveLeave});
     } catch (error) {
       next(error);

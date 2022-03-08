@@ -161,8 +161,8 @@ class SalarySlipService {
 
     const records = [];
     const today = new Date()
-    if(today.getDate() != 25){
-      throw new HttpException(401, "Cannot generate slip before the 25th!")
+    if(today.getDate() < 25){
+      throw new HttpException(400, "Cannot generate slip before the 25th!")
     }
     const noSalaries = []
     const employeeSalaries = await employeesSalaryModel.find({}).populate(
@@ -172,7 +172,7 @@ class SalarySlipService {
     for (let index = 0; index < employeeSalaries.length; index++) {
       const employeeSalary = employeeSalaries[index];
       // console.log(employeeSalary);
-      let today = new Date()
+      const today = new Date()
       const salarySlipConstructor: any = {
         employeeId: employeeSalary.employeeId,
         employeeSalary: employeeSalary,

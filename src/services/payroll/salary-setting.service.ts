@@ -11,7 +11,7 @@ class SalarySettingService {
     return this.salarySettingModel.find();
   }
 
-  public async createUpdateSalarySettings(SalarySettingData: CreateUpdateSalaryDto): Promise<ISalarySetting> {
+  public async createUpdateSalarySettings(SalarySettingData: CreateUpdateSalaryDto): Promise<any> {
     if (isEmpty(SalarySettingData)) throw new HttpException(400, 'No data provided');
     const findSalarySettings: ISalarySetting = await this.salarySettingModel.findOne({ _id: SalarySettingData._id });
     if (findSalarySettings) {
