@@ -4,7 +4,7 @@ import { HttpException } from '@exceptions/HttpException';
 import {IEmployeesSalary, ISalarySetting} from "@interfaces/payroll/employees-salary.interface";
 import employeesSalaryModel from "@models/payroll/employees-salary";
 import { isEmpty } from '@utils/util';
-import {CreateEmployeeSalaryDto} from "@dtos/payroll/employees-salary.dto";
+import {CreateEmployeeSalaryDto, UpdateEmployeeSalaryDto} from "@dtos/payroll/employees-salary.dto";
 import salarySettingModel from "@models/payroll/salary-setting";
 import EmployeeModel from "@models/employee/employee.model";
 
@@ -52,18 +52,8 @@ class EmployeeSalaryService {
 
   //remember to validate salary structure and employees for matching project and departments
   public async create(info): Promise<any> {
-    const data = info
-    console.log(info, 'INFO')
-    const salarySettingConstructor = {
-      basic: 0.3,
-      medical: 0.09,
-      housing: 0.2,
-      transport: 0.17,
-      monthlyEmployeePension: 0.8,
-      CRA:0.2,
-      CRABonusAmount:200000,
-      active: true
-    }
+    const {data} = info
+
     const salarySetting = await salarySettingModel.findOne({active: true})
     const employeesSalary = [];
     const nonExistingEmployees = []
@@ -144,14 +134,16 @@ class EmployeeSalaryService {
       }
   }
 
-  public async updateEmployeeSalary(payload: CreateEmployeeSalaryDto){
+  public async updateEmployeeSalary(payload: UpdateEmployeeSalaryDto){
 
-    console.log(payload)
-    if(!payload.employeeId){
-      throw new HttpException(400, "employee Id required")
+    const salarySetting = await salarySettingModel.findOne({active: true})
+    const employeeInfo  = await EmployeeModel.findOne({company_email: payload.company_email}).populate({path: 'department'});
+    if(!employeeInfo){
+      throw new HttpException(404, "employee does not exist")
     }
-    const updateSalary = await employeesSalaryModel.findOneAndUpdate({employeeId: payload.employeeId},{
-      $set: payload
+    const result = await this.salaryGeneratorHelper(payload, employeeInfo, salarySetting)
+    const updateSalary = await employeesSalaryModel.findOneAndUpdate({employeeId: employeeInfo._id},{
+      $set: result
     }, {
       new: true
     })

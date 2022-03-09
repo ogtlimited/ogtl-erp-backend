@@ -161,7 +161,7 @@ class SalarySlipService {
 
     const records = [];
     const today = new Date()
-    if(today.getDate() < 25){
+    if(today.getDate() != 25){
       throw new HttpException(400, "Cannot generate slip before the 25th!")
     }
     const noSalaries = []
