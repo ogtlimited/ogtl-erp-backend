@@ -26,6 +26,7 @@ export interface Employee {
     isSupervisor: boolean
     leaveCount: number,
     isRepSiever: boolean,
+    isLeaverApprover: boolean,
     sievedApplicationCount: number
 
 }

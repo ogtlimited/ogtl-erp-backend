@@ -12,18 +12,30 @@ class LeaveApplicationController {
 
   public getLeaveApplications = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const findAllLeaveApplicationsData: ILeaveApplication[] = await this.leaveApplicationService.findAllLeaveapplication();
+      const query = req.query
+      const findAllLeaveApplicationsData: ILeaveApplication[] = await this.leaveApplicationService.findAllLeaveapplication(query);
 
       res.status(200).json({ data: findAllLeaveApplicationsData, message: 'findAll' });
     } catch (error) {
       next(error);
     }
   };
-
   public findAllTeamMembersLeave = async (req: any, res: Response, next: NextFunction) => {
     try {
       const allTeamMembersLeave: ILeaveApplication[] = await this.leaveApplicationService.findAllTeamMembersLeave(req.user);
       res.status(200).json({ data: allTeamMembersLeave});
+    } catch (error) {
+      next(error);
+    }
+  };
+
+
+
+  public findAllLeaveapplicationsClient = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const ClientId: string = req.params.id;
+      const allLeaveApplicationClient: ILeaveApplication[] = await this.leaveApplicationService.findAllLeaveapplicationsClient(ClientId);
+      res.status(200).json({ data: allLeaveApplicationClient});
     } catch (error) {
       next(error);
     }
@@ -36,9 +48,9 @@ class LeaveApplicationController {
       next(error);
     }
   };
-  public hrApproveLeave = async (req: Request, res: Response, next: NextFunction) => {
+  public hrApproveLeave = async (req: any, res: Response, next: NextFunction) => {
     try {
-      const approveLeave: ILeaveApplication = await this.leaveApplicationService.HrApproveLeave(req.params.id, req.query.approve);
+      const approveLeave: ILeaveApplication = await this.leaveApplicationService.HrApproveLeave(req.params.id, req.query.approve, req.user);
       res.status(200).json({ data: approveLeave});
     } catch (error) {
       next(error);

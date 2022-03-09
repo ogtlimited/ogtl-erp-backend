@@ -40,12 +40,12 @@ class EmployeeSalaryService {
   ]
 
   public async findAll(query): Promise<IEmployeesSalary[]> {
-    const employeeSalaries = await employeesSalaryModel.find(query,{employeeId:0})
+    const employeeSalaries = await employeesSalaryModel.find(query).populate('employeeId')
     return employeeSalaries;
   }
 
-  public async findById(ogId: string): Promise<IEmployeesSalary> {
-    const employeeSalary: IEmployeesSalary = await this.employeeSalary.findOne({ ogId: ogId });
+  public async findById(id: string): Promise<IEmployeesSalary> {
+    const employeeSalary: IEmployeesSalary = await this.employeeSalary.findOne({ employeeId: id });
     if (!employeeSalary) throw new HttpException(404, "no record found");
     return employeeSalary;
   }
@@ -60,15 +60,28 @@ class EmployeeSalaryService {
     console.log(data, "data ----> ")
     for(let idx = 0; idx < data.length; idx++){
       console.log("looping bish")
-      let record = data[idx]
+      const record = data[idx]
       const employeeInfo  = await EmployeeModel.findOne({company_email: record.company_email}).populate({path: 'department'});
       if(!employeeInfo){
         nonExistingEmployees.push(record)
         continue
       }
-      let result = await this.salaryGeneratorHelper(record, employeeInfo, salarySetting)
+      const result = await this.salaryGeneratorHelper(record, employeeInfo, salarySetting)
       result.employeeId = employeeInfo._id
-      employeesSalary.push(result)
+      const existingSalary  = await employeesSalaryModel.findOne({employeeId: result.employeeId});
+      console.log(existingSalary, 'EXISTING');
+      if(existingSalary){
+        const updateSalary = await employeesSalaryModel.findOneAndUpdate({employeeId: existingSalary.employeeId},result, {
+          new: true
+        })
+        console.log(updateSalary, 'EMPLOYEE UPY');
+        if(!updateSalary){
+          throw new HttpException(404, 'employee salary record does not exist')
+        }
+      }else{
+        employeesSalary.push(result)
+      }
+
     }
 
     await employeesSalaryModel.insertMany(employeesSalary)
@@ -115,7 +128,7 @@ class EmployeeSalaryService {
       const rates =[21000,54000,129000,224000,560000,1232000]
       for(let i=0; i < this.schema.length; i++){
         if(annualTaxableIncome <= this.schema[i].group){
-          let current = annualTaxableIncome - this.schema[i -1].group;
+          const current = annualTaxableIncome - this.schema[i -1].group;
           return rates[i-1] + current * this.schema[i].percent
         }
       }
