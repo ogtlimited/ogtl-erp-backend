@@ -167,6 +167,8 @@ class JobApplicantService {
         path: "in_house_agent",
         select:{
           company_email:1,
+          first_name:1,
+          last_name:1,
           _id:0
         }})
   }
