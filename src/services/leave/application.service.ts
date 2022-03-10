@@ -10,11 +10,13 @@ import allocationModel from '@/models/leave/allocation.model';
 import EmployeeService from '@services/employee.service';
 import { Employee } from '@/interfaces/employee-interface/employee.interface';
 import EmployeeModel from '@models/employee/employee.model';
+import projectModel from '@/models/project/project.model';
 
 class LeaveApplicationService {
   public application = applicationModel;
   public allocationM = allocationModel;
   public employeeS = new EmployeeService();
+  public project = projectModel;
 
   public async findAllLeaveapplication(query): Promise<ILeaveApplication[]> {
     const application: ILeaveApplication[] = await this.application
@@ -135,13 +137,13 @@ class LeaveApplicationService {
     const date = new Date();
     // const user: Employee = await this.employeeS.findEmployeeById(LeaveapplicationData.employee_id)
     const MaxLeave = Number(user.leaveCount);
-    console.log(user);
     LeaveapplicationData.leave_approver = user.reports_to;
     LeaveapplicationData.employee_id = user._id;
     const totalApplied = this.getBusinessDatesCount(new Date(LeaveapplicationData.from_date), new Date(LeaveapplicationData.to_date));
     if (MaxLeave < totalApplied) {
       throw new HttpException(400, 'total leave days exceed available leaves');
     };
+
 
     const monthAfterOnboarding = this.monthDiff(new Date(user.date_of_joining), new Date());
     // if(user)
@@ -158,8 +160,6 @@ class LeaveApplicationService {
         $gte: new Date(date.getFullYear().toString()),
       },
     });
-    console.log(prevLeaves, 'prev');
-
     
     if (prevLeaves.length == 0) {
       // console.log(prevLeaves)
@@ -169,8 +169,10 @@ class LeaveApplicationService {
       const getLeaveDays = prevLeaves.map(e => this.getBusinessDatesCount(new Date(e.from_date), new Date(e.to_date)));
       const totalLeaveThisYear = getLeaveDays.reduce((previousValue, currentValue) => previousValue + currentValue);
       const oldAndNewLeave = totalApplied + totalLeaveThisYear;
-      console.log(getLeaveDays);
-      console.log(totalLeaveThisYear, 'totalLeaveThisYear');
+      const validateLeaveDay = await this.validateLeaveDay(LeaveapplicationData.from_date, user.projectId)
+      if(validateLeaveDay === false) {
+        throw new HttpException(400, 'This leave day is not available');
+      }
       if (totalLeaveThisYear > MaxLeave) {
         throw new HttpException(400, 'You have exceeded your total alloted leave');
       } else {
@@ -254,6 +256,53 @@ class LeaveApplicationService {
       },
     );
   }
+
+  private async validateLeaveDay(date: Date, employee_project_id: string): Promise<boolean> {
+    const year = new Date(date).getFullYear()
+    const month = new Date(date).getMonth()+1
+    const day = new Date(date).getDate()
+    const leaves = await this.application.find({
+      "employee_project_id": employee_project_id,
+      $expr: {
+        $and: [
+          {
+            "$eq": [
+              {
+                "$month": "$from_date"
+              },
+              month
+            ]
+          },
+          {
+            "$eq": [
+              {
+                "$year": "$from_date"
+              },
+              year
+            ]
+          }
+        ]
+      }
+    })
+    if(leaves.length === 0){
+      return true
+    }
+    const sortByLatestDate = leaves.sort((a, b) => {
+      return new Date(a.from_date).valueOf() - new Date(b.from_date).valueOf()
+    })
+    const getDayOfLatest = sortByLatestDate[sortByLatestDate.length - 1].from_date
+    const getLeaveCap = await this.findProjectLeaveCap(employee_project_id)
+    return (day - new Date(getDayOfLatest).getDate() > 0 && sortByLatestDate.length < Number(getLeaveCap))
+  }
+
+  private async findProjectLeaveCap(projectId: string){
+    const findProject = await this.project.findOne({_id: projectId}).select('leave_cap -_id');
+    if(findProject){
+      return findProject.leave_cap
+    }
+    return 2
+  }
 }
+
 
 export default LeaveApplicationService;
