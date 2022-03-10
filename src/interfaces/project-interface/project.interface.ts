@@ -17,4 +17,5 @@ export interface IProject {
   quality_analyst: string;
   team_leads: string;
   team_members: string;
+  leave_cap: string;
 }
