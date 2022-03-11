@@ -137,7 +137,7 @@ class CombineServices {
  //For anything relating to recruitment
   public async recruitmentForm(){
     const designations = await this.designationS.findAllDesignations()
-    const projects = await this.projectS.findAll();
+    const projects = await this.projectS.findAllNoPopulate();
     const branches = await this.brancheS.findAllBranches();
     const jobApplicants = await this.jobApplicantS.findAllJobApplicants({})
     const passedApplicants = await this.passedTestApplicants.findAllPassedTests()

@@ -62,3 +62,17 @@ export class CreateEmployeeSalaryDto {
   public updatedBy: String
 
 }
+
+export class UpdateEmployeeSalaryDto {
+
+  @IsString()
+  public company_email: string
+
+  @IsNumber()
+  public annualGrossSalary: number
+
+  @IsNumber()
+  @IsOptional()
+  public monthlySalary: number
+
+}

@@ -21,7 +21,7 @@ const journalSchema: Schema = new Schema(
     },
     credit: {
       type: Number,
-      required: 0,
+      default: 0,
     },
     date: {
       type: Date,

@@ -6,7 +6,7 @@ export class CreateJobOpeningDto {
   @IsString()
   public job_title: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   public designation_id: string;
 

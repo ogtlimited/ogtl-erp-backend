@@ -113,7 +113,7 @@ class App {
     if (this.env !== 'production') {
       set('debug', true);
     }
-    await connect(process.env.databaseUrl, dbConnection.options);
+    await connect(process.env.databaseUrl);
   }
 
   private initializeMiddlewares() {
