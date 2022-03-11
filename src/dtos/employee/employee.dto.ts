@@ -2,12 +2,12 @@
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
 import { Type } from 'class-transformer';
-import { IsEmail, IsString, IsBoolean, IsNumber, IsOptional, ValidateNested } from 'class-validator';
+import { IsEmail, IsString, IsBoolean, IsNumber, IsDateString, IsOptional, ValidateNested } from 'class-validator';
 
 export class CreateEmployeeDto {
 
 
-  @IsString()
+  @IsDateString()
   public date_of_joining: string;
 
   @IsString()
