@@ -15,6 +15,9 @@ class LeaveApplicationService {
   public application = applicationModel;
   public allocationM = allocationModel;
   public employeeS = new EmployeeService();
+  constructor(){
+    // this.updateAllLeaveCount()
+  }
 
   public async findAllLeaveapplication(query): Promise<ILeaveApplication[]> {
     const application: ILeaveApplication[] = await this.application
@@ -221,6 +224,9 @@ class LeaveApplicationService {
     } catch (error) {
       console.log(error);
     }
+  }
+  public async updateAllLeaveCount(){
+    return EmployeeModel.updateMany({}, {$inc : {'leaveCount' : 4}});
   }
 
   public async deleteLeaveapplication(LeaveapplicationId: string): Promise<ILeaveApplication> {
