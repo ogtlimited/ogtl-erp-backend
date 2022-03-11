@@ -86,7 +86,7 @@ class CombineServices {
     const acceptedJobOffers = await this.acceptedJobOfferS.findAllAcceptedJobOffers()
     const employees = await this.employeeS.findAllEmployee()
     const designations = await this.designationS.findAllDesignations()
-    const projects = await this.projectS.findAll();
+    const projects = await this.projectS.findAllNoPopulate();
     const departments = await this.departmentS.findAllDepartments()
     const shifts = await this.shiftS.findAllshiftType()
     const branches = await this.brancheS.findAllBranches();

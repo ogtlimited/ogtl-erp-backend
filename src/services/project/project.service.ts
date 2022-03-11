@@ -67,7 +67,7 @@ class ProjectService {
         return projects;
     }
     public async findAllNoPopulate(param: any = {}): Promise<IProject[]> {
-        const projects: IProject[] = await this.project.find(param)
+        const projects: IProject[] = await this.project.find()
         return projects;
     }
 
