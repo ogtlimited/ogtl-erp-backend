@@ -134,7 +134,7 @@ class EmployeeSalaryService {
       }
   }
 
-  public async updateEmployeeSalary(payload: UpdateEmployeeSalaryDto){
+  public async updateEmployeeSalary(payload){
 
     const salarySetting = await salarySettingModel.findOne({active: true})
     const employeeInfo  = await EmployeeModel.findOne({company_email: payload.company_email}).populate({path: 'department'});

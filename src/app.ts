@@ -113,7 +113,7 @@ class App {
     if (this.env !== 'production') {
       set('debug', true);
     }
-    await connect(process.env.databaseUrl, dbConnection.options);
+    await connect(process.env.databaseUrl);
   }
 
   private initializeMiddlewares() {
@@ -253,9 +253,14 @@ class App {
       const employeeStat = new EmployeeService()
       await employeeStat.EmployeeRatio()
     })
+    const LeaveCountUpdate = cron.schedule('0 0 1 * *', async function() {
+      const leaveApp = new LeaveApplicationService()
+      await leaveApp.updateAllLeaveCount()
+    })
     //  task.start()
     //  task2.start()
      employeeStat.start()
+     LeaveCountUpdate.start()
   }
 }
 

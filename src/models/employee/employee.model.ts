@@ -82,7 +82,7 @@ const employeeSchema: Schema = new Schema(
     },
     gender: {
       type: String,
-      enum: ["male", "female"],
+      enum: ["male", "female", "Not Set"],
     },
     image: {
       type: String,

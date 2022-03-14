@@ -38,7 +38,7 @@ class EmployeeSalaryController {
 
   public updateEmployeeSalary = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const payload: CreateEmployeeSalaryDto = req.body;
+      const payload: any = req.body;
       console.log(req.params)
       const empId = req.params.empId
       const data = await this.salaryStructureAssignmentService.updateEmployeeSalary(payload);

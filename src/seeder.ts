@@ -15,9 +15,7 @@ dotenv.config({ path: dirname( module.paths[1] ) + "/.env" });
 
 mongoose
   .connect(process.env.databaseUrl, {
-    useCreateIndex: true,
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
+    
   })
   .then(() => {
     console.log('DB connected')

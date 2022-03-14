@@ -20,13 +20,11 @@ const jobOpeningSchema: Schema = new Schema({
   },
   designation_id: {
     type: Schema.Types.ObjectId,
-    required: true,
     ref: 'Designation',
     default: null,
   },
   project_id: {
     type: Schema.Types.ObjectId,
-    required: true,
     ref: 'Project',
     default: null,
   },

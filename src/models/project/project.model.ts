@@ -86,6 +86,9 @@ const projectSchema: Schema = new Schema(
       type: [Schema.Types.ObjectId],
       ref: 'Employee',
     },
+    leave_cap: {
+      type: String
+    },
   },
   {
     timestamps: true,
