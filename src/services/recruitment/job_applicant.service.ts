@@ -33,7 +33,7 @@ class JobApplicantService {
 
   //Method for finding a single job applicant
   public async findJobApplicantById(jobApplicantId: string): Promise<IJobApplicant>{
-    
+
     //check if no Job applicant id is empty
     if(isEmpty(jobApplicantId)) throw new HttpException(400,`Job applicant with Id:${jobApplicantId}, does not exist`);
     //find Job applicant using the id provided
@@ -128,6 +128,7 @@ class JobApplicantService {
       )
     }
   }
+
   private async addToAssignedRecords(in_house_agent_id){
     await jobApplicationsTaskModel.findOneAndUpdate(
       {in_house_agent:in_house_agent_id,  createdAt: {$gte: this.startOfDay, $lt: this.endOfDay}},
@@ -143,6 +144,9 @@ class JobApplicantService {
     }
     if(interviewStage == "interview scheduled"){
       interviewStage = "scheduled_for_interview"
+    }
+    if(interviewStage == "Sieving"){
+      interviewStage = "sieving"
     }
     await jobApplicationsTaskModel.findOneAndUpdate(
       {in_house_agent:in_house_agent_id,  createdAt:
@@ -169,7 +173,6 @@ class JobApplicantService {
   public async getAgentJobApplicationTasks(in_house_agent_id: string):Promise<IJobApplicationsTasks[]>{
     return await jobApplicationsTaskModel.find({createdAt: {$gte: this.startOfDay, $lt: this.endOfDay}, in_house_agent: in_house_agent_id})
   }
-
 
   //Method for deleting job Applicant
   public async deleteJobApplicant(jobApplicantId: string):Promise<IJobApplicant>{
