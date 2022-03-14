@@ -1,6 +1,8 @@
 /* eslint-disable prettier/prettier */
 
 
+import SalarySettingRoute from '@routes/payroll/salary-settings.route';
+
 process.env['NODE_CONFIG_DIR'] = __dirname + '/configs';
 
 import 'dotenv/config';
@@ -172,7 +174,9 @@ const app = new App([
   new ExpenseHeadDraftRoute(),
   new documentRoute(),
   new JobDocumentRoute(),
-  new EmployeesSalaryRoute()
+  new EmployeesSalaryRoute(),
+
+  new SalarySettingRoute()
 ]);
 
 const server = app.listen();

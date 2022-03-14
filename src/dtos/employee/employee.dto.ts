@@ -55,6 +55,14 @@ export class CreateEmployeeDto {
   @IsString()
   public branch: string;
 
+  @IsOptional()
+  @IsBoolean()
+  public isExpatriate: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  public isLeaverApprover: boolean;
+
   @IsString()
   public employeeType: string;
 
@@ -117,9 +125,17 @@ export class UpdateEmployeeDto {
   @IsNumber()
   public permissionLevel: number;
   
+  @IsOptional()
+  @IsBoolean()
+  public isExpatriate: boolean;
+
+  @IsOptional()
   @IsBoolean()
   public isRepSiever: boolean;
 
+  @IsOptional()
+  @IsBoolean()
+  public isLeaverApprover: boolean;
 
 
 

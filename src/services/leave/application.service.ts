@@ -16,9 +16,9 @@ class LeaveApplicationService {
   public allocationM = allocationModel;
   public employeeS = new EmployeeService();
 
-  public async findAllLeaveapplication(): Promise<ILeaveApplication[]> {
+  public async findAllLeaveapplication(query): Promise<ILeaveApplication[]> {
     const application: ILeaveApplication[] = await this.application
-      .find()
+      .find(query)
       .populate({
         path: 'employee_id',
         model: 'Employee',
@@ -34,9 +34,22 @@ class LeaveApplicationService {
           path: 'designation',
           model: 'Designation',
         },
-      });
+      }).populate({
+        path:'employee_project_id',
+        model : 'Project',
+            });
     return application;
   }
+
+  public async findAllLeaveapplicationsClient(ClientId: string): Promise<ILeaveApplication[]> {
+
+    const application: ILeaveApplication[] = await this.application
+      .find({employee_project_id : ClientId})
+
+    return application;
+  }
+
+
 
   public async findAllTeamMembersLeave(user): Promise<ILeaveApplication[]> {
     const leaveApplications = await this.application.find({ leave_approver: user._id });
@@ -57,7 +70,20 @@ class LeaveApplicationService {
     return leaveApplication;
   }
 
-  public async HrApproveLeave(id: String, decision): Promise<ILeaveApplication> {
+  public async HrApproveLeave(id: String, decision, user): Promise<ILeaveApplication> {
+    const currentApplication: any = await this.application.find({ _id: id });
+    if (!currentApplication) {
+      throw new HttpException(400, 'leave application does not exist');
+    }
+    const totalApplied = this.getBusinessDatesCount(new Date(currentApplication.from_date), new Date(currentApplication.to_date));
+    const MaxLeave = Number(user.leaveCount);
+    const leaveDiff = MaxLeave - totalApplied;
+    await EmployeeModel.findOneAndUpdate(
+      { _id: user._id },
+      {
+        $set: { leaveCount: leaveDiff },
+      },
+    );
     const leaveApplication = await this.application.findOneAndUpdate(
       { _id: id, status: { $eq: 'approved by supervisor' } },
       {
@@ -65,10 +91,6 @@ class LeaveApplicationService {
       },
       { new: true },
     );
-
-    if (!leaveApplication) {
-      throw new HttpException(400, 'leave application does not exist');
-    }
     return leaveApplication;
   }
 
@@ -116,35 +138,32 @@ class LeaveApplicationService {
     console.log(user);
     LeaveapplicationData.leave_approver = user.reports_to;
     LeaveapplicationData.employee_id = user._id;
+    const totalApplied = this.getBusinessDatesCount(new Date(LeaveapplicationData.from_date), new Date(LeaveapplicationData.to_date));
+    if (MaxLeave < totalApplied) {
+      throw new HttpException(400, 'total leave days exceed available leaves');
+    };
+
+    const monthAfterOnboarding = this.monthDiff(new Date(user.date_of_joining), new Date());
+    // if(user)
+    if (totalApplied > 12) {
+      throw new HttpException(400, 'You can apply for more than 12 working days');
+    }
+
+    if (monthAfterOnboarding == 0) {
+      throw new HttpException(400, 'You can only apply exactly one month after onboarding');
+    }
     const prevLeaves: ILeaveApplication[] = await this.application.find({
       employee_id: LeaveapplicationData.employee_id,
       createdAt: {
         $gte: new Date(date.getFullYear().toString()),
       },
     });
-    const totalApplied = this.getBusinessDatesCount(new Date(LeaveapplicationData.from_date), new Date(LeaveapplicationData.to_date));
-    if (MaxLeave < totalApplied) {
-      throw new HttpException(400, 'total leave days exceed available leaves');
-    }
-    const leaveDiff = MaxLeave - totalApplied;
-    const monthAfterOnboarding = this.monthDiff(new Date(user.date_of_joining), new Date());
-    // if(user)
-    if (totalApplied > 12) {
-      throw new HttpException(400, 'You can apply for more than 12 working days');
-    }
-    if (monthAfterOnboarding == 0) {
-      throw new HttpException(400, 'You can only apply exactly one month after onboarding');
-    }
     console.log(prevLeaves, 'prev');
+
+    
     if (prevLeaves.length == 0) {
       // console.log(prevLeaves)
       const createLeaveapplicationData: ILeaveApplication = await this.application.create(LeaveapplicationData);
-      await EmployeeModel.findOneAndUpdate(
-        { _id: user._id },
-        {
-          $set: { leaveCount: leaveDiff },
-        },
-      );
       return createLeaveapplicationData;
     } else {
       const getLeaveDays = prevLeaves.map(e => this.getBusinessDatesCount(new Date(e.from_date), new Date(e.to_date)));
@@ -159,12 +178,6 @@ class LeaveApplicationService {
           throw new HttpException(400, 'You have used ' + totalLeaveThisYear + ', you have ' + (MaxLeave - totalLeaveThisYear) + ' leave left');
         } else {
           const createLeaveapplicationData: ILeaveApplication = await this.application.create(LeaveapplicationData);
-          await EmployeeModel.findOneAndUpdate(
-            { _id: user._id },
-            {
-              $set: { leaveCount: leaveDiff },
-            },
-          );
           return createLeaveapplicationData;
         }
       }

@@ -127,6 +127,10 @@ const employeeSchema: Schema = new Schema(
     isInPIP:{
       type: Boolean,
       default: false,
+    },
+    isLeaverApprover:{
+      type: Boolean,
+      default: false,
     }
   }
 );

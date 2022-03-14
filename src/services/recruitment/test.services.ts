@@ -9,8 +9,9 @@ class TestServices {
   public test = testModel;
 
   //Method for finding all tests
-  public async findAllTests(): Promise<ITest[]>{
-    return this.test.find().populate('job_applicant_id hr_user');
+  public async findAllTests(query: any): Promise<ITest[]>{
+    // return this.test.find(query).populate('job_applicant_id hr_user ');
+    return  this.test.find(query).populate({path:'job_applicant_id hr',populate:{path:'job_opening_id'}})
   }
 
   //Method for finding all tests where applicants have undergone soft skills and passed

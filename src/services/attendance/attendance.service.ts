@@ -114,9 +114,9 @@ class AttendanceTypeService {
     const latenessDeduction = await deductionTypeModel.findOne({title:"lateness"})
     const ncnsDeduction = await deductionTypeModel.findOne({title:"NCNS"})
 
-    for(const employeeData of attendanceTypeData.attendances){
-      console.log(employeeData)
-      const result = await this.generatePossibleDeductions(employeeData.companyEmail, employeeData, latenessDeduction, ncnsDeduction)
+    for(const employeeData of attendanceTypeData){
+      // console.log(employeeData)
+      const result = await this.generatePossibleDeductions(employeeData.ogid, employeeData, latenessDeduction, ncnsDeduction)
       const attendanceConstructor: ICreateAttendance = AttendanceTypeService.attendanceData(employeeData, result);
 
       if (result.departmentId != undefined){
@@ -211,17 +211,17 @@ class AttendanceTypeService {
     }
   }
 
-  private async generatePossibleDeductions(employeeEmail: string, attendanceRecord: ICreateAttendance = null, latenessDeductionData, ncnsDeductionData):Promise<IPossibleDeductons>{
+  private async generatePossibleDeductions(ogid: string, attendanceRecord: ICreateAttendance = null, latenessDeductionData, ncnsDeductionData):Promise<IPossibleDeductons>{
     try {
 
       const latenessDeduction = latenessDeductionData
       const ncnsDeduction = ncnsDeductionData
       const employeesDeductions = []
       let deductionAmount = 0
-      let deductionsConstructor:any = {}
-      let latenessConstructor:any = {}
+      const deductionsConstructor:any = {}
+      const latenessConstructor:any = {}
 
-      let employee:any = await EmployeeModel.findOne({company_email: employeeEmail, status: {$eq: "active"} }, {
+      let employee:any = await EmployeeModel.findOne({ogid: ogid, status: {$eq: "active"} }, {
         company_email: 1,
         default_shift:1,
         projectId:1,
@@ -235,7 +235,7 @@ class AttendanceTypeService {
         },
       })
 
-      console.log(employee, employeeEmail, employee._id, "employee ---------------------------->1")
+      console.log(employee, ogid, employee._id, "employee ---------------------------->1")
       let employeeSalary: any = await employeesSalaryModel.findOne({employeeId: employee._id})
       employee = employee.toObject();
       employeeSalary = employeeSalary.toObject()
