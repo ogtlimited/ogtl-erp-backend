@@ -53,7 +53,7 @@ class EmployeeSalaryService {
   //remember to validate salary structure and employees for matching project and departments
   public async create(info): Promise<any> {
     const {data} = info
-
+    console.log(info)
     const salarySetting = await salarySettingModel.findOne({active: true})
     const employeesSalary = [];
     const nonExistingEmployees = []
