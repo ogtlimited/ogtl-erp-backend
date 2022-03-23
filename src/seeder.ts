@@ -14,7 +14,9 @@ dotenv.config({ path: dirname( module.paths[1] ) + "/.env" });
 // console.log(process.env.databaseUrl);
 
 mongoose
-  .connect(process.env.databaseUrl)
+  .connect(process.env.databaseUrl, {
+    
+  })
   .then(() => {
     console.log('DB connected')
   })
