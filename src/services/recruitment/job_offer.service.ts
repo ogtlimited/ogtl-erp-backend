@@ -37,6 +37,7 @@ class JobOfferService {
 
     // return created job offer
     return await this.jobOffer.create(jobOfferData);
+
   }
 
   //Method for updating job offer
