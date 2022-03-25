@@ -19,6 +19,16 @@ class JobApplicantController {
     }
   }
 
+  //Method for returning all job applicants scheduled for interview
+  public getJobApplicantsScheduled = async (req:Request, res:Response, next:NextFunction) =>{
+    try {
+      const findAllJobApplicantsScheduled: IJobApplicant[] = await this.jobApplicantService.findAllJobApplicantsThatHaveBeenScheduled()
+      res.status(200).json({data:findAllJobApplicantsScheduled, totalJobApplicants: findAllJobApplicantsScheduled.length, message:"All job applicants scheduled for interview"})
+    }catch (error) {
+      next(error)
+    }
+  }
+
   //Method for returning all job applicants
   public getJobApplicationTasks = async (req:Request, res:Response, next:NextFunction) =>{
     try {

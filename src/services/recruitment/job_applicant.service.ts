@@ -21,6 +21,7 @@ class JobApplicantService {
     this.endOfDay.setHours(23,59,59,999);
   }
 
+
   //Method for finding all job applicants
   public async findAllJobApplicants(query: any): Promise<IJobApplicant[]>{
     console.log('ALL JOB APPLICANTS')
@@ -29,8 +30,13 @@ class JobApplicantService {
     .populate({path:'job_opening_id'})
     .populate({path:'default_job_opening_id'})
   }
-  
 
+  public async findAllJobApplicantsThatHaveBeenScheduled(): Promise<IJobApplicant[]>{
+    return this.jobApplicant.find({ interview_date:{$gte: this.startOfDay, $lt: this.endOfDay} })
+      .populate({path:'rep_sieving_call', model: 'Employee'})
+      .populate({path:'job_opening_id'})
+      .populate({path:'default_job_opening_id'})
+  }
   //Method for finding a single job applicant
   public async findJobApplicantById(jobApplicantId: string): Promise<IJobApplicant>{
 
