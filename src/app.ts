@@ -113,7 +113,7 @@ class App {
     if (this.env !== 'production') {
       set('debug', true);
     }
-    await connect(process.env.databaseUrl);
+    await connect(process.env.databaseUrl, { useUnifiedTopology: true });
   }
 
   private initializeMiddlewares() {
