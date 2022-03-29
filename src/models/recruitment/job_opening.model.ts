@@ -35,7 +35,7 @@ const jobOpeningSchema: Schema = new Schema({
   },
   type: {
     type: String,
-    enum: ['Full Time', 'Part Time'],
+    enum: ['Full Time: Remote', 'Part Time: Remote','Full Time: Onsite','Part Time: Onsite'],
     default: 'Full Time',
   },
   description: {

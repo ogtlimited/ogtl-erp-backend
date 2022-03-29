@@ -8,8 +8,14 @@ const promotionMessage = {
   message: "You have been promoted",
   subject: "Employee Promotion"
 }
+const OfferMessage = {
+  message: "We are pleased to inform you that you have been offered a Job, Please find attached the offer terms and conditions",
+  subject: "Employment Offer Letter"
+}
+
+ 
 
 
 
 
-export { terminationMessage , promotionMessage};
+export { terminationMessage , promotionMessage, OfferMessage};
