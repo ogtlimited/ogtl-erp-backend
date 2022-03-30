@@ -54,7 +54,7 @@ class App {
     this.initializeSwagger();
     this.initializeErrorHandling();
     this.redisConnection();
-    // this.initializeCron();
+    this.initializeCron();
     // this.initializeCron();
 
   }
@@ -244,10 +244,10 @@ class App {
     //     await attendanceService.generateAttendance("project")
     //   }
     })
-    const task2 = cron.schedule('* 1 * * 1-5', async function() {
-      const applicationService = new LeaveApplicationService()
-      await applicationService.addLeavesForEmployees()
-    })
+    // const task2 = cron.schedule('* 1 * * 1-5', async function() {
+    //   const applicationService = new LeaveApplicationService()
+    //   await applicationService.addLeavesForEmployees()
+    // })
 
     const employeeStat = cron.schedule('0 0 1 * *', async function() {
       const employeeStat = new EmployeeService()

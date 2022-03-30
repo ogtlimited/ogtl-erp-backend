@@ -232,7 +232,7 @@ class LeaveApplicationService {
     }
   }
   public async updateAllLeaveCount(){
-    return EmployeeModel.updateMany({}, {$inc : {'leaveCount' : 4}});
+    return EmployeeModel.updateMany({}, {$inc : {'leaveCount' : 2}});
   }
 
   public async deleteLeaveapplication(LeaveapplicationId: string): Promise<ILeaveApplication> {
