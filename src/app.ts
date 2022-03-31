@@ -54,8 +54,7 @@ class App {
     this.initializeSwagger();
     this.initializeErrorHandling();
     this.redisConnection();
-    // this.initializeCron();
-    // this.initializeCron();
+    this.initializeCron();
 
   }
 
