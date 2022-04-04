@@ -11,16 +11,16 @@ import { officeQueryGenerator } from '@/utils/payrollUtil';
 class SalaryComponentService {
   public salaryComponentModel = salaryComponentModel;
 
-  public async findAll(query): Promise<ISalaryComponent[]> {
+  public async findAll(query): Promise<any[]> {
     const dbQuery = officeQueryGenerator(query)
     console.log(dbQuery)
     const salaryComponents = await this.salaryComponentModel.find(dbQuery).populate("projectId departmentId");
     return salaryComponents;
   }
 
-  public async findById(id: string): Promise<ISalaryComponent> {
+  public async findById(id: string): Promise<any> {
     if (isEmpty(id)) throw new HttpException(400, "provide Id");
-    const salaryComponent: ISalaryComponent = await this.salaryComponentModel.findOne({ _id: id }).populate("projectId departmentId");
+    const salaryComponent = await this.salaryComponentModel.findOne({ _id: id }).populate("projectId departmentId");
     if (!salaryComponent) throw new HttpException(404, "no record found");
     return salaryComponent;
   }
