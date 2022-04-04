@@ -11,6 +11,7 @@ const personalDetailsSchema: Schema = new Schema(
                 required: true,
                 ref: "Employee",
             },
+        
       means_of_identification: {
         type: String,
         default: null,
@@ -20,6 +21,10 @@ const personalDetailsSchema: Schema = new Schema(
         type: String
       },
         date_of_issue: {
+            default: null,
+            type: Date,
+        },
+        date_of_birth: {
             default: null,
             type: Date,
         },

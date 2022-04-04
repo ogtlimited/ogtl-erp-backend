@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { isOptionalChain } from 'typescript';
 
 export class CreateContactDetailsDto {
   @IsOptional()
@@ -19,12 +20,14 @@ export class CreateContactDetailsDto {
   public personal_email: string;
 
   @IsString()
+  @IsOptional()
   public permanent_address_is: string;
 
   @IsString()
   public permanent_address: string;
 
   @IsString()
+  @IsOptional()
   public current_address_is: string;
 
   @IsString()
