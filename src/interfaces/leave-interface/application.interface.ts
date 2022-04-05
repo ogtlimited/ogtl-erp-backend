@@ -6,6 +6,7 @@ export interface ILeaveApplication{
     from_date: Date;
     to_date : Date;
     leave_approver?: string;
+    employee_project_id?: string;
     // posting_date: Date;
     reason: string;
     status?: string;

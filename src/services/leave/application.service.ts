@@ -133,6 +133,9 @@ class LeaveApplicationService {
   }
 
   public async createLeaveapplication(LeaveapplicationData: ILeaveApplication, user): Promise<ILeaveApplication> {
+    console.log(user)
+    console.log({...LeaveapplicationData, employee_project_id: user.projectId});
+    
     if (isEmpty(LeaveapplicationData)) throw new HttpException(400, 'Bad request');
     const startDate = new Date(LeaveapplicationData.from_date);
     const endDate = new Date(LeaveapplicationData.to_date);
@@ -166,7 +169,8 @@ class LeaveApplicationService {
     
     if (prevLeaves.length == 0) {
       // console.log(prevLeaves)
-      const createLeaveapplicationData: ILeaveApplication = await this.application.create(LeaveapplicationData);
+      
+      const createLeaveapplicationData: ILeaveApplication = await this.application.create({...LeaveapplicationData, employee_project_id: user.projectId});
       return createLeaveapplicationData;
     } else {
       const getLeaveDays = prevLeaves.map(e => this.getBusinessDatesCount(new Date(e.from_date), new Date(e.to_date)));
@@ -182,7 +186,7 @@ class LeaveApplicationService {
         if (oldAndNewLeave > MaxLeave) {
           throw new HttpException(400, 'You have used ' + totalLeaveThisYear + ', you have ' + (MaxLeave - totalLeaveThisYear) + ' leave left');
         } else {
-          const createLeaveapplicationData: ILeaveApplication = await this.application.create(LeaveapplicationData);
+          const createLeaveapplicationData: ILeaveApplication = await this.application.create({...LeaveapplicationData, employee_project_id: user.projectId});
           return createLeaveapplicationData;
         }
       }
@@ -228,7 +232,7 @@ class LeaveApplicationService {
     }
   }
   public async updateAllLeaveCount(){
-    return EmployeeModel.updateMany({}, {$inc : {'leaveCount' : 4}});
+    return EmployeeModel.updateMany({}, {$inc : {'leaveCount' : 2}});
   }
 
   public async deleteLeaveapplication(LeaveapplicationId: string): Promise<ILeaveApplication> {
