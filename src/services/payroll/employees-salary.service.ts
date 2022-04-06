@@ -68,13 +68,14 @@ class EmployeeSalaryService {
       }
       const result = await this.salaryGeneratorHelper(record, employeeInfo, salarySetting)
       result.employeeId = employeeInfo._id
+      result.departmentId = employeeInfo.department
+      result.projectId = employeeInfo.projectId
       const existingSalary  = await employeesSalaryModel.findOne({employeeId: result.employeeId});
       console.log(existingSalary, 'EXISTING');
       if(existingSalary){
         const updateSalary = await employeesSalaryModel.findOneAndUpdate({employeeId: existingSalary.employeeId},result, {
           new: true
         })
-        console.log(updateSalary, 'EMPLOYEE UPY');
         if(!updateSalary){
           throw new HttpException(404, 'employee salary record does not exist')
         }
