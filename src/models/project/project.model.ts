@@ -13,6 +13,12 @@ const projectSchema: Schema = new Schema(
       type: String,
       required: true,
     },
+    parent: {
+      type: String,
+    },
+    leave_cap: {
+      type: Number
+    },
     client_id: {
       type: Schema.Types.ObjectId,
       ref: 'Client',

@@ -123,9 +123,9 @@ class JobApplicantService {
       return updateJobApplicantById;
     }
 
-    if (jobApplicationUpdateData.process_stage) {
-      const updateJobApplicantById = await this.jobApplicant.findOneAndUpdate(
-        { rep_sieving_call: jobApplication.rep_sieving_call, _id: jobApplication._id },
+    if(jobApplicationUpdateData.process_stage){
+      const updateJobApplicantById = await  this.jobApplicant.findOneAndUpdate(
+        {rep_sieving_call: agent_id, _id:jobApplication._id},
         {
           $set: { process_stage: jobApplicationUpdateData.process_stage },
         },
@@ -136,7 +136,7 @@ class JobApplicantService {
     }
     if (jobApplicationUpdateData.interview_status) {
       return await this.jobApplicant.findOneAndUpdate(
-        { rep_sieving_call: jobApplication.rep_sieving_call, _id: jobApplication._id },
+        {rep_sieving_call: agent_id, _id: jobApplication._id},
         {
           $set: { interview_status: jobApplicationUpdateData.interview_status },
         },
@@ -159,6 +159,9 @@ class JobApplicantService {
     }
     if (interviewStage == 'interview scheduled') {
       interviewStage = 'scheduled_for_interview';
+    }
+    if(interviewStage == "Sieving"){
+      interviewStage = "sieving"
     }
     await jobApplicationsTaskModel.findOneAndUpdate(
       {
