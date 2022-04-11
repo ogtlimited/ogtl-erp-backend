@@ -1,0 +1,17 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /opt/backend/
+permissions:
+  - object: /opt/backend/
+    owner: root
+    group: root
+    type:
+      - directory
+      - file
+hooks:
+  ApplicationStart:
+    - location: scripts/reload-pm2.sh
+      timeout: 300
+      runas: root
