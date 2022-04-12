@@ -5,4 +5,5 @@ cp /home/ubuntu/.env .
 sudo chown -R ubuntu:ubuntu ./*
 sudo apt install npm -y
 sudo npm install pm2 -g 
-sudo pm2 startOrReload ecosystem.config.js --only prod
+cd ./dist
+pm2 startOrReload server.js #--only prod
