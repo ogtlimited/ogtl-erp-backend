@@ -5,8 +5,8 @@ files:
     destination: /opt/backend/
 permissions:
   - object: /opt/backend/
-    owner: root
-    group: root
+    owner: ubuntu
+    group: ubuntu
     type:
       - directory
       - file
@@ -14,4 +14,4 @@ hooks:
   ApplicationStart:
     - location: scripts/reload-pm2.sh
       timeout: 300
-      runas: root
+      runas: ubuntu
