@@ -2,9 +2,9 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /opt/backend/
+    destination: /home/ubuntu/ogtl-erp-backend
 permissions:
-  - object: /opt/backend/
+  - object: /home/ubuntu/
     owner: ubuntu
     group: ubuntu
     type:
