@@ -37,7 +37,7 @@ jobs:
         python-version: [3.8]
         node-version: ['14.x']
         appname: ['ogtl-backend-app']
-        deploy-group: ['ogtl-backend-DG']
+        deploy-group: ['erp-backend-DG']
         s3-bucket: ['ogtl-erp-backend-deploy']
         s3-filename: ['ogtl-erp-backend-deploy-${{ github.sha }}']
 
