@@ -229,5 +229,10 @@ class CombineServices {
       jobOpenings
     }
   }
+
+  public async fetchStakeHolders(){
+    const employeeS = await  this.employeeS.findAllEmployee()
+
+  }
 }
  export default CombineServices
