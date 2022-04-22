@@ -19,6 +19,8 @@ import { isEmpty } from '@utils/util';
 import { IShiftType } from '@/interfaces/shift-interface/shift_type.interface';
 import TerminationService from './employee-lifecycle/termination.service';
 import { IEmployeeStat } from './../interfaces/employee-stat/employee-stat.interface';
+import IdRequestService from './procurement/idrequest.service';
+
 
 class EmployeeService {
   // eslint-disable-next-line prettier/prettier
@@ -29,6 +31,7 @@ class EmployeeService {
   public Shift = shiftTypeModel;
   public employeeStatModel = EmployeeStatModel;
   public TerminationService = new TerminationService();
+  private idRequestService = new IdRequestService();
 
 
   public async findAllEmployee(): Promise<Employee[]> {
@@ -106,6 +109,15 @@ class EmployeeService {
     // console.log(endOfyear)
     console.log(EmployeeData['leaveCount'])
     const createEmployeeData: Employee = await this.Employees.create({ ...EmployeeData, password: hashedPassword, ogid: newOgid });
+    const idRequestData = {
+      employee_id:createEmployeeData._id,
+      date: createEmployeeData.created_at,
+      notes : "None"
+    }
+    this.idRequestService.createIdRequest(idRequestData).then(result=>{
+      console.log("id Request Created")
+    })
+
     return createEmployeeData;
   }
   public async createMultipleEmployee(EmployeeData: any): Promise<any> {
