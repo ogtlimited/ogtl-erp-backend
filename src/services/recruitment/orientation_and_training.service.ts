@@ -14,7 +14,6 @@ class OrientationService {
   public employee  = EmployeeModel;
   public department = departmentModel;
 
-
  
   public async findAllOrientations(): Promise<IOrientation[]>{
    
@@ -104,7 +103,7 @@ class OrientationService {
 
   private async fetchITEmail ():Promise<{emails: any[]}>{
    
-  const designatedEmails = await this.employee.find({designation: {$in:[new ObjectId('6195674bb261e472f07d7380'),new ObjectId('61956752b261e472f07d7417')]}},
+  const designatedEmails = await this.employee.find({designation: {$in:[]}},
       {
         company_email:1,
         _id:0
@@ -119,7 +118,7 @@ class OrientationService {
 
 private async fetchHREmail ():Promise<{emails: any[]}>{
    
-    const designatedEmails = await this.employee.find({designation: {$in:[new ObjectId('61956753b261e472f07d7431'), new ObjectId('61956753b261e472f07d7433'), new ObjectId('618a47fb9c7acabb9420e184'), new ObjectId('6195674bb261e472f07d7387')]}},
+    const designatedEmails = await this.employee.find({designation: {$in:[]}},
         {
           company_email:1,
           _id:0
@@ -134,7 +133,7 @@ private async fetchHREmail ():Promise<{emails: any[]}>{
 
   private async fetchAccountEmail ():Promise<{emails: any[]}>{
    
-    const designatedEmails = await this.employee.find({designation: {$in:[new ObjectId('61956750b261e472f07d73fb'), new ObjectId('6195674cb261e472f07d7397')]}},
+    const designatedEmails = await this.employee.find({designation: {$in:[]}},
         {
           company_email:1,
           _id:0
@@ -149,7 +148,7 @@ private async fetchHREmail ():Promise<{emails: any[]}>{
 
   private async fetchOperationsEmail ():Promise<{emails: any[]}>{
    
-    const designatedEmails = await this.employee.find({designation: {$in:[new ObjectId('61956750b261e472f07d73f8'), new ObjectId('6195674ab261e472f07d7365'), new ObjectId('6195674bb261e472f07d737e')]}},
+    const designatedEmails = await this.employee.find({designation: {$in:[]}},
         {
           company_email:1,
           _id:0
@@ -164,7 +163,7 @@ private async fetchHREmail ():Promise<{emails: any[]}>{
 
   private async fetchFacilityEmail ():Promise<{emails: string[]}>{
    
-    const designatedEmails = await this.employee.find({designation: {$in:[new ObjectId('61956662b261e472f07d733e'), new ObjectId('61956751b261e472f07d73fd')]}},
+    const designatedEmails = await this.employee.find({designation: {$in:[]}},
         {
           company_email:1,
           _id:0
