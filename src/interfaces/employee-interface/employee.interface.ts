@@ -27,6 +27,7 @@ export interface Employee {
     leaveCount: number,
     isRepSiever: boolean,
     isLeaverApprover: boolean,
-    sievedApplicationCount: number
+    sievedApplicationCount: number,
+    created_at?: any
 
 }

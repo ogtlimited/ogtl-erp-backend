@@ -56,6 +56,7 @@ class AuthService {
         image: null,
         branch:null,
         projectId:null,
+        ogId : generateOGID(),
         isAdmin: false,
         leaveCount: 0,
       };

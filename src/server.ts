@@ -91,6 +91,8 @@ import ProcurementRoute from '@/routes/procurement/procurement.route'
 import PaymentRoute from './routes/payments/payment.route';
 import ExpenseHeadDraftRoute from "@routes/expense-head/expense-head.route";
 import EmployeesSalaryRoute from "@routes/payroll/employees-salary.route";
+import OrientationRoute from "@routes/recruitment/orientation_and_training.route";
+import IdRequestRoute from "@routes/procurement/idrequest.route"
 
 validateEnv();
 
@@ -176,7 +178,9 @@ const app = new App([
   new JobDocumentRoute(),
   new EmployeesSalaryRoute(),
 
-  new SalarySettingRoute()
+  new SalarySettingRoute(),
+  new OrientationRoute(),
+  new IdRequestRoute(),
 ]);
 
 const server = app.listen();

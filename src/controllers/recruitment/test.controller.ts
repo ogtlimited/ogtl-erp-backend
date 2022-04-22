@@ -3,9 +3,13 @@ import TestServices from '@services/recruitment/test.services';
 import { NextFunction, Request, Response } from 'express';
 import { ITest } from '@interfaces/recruitment/test.interface';
 import { CreateTestDto, UpdateTestDto } from '@dtos/recruitment/test.dto';
+import JobApplicantService from '@/services/recruitment/job_applicant.service';
+import { sendEmail } from '@/utils/sendEmail';
+import { rejectionMessage } from '@/utils/message';
 
 class TestController {
   public testService = new TestServices();
+  public jobApplicantService = new JobApplicantService();
 
   //Method for returning all Test
   public getTests = async (req:Request, res:Response, next:NextFunction) =>{
@@ -43,6 +47,10 @@ class TestController {
     try {
       const testData:CreateTestDto = req.body;
       const createTestData: ITest = await this.testService.createTest(testData);
+      const jobApplicantData = await this.jobApplicantService.findJobApplicantById(testData.job_applicant_id)
+      if(testData.interview_status == "Not Qualified"){
+        sendEmail(rejectionMessage.subject, rejectionMessage.message,[jobApplicantData.email_address])
+      }
       res.status(201).json({ data: createTestData, message: 'Test created.' });
     }
     catch (error) {
