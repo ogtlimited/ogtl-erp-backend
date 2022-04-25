@@ -5,15 +5,16 @@ import { isEmpty } from '@utils/util';
 import { HttpException } from '@exceptions/HttpException';
 import { CreateJobOfferDto, UpdateJobOfferDto } from '@dtos/recruitment/job_offer.dto';
 import EmployeeModel from '@models/employee/employee.model';
-import { ObjectId } from 'mongodb';
 import { sendEmail } from '@utils/sendEmail';
-import { acceptedOfferMessage } from '@utils/message';
+import { acceptedOfferMessage, offerMessageFunc } from '@utils/message';
 import DesignationModel from '@models/employee/designation.model';
+import JobApplicantService from '@services/recruitment/job_applicant.service';
 
 class JobOfferService {
   public jobOffer = jobOfferModel;
   public employee = EmployeeModel
   public desM = DesignationModel;
+  public jobApplicantService = new JobApplicantService();
   public DesignationList = ['HEAD OF IT', 'SENIOR IT SUPPORT','CHIEF OF FACILITY AND REGULATION', 'HEAD FACILITY','DEPUTY HR MANAGER', 'SENIOR HR ASSOCIATE', 'HR-IN-HOUSE','COO', 'OPERATIONS & TRAINING DIRECTOR', 'OPERATIONS MANAGER', 'OPERATIONS MANAGER']
 
   //Method for finding all job offers
@@ -43,10 +44,14 @@ class JobOfferService {
   public async createJobOffer(jobOfferData: CreateJobOfferDto): Promise<IJobOffer>{
     //check if no job offer data is empty
     if (isEmpty(jobOfferData)) throw new HttpException(400, "Bad request");
-
+    const newJobOffer  = await this.jobOffer.create(jobOfferData);
     // return created job offer
-    return await this.jobOffer.create(jobOfferData);
-
+    if(newJobOffer){
+      const jobApplicantData = await this.jobApplicantService.findJobApplicantById(jobOfferData.job_applicant_id)
+      const offerMessageObj = offerMessageFunc(`recruitment/accept-offer/${newJobOffer._id}`)
+      sendEmail(offerMessageObj.subject, offerMessageObj.message,[jobApplicantData.email_address])
+    }
+  return newJobOffer
   }
 
   //Method for updating job offer
