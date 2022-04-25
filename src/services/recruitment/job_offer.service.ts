@@ -8,13 +8,17 @@ import EmployeeModel from '@models/employee/employee.model';
 import { ObjectId } from 'mongodb';
 import { sendEmail } from '@utils/sendEmail';
 import { acceptedOfferMessage } from '@utils/message';
+import DesignationModel from '@models/employee/designation.model';
 
 class JobOfferService {
   public jobOffer = jobOfferModel;
   public employee = EmployeeModel
+  public desM = DesignationModel;
+  public DesignationList = ['HEAD OF IT', 'SENIOR IT SUPPORT','CHIEF OF FACILITY AND REGULATION', 'HEAD FACILITY','DEPUTY HR MANAGER', 'SENIOR HR ASSOCIATE', 'HR-IN-HOUSE','COO', 'OPERATIONS & TRAINING DIRECTOR', 'OPERATIONS MANAGER', 'OPERATIONS MANAGER']
 
   //Method for finding all job offers
   public async findAllJobOffers(): Promise<IJobOffer[]>{
+
     return this.jobOffer.find().populate('job_applicant_id designation_id');
   }
 
@@ -54,9 +58,14 @@ class JobOfferService {
       const findJobOffer: IJobOffer = await this.jobOffer.findOne({ _id: jobOfferData._id  });
       if(findJobOffer && findJobOffer._id != jobOfferId) throw new HttpException(409, `${jobOfferData._id } already exist`);
     }
-    const res= await this.sendEmails()
+    const emailDesign = await this.desM.find({"designation" : { "$in": this.DesignationList }}, {
+      _id: 1,
+    });
+    const ids = emailDesign.map(id => id._id);
+    const { emails } = await this.fetchStakeHoldersEmail(ids);
+    // const res= await this.sendEmails()
     if(jobOfferData.status === "Accepted"){
-      sendEmail(acceptedOfferMessage.subject, acceptedOfferMessage.message,[...res])
+      sendEmail(acceptedOfferMessage.subject, acceptedOfferMessage.message,[...emails])
     }
     //find job offer using the id provided and update it
     const updateJobOfferById:IJobOffer = await this.jobOffer.findByIdAndUpdate(jobOfferId,jobOfferData ,{new:true})
@@ -72,29 +81,21 @@ class JobOfferService {
     if(!deleteJobOfferById) throw new HttpException(409, `Job offer with Id:${jobOfferId}, does not exist`);
     return deleteJobOfferById;
   }
+  private async fetchStakeHoldersEmail(ids): Promise<{ emails: string[] }> {
+    const designatedEmails = await this.employee.find(
+      { designation: { $in: ids } },
+      {
+        company_email: 1,
+        _id: 0,
+      },
+    );
 
-  private async fetchStakeHoldersEmail ():Promise<{emails: any[]}>{
-      // const designatedEmails = await this.employee.find({designation: {$in:[new ObjectId('6139def7ae37c158b0f4fe57'), new ObjectId('614a133561f66f5d64d857ba'), new ObjectId('621c9480ff376d085072010a')]}},
-      //   {
-      //     company_email:1,
-      //     _id:0
-      //   })
-    const designatedEmails = await this.employee.find({designation: {$in:[new ObjectId('6195674bb261e472f07d7380'), new ObjectId('61956751b261e472f07d73fd'), new ObjectId('61956752b261e472f07d7417'), new ObjectId('61956753b261e472f07d742f')]}},
-        {
-          company_email:1,
-          _id:0
-        })
-
-      return {
-        emails: designatedEmails
-      }
-  }
-
-  private async sendEmails ():Promise<any[]>{
-    const result =  await this.fetchStakeHoldersEmail()
-    const newResult= result.emails.map((result) => result.company_email)
+    const newResult = designatedEmails.map(designatedEmails => designatedEmails.company_email);
     newResult.push('it_helpdesk@outsourceglobal.com')
-    return newResult;
+    return {
+      emails: newResult,
+    };
   }
+
 }
 export default JobOfferService;
