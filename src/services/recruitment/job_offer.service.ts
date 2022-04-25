@@ -48,7 +48,7 @@ class JobOfferService {
     // return created job offer
     if(newJobOffer){
       const jobApplicantData = await this.jobApplicantService.findJobApplicantById(jobOfferData.job_applicant_id)
-      const offerMessageObj = offerMessageFunc(`recruitment/accept-offer/${newJobOffer._id}`)
+      const offerMessageObj = offerMessageFunc(`https://erp.outsourceglobal.com/recruitment/accept-offer/${newJobOffer._id}`)
       sendEmail(offerMessageObj.subject, offerMessageObj.message,[jobApplicantData.email_address])
     }
   return newJobOffer
