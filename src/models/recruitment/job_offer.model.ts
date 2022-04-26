@@ -26,12 +26,10 @@ const jobOfferSchema: Schema = new Schema({
     ref: 'Designation',
     default: null,
   },
-  job_offer_terms: [
-    {
-      type: String,
-      default: null,
-    },
-  ],
+  job_offer_terms:{
+    type: String,
+    default: null,
+  },
   terms_and_conditions: {
     type: String,
     default: null,
