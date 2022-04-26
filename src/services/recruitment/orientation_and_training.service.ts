@@ -100,7 +100,7 @@ class OrientationService {
     }
     
      const send_emails = [...employee_emails,... candidate_emails];
-    // sendEmail(subject, message, send_emails);
+    sendEmail(subject, message, send_emails);
     return await this.orientation.create(orientationData);
   }
 
