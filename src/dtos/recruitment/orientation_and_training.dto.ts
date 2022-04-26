@@ -1,5 +1,5 @@
 /*eslint-disable prettier/prettier */
-import { IsString, IsNotEmpty, IsDateString, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsDateString, IsOptional, IsArray } from 'class-validator';
 
 export class CreateOrientationDto {
   @IsNotEmpty()
@@ -21,6 +21,12 @@ export class CreateOrientationDto {
   @IsOptional()
   @IsString()
   public attendance : string;
+
+  @IsNotEmpty()
+  @IsArray()
+  public employee_id: [];
+
+
 }
 
 
@@ -47,6 +53,10 @@ export class UpdateOrientationDto {
   
   @IsString()
   public attendance : string;
+
+  @IsNotEmpty()
+  @IsArray()
+  public employee_id: [];
 
 
 }
