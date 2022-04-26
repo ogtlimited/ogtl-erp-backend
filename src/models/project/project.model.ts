@@ -13,6 +13,12 @@ const projectSchema: Schema = new Schema(
       type: String,
       required: true,
     },
+    parent: {
+      type: String,
+    },
+    leave_cap: {
+      type: Number
+    },
     client_id: {
       type: Schema.Types.ObjectId,
       ref: 'Client',
@@ -79,10 +85,7 @@ const projectSchema: Schema = new Schema(
     team_members: {
       type: [Schema.Types.ObjectId],
       ref: 'Employee',
-    },
-    leave_cap: {
-      type: String
-    },
+    }
   },
   {
     timestamps: true,

@@ -10,6 +10,7 @@ import {isValidObjectId} from 'mongoose';
 import EmployeeModel from '@/models/employee/employee.model';
 import {calculateEmployeeDeductions, officeQueryGenerator} from '@/utils/payrollUtil';
 import employeesSalaryModel from "@models/payroll/employees-salary";
+import {ObjectId} from "mongodb";
 
 // import omit from 'lodash/omit'
 
@@ -31,6 +32,7 @@ class SalarySlipService {
     ];
 
     const officeQuery = officeQueryGenerator(query)
+    console.log(officeQuery);
     const results = await this.salarySlipModel.find(officeQuery, {
       employeeId: 1,
       _id: 1,
@@ -63,7 +65,7 @@ class SalarySlipService {
       }).populate({
         path: "departmentId",
         select: {
-          _id: 0,
+          _id: 1,
           department: 1
         }
       });
@@ -169,8 +171,12 @@ class SalarySlipService {
       {path: 'employeeId', select: {first_name: 1, last_name:1, date_of_joining: 1 }}
     )
 
+    console.log(employeeSalaries, "employee salaries")
+    // return "who dey breet"
+
+
     for (let index = 0; index < employeeSalaries.length; index++) {
-      const employeeSalary = employeeSalaries[index];
+      const employeeSalary:any = employeeSalaries[index];
       // console.log(employeeSalary);
       const today = new Date()
       const salarySlipConstructor: any = {
@@ -180,7 +186,7 @@ class SalarySlipService {
         // departmentId: employee.department,
         month: today.toISOString()
       }
-      const deductions = await calculateEmployeeDeductions(employeeSalary.employeeId, employeeSalary.netPay)
+      const deductions = await calculateEmployeeDeductions(employeeSalary.employeeId._id, employeeSalary.netPay)
       if (deductions.hasDeductions) {
         salarySlipConstructor.deductions = [...deductions.deductionIds]
         salarySlipConstructor.netPay = deductions.salaryAfterDeductions
@@ -191,8 +197,6 @@ class SalarySlipService {
     await this.salarySlipModel.insertMany(records);
     return `${records.length} salary slips created`;
   }
-
-  // public async employeeDeductions(id): Promise<any>{}
 
 }
 

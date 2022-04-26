@@ -10,6 +10,12 @@ const testSchema: Schema = new Schema({
     ref: 'JobApplicant',
 
   },
+  hr_user: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'Employee',
+
+  },
   status:{
     type: String,
 

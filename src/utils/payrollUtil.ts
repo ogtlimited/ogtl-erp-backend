@@ -4,6 +4,7 @@ import isEmpty from 'lodash/isEmpty';
 import { HttpException } from '@/exceptions/HttpException';
 import deductionModel from '@/models/payroll/deduction.model';
 import { deductionAggBuilder } from '@/utils/pipelineUtils';
+import moment from "moment";
 
 export const calculateNetAndGrossPay = (salaryComponents: Array<any>) => {
   if (salaryComponents.length < 1) {
@@ -37,8 +38,8 @@ export const officeQueryGenerator = queryParams => {
   if (queryParams.departmentId) {
     if (queryParams.startOfMonth && queryParams.endOfMonth) {
       officeQuery.createdAt = {
-        '$gte': new Date(queryParams.startOfMonth),
-        '$lte': new Date(queryParams.endOfMonth)
+        '$lte': new Date(moment(queryParams.endOfMonth).format('YYYY-MM-DD')).toISOString(),
+        '$gte': new Date(moment(queryParams.startOfMonth).format('YYYY-MM-DD')).toISOString(),
       }
     }
     officeQuery.departmentId = new ObjectId(queryParams.departmentId)
@@ -46,10 +47,10 @@ export const officeQueryGenerator = queryParams => {
   }
   if (queryParams.projectId) {
     if (queryParams.startOfMonth && queryParams.endOfMonth) {
-    officeQuery.createdAt = {
-      '$gte': new Date(queryParams.startOfMonth),
-      '$lte': new Date(queryParams.endOfMonth)
-    }}
+      officeQuery.createdAt = {
+        '$gte': new Date(queryParams.startOfMonth),
+        '$lte': new Date(queryParams.endOfMonth)
+      }}
     officeQuery.projectId = new ObjectId(queryParams.projectId)
     return officeQuery
   }
@@ -59,7 +60,7 @@ export const officeQueryGenerator = queryParams => {
         '$gte': new Date(queryParams.startOfMonth),
         '$lte': new Date(queryParams.endOfMonth)
       },
-     };
+    };
     return officeQuery
   }
 };

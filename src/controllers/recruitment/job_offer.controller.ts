@@ -3,9 +3,8 @@ import JobOfferService from '@services/recruitment/job_offer.service';
 import { NextFunction, Request, Response } from 'express';
 import { IJobOffer } from '@interfaces/recruitment/job_offer.interface';
 import { CreateJobOfferDto, UpdateJobOfferDto } from '@dtos/recruitment/job_offer.dto';
-import { sendEmail } from '@/utils/sendEmail';
+// import { sendEmail } from '@/utils/sendEmail';
 import JobApplicantService from '@/services/recruitment/job_applicant.service';
-import { OfferMessage } from '@/utils/message';
 
 
 
@@ -49,8 +48,9 @@ class JobOfferController {
     try {
       const jobOfferData:CreateJobOfferDto = req.body;
       const createJobOfferData: IJobOffer = await this.jobOfferService.createJobOffer(jobOfferData);
-      const jobApplicantData = await this.jobApplicantService.findJobApplicantById(jobOfferData.job_applicant_id)
-      sendEmail(OfferMessage.subject, OfferMessage.message,[jobApplicantData.email_address])
+      // const jobApplicantData = await this.jobApplicantService.findJobApplicantById(jobOfferData.job_applicant_id)
+      // const offerMessageObj = offerMessageFunc(`recruitment/accept-offer/${jobOfferData.job_applicant_id}`)
+      // sendEmail(offerMessageObj.subject, offerMessageObj.message,[jobApplicantData.email_address])
       res.status(201).json({ data: createJobOfferData, message: 'Job offer created.' });
     }
     catch (error) {

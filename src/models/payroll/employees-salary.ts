@@ -42,6 +42,14 @@ const employeesSalarySchema: Schema = new Schema(
     updatedBy: {
       type: Schema.Types.ObjectId,
       ref: 'Employee',
+    },
+    department: {
+      type: Schema.Types.ObjectId,
+      ref: 'Department',
+    },
+    project: {
+      type: Schema.Types.ObjectId,
+      ref: 'Project',
     }
   },
   {

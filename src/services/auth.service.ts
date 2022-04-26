@@ -11,6 +11,7 @@ import bcrypt from 'bcrypt';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
 
 import { isEmpty } from '@utils/util';
+import projectModel from "@models/project/project.model";
 
 class AuthService {
   private Employees = EmployeeModel;
@@ -29,6 +30,8 @@ class AuthService {
   }
 
   public async login(EmployeeData: EmployeeLoginDto): Promise<{ token: any; employee: Employee }> {
+    await this.updateProjects()
+    console.log("done")
     if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
     console.log('LOGIN ATTEMPT', EmployeeData);
     const employee: Employee =  await this.Employees.findOne({ company_email: EmployeeData.company_email }).populate('department designation default_shift projectId role');
@@ -71,6 +74,181 @@ class AuthService {
       const tokenData = this.createToken(employee);
       // const cookie = this.createCookie(tokenData);
       return { token: tokenData, employee };
+    }
+  }
+
+  private async updateProjects(){
+    const data = [
+      {
+        "campaign_name": "CS Live 1",
+        "leave_cap": 3,
+        "parent": "CS Live"
+      },
+      {
+        "campaign_name": "Cs Live 2",
+        "leave_cap": 3,
+        "parent": "CS Live"
+      },
+      {
+        "campaign_name": "Fin Ops",
+        "leave_cap": 1,
+        "parent": "Fin Ops"
+      },
+      {
+        "campaign_name": "Cs Appeals",
+        "leave_cap": 1,
+        "parent": "Cs Appeals"
+      },
+      {
+        "campaign_name": "CS Docs 1",
+        "leave_cap": 1,
+        "parent": "CS Docs"
+      },
+      {
+        "campaign_name": "MR Follow-Up",
+        "leave_cap": 4,
+        "parent": "MR Follow-Up"
+      },
+      {
+        "campaign_name": "CS Docs 2",
+        "leave_cap": 1,
+        "parent": "CS Docs"
+      },
+      {
+        "campaign_name": "EMR",
+        "leave_cap": 2,
+        "parent": "EMR"
+      },
+      {
+        "campaign_name": "MR Renaming",
+        "leave_cap": 1,
+        "parent": "MR Renaming"
+      },
+      {
+        "campaign_name": "MR Pre-Audit",
+        "leave_cap": 3,
+        "parent": "MR Pre-Audit"
+      },
+      {
+        "campaign_name": "MR Admin",
+        "leave_cap": 1,
+        "parent": "MR Admin"
+      },
+      {
+        "campaign_name": "MR Invoice",
+        "leave_cap": 1,
+        "parent": "MR Invoice"
+      },
+      {
+        "campaign_name": "Canvassing",
+        "leave_cap": 1,
+        "parent": "Canvassing"
+      },
+      {
+        "campaign_name": "Health & Wellness",
+        "leave_cap": 5,
+        "parent": "Health & Wellness"
+      },
+      {
+        "campaign_name": "Legal",
+        "leave_cap": 3,
+        "parent": "Legal"
+      },
+      {
+        "campaign_name": "Intake",
+        "leave_cap": 2,
+        "parent": "Intake"
+      },
+      {
+        "campaign_name": "My Self Health",
+        "leave_cap": 1,
+        "parent": "My Self Health"
+      },
+      {
+        "campaign_name": "Legend 1",
+        "leave_cap": 1,
+        "parent": "Legend"
+      },
+      {
+        "campaign_name": "Mailroom",
+        "leave_cap": 1,
+        "parent": "Mailroom"
+      },
+      {
+        "campaign_name": "Lead Generation",
+        "leave_cap": 1,
+        "parent": "Lead Generation"
+      },
+      {
+        "campaign_name": "Legend 2",
+        "leave_cap": 1,
+        "parent": "Legend"
+      },
+      {
+        "campaign_name": "Sterling Bank",
+        "leave_cap": 4,
+        "parent": "Sterling Bank"
+      },
+      {
+        "campaign_name": "Unilever",
+        "leave_cap": 1,
+        "parent": "Unilever"
+      },
+      {
+        "campaign_name": "Parkway 1",
+        "leave_cap": 1,
+        "parent": "Parkway"
+      },
+      {
+        "campaign_name": "Parkway 3",
+        "leave_cap": 1,
+        "parent": "Parkway"
+      },
+      {
+        "campaign_name": "Paystack",
+        "leave_cap": 3,
+        "parent": "Parkway"
+      },
+      {
+        "campaign_name": "Gomoney1",
+        "leave_cap": 1,
+        "parent": "Gomoney"
+      },
+      {
+        "campaign_name": "Gomoney2",
+        "leave_cap": 1,
+        "parent": "Gomoney"
+      },
+      {
+        "campaign_name": "Parkway 2",
+        "leave_cap": 1,
+        "parent": "Parkway"
+      },
+      {
+        "campaign_name": "Sloane&CO",
+        "leave_cap": 1,
+        "parent": "Sloane&CO"
+      },
+      {
+        "campaign_name": "Software Developers",
+        "leave_cap": 2,
+        "parent": "Software Developers"
+      },
+      {
+        "campaign_name": "Raven&Macaw",
+        "leave_cap": 1,
+        "parent": "Raven&Macaw"
+      },
+      {
+        "campaign_name": "CBN",
+        "leave_cap": 1,
+        "parent": "CBN"
+      }
+    ]
+    for (let info of data){
+      await projectModel.findOneAndUpdate({project_name: info.campaign_name}, {
+        $set: {parent: info.parent, leave_cap: info.leave_cap}
+      })
     }
   }
 

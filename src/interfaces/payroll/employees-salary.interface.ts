@@ -16,6 +16,8 @@ export interface IEmployeesSalary {
 }
 
 export interface ISalarySetting {
+  projectId?: string;
+  departmentId?: string;
   basic?: number,
   medical?: number,
   housing?: number,

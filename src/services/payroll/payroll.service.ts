@@ -52,10 +52,6 @@ class PayRollService {
     return 'done';
   }
 
-  public async generatePayroll(){
-
-  }
-
 
 }
 
