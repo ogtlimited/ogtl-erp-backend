@@ -15,7 +15,7 @@ class JobOfferService {
   public employee = EmployeeModel
   public desM = DesignationModel;
   public jobApplicantService = new JobApplicantService();
-  public DesignationList = ['HEAD OF IT', 'SENIOR IT SUPPORT','CHIEF OF FACILITY AND REGULATION', 'HEAD FACILITY','DEPUTY HR MANAGER', 'SENIOR HR ASSOCIATE', 'HR-IN-HOUSE','COO', 'OPERATIONS & TRAINING DIRECTOR', 'OPERATIONS MANAGER', 'OPERATIONS MANAGER']
+  public DesignationList = ['SUPER','HEAD OF IT', 'SENIOR IT SUPPORT','CHIEF OF FACILITY AND REGULATION', 'HEAD FACILITY','DEPUTY HR MANAGER', 'SENIOR HR ASSOCIATE', 'HR-IN-HOUSE','COO', 'OPERATIONS & TRAINING DIRECTOR', 'OPERATIONS MANAGER', 'OPERATIONS MANAGER']
 
   //Method for finding all job offers
   public async findAllJobOffers(): Promise<IJobOffer[]>{
