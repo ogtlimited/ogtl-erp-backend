@@ -19,7 +19,7 @@ class OrientationController {
   public getOrientations = async (req:Request, res:Response, next:NextFunction) =>{
     try {
       const findAllOrientations: IOrientation[] = await this.orientationService.findAllOrientations();
-      res.status(200).json({data:findAllOrientations, totalOrientations: findAllOrientations.length, message:"All job offers"})
+      res.status(200).json({data:findAllOrientations, totalOrientations: findAllOrientations.length, message:"All Orientation"})
     }catch (error) {
       next(error)
     }
@@ -32,7 +32,7 @@ class OrientationController {
     try {
       const orientationId:string = req.params.id;
       const findJobOffer:IOrientation = await this.orientationService.findOrientationById(orientationId);
-      res.status(200).json({data:findJobOffer, message:"Job offer found successfully"})
+      res.status(200).json({data:findJobOffer, message:" Orientation found successfully"})
     }
     catch (error) {
       next(error)
@@ -54,9 +54,9 @@ class OrientationController {
   public updateOrientation = async (req:Request, res:Response, next:NextFunction) =>{
     try {
       const orientationId:string = req.params.id;
-      const jobOfferData:UpdateOrientationDto = req.body;
-      const updateOrientationData: IOrientation = await this.orientationService.updateOrientation(orientationId,jobOfferData);
-      res.status(200).json({ data: updateOrientationData, message: 'Job offer updated.' });
+      const orientationData:UpdateOrientationDto = req.body;
+      const updateOrientationData: IOrientation = await this.orientationService.updateOrientation(orientationId,orientationData);
+      res.status(200).json({ data: updateOrientationData, message: 'Orientation/Training updated.' });
     }
     catch (error) {
       next(error)
@@ -69,7 +69,7 @@ class OrientationController {
       const orientationId:string = req.params.id;
       const deleteOrientation = await this.orientationService.deleteOrientation(orientationId);
 
-      res.status(200).json({ data: deleteOrientation, message: 'Job offer deleted' });
+      res.status(200).json({ data: deleteOrientation, message: 'Orientation/Training  deleted' });
     } catch (error) {
       next(error);
     }

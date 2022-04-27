@@ -30,6 +30,10 @@ const orientationSchema: Schema = new Schema({
     type: String,
     
   },
+  employee_id : [{
+    type: Schema.Types.ObjectId,
+    ref: 'Employee',
+  }]
  
 },
   {

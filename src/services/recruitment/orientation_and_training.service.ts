@@ -18,19 +18,19 @@ class OrientationService {
   public DesignationList = {
     it: ['HEAD OF IT', 'SENIOR IT SUPPORT'],
     facility: ['CHIEF OF FACILITY AND REGULATION', 'HEAD FACILITY'],
-    hr: ['DEPUTY HR MANAGER', 'SENIOR HR ASSOCIATE', 'HR-IN-HOUSE'],
+    hr: ['SUPER','DEPUTY HR MANAGER', 'SENIOR HR ASSOCIATE', 'HR-IN-HOUSE'],
     accounts: ['HEAD ACCOUNT', 'SENIOR ACCOUNTANT'],
     operations: ['COO', 'OPERATIONS & TRAINING DIRECTOR', 'OPERATIONS MANAGER', 'OPERATIONS MANAGER'],
   };
 
   public async findAllOrientations(): Promise<IOrientation[]> {
-    return this.orientation.find().populate('department_id');
+    return this.orientation.find().populate('department_id employee_id');
   }
 
   public async findOrientationById(orientationId: string): Promise<IOrientation> {
     if (isEmpty(orientationId)) throw new HttpException(400, `Orientation with Id:${orientationId}, does not exist`);
 
-    const findOrientation: IOrientation = await this.orientation.findOne({ _id: orientationId }).populate('department_id');
+    const findOrientation: IOrientation = await this.orientation.findOne({ _id: orientationId }).populate('department_id employee_id');
     if (!findOrientation) throw new HttpException(409, `Orientation with Id:${orientationId}, does not exist`);
     return findOrientation;
   }
@@ -39,8 +39,16 @@ class OrientationService {
     if (isEmpty(orientationData)) throw new HttpException(400, 'Bad request');
 
     const dept = await this.department.findById(orientationData.department_id);
-    const message = `${dept.department} has been scheduled for ${orientationData.type} on ${orientationData.start_date} at ${orientationData.end_date}/n Please attend and be on time /n HR Team`;
+    const message = ` You have been scheduled for ${orientationData.type} with the ${dept.department} department on ${orientationData.start_date} at ${orientationData.end_date}/n Please attend and be on time /n HR Team`;
     const subject = 'Orientation/Customer Service Training';
+    const candidates = await this.employee.find(
+      { _id: { $in: orientationData.employee_id } },
+      {
+        company_email: 1,
+        _id: 0,
+      },
+    );
+    const candidate_emails = candidates.map(candidates => candidates.company_email);
 
     let employee_emails: string[];
 
@@ -51,6 +59,8 @@ class OrientationService {
       const ids = hrDesign.map(id => id._id);
       const { emails } = await this.fetchHREmail(ids);
       employee_emails = emails;
+
+
     }
 
     if (dept.department === 'Accounting') {
@@ -88,8 +98,9 @@ class OrientationService {
       const { emails } = await this.fetchFacilityEmail(ids);
       employee_emails = emails;
     }
-
-    sendEmail(subject, message, employee_emails);
+    
+     const send_emails = [...employee_emails,...candidate_emails];
+    sendEmail(subject, message, send_emails);
     return await this.orientation.create(orientationData);
   }
 
