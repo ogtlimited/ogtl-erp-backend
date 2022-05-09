@@ -41,7 +41,10 @@ class TerminationService {
   public async createTermination(data: CreateTerminationDto): Promise<ITermination> {
     if (isEmpty(data)) throw new HttpException(400, "Bad request");
     //checks if employee exists
-    const findEmployeeById: Employee = await this.employeeModel.findOne({ _id:data.employee }).populate("employee");
+    console.log(data,"employee data");
+    
+    const findEmployeeById: Employee = await this.employeeModel.findOne({ _id:data.employee });
+    console.log(findEmployeeById, "find employee")
     if (!findEmployeeById) throw new HttpException(404, 'Employee does not exist!');
     const createdata = await this.TerminationModel.create(data);
     if(createdata){
