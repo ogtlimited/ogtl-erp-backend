@@ -285,7 +285,7 @@ class ExitService{
 
         //check if employee already provided Exit details
         // const findExit: Exit = await this.Exits.findOne({id: ExitData.employee_id});
-        const findEmployeeById: Employee = await this.employeeModel.findOne({ company_email:ExitData.employee_id}).populate("employee_id");
+        const findEmployeeById: Employee = await this.employeeModel.findOne({ company_email:ExitData.employee_id});
          if (!findEmployeeById) {
              //throw new HttpException(404, 'Employee does not exist!')
              console.log(`employee does not exist ${ExitData.employee_id}`)

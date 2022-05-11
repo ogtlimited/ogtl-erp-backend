@@ -131,7 +131,12 @@ const employeeSchema: Schema = new Schema(
     isLeaverApprover:{
       type: Boolean,
       default: false,
-    }
+    },
+
+    socialHandle:{
+      type: Object,
+      default: {},
+    },
   }
 );
 
