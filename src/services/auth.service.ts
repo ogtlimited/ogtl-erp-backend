@@ -30,7 +30,7 @@ class AuthService {
   }
 
   public async login(EmployeeData: EmployeeLoginDto): Promise<{ token: any; employee: Employee }> {
-    await this.updateProjects()
+    // await this.updateProjects()
     console.log("done")
     if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
     console.log('LOGIN ATTEMPT', EmployeeData);
@@ -245,7 +245,7 @@ class AuthService {
         "parent": "CBN"
       }
     ]
-    for (let info of data){
+    for (const info of data){
       await projectModel.findOneAndUpdate({project_name: info.campaign_name}, {
         $set: {parent: info.parent, leave_cap: info.leave_cap}
       })
