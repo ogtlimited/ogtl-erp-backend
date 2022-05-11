@@ -177,6 +177,15 @@ class EmployeeService {
     console.log(formatted);
     console.log('formatted');
 
+    // const idRequestData = {
+    //   employee_id:createEmployeeData._id,
+    //   date: createEmployeeData.created_at,
+    //   notes : "None"
+    // }
+    // this.idRequestService.createIdRequest(idRequestData).then(result=>{
+    //   console.log("id Request Created")
+    // })
+
     const createEmployeeData = await this.Employees.insertMany(formatted);
 
     return createEmployeeData;

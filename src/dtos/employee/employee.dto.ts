@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
 import { Type } from 'class-transformer';
-import { IsEmail, IsString, IsBoolean, IsNumber, IsDateString, IsOptional, ValidateNested } from 'class-validator';
+import { IsEmail, IsString, IsBoolean, IsNumber, IsDateString, IsOptional, ValidateNested, IsArray } from 'class-validator';
 
 export class CreateEmployeeDto {
 
@@ -72,6 +72,9 @@ export class CreateEmployeeDto {
   @IsOptional()
   leaveCount: number;
 
+  @IsOptional()
+  socialHandle: {};
+
 
 
 }
@@ -136,6 +139,10 @@ export class UpdateEmployeeDto {
   @IsOptional()
   @IsBoolean()
   public isLeaverApprover: boolean;
+
+  @IsOptional()
+  @IsArray()
+  socialHandle: [];
 
 
 

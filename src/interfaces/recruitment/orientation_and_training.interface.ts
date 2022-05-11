@@ -6,6 +6,7 @@ export interface IOrientation{
     end_date: string;
     type: string;
     attendance? : string;
+    employee_id: [];
 
 
 }
