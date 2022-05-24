@@ -3,7 +3,7 @@ import jobOpeningModel, { defaultJobOpeningModel } from '@models/recruitment/job
 import { IJobOpening, IDefaultJobOpening } from '@interfaces/recruitment/job_opening.interface';
 import { isEmpty } from '@utils/util';
 import { HttpException } from '@exceptions/HttpException';
-import { CreateJobOpeningDto,CreateDefaultJobOpeningDto, UpdateJobOpeningDto } from '@dtos/recruitment/job_opening.dto';
+import { CreateJobOpeningDto,CreateDefaultJobOpeningDto, UpdateJobOpeningDto, UpdateDefaultJobOpeningDto } from '@dtos/recruitment/job_opening.dto';
 import jobs from './job.json'
 class JobOpeningService {
   public jobOpening = jobOpeningModel;
@@ -65,11 +65,32 @@ class JobOpeningService {
     // return updated job opening
     return updateJobOpeningById;
   }
+  public async updateDefaultJobOpening(jobOpeningId: string,jobOpeningData: UpdateDefaultJobOpeningDto):Promise<IDefaultJobOpening>{
+    //check if no job opening data is empty
+    console.log('SERVICE', jobOpeningData )
+    if (isEmpty(jobOpeningData)) throw new HttpException(400, "Bad request");
+    if(jobOpeningData._id){
+      //find job opening using the employee id provided
+      const findJobOpening: IDefaultJobOpening = await this.defaultJobOpeningModel.findOne({ _id: jobOpeningData._id });
+      if(findJobOpening && findJobOpening._id != jobOpeningId) throw new HttpException(409, `${jobOpeningData._id } already exists`);
+    }
+    //find job opening using the id provided and update it
+    const updateJobOpeningById:IDefaultJobOpening = await this.defaultJobOpeningModel.findByIdAndUpdate(jobOpeningId,jobOpeningData,{new:true})
+    if (!updateJobOpeningById) throw new HttpException(409, "Job opening could not be updated");
+    // return updated job opening
+    return updateJobOpeningById;
+  }
 
   //Method for deleting job opening
   public async deleteJobOpening(jobOpeningId: string):Promise<IJobOpening>{
     //find job opening using the id provided and delete
     const deleteJobOpeningById: IJobOpening = await this.jobOpening.findByIdAndDelete(jobOpeningId);
+    if(!deleteJobOpeningById) throw new HttpException(409, `Job opening with Id:${jobOpeningId}, does not exist`);
+    return deleteJobOpeningById;
+  }
+  public async deleteDefaultJobOpening(jobOpeningId: string):Promise<IDefaultJobOpening>{
+    //find job opening using the id provided and delete
+    const deleteJobOpeningById: IDefaultJobOpening = await this.defaultJobOpeningModel.findByIdAndDelete(jobOpeningId);
     if(!deleteJobOpeningById) throw new HttpException(409, `Job opening with Id:${jobOpeningId}, does not exist`);
     return deleteJobOpeningById;
   }

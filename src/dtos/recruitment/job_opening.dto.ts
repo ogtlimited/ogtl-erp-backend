@@ -51,7 +51,14 @@ export class CreateDefaultJobOpeningDto {
   public job_title: string;
 
 }
+export class UpdateDefaultJobOpeningDto {
+  @IsString()
+  public _id: string;
 
+  @IsNotEmpty()
+  @IsString()
+  public job_title: string;
+}
 export class UpdateJobOpeningDto {
   @IsString()
   public _id: string;

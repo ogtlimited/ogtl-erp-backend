@@ -2,7 +2,7 @@
 import JobOpeningService from '@services/recruitment/job_opening.service';
 import { NextFunction, Request, Response } from 'express';
 import { IDefaultJobOpening, IJobOpening } from '@interfaces/recruitment/job_opening.interface';
-import { CreateJobOpeningDto, UpdateJobOpeningDto } from '@dtos/recruitment/job_opening.dto';
+import { CreateJobOpeningDto, UpdateJobOpeningDto,UpdateDefaultJobOpeningDto, CreateDefaultJobOpeningDto } from '@dtos/recruitment/job_opening.dto';
 
 class JobOpeningController {
   public jobOpeningService = new JobOpeningService();
@@ -47,13 +47,33 @@ class JobOpeningController {
       next(error);
     }
   };
+  public createDefaultJob = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const jobOpeningData: CreateDefaultJobOpeningDto = req.body;
+      const createJobOpeningData: IDefaultJobOpening = await this.jobOpeningService.createDefaultJobOpening(jobOpeningData);
+      res.status(201).json({ data: createJobOpeningData, message: 'Job opening created.' });
+    } catch (error) {
+      next(error);
+    }
+  };
 
   //Method for updating job opening
   public updateJobOpening = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const jobOpeningId: string = req.params.id;
       const jobOpeningData: UpdateJobOpeningDto = req.body;
+      console.log('CONTROLLER',jobOpeningData )
       const updateJobOpeningData: IJobOpening = await this.jobOpeningService.updateJobOpening(jobOpeningId, jobOpeningData);
+      res.status(200).json({ data: updateJobOpeningData, message: 'Job opening updated.' });
+    } catch (error) {
+      next(error);
+    }
+  };
+  public updateDefaultJobOpening = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const jobOpeningId: string = req.params.id;
+      const jobOpeningData: UpdateDefaultJobOpeningDto = req.body;
+      const updateJobOpeningData: IDefaultJobOpening = await this.jobOpeningService.updateDefaultJobOpening(jobOpeningId, jobOpeningData);
       res.status(200).json({ data: updateJobOpeningData, message: 'Job opening updated.' });
     } catch (error) {
       next(error);
@@ -65,6 +85,17 @@ class JobOpeningController {
     try {
       const jobOpeningId: string = req.params.id;
       const deleteJobOpening = await this.jobOpeningService.deleteJobOpening(jobOpeningId);
+
+      res.status(200).json({ data: deleteJobOpening, message: 'Job opening deleted' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public deleteDefaultJobOpening = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const jobOpeningId: string = req.params.id;
+      const deleteJobOpening = await this.jobOpeningService.deleteDefaultJobOpening(jobOpeningId);
 
       res.status(200).json({ data: deleteJobOpening, message: 'Job opening deleted' });
     } catch (error) {
