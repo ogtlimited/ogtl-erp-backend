@@ -81,12 +81,14 @@ class SalarySlipService {
         $gte: query.startOfMonth,
         $lte: query.endOfMonth
       }})
+      .populate({path: "employeeId", select:{first_name: 1, last_name: 1, ogid:1, middle_name: 1 } })
+      .populate({path: "departmentId"})
       .populate({path: "projectId", select: {project_name: 1}})
-      .populate({path: "departmentId", select: {project_name: 1}})
       .populate({path: 'deductions', populate: {path: 'deductionTypeId', model: 'DeductionType'}})
     if (!salarySlip) {
       throw new HttpException(404, "no record found")
     }
+    console.log(salarySlip)
     // const employeeSalary = await employeesSalaryModel.findOne({employeeId: salarySlip.employeeId}).populate(
     //   {path: 'employeeId', select: {first_name: 1, last_name:1, date_of_joining: 1 }}
     // )
@@ -110,7 +112,11 @@ class SalarySlipService {
     }
     // record.salaryStructure = salarySlip.salaryStructure
     employeeSlip.additionalDeductions = additionalDeductions;
-    employeeSlip.employeeSalary = salarySlip.employeeSalary;
+    employeeSlip.employeeSalary = {
+      ...salarySlip.employeeSalary,
+      employeeId: salarySlip.employeeId,
+      department: salarySlip.departmentId,
+    };
     employeeSlip.netPay = salarySlip.netPay;
     employeeSlip.deductionsBreakDown = salarySlip.deductions
     employeeSlip.createdAt = salarySlip.createdAt;
@@ -163,7 +169,9 @@ class SalarySlipService {
 
     const records = [];
     const today = new Date()
-    if(today.getDate() != 25){
+    console.log(today.getDate(), 'PAYSLIP')
+    if(today.getDate() > 25){
+    // if(today.getDate() != 25){
       throw new HttpException(400, "Cannot generate slip before the 25th!")
     }
     const noSalaries = []
