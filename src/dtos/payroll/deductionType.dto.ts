@@ -15,6 +15,10 @@ export class CreateDeductionTypeDto {
   public amount: string;
 
   @IsString()
+  public type: string;
+
+
+  @IsString()
   @IsOptional()
   public status: string;
 }

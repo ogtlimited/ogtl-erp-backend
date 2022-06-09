@@ -7,6 +7,11 @@ const deductionTypeSchema: Schema = new Schema(
       type: String,
       required: true
     },
+    type:{
+      type: String,
+      enum: ["Deduction", "Extra Time"],
+      
+    },
     description: {
       type: String,
     },
@@ -24,6 +29,10 @@ const deductionTypeSchema: Schema = new Schema(
     },
     amount: {
       type: Number,
+    },
+    departmentId : {
+      type: Schema.Types.ObjectId,
+      ref: "Department"
     },
     percentage: {
       type: Number,
