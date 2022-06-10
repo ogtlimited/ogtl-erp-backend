@@ -7,11 +7,7 @@ const deductionTypeSchema: Schema = new Schema(
       type: String,
       required: true
     },
-    type:{
-      type: String,
-      enum: ["Deduction", "Extra Time"],
-      
-    },
+
     description: {
       type: String,
     },
