@@ -23,6 +23,7 @@ import InvoiceService from '@services/invoice/invoice.service';
 import PaymentService from '@services/payments/payment.service';
 import RoleService from '@services/role/role.service';
 import JobOpeningService from '@services/recruitment/job_opening.service';
+import DeductionTypeService from './payroll/deductionType.service';
 
 class CombineServices {
   public designationS = new DesignationService();
@@ -48,6 +49,7 @@ class CombineServices {
   public Payments = new PaymentService()
   public roleS = new RoleService()
   public jobOpeningS = new JobOpeningService()
+  public deductionType = new DeductionTypeService()
 //   public departmentS = new Department
 
   public async createEmployeeFormSelection(){
@@ -64,6 +66,7 @@ class CombineServices {
     const allPurchaseOrders = await this.PurchaseOrder.findAllPurchaseOrders()
     const clientS = await this.clientS.findAll()
     const roles = await this.roleS.findAll()
+    
 
 
     return {
@@ -78,7 +81,8 @@ class CombineServices {
         passedApplicants,
         allAssets,
         allPurchaseOrders,
-       clientS
+       clientS,
+       
     }
   }
   //For anything relating to Employee creation
@@ -90,6 +94,7 @@ class CombineServices {
     const departments = await this.departmentS.findAllDepartments()
     const shifts = await this.shiftS.findAllshiftType()
     const branches = await this.brancheS.findAllBranches();
+    const deductionTypes = await this.deductionType.findAll()
 
     return {
       acceptedJobOffers,
@@ -98,7 +103,8 @@ class CombineServices {
       projects,
       shifts,
       departments,
-      branches
+      branches,
+      deductionTypes
     }
   }
 
