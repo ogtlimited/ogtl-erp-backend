@@ -92,7 +92,11 @@ import PaymentRoute from './routes/payments/payment.route';
 import ExpenseHeadDraftRoute from "@routes/expense-head/expense-head.route";
 import EmployeesSalaryRoute from "@routes/payroll/employees-salary.route";
 import OrientationRoute from "@routes/recruitment/orientation_and_training.route";
-import IdRequestRoute from "@routes/procurement/idrequest.route"
+import IdRequestRoute from "@routes/procurement/idrequest.route";
+import DeductionTypeRoute from "@routes/payroll/deductionType.route";
+import DeductionRoute from "@routes/payroll/deduction.route";
+import NotesRoute from "@routes/payroll/notes.route";
+
 
 validateEnv();
 
@@ -181,6 +185,9 @@ const app = new App([
   new SalarySettingRoute(),
   new OrientationRoute(),
   new IdRequestRoute(),
+  new DeductionTypeRoute(),
+  new DeductionRoute(),
+  new NotesRoute()
 ]);
 
 const server = app.listen();

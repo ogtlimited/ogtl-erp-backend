@@ -3,17 +3,17 @@
 
 import { IsString, IsNumber } from 'class-validator';
 
-export class CreateDeductionDto {  
+export class CreatNotesDto {  
   @IsString()
-  public deductionTypeId: string;
+  public title: string;
 
   @IsString()
   public employeeId: string;
 
-  // @IsNumber()
-  // //default 1
-  // public quantity: Number;
+  @IsString()
+  public description: string;
 
-  @IsNumber()
-  public amount : Number;
+  
+
+
 }

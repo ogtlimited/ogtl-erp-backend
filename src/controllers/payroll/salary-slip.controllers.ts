@@ -22,6 +22,8 @@ class SalarySlipController {
     try {
       // const id: string = req.params.id;
       const data = await this.salarySlipService.findById(req.query);
+      console.log(data, "data");
+      
       res.status(200).json({ data: data});
     } catch (error) {
       next(error);

@@ -9,7 +9,7 @@ class DeductionService {
   public deductionModel = deductionModel;
 
   public async findAll() {
-    const results = await this.deductionModel.find();
+    const results = await this.deductionModel.find().populate('deductionTypeId employeeId');
     return results;
   }
 

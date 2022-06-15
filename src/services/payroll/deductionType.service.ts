@@ -10,7 +10,7 @@ class DeductionTypeService {
   public deductionTypeModel = deductionTypeModel;
 
   public async findAll() {
-    const results = await this.deductionTypeModel.find();
+    const results = await this.deductionTypeModel.find().populate('departmentId');
     return results;
   }
 
@@ -24,7 +24,6 @@ class DeductionTypeService {
   public async create(data: CreateDeductionTypeDto){
     if (isEmpty(data)) throw new HttpException(400, "Bad request");
     const createdata = await this.deductionTypeModel.create(data);
-    const createdDepartment = await departmentModel.create({title: "lmaoe"});
     return createdata;
   }
 
