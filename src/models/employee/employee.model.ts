@@ -132,11 +132,15 @@ const employeeSchema: Schema = new Schema(
       type: Boolean,
       default: false,
     },
-
     socialHandle:{
       type: Object,
       default: {},
     },
+    extraTime:{
+      type:Boolean,
+      default:false
+    }
+
   }
 );
 

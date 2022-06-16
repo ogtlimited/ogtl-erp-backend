@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 export const deductionAggBuilder = employeeId => {
-  const query = [
+  return [
     {
       $facet: {
         deductionIds: [
@@ -44,5 +44,4 @@ export const deductionAggBuilder = employeeId => {
       },
     },
   ];
-  return query;
 };
