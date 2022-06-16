@@ -36,6 +36,14 @@ const salarySlipSchema: Schema = new Schema(
       type: Number,
       required: true,
     },
+    salaryAfterDeductions: {
+      type: Number,
+      default:0
+    },
+    totalDeductions: {
+      type: Number,
+      default: 0
+    },
     month: {
       type: Date,
     },

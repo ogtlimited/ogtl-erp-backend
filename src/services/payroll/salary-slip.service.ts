@@ -11,11 +11,21 @@ import EmployeeModel from '@/models/employee/employee.model';
 import {calculateEmployeeDeductions, officeQueryGenerator} from '@/utils/payrollUtil';
 import employeesSalaryModel from "@models/payroll/employees-salary";
 import {ObjectId} from "mongodb";
-
+import moment from "moment";
+import attendanceModel from "@models/attendance/attendance.model";
+import AttendanceTypeService from "@services/attendance/attendance.service";
+import differenceInBusinessDays from 'date-fns/differenceInBusinessDays'
+import applicationModel from "@models/leave/application.model";
 // import omit from 'lodash/omit'
 
 class SalarySlipService {
+
+  private startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
+  private endOfMonth   = moment().endOf('month').format('YYYY-MM-DD');
+
   public salarySlipModel = salarySlipModel;
+  private attendanceService = new AttendanceTypeService()
+  private leaveModel = applicationModel;
 
   public async findAll(query): Promise<any> {
     console.log(query);
@@ -167,24 +177,62 @@ class SalarySlipService {
 
   public async createDepartmentPayroll(data: CreateSalarySlipDto): Promise<any> {
 
+
+    /*
+     The steps for this method are:
+
+     1. Fetch all employees salaries
+     2. loop through each of the employee salaries and get the employee
+     3. check the days the employee has worked if he meets the attendance threshold.
+     4. if yes, check if emp has pending deductions.
+     5. If emp hasn't met threshold....TODO
+
+     */
+
     const records = [];
     const today = new Date()
-    console.log(today.getDate(), 'PAYSLIP')
+    // console.log(today.getDate(), 'PAYSLIP')
     if(today.getDate() > 25){
     // if(today.getDate() != 25){
       throw new HttpException(400, "Cannot generate slip before the 25th!")
     }
     const noSalaries = []
     const employeeSalaries = await employeesSalaryModel.find({}).populate(
-      {path: 'employeeId', select: {first_name: 1, last_name:1, date_of_joining: 1 }}
+      {path: 'employeeId', select: {first_name: 1, last_name:1, date_of_joining: 1 , ogid:1}}
     )
 
-    console.log(employeeSalaries, "employee salaries")
-    // return "who dey breet"
-
+    const startOfMonth = new Date(moment().startOf('month').format('YYYY-MM-DD')).toISOString();
+    const endOfMonth   = new Date(moment().endOf('month').format('YYYY-MM-DD')).toISOString();
 
     for (let index = 0; index < employeeSalaries.length; index++) {
       const employeeSalary:any = employeeSalaries[index];
+
+      console.log(startOfMonth, endOfMonth);
+      // '$lte': new Date(moment(queryParams.endOfMonth).format('YYYY-MM-DD')).toISOString(),
+      //   '$gte': new Date(moment(queryParams.startOfMonth).format('YYYY-MM-DD')).toISOString(),
+
+      const totalAttendance = await this.attendanceService.findAllEmployeeAttendance(employeeSalary.employeeId.ogid, {
+        startOfMonth,
+        endOfMonth
+      })
+
+      const workDaysInMonth = differenceInBusinessDays(
+        new Date(endOfMonth),
+        new Date(startOfMonth)
+      )
+
+      // EMPLOYEE ATTENDANCE WORKDAYS CHECK
+      // console.log(totalAttendance.length, employeeSalary.employeeId.ogid, workDaysInMonth );
+      // if(totalAttendance.length < workDaysInMonth ){
+      //     //check leave model
+      //
+      //   const empLeave = await this.leaveModel.findOne({
+      //     employee_id: employeeSalary.employeeId._id,
+      //   })
+      //
+      //   console.log('skipping');
+      //   continue
+      // }
       // console.log(employeeSalary);
       const today = new Date()
       const salarySlipConstructor: any = {
@@ -198,6 +246,8 @@ class SalarySlipService {
       if (deductions.hasDeductions) {
         salarySlipConstructor.deductions = [...deductions.deductionIds]
         salarySlipConstructor.netPay = deductions.salaryAfterDeductions
+        salarySlipConstructor.salaryAfterDeductions = deductions.salaryAfterDeductions
+        salarySlipConstructor.totalDeductions = deductions.totalDeductions
       }
       records.push(salarySlipConstructor)
     }

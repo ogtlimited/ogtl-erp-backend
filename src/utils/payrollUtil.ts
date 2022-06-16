@@ -91,6 +91,7 @@ export const calculateEmployeeDeductions = async (employeeId, netPay) => {
   if (deductionIds.length > 0) {
     employeeDeductions.hasDeductions = true;
     employeeDeductions.salaryAfterDeductions = netPay - totalDeductions[0].sum;
+    employeeDeductions.totalDeductions = totalDeductions[0].sum;
     for (let index = 0; index < deductionIds.length; index++) {
       const deduction = deductionIds[index];
       employeeDeductions.deductionIds.push(deduction['_id']);
