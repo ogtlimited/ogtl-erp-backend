@@ -96,6 +96,7 @@ import IdRequestRoute from "@routes/procurement/idrequest.route";
 import DeductionTypeRoute from "@routes/payroll/deductionType.route";
 import DeductionRoute from "@routes/payroll/deduction.route";
 import NotesRoute from "@routes/payroll/notes.route";
+import PayRollArchiveRoute from "@routes/payroll/payroll_archive.route";
 
 
 validateEnv();
@@ -187,7 +188,8 @@ const app = new App([
   new IdRequestRoute(),
   new DeductionTypeRoute(),
   new DeductionRoute(),
-  new NotesRoute()
+  new NotesRoute(),
+  new PayRollArchiveRoute()
 ]);
 
 const server = app.listen();

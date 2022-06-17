@@ -6,7 +6,7 @@ import PayRollService from '@/services/payroll/payroll.service';
 
 class PayRollController {
   public payRollService = new PayRollService();
-  
+
   public findAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const payRollEntries = await this.payRollService.findAll();
@@ -32,10 +32,21 @@ class PayRollController {
     try {
       const newData: CreatePayrollDto = req.body;
       console.log(newData);
-      
-      const createdData: IPayRoll = await this.payRollService.create(newData, req.query); 
+
+      const createdData: IPayRoll = await this.payRollService.create(newData, req.query);
       res.status(201).json({ data: createdData});
-    } catch (error) {  
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  };
+
+  public uploadPayment = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const newData = req.body;
+      const createdData = await this.payRollService.uploadPayment(newData.slips);
+      res.status(201).json({ data: createdData});
+    } catch (error) {
       console.log(error);
       next(error);
     }

@@ -6,10 +6,12 @@ import payRollModel  from '@/models/payroll/payroll.model';
 import { isEmpty } from '@utils/util';
 import { officeQueryGenerator } from '@/utils/payrollUtil';
 import salarySlipModel from '@/models/payroll/salary-slip.model';
+import payRollArchiveModel from "@models/payroll/payroll_archive.model";
 // import omit from 'lodash/omit'
 
 class PayRollService {
   public payRollModel = payRollModel;
+  public payrollArchive = payRollArchiveModel;
 
   public async findAll(): Promise<IPayRoll[]> {
     const results = await this.payRollModel.find();
@@ -50,6 +52,31 @@ class PayRollService {
     })
     await this.payRollModel.create(slipConstructor)
     return 'done';
+  }
+
+  public async uploadPayment(payload): Promise<any> {
+
+    if(payload.length < 1){
+      throw new HttpException(400, "provide list of salary slips")
+    }
+
+    const archives = []
+
+    for(let i = 0; i < payload.length; i++){
+      const salarySlip = payload[i]
+
+      //BANK 3D Upload service
+      archives.push({
+        employee: salarySlip.employeeId,
+        salarySlip: salarySlip._id,
+        paid: salarySlip.paid
+      })
+    }
+
+    console.log(archives, "------------>");
+
+    return await payRollArchiveModel.insertMany(archives)
+
   }
 
 
