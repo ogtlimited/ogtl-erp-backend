@@ -135,6 +135,10 @@ const employeeSchema: Schema = new Schema({
     type: Object,
     default: {},
   },
+  extraTime:{
+    type:Boolean,
+    default:false
+  }
 });
 
 // employeeSchema.virtual('full_name').get(function () {
