@@ -5,6 +5,7 @@ import { HttpException } from '@/exceptions/HttpException';
 import deductionModel from '@/models/payroll/deduction.model';
 import { deductionAggBuilder } from '@/utils/pipelineUtils';
 import moment from "moment";
+import { log } from "util";
 
 export const calculateNetAndGrossPay = (salaryComponents: Array<any>) => {
   if (salaryComponents.length < 1) {
@@ -32,6 +33,9 @@ export const calculateNetAndGrossPay = (salaryComponents: Array<any>) => {
 
 export const officeQueryGenerator = queryParams => {
   let officeQuery: any = {};
+  if(queryParams.employee){
+    officeQuery.employee = queryParams.employee;
+  }
   if (isEmpty(queryParams)) {
     return officeQuery;
   }
@@ -61,6 +65,10 @@ export const officeQueryGenerator = queryParams => {
         '$lte': new Date(queryParams.endOfMonth)
       },
     };
+    if(queryParams.employee){
+      console.log("added ---------->>>>>>>>>>>>>>>>");
+      officeQuery.employee = queryParams.employee;
+    }
     return officeQuery
   }
 };
