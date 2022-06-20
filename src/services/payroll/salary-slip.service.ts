@@ -1,22 +1,16 @@
 /* eslint-disable prettier/prettier */
 import {CreateSalarySlipDto} from '@dtos/payroll/salary-slip.dto';
 import {HttpException} from '@exceptions/HttpException';
-import {ISalarySlip} from '@/interfaces/payroll/salary-slip.interface';
 import salarySlipModel from '@models/payroll/salary-slip.model';
 import {isEmpty} from '@utils/util';
-import departmentModel from '@/models/department/department.model';
 import projectModel from '@/models/project/project.model';
-import {isValidObjectId} from 'mongoose';
 import EmployeeModel from '@/models/employee/employee.model';
 import {calculateEmployeeDeductions, officeQueryGenerator} from '@/utils/payrollUtil';
 import employeesSalaryModel from "@models/payroll/employees-salary";
-import {ObjectId} from "mongodb";
 import moment from "moment";
-import attendanceModel from "@models/attendance/attendance.model";
 import AttendanceTypeService from "@services/attendance/attendance.service";
 import differenceInBusinessDays from 'date-fns/differenceInBusinessDays'
 import applicationModel from "@models/leave/application.model";
-// import omit from 'lodash/omit'
 
 class SalarySlipService {
 
