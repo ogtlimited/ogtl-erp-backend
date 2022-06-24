@@ -1,4 +1,9 @@
 import { ObjectId } from 'mongodb';
+import moment from 'moment';
+
+const startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
+const endOfMonth = moment().endOf('month').format('YYYY-MM-DD');
+
 export const deductionAggBuilder = employeeId => {
   return [
     {
@@ -12,6 +17,10 @@ export const deductionAggBuilder = employeeId => {
           {
             $match: {
               employeeId: new ObjectId(employeeId),
+              createdAt: {
+                $gte: new Date(startOfMonth),
+                $lte: new Date(endOfMonth),
+              },
             },
           },
           {

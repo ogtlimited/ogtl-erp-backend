@@ -4,6 +4,7 @@ import moment from "moment";
 import payRollArchiveModel from "@models/payroll/payroll_archive.model";
 import { officeQueryGenerator } from "@utils/payrollUtil";
 import { CreatePayrollArchiveDto } from "@dtos/payroll/payroll_archive.dto";
+import { HttpException } from "@exceptions/HttpException";
 
 class PayrollArchiveService {
 
@@ -58,6 +59,17 @@ class PayrollArchiveService {
   }
 
   public async createArchive(payload: CreatePayrollArchiveDto): Promise<any> {
+
+    const payrollArchiveExists = await this.payrollArchiveModel.exists({
+      'createdAt': {
+        '$gte': new Date(this.startOfMonth),
+        '$lte': new Date(this.endOfMonth)
+      },
+    })
+
+    if(payrollArchiveExists){
+      throw new HttpException(403, "payrolls already archived for this month!")
+    }
     const payrollArchive = await this.payrollArchiveModel.create(payload)
     return payrollArchive
   }
