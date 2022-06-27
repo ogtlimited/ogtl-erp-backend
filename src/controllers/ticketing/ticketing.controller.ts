@@ -29,7 +29,7 @@ class TicketingController {
 
  public getTicketingsByEmployeeId = async (req:Request, res:Response, next:NextFunction) =>{
     try {
-      const employeeId:string = req.params.id;
+      const employeeId:string = req.params.employeeId;
       const findTicketings:ITicketing[] = await this.ticketingService.findTicketingByEmployeeId(employeeId);
       res.status(200).json({data:findTicketings, message:"Ticketing found successfully"})
     }
@@ -39,7 +39,7 @@ class TicketingController {
   }
 public getTicketingsByDepartmentId = async (req:Request, res:Response, next:NextFunction) =>{
     try {
-      const department:string = req.params.id;
+      const department:string = req.params.departmentId;
       const findTicketings:ITicketing[] = await this.ticketingService.findTicketingByDepartmentId(department);
       res.status(200).json({data:findTicketings, message:"Ticketing found successfully"})
     }

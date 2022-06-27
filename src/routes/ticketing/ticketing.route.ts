@@ -18,8 +18,8 @@ class TicketingRoute implements Routes{
   private initializeRoutes() {
     this.router.get(`${this.path}`, authMiddleware,this.ticketingController.getTicketings);
     this.router.get(`${this.path}/:id`, authMiddleware,this.ticketingController.getTicketingsById);
-    this.router.get(`${this.path}/:employeeId`, authMiddleware,this.ticketingController.getTicketingsByEmployeeId);
-    this.router.get(`${this.path}/:departmentId`, authMiddleware,this.ticketingController.getTicketingsByDepartmentId);
+    this.router.get(`${this.path}/employee/:employeeId`, authMiddleware,this.ticketingController.getTicketingsByEmployeeId);
+    this.router.get(`${this.path}/department/:departmentId`, authMiddleware,this.ticketingController.getTicketingsByDepartmentId);
     this.router.post(`${this.path}`, [validationMiddleware(CreateTicketingDto, 'body'),authMiddleware], this.ticketingController.createTicketings);
     this.router.patch(`${this.path}/:id`,[ validationMiddleware(UpdateTicketingDto, 'body', true),authMiddleware], this.ticketingController.updateTicketings);
     this.router.delete(`${this.path}/:id`, authMiddleware,this.ticketingController.deleteTicketings);
