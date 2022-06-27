@@ -7,11 +7,15 @@ import { isEmpty } from '@utils/util';
 import { officeQueryGenerator } from '@/utils/payrollUtil';
 import salarySlipModel from '@/models/payroll/salary-slip.model';
 import payRollArchiveModel from "@models/payroll/payroll_archive.model";
+import moment from "moment";
 // import omit from 'lodash/omit'
 
 class PayRollService {
   public payRollModel = payRollModel;
   public payrollArchive = payRollArchiveModel;
+
+  private startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
+  private endOfMonth   = moment().endOf('month').format('YYYY-MM-DD');
 
   public async findAll(): Promise<IPayRoll[]> {
     const results = await this.payRollModel.find();
@@ -55,6 +59,17 @@ class PayRollService {
   }
 
   public async uploadPayment(payload): Promise<any> {
+
+    const payrollArchiveExisits = await payRollArchiveModel.exists({
+      'createdAt': {
+        '$gte': new Date(this.startOfMonth),
+        '$lte': new Date(this.endOfMonth)
+      },
+    })
+
+    if(payrollArchiveExisits){
+      throw new HttpException(403, "salary slips payments already generated for this month!")
+    }
 
     if(payload.length < 1){
       throw new HttpException(400, "provide list of salary slips")

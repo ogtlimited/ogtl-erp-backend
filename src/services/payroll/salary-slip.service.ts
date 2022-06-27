@@ -192,17 +192,24 @@ class SalarySlipService {
 
      */
 
-    const records = [];
-    const today = new Date();
-    // console.log(today.getDate(), 'PAYSLIP')
-    if (today.getDate() > 25) {
-      // if(today.getDate() != 25){
-      throw new HttpException(400, 'Cannot generate slip before the 25th!');
+    const salarySlipExists = await this.salarySlipModel.exists({
+      'createdAt': {
+        '$gte': new Date(this.startOfMonth),
+        '$lte': new Date(this.endOfMonth)
+      },
+    })
+
+    if(salarySlipExists){
+      throw new HttpException(403, "salary slips already generated for this month!")
     }
-    const noSalaries = [];
-    const employeeSalaries = await employeesSalaryModel
-      .find({})
-      .populate({ path: 'employeeId', select: { first_name: 1, last_name: 1, date_of_joining: 1, ogid: 1 } });
+
+    const records = [];
+    const today = new Date()
+
+    const noSalaries = []
+    const employeeSalaries = await employeesSalaryModel.find({}).populate(
+      {path: 'employeeId', select: {first_name: 1, last_name:1, date_of_joining: 1 , ogid:1}}
+    )
 
     const startOfMonth = new Date(moment().startOf('month').format('YYYY-MM-DD')).toISOString();
     const endOfMonth = new Date(moment().endOf('month').format('YYYY-MM-DD')).toISOString();
