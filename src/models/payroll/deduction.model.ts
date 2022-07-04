@@ -31,6 +31,10 @@ const deductionSchema: Schema = new Schema(
     amount: {
       type: Number,
       required: true
+    },
+    usedDailyRate: {
+      type: Boolean,
+      default: false
     }
   },
   {
