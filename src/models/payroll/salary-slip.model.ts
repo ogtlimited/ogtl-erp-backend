@@ -24,6 +24,10 @@ const salarySlipSchema: Schema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Status"
     },
+    salaryArrears: {
+      type: Schema.Types.ObjectId,
+      ref: "SalaryArrears"
+    },
     deductions: [{
       type: Schema.Types.ObjectId,
       ref: "Deduction",

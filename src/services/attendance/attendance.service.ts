@@ -253,8 +253,8 @@ class AttendanceTypeService {
       if (!attendanceRecord) {
         const empLeave = await this.leaveModel.findOne({
           employee_id: employee._id,
-          from_date: {'$lte': new Date(moment().format('YYYY-MM-DD'))},
-          to_date:{'$gte': new Date(moment().format('YYYY-MM-DD'))}
+          from_date: {'$lte': new Date(moment().format('YYYY-MM-DD')).toISOString()},
+          to_date:{'$gte': new Date(moment().format('YYYY-MM-DD')).toISOString()}
         })
 
         if(!empLeave){

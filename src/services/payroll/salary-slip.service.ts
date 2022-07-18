@@ -5,16 +5,19 @@ import salarySlipModel from '@models/payroll/salary-slip.model';
 import { isEmpty } from '@utils/util';
 import projectModel from '@/models/project/project.model';
 import EmployeeModel from '@/models/employee/employee.model';
-import { calculateEmployeeDeductions, officeQueryGenerator } from '@/utils/payrollUtil';
-import employeesSalaryModel from '@models/payroll/employees-salary';
-import moment from 'moment';
-import AttendanceTypeService from '@services/attendance/attendance.service';
-import differenceInBusinessDays from 'date-fns/differenceInBusinessDays';
-import applicationModel from '@models/leave/application.model';
+import {calculateEmployeeDeductions, officeQueryGenerator} from '@/utils/payrollUtil';
+import employeesSalaryModel from "@models/payroll/employees-salary";
+import moment from "moment";
+import AttendanceTypeService from "@services/attendance/attendance.service";
+import differenceInBusinessDays from 'date-fns/differenceInBusinessDays'
+import applicationModel from "@models/leave/application.model";
+import SalaryArrearsModel from "@models/payroll/salary-arrears.model";
+import salaryArrearsModel from "@models/payroll/salary-arrears.model";
 
 class SalarySlipService {
-  private startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
-  private endOfMonth = moment().endOf('month').format('YYYY-MM-DD');
+
+  private startOfMonth = new Date(moment().startOf('month').format('YYYY-MM-DD')).toISOString();
+  private endOfMonth   = new Date(moment().endOf('month').format('YYYY-MM-DD')).toISOString();
 
   public salarySlipModel = salarySlipModel;
   private attendanceService = new AttendanceTypeService();
@@ -182,31 +185,20 @@ class SalarySlipService {
 
   public async createDepartmentPayroll(data: CreateSalarySlipDto): Promise<any> {
     /*
-     The steps for this method are:
+      The steps for this method are:
 
-     1. Fetch all employees salaries
-     2. loop through each of the employee salaries and get the employee
-     3. check the days the employee has worked if he meets the attendance threshold.
-     4. if yes, check if emp has pending deductions.
-     5. If emp hasn't met threshold....TODO
+      1. Fetch all employees salaries
+      2. loop through each of the employee salaries and get the employee
+      3. check the days the employee has worked if he meets the attendance threshold.
+      4. if yes, check if emp has pending deductions.
+      5. If emp hasn't met threshold....TODO
 
-     */
+    */
 
-    const salarySlipExists = await this.salarySlipModel.exists({
-      'createdAt': {
-        '$gte': new Date(this.startOfMonth),
-        '$lte': new Date(this.endOfMonth)
-      },
-    })
-
-    if(salarySlipExists){
-      throw new HttpException(403, "salary slips already generated for this month!")
-    }
-
+    await this.salarySlipExistenceCheck();
     const records = [];
-    const today = new Date()
+    const arrears = [];
 
-    const noSalaries = []
     const employeeSalaries = await employeesSalaryModel.find({}).populate(
       {path: 'employeeId', select: {first_name: 1, last_name:1, date_of_joining: 1 , ogid:1}}
     )
@@ -217,50 +209,136 @@ class SalarySlipService {
     for (let index = 0; index < employeeSalaries.length; index++) {
       const employeeSalary: any = employeeSalaries[index];
 
-      console.log(startOfMonth, endOfMonth);
-      // '$lte': new Date(moment(queryParams.endOfMonth).format('YYYY-MM-DD')).toISOString(),
-      //   '$gte': new Date(moment(queryParams.startOfMonth).format('YYYY-MM-DD')).toISOString(),
+      if(moment(employeeSalary.employeeId.date_of_joining).date() >= 20){
+        await SalaryArrearsModel.create({
+          employeeId: employeeSalary.employeeId._id,
+          employeeSalary: employeeSalary,
+          amount: 1000
+        })
+      }
 
-      const totalAttendance = await this.attendanceService.findAllEmployeeAttendance(employeeSalary.employeeId.ogid, {
-        startOfMonth,
-        endOfMonth,
-      });
-
-      const workDaysInMonth = differenceInBusinessDays(new Date(endOfMonth), new Date(startOfMonth));
+      const totalAttendance = await this.getEmployeeTotalAttendance(employeeSalary);
+      const workDaysInMonth = this.getWorkDaysInMonth();
 
       // EMPLOYEE ATTENDANCE WORKDAYS CHECK
-      // console.log(totalAttendance.length, employeeSalary.employeeId.ogid, workDaysInMonth );
-      // if(totalAttendance.length < workDaysInMonth ){
-      //     //check leave model
-      //
-      //   const empLeave = await this.leaveModel.findOne({
-      //     employee_id: employeeSalary.employeeId._id,
-      //   })
-      //
-      //   console.log('skipping');
-      //   continue
-      // }
-      // console.log(employeeSalary);
-      const today = new Date();
-      const salarySlipConstructor: any = {
-        employeeId: employeeSalary.employeeId,
-        employeeSalary: employeeSalary,
-        netPay: employeeSalary.netPay,
-        // departmentId: employee.department,
-        month: today.toISOString(),
-      };
-      const deductions = await calculateEmployeeDeductions(employeeSalary.employeeId._id, employeeSalary.netPay);
-      if (deductions.hasDeductions) {
-        salarySlipConstructor.deductions = [...deductions.deductionIds];
-        salarySlipConstructor.netPay = deductions.salaryAfterDeductions;
-        salarySlipConstructor.salaryAfterDeductions = deductions.salaryAfterDeductions;
-        salarySlipConstructor.totalDeductions = deductions.totalDeductions;
+      console.log(totalAttendance.length, employeeSalary.employeeId.ogid, workDaysInMonth );
+      if(totalAttendance.length < workDaysInMonth ){
+
+        //check leave model
+        // const empLeave = await this.leaveModel.findOne({
+        //   employee_id: employeeSalary.employeeId._id,
+        // })
+        const employeeDailyRate  = employeeSalary.netPay.toFixed(2) / workDaysInMonth
+        const employeeDueSalary = employeeDailyRate * totalAttendance.length
+        const today = new Date();
+        console.log(employeeDailyRate, employeeDueSalary,  "net pay and daily rate" );
+        console.log(`
+          employeeDailyRate: ${employeeDailyRate},
+          employeeDueSalary : ${employeeDueSalary},
+          attendance:${totalAttendance.length}
+          net pay: ${employeeSalary.netPay}`
+        );
+        const salarySlipConstructor: any = {
+          employeeId: employeeSalary.employeeId._id,
+          employeeSalary: employeeSalary,
+          netPay: employeeSalary.netPay,
+          // departmentId: employee.department,
+          month: today.toISOString()
+        };
+
+        const salaryArrears: any = await salaryArrearsModel.findOne({
+          employeeId: employeeSalary.employeeId,
+          createdAt: {
+            $gte: new Date(moment().subtract(1, 'M').startOf('month').format('YYYY-MM-DD')).toISOString(),
+            $lte: new Date(moment().subtract(1, 'M').endOf('month').format('YYYY-MM-DD')).toISOString()
+          }
+        })
+
+        const deductions = await calculateEmployeeDeductions(employeeSalary.employeeId._id, employeeDueSalary);
+        if (deductions.hasDeductions) {
+          salarySlipConstructor.deductions = [...deductions.deductionIds];
+          salarySlipConstructor.netPay = deductions.salaryAfterDeductions;
+          salarySlipConstructor.salaryAfterDeductions = deductions.salaryAfterDeductions;
+          salarySlipConstructor.totalDeductions = deductions.totalDeductions;
+        }
+        if (salaryArrears){
+          salarySlipConstructor.salaryArrears = salaryArrears._id
+          salarySlipConstructor.salaryAfterDeductions = salaryArrears.amount + salarySlipConstructor.salaryAfterDeductions
+        }
+
+        // return salarySlipConstructor;
+        records.push(salarySlipConstructor)
+        continue
       }
-      records.push(salarySlipConstructor);
+
+
+      const salarySlipConstructor = await this.employeeSalarySlipGenerator(employeeSalary);
+      records.push(salarySlipConstructor)
+
     }
 
     await this.salarySlipModel.insertMany(records);
     return `${records.length} salary slips created`;
+  }
+
+  private getWorkDaysInMonth() {
+    return differenceInBusinessDays(
+      new Date(this.endOfMonth),
+      new Date(this.startOfMonth)
+    );
+  }
+
+  private async getEmployeeTotalAttendance(employeeSalary: any) {
+    return await this.attendanceService.findAllEmployeeAttendance(employeeSalary.employeeId.ogid, {
+      startOfMonth: this.startOfMonth,
+      endOfMonth: this.endOfMonth
+    });
+  }
+
+  private async employeeSalarySlipGenerator(employeeSalary: any) {
+
+    const today = new Date();
+    const salarySlipConstructor: any = {
+      employeeId: employeeSalary.employeeId._id,
+      employeeSalary: employeeSalary,
+      netPay: employeeSalary.netPay,
+      // departmentId: employee.department,
+      month: today.toISOString()
+    };
+
+    const salaryArrears: any = await salaryArrearsModel.findOne({
+      employeeId: employeeSalary.employeeId,
+      createdAt: {
+        $gte: new Date(moment().subtract(1, 'M').startOf('month').format('YYYY-MM-DD')).toISOString(),
+        $lte: new Date(moment().subtract(1, 'M').endOf('month').format('YYYY-MM-DD')).toISOString()
+      }
+    })
+
+    const deductions = await calculateEmployeeDeductions(employeeSalary.employeeId._id, employeeSalary.netPay);
+    if (deductions.hasDeductions) {
+      salarySlipConstructor.deductions = [...deductions.deductionIds];
+      salarySlipConstructor.netPay = deductions.salaryAfterDeductions;
+      salarySlipConstructor.salaryAfterDeductions = deductions.salaryAfterDeductions;
+      salarySlipConstructor.totalDeductions = deductions.totalDeductions;
+    }
+    if (salaryArrears){
+      salarySlipConstructor.salaryArrears = salaryArrears._id
+      salarySlipConstructor.salaryAfterDeductions = salaryArrears.amount + salarySlipConstructor.salaryAfterDeductions
+    }
+    return salarySlipConstructor;
+  }
+
+  private async salarySlipExistenceCheck() {
+    const salarySlipExists = await this.salarySlipModel.exists({
+      "createdAt": {
+        "$gte": new Date(this.startOfMonth),
+        "$lte": new Date(this.endOfMonth)
+      }
+    });
+
+    if (salarySlipExists) {
+      throw new HttpException(403, "salary slips already generated for this month!");
+    }
   }
 }
 
