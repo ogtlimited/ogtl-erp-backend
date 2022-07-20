@@ -19,7 +19,8 @@ class documentRoute implements Routes {
   private initializeRoutes() {
     this.router.get(`${this.path}`, this.document.getdocuments);
     this.router.get(`${this.path}/:documentId`, this.document.getdocument);
-    this.router.get(`${this.path}/campaign/:documentId`, this.document.getCampaigndocuments);
+    this.router.get(`${this.path}/employee/folder/:folderId`, this.document.getFolderDocuments);
+    this.router.get(`${this.path}/campaign/:projectId`, this.document.getCampaigndocuments);
     this.router.post(`${this.path}`, validationMiddleware(CreateDocumentDto, 'body'), this.document.createdocument);
     this.router.patch(`${this.path}/:documentId`, validationMiddleware(UpdateDocumentDto, 'body'), this.document.updatedocument);
     this.router.delete(`${this.path}/:documentId`, this.document.deletedocument);
