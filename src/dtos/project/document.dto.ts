@@ -20,6 +20,12 @@ export class CreateDocumentDto {
 
   @IsOptional()
   public file_extension: string
+
+  @IsNotEmpty()
+  public document_type: string
+
+  @IsNotEmpty()
+  public parent_folder_id: string
 }
 
 export class UpdateDocumentDto {
@@ -30,4 +36,3 @@ export class UpdateDocumentDto {
     @IsNotEmpty()
     public document: any;
   }
-  
