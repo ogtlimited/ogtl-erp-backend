@@ -26,7 +26,7 @@ class DocumentController {
 
     public getCampaigndocuments = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const documentId: any = {project_id: req.params.documentId};
+            const documentId: any = {project_id: req.params.projectId};
             const findAlldocuments: IDocument[] = await this.documentService.findAll(documentId);
             res.status(200).json({ data: findAlldocuments, message: 'findAll' });
         } catch (error) {

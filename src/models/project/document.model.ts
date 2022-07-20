@@ -27,11 +27,9 @@ const documentSchema: Schema = new Schema(
     document_type: {
       type: String,
       enum: ['employee', 'campaign', 'department'],
-      required: true,
     },
     parent_folder_id: {
-      type: String,
-      required: true,
+      type: String
     },
   },
   {

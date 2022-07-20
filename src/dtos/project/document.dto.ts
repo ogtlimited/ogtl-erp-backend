@@ -2,7 +2,7 @@
 import { IsString,IsNotEmpty, IsOptional} from 'class-validator';
 
 export class CreateDocumentDto {
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   public project_id: string;
 
@@ -21,10 +21,10 @@ export class CreateDocumentDto {
   @IsOptional()
   public file_extension: string
 
-  @IsNotEmpty()
+  @IsOptional()
   public document_type: string
 
-  @IsNotEmpty()
+  @IsOptional()
   public parent_folder_id: string
 }
 
