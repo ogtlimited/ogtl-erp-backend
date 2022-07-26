@@ -3,12 +3,16 @@
 
 import { IsString, IsNumber } from 'class-validator';
 
-export class CreateDeductionDto {  
+export class CreateDeductionDto {
   @IsString()
   public deductionTypeId: string;
 
   @IsString()
   public employeeId: string;
+
+
+  @IsString()
+  public useDailyRate: boolean;
 
   // @IsNumber()
   // //default 1
