@@ -50,7 +50,7 @@ class SalaryDetailsService {
    */
 
   public async findAllSalaryDetails(): Promise<SalaryDetail[]> {
-    return this.SalaryDetails.find();
+    return this.SalaryDetails.find().sort({ created_at: -1 });
   }
 
   /**
@@ -60,7 +60,8 @@ class SalaryDetailsService {
   public async findSalaryDetailsById(SalaryDetailsId: string): Promise<SalaryDetail> {
     //Check if Id is empty
     if (isEmpty(SalaryDetailsId)) throw new HttpException(400, 'No Id provided');
-    return this.SalaryDetails.findOne({ employee_id: SalaryDetailsId });
+    const all = await this.SalaryDetails.find({ employee_id: SalaryDetailsId });
+    return all[all.length -1];
   }
 
   /**
@@ -73,10 +74,12 @@ class SalaryDetailsService {
     const findSalaryDetails: SalaryDetail = await this.SalaryDetails.findOne({ employee_id: SalaryDetailData.employee_id });
 
     if (findSalaryDetails) {
+      console.log('findSalaryDetails', findSalaryDetails);
       const updateSalaryDetailsData: SalaryDetail = await this.SalaryDetails.findByIdAndUpdate(SalaryDetailData._id, SalaryDetailData, { new: true });
       if (!updateSalaryDetailsData) throw new HttpException(409, 'details could not be updated');
       return updateSalaryDetailsData;
     } else {
+      console.log('SalaryDetailData');
       return await this.SalaryDetails.create(SalaryDetailData);
     }
   }
