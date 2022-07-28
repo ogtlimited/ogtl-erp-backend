@@ -8,7 +8,7 @@ const maintenanceAndRepairsSchema: Schema = new Schema(
     asset_id: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "Assets",
+      ref: "Asset",
     },
     issue:{
       type: String,
