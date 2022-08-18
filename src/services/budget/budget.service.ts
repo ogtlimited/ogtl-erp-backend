@@ -155,7 +155,7 @@ class BudgetService {
   public async update( id, updateData: UpdateBudgetDto): Promise<IBudget> {
     const data: IUpdateBudget = updateData
     const approvebudget  = await budgetModel.findOneAndUpdate({_id:id}, {
-        $set: data
+          $set: data
     },{new:true})
     if (!approvebudget) {
         throw  new HttpException(400, "please provide valid budget Id");
