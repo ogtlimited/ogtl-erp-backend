@@ -199,6 +199,7 @@ class CombineServices {
     const history = await this.historyS.findHistoryById(EmployeeId)
     const personalDetails = await this.personalDetailS.findPersonalDetailsById(EmployeeId)
     const salaryDetails = await this.salaryDetailS.findSalaryDetailsById(EmployeeId)
+    console.log(salaryDetails, 'SALARY')
     const workExperience = await this.workExperienceS.findWorkExperienceById(EmployeeId)
 
     return{

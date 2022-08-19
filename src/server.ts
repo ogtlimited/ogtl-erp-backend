@@ -97,6 +97,7 @@ import DeductionTypeRoute from "@routes/payroll/deductionType.route";
 import DeductionRoute from "@routes/payroll/deduction.route";
 import NotesRoute from "@routes/payroll/notes.route";
 import PayRollArchiveRoute from "@routes/payroll/payroll_archive.route";
+import TicketingRoute from '@routes/ticketing/ticketing.route';
 
 
 validateEnv();
@@ -189,7 +190,9 @@ const app = new App([
   new DeductionTypeRoute(),
   new DeductionRoute(),
   new NotesRoute(),
-  new PayRollArchiveRoute()
+  new PayRollArchiveRoute(),
+
+  new TicketingRoute()
 ]);
 
 const server = app.listen();

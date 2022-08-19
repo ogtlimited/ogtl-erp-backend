@@ -1,0 +1,212 @@
+[
+    {
+      "Bank Name": "Access Bank Plc",
+      "bank_abbrev": "Access Bank",
+      "bank_code": 44
+    },
+    {
+      "Bank Name": "Afribank Nigeria Plc",
+      "bank_abbrev": "Afribank",
+      "bank_code": 14
+    },
+    {
+      "Bank Name": "Associated Discount Ltd",
+      "bank_abbrev": "Associated Discount Ltd",
+      "bank_code": 902
+    },
+    {
+      "Bank Name": "Bank of Industry",
+      "bank_abbrev": "BOI",
+      "bank_code": 404
+    },
+    {
+      "Bank Name": "BankPHB Limited",
+      "bank_abbrev": "BankPHB Limited",
+      "bank_code": 82
+    },
+    {
+      "Bank Name": "Central Bank of Nigeria",
+      "bank_abbrev": "CBN",
+      "bank_code": 1
+    },
+    {
+      "Bank Name": "Consolidated Discount Ltd",
+      "bank_abbrev": "Consolidated Discount Ltd",
+      "bank_code": 906
+    },
+    {
+      "Bank Name": "Diamond Bank Plc",
+      "bank_abbrev": "Diamond Bank",
+      "bank_code": 63
+    },
+    {
+      "Bank Name": "Ecobank Nigeria Plc",
+      "bank_abbrev": "Ecobank",
+      "bank_code": 50
+    },
+    {
+      "Bank Name": "Equitorial Trust Bank Plc",
+      "bank_abbrev": "Equitorial Trust Bank ",
+      "bank_code": 40
+    },
+    {
+      "Bank Name": "Express Discount Ltd",
+      "bank_abbrev": "Express Discount Ltd",
+      "bank_code": 907
+    },
+    {
+      "Bank Name": "Fidelity Bank plc",
+      "bank_abbrev": "Fidelity Bank",
+      "bank_code": 70
+    },
+    {
+      "Bank Name": "First Bank of Nigeria",
+      "bank_abbrev": "First Bank",
+      "bank_code": 11
+    },
+    {
+      "Bank Name": "First City Monument Bank Plc",
+      "bank_abbrev": "FCMB",
+      "bank_code": 214
+    },
+    {
+      "Bank Name": "First Inland Bank Plc",
+      "bank_abbrev": "First Inland Bank Plc",
+      "bank_code": 85
+    },
+    {
+      "Bank Name": "First Securities Discount House",
+      "bank_abbrev": "First Securities Discount House",
+      "bank_code": 908
+    },
+    {
+      "Bank Name": "First Securities Discount House",
+      "bank_abbrev": "First Securities Discount House",
+      "bank_code": 501
+    },
+    {
+      "Bank Name": "Guaranty Trust Bank Plc",
+      "bank_abbrev": "GT Bank",
+      "bank_code": 58
+    },
+    {
+      "Bank Name": "Heritage Bank",
+      "bank_abbrev": "Heritage Bank",
+      "bank_code": 30
+    },
+    {
+      "Bank Name": "IBTC Chartered Bank Plc",
+      "bank_abbrev": "IBTC Chartered Bank ",
+      "bank_code": 221
+    },
+    {
+      "Bank Name": "Intercontinental Bank Plc",
+      "bank_abbrev": "Intercontinental Bank ",
+      "bank_code": 69
+    },
+    {
+      "Bank Name": "Jaiz Bank Plc",
+      "bank_abbrev": "Jaiz Bank",
+      "bank_code": 301
+    },
+    {
+      "Bank Name": "Kakawa Discount Plc",
+      "bank_abbrev": "Kakawa Discount Plc",
+      "bank_code": 991
+    },
+    {
+      "Bank Name": "NEXIM",
+      "bank_abbrev": "NEXIM",
+      "bank_code": 405
+    },
+    {
+      "Bank Name": "NIBBS",
+      "bank_abbrev": "NIBBS",
+      "bank_code": 917
+    },
+    {
+      "Bank Name": "Nigeria International Bank Plc",
+      "bank_abbrev": "Nigeria International Bank Plc",
+      "bank_code": 23
+    },
+    {
+      "Bank Name": "Oceanic Bank International Plc",
+      "bank_abbrev": "Oceanic Bank ",
+      "bank_code": 56
+    },
+    {
+      "Bank Name": "Providus Bank Nigeria Ltd",
+      "bank_abbrev": "Providus Bank",
+      "bank_code": 101
+    },
+    {
+      "Bank Name": "Polaris Bank",
+      "bank_abbrev": "Polaris Bank",
+      "bank_code": 76
+    },
+    {
+      "Bank Name": "Skye Bank Plc",
+      "bank_abbrev": "Skye Bank ",
+      "bank_code": 76
+    },
+    {
+      "Bank Name": "Springbank Plc",
+      "bank_abbrev": "Springbank",
+      "bank_code": 84
+    },
+    {
+      "Bank Name": "Standard Chartered Bank of Nigeria",
+      "bank_abbrev": "SCB",
+      "bank_code": 68
+    },
+    {
+      "Bank Name": "Stanbic IBTC Plc",
+      "bank_abbrev": "Stanbic IBTC",
+      "bank_code": 39
+    },
+    {
+      "Bank Name": "Sterling Bank Plc",
+      "bank_abbrev": "Sterling Bank",
+      "bank_code": 232
+    },
+    {
+      "Bank Name": "Suntrust Bank Nigeria Limited",
+      "bank_abbrev": "Sterling Bank ",
+      "bank_code": 100
+    },
+    {
+      "Bank Name": "Union Bank of Nigeria",
+      "bank_abbrev": "Union Bank",
+      "bank_code": 32
+    },
+    {
+      "Bank Name": "United Bank for Africa",
+      "bank_abbrev": "UBA",
+      "bank_code": 33
+    },
+    {
+      "Bank Name": "United Bank for Africa",
+      "bank_abbrev": "United Bank for Africa",
+      "bank_code": 33
+    },
+    {
+      "Bank Name": "Unity Bank Plc",
+      "bank_abbrev": "Unity Bank",
+      "bank_code": 215
+    },
+    {
+      "Bank Name": "Wema Bank Plc",
+      "bank_abbrev": "Wema Bank",
+      "bank_code": 35
+    },
+    {
+      "Bank Name": "Zenith International Bank Plc",
+      "bank_abbrev": "Zenith Bank",
+      "bank_code": 57
+    },
+    {
+      "Bank Name": "Bank PHB/Keystone Bank",
+      "bank_abbrev": "Keystone Bank",
+      "bank_code": 82
+    }
+   ]
