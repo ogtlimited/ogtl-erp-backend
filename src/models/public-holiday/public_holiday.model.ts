@@ -19,7 +19,7 @@ const publicHolidaySchema: Schema = new Schema(
     deleted: {
       type: Boolean,
       required:true,
-      default:false
+      default:false,
     },
     deleted_by: {
       type: String,
@@ -33,8 +33,8 @@ const publicHolidaySchema: Schema = new Schema(
       type: Date,
       ref:"employee_id"
     },
-    project_id:{
-      type: Number,
+    project_id: {
+      type: Schema.Types.ObjectId,
       ref: "project_id"
     },
    
