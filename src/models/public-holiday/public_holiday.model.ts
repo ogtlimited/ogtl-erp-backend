@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+/* eslint-disable prettier/prettier .... */
 // import { IAttendance } from '@interfaces/attendance-interface/attendance-interface';
 import { model, Schema } from 'mongoose';
 
