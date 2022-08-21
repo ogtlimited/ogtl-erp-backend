@@ -24,7 +24,7 @@ const publicHolidaySchema: Schema = new Schema({
     ref: 'Employee',
   },
   updated_by: {
-    type: String,
+    type: Schema.Types.ObjectId,
     ref: 'Employee',
   },
   created_by: {
