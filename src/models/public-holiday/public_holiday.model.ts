@@ -2,11 +2,11 @@
 import { model, Schema } from 'mongoose';
 
 const publicHolidaySchema: Schema = new Schema({
-  startDate: {
+  start_date: {
     type: Date,
     required: true,
   },
-  endDate: {
+  end_date: {
     type: Date,
     required: true,
   },
@@ -20,7 +20,7 @@ const publicHolidaySchema: Schema = new Schema({
     default: false,
   },
   deleted_by: {
-    type: String,
+    type: Schema.Types.ObjectId,
     ref: 'Employee',
   },
   updated_by: {
@@ -28,12 +28,12 @@ const publicHolidaySchema: Schema = new Schema({
     ref: 'Employee',
   },
   created_by: {
-    type: Date,
-    ref: 'employee_id',
+    type: Schema.Types.ObjectId,
+    ref: 'Employee',
   },
   project_id: {
     type: Schema.Types.ObjectId,
-    ref: 'project_id',
+    ref: 'Project',
   },
 });
 
