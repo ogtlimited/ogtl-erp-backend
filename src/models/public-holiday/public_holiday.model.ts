@@ -16,7 +16,6 @@ const publicHolidaySchema: Schema = new Schema({
   },
   deleted: {
     type: Boolean,
-    required: true,
     default: false,
   },
   deleted_by: {
