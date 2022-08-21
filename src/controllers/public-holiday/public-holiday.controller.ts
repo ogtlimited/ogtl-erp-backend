@@ -9,8 +9,8 @@ class PublicHolidayController {
   public create = async (req, res: Response, next: NextFunction) => {
     try {
       const publicHolidayData: CreatePublicHolidayDto = req.body;
-      const createdPublicHoliday: IPublicHoliday = await this.publicHolidayService.create(req.user, publicHolidayData);
-      res.status(201).json({ data: createdPublicHoliday, message: 'Public holiday created successfully' });
+      const createdPublicHoliday: IPublicHoliday = await this.publicHolidayService.create(req, publicHolidayData);
+      res.status(201).json({ data: createdPublicHoliday, message: `${createdPublicHoliday.title} public holiday created successfully` });
     } catch (error) {
       next(error);
     }

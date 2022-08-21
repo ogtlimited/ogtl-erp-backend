@@ -12,21 +12,23 @@ class PublicHolidayService {
   public async create(user, publicHolidayData: CreatePublicHolidayDto): Promise<IPublicHoliday> {
     const newData = publicHolidayData;
 
-    if (isEmpty(newData)) throw new HttpException(400, 'No data provided');
-
     const publicHolidayExists = await publicHolidayModel.exists(newData);
     if (publicHolidayExists) {
-      throw new HttpException(409, 'Public holiday already exists');
+      throw new HttpException(409, `${newData.title} Public holiday already exists`);
     }
 
-    newData.created_by = user._id;
-    newData.project_id = user.projectId;
-    newData.startDate = moment(newData.startDate).format('YYYY-MM-DD');
-    newData.endDate = moment(newData.endDate).format('YYYY-MM-DD');
-    newData.title = newData.title.toUpperCase();
-    newData.deleted = false;
+    const newPublicHolidayData: CreatePublicHolidayDto = {
+      startDate: newData.startDate,
+      endDate: newData.endDate,
+      title: newData.title,
+      project_id: user.projectId,
+      updated_by: null,
+      created_by: user._id,
+      deleted_by: null,
+      deleted: false,
+    };
 
-    let publicHoliday = await publicHolidayModel.create(newData);
+    let publicHoliday = await publicHolidayModel.create(newPublicHolidayData);
     console.log(`${newData.title} Public holiday has been created`, publicHoliday);
     publicHoliday = omit(publicHoliday.toObject(), ['updated_by', 'deleted_by']);
 
