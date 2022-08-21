@@ -1,7 +1,7 @@
 export interface IPublicHoliday {
-  startDate: string;
-  endDate: string;
-  project_id: string;
+  start_date: string;
+  end_date: string;
+  project_id?: string;
   title: string;
   updated_by?: string;
   created_by?: string;
