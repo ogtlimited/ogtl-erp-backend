@@ -25,6 +25,7 @@ class PublicHolidayRoute implements Routes {
       [authMiddleware, validationMiddleware(CreatePublicHolidayDto, 'body'), permissionMiddleware('HR')],
       this.publicHolidayController.update,
     );
+    this.router.delete(`${this.path}/:id`, [authMiddleware, permissionMiddleware('HR')], this.publicHolidayController.delete);
   }
 }
 
