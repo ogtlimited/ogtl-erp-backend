@@ -18,6 +18,8 @@ class PublicHolidayRoute implements Routes {
   private initializeRoutes() {
     this.router.post(`${this.path}`, [authMiddleware, validationMiddleware(CreatePublicHolidayDto, 'body')], this.publicHolidayController.create);
     this.router.get(`${this.path}/list`, [authMiddleware], this.publicHolidayController.findAll);
+    this.router.get(`${this.path}/list/:active`, [authMiddleware], this.publicHolidayController.findAllActive);
+    this.router.get(`${this.path}/list/:id`, [authMiddleware], this.publicHolidayController.findById);
   }
 }
 
