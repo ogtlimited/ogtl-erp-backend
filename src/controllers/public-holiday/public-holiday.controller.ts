@@ -1,4 +1,4 @@
-import { Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { CreatePublicHolidayDto } from '@/dtos/public-holiday/public_holiday.dto';
 import { IPublicHoliday } from '@/interfaces/public-holiday/public_holiday.interface';
 import PublicHolidayService from '@/services/public-holiday/public-holiday.service';
@@ -6,7 +6,7 @@ import PublicHolidayService from '@/services/public-holiday/public-holiday.servi
 class PublicHolidayController {
   public publicHolidayService = new PublicHolidayService();
 
-  public create = async (req, res: Response, next: NextFunction) => {
+  public create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const publicHolidayData: CreatePublicHolidayDto = req.body;
       const createdPublicHoliday: IPublicHoliday = await this.publicHolidayService.create(req, publicHolidayData);
