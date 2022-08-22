@@ -3,7 +3,7 @@ import { IPublicHoliday } from '@/interfaces/public-holiday/public_holiday.inter
 import publicHolidayModel from '@/models/public-holiday/public_holiday.model';
 import { HttpException } from '@/exceptions/HttpException';
 import omit from 'lodash/omit';
-// import { isEmpty } from '@/utils/util';
+import { isEmpty } from '@/utils/util';
 
 class PublicHolidayService {
   public publicHolidayModel = publicHolidayModel;
@@ -29,6 +29,22 @@ class PublicHolidayService {
   public async findAll(): Promise<IPublicHoliday[]> {
     const publicHolidays: IPublicHoliday[] = await this.publicHolidayModel.find();
     return publicHolidays;
+  }
+
+  public async findAllActive(): Promise<IPublicHoliday[]> {
+    const publicHolidays: IPublicHoliday[] = await this.publicHolidayModel.find({ deleted: false });
+    return publicHolidays;
+  }
+
+  public async findById(id: string): Promise<IPublicHoliday> {
+    if (isEmpty(id)) throw new HttpException(400, 'provide Id');
+
+    const publicHoliday = await this.publicHolidayModel.findOne({ _id: id, deleted: false });
+
+    if (!publicHoliday) {
+      throw new HttpException(404, `Public holiday not found`);
+    }
+    return publicHoliday;
   }
 }
 
