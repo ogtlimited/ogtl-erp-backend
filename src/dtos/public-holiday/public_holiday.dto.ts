@@ -19,6 +19,7 @@ export class CreatePublicHolidayDto {
   public updated_by: string;
 
   @IsString()
+  @IsOptional()
   public created_by: string;
 
   @IsString()
