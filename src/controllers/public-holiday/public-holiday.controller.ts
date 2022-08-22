@@ -57,6 +57,24 @@ class PublicHolidayController {
       const id: string = req.params.id;
       const data = await this.publicHolidayService.findById(id);
       res.status(200).json({ data: data });
+
+      console.table({
+        title: data.title,
+        deleted: data.deleted,
+      });
+      console.log(`${data.title} public holidays found`);
+      console.log(`================================`);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public update = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const id: string = req.params.id;
+      const updatedData: CreatePublicHolidayDto = req.body;
+      const updatedPublicHoliday: IPublicHoliday = await this.publicHolidayService.update(id, updatedData);
+      res.status(200).json({ data: updatedPublicHoliday, message: `${updatedData.title} public holiday updated successfully` });
     } catch (error) {
       next(error);
     }
