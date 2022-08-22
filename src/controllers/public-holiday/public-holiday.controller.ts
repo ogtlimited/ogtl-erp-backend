@@ -79,5 +79,15 @@ class PublicHolidayController {
       next(error);
     }
   };
+
+  public delete = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const id: string = req.params.id;
+      const deletedPublicHoliday: IPublicHoliday = await this.publicHolidayService.delete(id);
+      res.status(200).json({ data: deletedPublicHoliday, message: `public holiday with id ${id} deleted successfully` });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 export default PublicHolidayController;
