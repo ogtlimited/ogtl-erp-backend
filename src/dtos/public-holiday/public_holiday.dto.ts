@@ -1,4 +1,4 @@
-import { IsDateString, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsDateString, IsOptional, IsString } from 'class-validator';
 
 export class CreatePublicHolidayDto {
   @IsDateString()
@@ -13,4 +13,19 @@ export class CreatePublicHolidayDto {
   @IsString()
   @IsOptional()
   public project_id: string;
+
+  @IsString()
+  @IsOptional()
+  public updated_by: string;
+
+  @IsString()
+  public created_by: string;
+
+  @IsString()
+  @IsOptional()
+  public deleted_by: string;
+
+  @IsBoolean()
+  @IsOptional()
+  public deleted: boolean;
 }
