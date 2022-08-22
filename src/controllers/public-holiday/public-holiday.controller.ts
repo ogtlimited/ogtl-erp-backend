@@ -33,5 +33,33 @@ class PublicHolidayController {
       next(error);
     }
   };
+
+  public findAllActive = async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+      const publicHolidayEntries = await this.publicHolidayService.findAllActive();
+      res.status(200).json({ data: publicHolidayEntries });
+
+      console.table(
+        publicHolidayEntries.map(entry => ({
+          title: entry.title,
+          deleted: entry.deleted,
+        })),
+      );
+      console.log(`========  ${publicHolidayEntries.length} public holidays found  =======`);
+      console.log(`==========================================`);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public findById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const id: string = req.params.id;
+      const data = await this.publicHolidayService.findById(id);
+      res.status(200).json({ data: data });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 export default PublicHolidayController;
