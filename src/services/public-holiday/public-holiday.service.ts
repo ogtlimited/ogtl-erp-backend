@@ -25,6 +25,11 @@ class PublicHolidayService {
 
     return publicHoliday;
   }
+
+  public async findAll(): Promise<IPublicHoliday[]> {
+    const publicHolidays: IPublicHoliday[] = await this.publicHolidayModel.find();
+    return publicHolidays;
+  }
 }
 
 export default PublicHolidayService;
