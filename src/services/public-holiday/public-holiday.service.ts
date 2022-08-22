@@ -58,6 +58,18 @@ class PublicHolidayService {
     const updatedPublicHoliday = await publicHoliday.updateOne(updatedData);
     return updatedPublicHoliday;
   }
+
+  public async delete(id: string): Promise<IPublicHoliday> {
+    if (isEmpty(id)) throw new HttpException(400, 'provide Id');
+
+    const publicHoliday = await this.publicHolidayModel.findOne({ _id: id, deleted: false });
+
+    if (!publicHoliday) {
+      throw new HttpException(404, `Public holiday not found`);
+    }
+    const deletedPublicHoliday = await publicHoliday.updateOne({ deleted: true });
+    return deletedPublicHoliday;
+  }
 }
 
 export default PublicHolidayService;
