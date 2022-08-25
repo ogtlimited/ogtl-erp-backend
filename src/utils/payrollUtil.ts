@@ -96,6 +96,8 @@ export const calculateEmployeeDeductions = async (employeeId, netPay) => {
   const facetQuery = deductionAggBuilder(employeeId);
   const deductions: any = await deductionModel.aggregate(facetQuery);
   const { deductionIds, totalDeductions } = deductions[0];
+  employeeDeductions.salaryAfterDeductions = netPay
+  employeeDeductions.totalDeductions = 0
   if (deductionIds.length > 0) {
     employeeDeductions.hasDeductions = true;
     employeeDeductions.salaryAfterDeductions = netPay - totalDeductions[0].sum;

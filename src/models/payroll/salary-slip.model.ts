@@ -36,10 +36,6 @@ const salarySlipSchema: Schema = new Schema(
     totalInWords: {
       type: String,
     },
-    netPay: {
-      type: Number,
-      required: true,
-    },
     salaryAfterDeductions: {
       type: Number,
       default:0
