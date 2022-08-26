@@ -24,7 +24,12 @@ import { logger, stream } from './utils/logger';
 import * as cron from 'node-cron';
 const { io } = require("@/utils/socket");
 const redis = require('redis');
-const client = redis.createClient();
+const client = redis.createClient({
+  host: "13.41.139.21",
+  port: 6379,
+  password: "redis-auth",
+  username: ""
+});
 import LeaveApplicationService from "@services/leave/application.service";
 import attendanceModel  from '@models/attendance/attendance.model';
 import {getWorkTime, calculateLateness}  from '@/utils/attendanceCalculator';
@@ -92,6 +97,9 @@ class App {
   {
     client.on('connect', function() {
       console.log('Connected!');
+    });
+    client.on("error", function (err) {
+      console.log("Error " + err);
     });
   }
   public listen() {
