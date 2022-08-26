@@ -96,7 +96,10 @@ class App {
   public redisConnection()
   {
     client.on('connect', function() {
-      console.log('Connected!');
+      console.log('Redis Connected!');
+    });
+    client.on("error", function (err) {
+      console.log("Error " + err);
     });
     client.on("error", function (err) {
       console.log("Error " + err);
