@@ -1,24 +1,48 @@
 # Common build stage
-FROM node:14.14.0-alpine3.12 as common-build-stage
+FROM ubuntu:20.04
 
 COPY . ./app
 
 WORKDIR /app
 
+ENV NODE_VERSION=16.13.0
+
+RUN apt update 
+
+RUN apt install -y curl
+
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+
+ENV NVM_DIR=/root/.nvm
+
+RUN . "$NVM_DIR/nvm.sh" && nvm install ${NODE_VERSION}
+
+RUN . "$NVM_DIR/nvm.sh" && nvm use v${NODE_VERSION}
+
+RUN . "$NVM_DIR/nvm.sh" && nvm alias default v${NODE_VERSION}
+
+ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
+
+RUN node --version
+
+RUN npm --version
+
 RUN npm install
 
-# RUN apk update && apk add --no-cache wget
-
-# RUN wget https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem
+RUN apt install redis-server -y
 
 EXPOSE 3000
 
-# Development build stage
-FROM common-build-stage as development-build-stage
+# RUN service redis-server start
 
-ENV NODE_ENV development
+# # Development build stage
+# FROM common-build-stage as development-build-stage
 
-CMD ["npm", "run", "dev"]
+# ENV NODE_ENV development
+
+# CMD ["/bin/bash", "-c", "service", "redis-server", "start";"npm", "run", "dev"]
+CMD service redis-server start && npm run dev
+# CMD ["sleep", "1000"]
 
 # Production build stage
 # FROM common-build-stage as production-build-stage
