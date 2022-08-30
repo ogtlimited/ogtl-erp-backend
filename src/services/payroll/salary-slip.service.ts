@@ -200,18 +200,18 @@ class SalarySlipService {
       5. If emp hasn't met threshold....TODO
 
     */
-    // await this.salarySlipExistenceCheck();
-    // const token = await BankPaymentService.getBankToken();
-    // const batchData = await BankPaymentService.initiateBankPayment(token)
-    // const salarySlipBatch: IBatchInterface = await  BatchModel.create({
-    //   batch_id: batchData.BatchID,
-    //   reference_id: batchData.Reference
-    // })
-
+    await this.salarySlipExistenceCheck();
+    const token = await Bank3DPaymentService.getBankToken();
+    const batchData = await Bank3DPaymentService.initiateBankPayment(token)
     const salarySlipBatch: IBatchInterface = await  BatchModel.create({
-      batch_id: "qwertyu",
-      reference_id: "1234543223"
+      batch_id: batchData.BatchID,
+      reference_id: batchData.Reference
     })
+
+    // const salarySlipBatch: IBatchInterface = await  BatchModel.create({
+    //   batch_id: "qwertyu",
+    //   reference_id: "1234543223"
+    // })
 
 
     const records = [];
@@ -224,18 +224,6 @@ class SalarySlipService {
       const employeeSalary: any = employeeSalaries[index];
 
       if (employeeSalary.employeeId.remote){
-        // if(moment(employeeSalary.employeeId.date_of_joining).date() >= 25){
-        //   new Promise((resolve, reject) => {
-        //     SalaryArrearsModel.create({
-        //       employeeId: employeeSalary.employeeId._id,
-        //       employeeSalary: employeeSalary,
-        //       amount: 1000
-        //     }).then( (result) => {
-        //       resolve(result)
-        //     }).catch((e) => reject(e))
-        //   })
-        //
-        // }
         const salarySlipConstructor = await SalarySlipService.employeeSalarySlipGenerator(employeeSalary, salarySlipBatch);
         records.push(salarySlipConstructor)
       }
@@ -319,6 +307,8 @@ class SalarySlipService {
 
      */
 
+    const token = await Bank3DPaymentService.getBankToken();
+
     const batch = await BatchModel.findOne({
       "createdAt": {
         "$gte": new Date(this.startOfMonth),
@@ -327,7 +317,9 @@ class SalarySlipService {
       approved: false
     })
 
-    console.log(batch);
+    // if(!batch){
+    //   throw new HttpException(400, "Batch already created for this month")
+    // }
 
     const SalarySlips = await SalarySlipModel.find({
       batchId: batch._id
@@ -338,9 +330,27 @@ class SalarySlipService {
       BeneficiaryName:1,
       Narration:1,
       Amount:1,
+      Reference:1
     })
 
-    return SalarySlips
+    const today =moment().format().split("+")[0]
+    console.log(today);
+
+    // new Promise((resolve , reject) => {
+    //   const result = Bank3DPaymentService.loadPayments(today, SalarySlips, batch._id, token)
+    //   if (result){
+    //
+    //     resolve("process complete")
+    //   }
+    // })
+    await Bank3DPaymentService.loadPayments(today, SalarySlips, batch.batch_id, token)
+    await Bank3DPaymentService.processPayments(batch.batch_id, token, today)
+    await BatchModel.findOneAndUpdate( {_id: batch._id},{
+      $set: {
+        approved: true
+      }
+    })
+    return "Payments being Processed"
   }
 
   private async salarySlipExistenceCheck() {

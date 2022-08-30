@@ -45,18 +45,40 @@ export class Bank3DPaymentService {
     }
   }
 
-  static async processPayments(date, salarySlips) {
-    const token = await Bank3DPaymentService.getBankToken();
+  static async loadPayments(date, salarySlips, batch_id, token) {
+    // const token = await Bank3DPaymentService.getBankToken();
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
+    const payload = {
+      BatchID: batch_id,
+      Items: salarySlips
+    };
     const response = await axios({
       method: 'post',
-      url: process.env.BANK_3D_URL_Process_Payment,
-      data: salarySlips,
+      url: process.env.BANK_3D_URL_Update_Payment,
+      data: payload,
       headers: config.headers,
     });
 
     return 'Payment Process Commenced';
+  }
+
+  static async processPayments(batch_id, token, date) {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
+    const payload = {
+      BatchID: batch_id,
+      ProcessDate: date,
+    };
+    const response = await axios({
+      method: 'post',
+      url: process.env.BANK_3D_URL_Process_Payment,
+      data: payload,
+      headers: config.headers,
+    });
+
+    return 'Payments being Processed';
   }
 }
