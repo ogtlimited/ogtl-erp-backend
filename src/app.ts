@@ -23,7 +23,12 @@ import { logger, stream } from './utils/logger';
 import * as cron from 'node-cron';
 const { io } = require("@/utils/socket");
 const redis = require('redis');
-const client = redis.createClient();
+const client = redis.createClient({
+  host: "13.41.139.21",
+  port: 6379,
+  password: "redis-auth",
+  username: ""
+});
 import LeaveApplicationService from "@services/leave/application.service";
 import EmployeeService from "./services/employee.service";
 
@@ -85,7 +90,13 @@ class App {
   public redisConnection()
   {
     client.on('connect', function() {
-      console.log('Connected!');
+      console.log('Redis Connected!');
+    });
+    client.on("error", function (err) {
+      console.log("Error " + err);
+    });
+    client.on("error", function (err) {
+      console.log("Error " + err);
     });
   }
   public listen() {

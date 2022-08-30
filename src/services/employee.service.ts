@@ -209,17 +209,17 @@ class EmployeeService {
   }
 
   public async updateEmployee(EmployeeId: string, EmployeeData: UpdateEmployeeDto): Promise<Employee> {
-    if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
+    if (isEmpty(EmployeeData)) throw new HttpException(400, "EmployeeData is absent");
 
     if (EmployeeData.company_email) {
-      const findEmployee: Employee = await this.Employees.findOne({ email: EmployeeData.company_email });
+      const findEmployee: Employee = await this.Employees.findOne({ company_email: EmployeeData.company_email });
       if (findEmployee && findEmployee._id != EmployeeId) throw new HttpException(409, `You're email ${EmployeeData.company_email} already exists`);
     }
 
-    if (EmployeeData.password) {
-      const hashedPassword = await bcrypt.hash(EmployeeData.password, 10);
-      EmployeeData = { ...EmployeeData, password: hashedPassword };
-    }
+    // if (EmployeeData.password) {
+    //   const hashedPassword = await bcrypt.hash(EmployeeData.password, 10);
+    //   EmployeeData = { ...EmployeeData, password: hashedPassword };
+    // }
     // console.log(emp)
     const updateEmployeeById: Employee = await this.Employees.findByIdAndUpdate(EmployeeId,  EmployeeData );
     if (!updateEmployeeById) throw new HttpException(409, "You're not Employee");

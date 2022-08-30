@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import config from 'config';
 import { dbConfig } from '@interfaces/db.interface';
 import { models } from 'mongoose';
