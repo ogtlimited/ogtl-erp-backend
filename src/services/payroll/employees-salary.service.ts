@@ -138,7 +138,6 @@ class EmployeeSalaryService {
         }
       }
     }
-  }
 
   public async updateEmployeeSalary(payload) {
     const salarySetting = await salarySettingModel.findOne({ active: true });
