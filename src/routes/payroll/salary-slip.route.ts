@@ -20,6 +20,7 @@ class SalarySlipRoute implements Routes {
         this.router.get(`${this.path}`,[], this.salarySlipController.findAll);
         this.router.get(`${this.path}/employee-report`, [], this.salarySlipController.findById);
         this.router.post(`${this.path}`, [], this.salarySlipController.create);
+        this.router.post(`${this.path}/approve/batch`, [], this.salarySlipController.approveAndPay);
         this.router.post(`${this.path}/generate`, [], this.salarySlipController.createDepartmentPayroll);
     }
   }

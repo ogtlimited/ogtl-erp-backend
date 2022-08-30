@@ -23,7 +23,7 @@ class SalarySlipController {
       // const id: string = req.params.id;
       const data = await this.salarySlipService.findById(req.query);
       console.log(data, "data");
-      
+
       res.status(200).json({ data: data});
     } catch (error) {
       next(error);
@@ -46,6 +46,17 @@ class SalarySlipController {
       const newData: CreateSalarySlipDto = req.body;
       const createdData: ISalarySlip = await this.salarySlipService.createDepartmentPayroll(newData);
       res.status(201).json({ data: createdData});
+    } catch (error) {
+      console.log(error);
+
+      next(error);
+    }
+  };
+
+  public approveAndPay = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await this.salarySlipService.approveAndPay();
+      res.status(201).json({ data: result});
     } catch (error) {
       console.log(error);
 

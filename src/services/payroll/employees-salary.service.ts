@@ -50,44 +50,49 @@ class EmployeeSalaryService {
   }
 
   //remember to validate salary structure and employees for matching project and departments
+  //refactor. consider getting all employees.
   public async create(info): Promise<any> {
-    const { data } = info;
-    console.log(info);
-    const salarySetting = await salarySettingModel.findOne({ active: true });
+    const {data} = info
+    const salarySetting = await salarySettingModel.findOne({active: true})
     const employeesSalary = [];
-    const nonExistingEmployees = [];
-    console.log(data, 'data ----> ');
-    for (let idx = 0; idx < data.length; idx++) {
-      console.log('looping bish');
-      const record = data[idx];
-      const employeeInfo = await EmployeeModel.findOne({ company_email: record.company_email }).populate({ path: 'department' });
-      if (!employeeInfo) {
-        nonExistingEmployees.push(record);
-        continue;
+    const nonExistingEmployees = []
+    for(let idx = 0; idx < data.length; idx++){
+      const record = data[idx]
+      const employeeInfo  = await EmployeeModel.findOne({company_email: record.company_email}).populate({path: 'department'});
+      if(employeeInfo.department == null){
+        nonExistingEmployees.push(employeeInfo)
       }
-      const result = await this.salaryGeneratorHelper(record, employeeInfo, salarySetting);
-      result.employeeId = employeeInfo._id;
-      result.departmentId = employeeInfo.department;
-      result.projectId = employeeInfo.projectId;
-      const existingSalary = await employeesSalaryModel.findOne({ employeeId: result.employeeId });
-      console.log(existingSalary, 'EXISTING');
-      if (existingSalary) {
-        const updateSalary = await employeesSalaryModel.findOneAndUpdate({ employeeId: existingSalary.employeeId }, result, {
-          new: true,
-        });
-        if (!updateSalary) {
-          throw new HttpException(404, 'employee salary record does not exist');
+      if(!employeeInfo){
+        nonExistingEmployees.push(record)
+        continue
+      }
+      const result = await this.salaryGeneratorHelper(record, employeeInfo, salarySetting)
+      result.employeeId = employeeInfo._id
+      result.departmentId = employeeInfo.department
+      result.projectId = employeeInfo.projectId
+      const existingSalary  = await employeesSalaryModel.findOne({employeeId: result.employeeId});
+      // console.log(existingSalary, 'EXISTING----->', "record--->", record, !null, !employeeInfo, "employeeinfo", employeeInfo );
+      if(existingSalary){
+        const updateSalary = await employeesSalaryModel.findOneAndUpdate({employeeId: existingSalary.employeeId},result, {
+          new: true
+        })
+        if(!updateSalary){
+          throw new HttpException(404, 'employee salary record does not exist')
         }
       } else {
         employeesSalary.push(result);
       }
     }
 
-    await employeesSalaryModel.insertMany(employeesSalary);
-    return `${employeesSalary.length} record(s) uploaded successfully`;
+    // console.log(nonExistingEmployees);
+    await employeesSalaryModel.insertMany(employeesSalary)
+    return `${employeesSalary.length} record(s) uploaded successfully`
+
   }
 
-  private async salaryGeneratorHelper(data, employeeInfo, salarySetting: ISalarySetting) {
+  private async salaryGeneratorHelper(data, employeeInfo,  salarySetting: ISalarySetting){
+
+    console.log(employeeInfo, "in the salary helper!");
     const salaryGenerator: ISalarySetting = {};
     const { annualGrossSalary } = data;
     const monthlySalary = annualGrossSalary / 12;
@@ -123,16 +128,16 @@ class EmployeeSalaryService {
   }
 
   private taxCalculator(annualTaxableIncome: number) {
-    const rates = [21000, 54000, 129000, 224000, 560000, 1232000];
-    for (let i = 0; i < this.schema.length; i++) {
-      console.log(this.schema[i].group, "GROUP");
-      if (annualTaxableIncome <= this.schema[i].group) {
-        console.log(this.schema[i - 1].group)
-        const current = annualTaxableIncome - this.schema[i - 1].group;
-        return rates[i - 1] + current * this.schema[i].percent;
+      const rates =[21000,54000,129000,224000,560000,1232000]
+      for(let i=0; i < this.schema.length; i++){
+        console.log(this.schema[i], "schema info -------->");
+        if(annualTaxableIncome <= this.schema[i]?.group){
+          console.log(`schema group: ${this.schema[i]?.group}, schema ded: ${this.schema[i -1]?.group}`);
+          const current = annualTaxableIncome - this.schema[i -1].group;
+          return rates[i-1] + current * this.schema[i].percent
+        }
       }
     }
-  }
 
   public async updateEmployeeSalary(payload) {
     const salarySetting = await salarySettingModel.findOne({ active: true });

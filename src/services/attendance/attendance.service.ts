@@ -114,7 +114,9 @@ class AttendanceTypeService {
     const latenessDeduction = await deductionTypeModel.findOne({title:"lateness"})
     const ncnsDeduction = await deductionTypeModel.findOne({title:"NCNS"})
 
-    for(const employeeData of attendanceTypeData){
+    // return attendanceTypeData
+
+    for(const employeeData of attendanceTypeData.attendances){
       // console.log(employeeData)
       const result = await this.generatePossibleDeductions(employeeData.ogid, employeeData, latenessDeduction, ncnsDeduction)
       const attendanceConstructor: ICreateAttendance = AttendanceTypeService.attendanceData(employeeData, result);
@@ -296,7 +298,7 @@ class AttendanceTypeService {
           const workTimeDeficit = expectedWorkHours - attendanceRecord.totalHours
           deductionAmount = Math.floor(((employee.employeeSalary.monthlySalary/22)/expectedWorkHours)) * workTimeDeficit;
           deductionsConstructor.employeeId= employee._id
-          deductionsConstructor.description= "incompleteHours"
+          deductionsConstructor.description= "Incomplete Hours"
           deductionsConstructor.amount= deductionAmount
           employeesDeductions.push(deductionsConstructor)
         }
