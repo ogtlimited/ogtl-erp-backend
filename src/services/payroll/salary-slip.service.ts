@@ -1,23 +1,28 @@
 /* eslint-disable prettier/prettier */
-import { CreateSalarySlipDto } from '@dtos/payroll/salary-slip.dto';
-import { HttpException } from '@exceptions/HttpException';
-import salarySlipModel from '@models/payroll/salary-slip.model';
-import { isEmpty } from '@utils/util';
-import projectModel from '@/models/project/project.model';
-import EmployeeModel from '@/models/employee/employee.model';
-import {calculateEmployeeDeductions, officeQueryGenerator} from '@/utils/payrollUtil';
+import { CreateSalarySlipDto } from "@dtos/payroll/salary-slip.dto";
+import { HttpException } from "@exceptions/HttpException";
+import salarySlipModel from "@models/payroll/salary-slip.model";
+import { isEmpty } from "@utils/util";
+import projectModel from "@/models/project/project.model";
+import EmployeeModel from "@/models/employee/employee.model";
+import { calculateEmployeeDeductions, officeQueryGenerator } from "@/utils/payrollUtil";
 import employeesSalaryModel from "@models/payroll/employees-salary";
 import moment from "moment";
 import AttendanceTypeService from "@services/attendance/attendance.service";
-import differenceInBusinessDays from 'date-fns/differenceInBusinessDays'
+import differenceInBusinessDays from "date-fns/differenceInBusinessDays";
 import applicationModel from "@models/leave/application.model";
-import SalaryArrearsModel from "@models/payroll/salary-arrears.model";
 import salaryArrearsModel from "@models/payroll/salary-arrears.model";
+import BatchModel from "@models/payroll/batch.model";
+import { IBatchInterface } from "@interfaces/payroll/batch.interface";
+import { ReferenceGenerator } from "@services/payroll/reference-number.generator";
+import { Bank3DPaymentService } from "@services/payroll/bank3d.service";
+import SalarySlipModel from "@models/payroll/salary-slip.model";
 
 class SalarySlipService {
 
   private startOfMonth = new Date(moment().startOf('month').format('YYYY-MM-DD')).toISOString();
   private endOfMonth   = new Date(moment().endOf('month').format('YYYY-MM-DD')).toISOString();
+  // private axiosService = SalarySlipService.axiosInstance()
 
   public salarySlipModel = salarySlipModel;
   private attendanceService = new AttendanceTypeService();
@@ -195,7 +200,20 @@ class SalarySlipService {
       5. If emp hasn't met threshold....TODO
 
     */
-    await this.salarySlipExistenceCheck();
+    // await this.salarySlipExistenceCheck();
+    // const token = await BankPaymentService.getBankToken();
+    // const batchData = await BankPaymentService.initiateBankPayment(token)
+    // const salarySlipBatch: IBatchInterface = await  BatchModel.create({
+    //   batch_id: batchData.BatchID,
+    //   reference_id: batchData.Reference
+    // })
+
+    const salarySlipBatch: IBatchInterface = await  BatchModel.create({
+      batch_id: "qwertyu",
+      reference_id: "1234543223"
+    })
+
+
     const records = [];
 
     const employeeSalaries = await employeesSalaryModel.find({}).populate(
@@ -218,7 +236,7 @@ class SalarySlipService {
         //   })
         //
         // }
-        const salarySlipConstructor = await SalarySlipService.employeeSalarySlipGenerator(employeeSalary);
+        const salarySlipConstructor = await SalarySlipService.employeeSalarySlipGenerator(employeeSalary, salarySlipBatch);
         records.push(salarySlipConstructor)
       }
     }
@@ -241,14 +259,26 @@ class SalarySlipService {
     });
   }
 
-  private static async employeeSalarySlipGenerator(employeeSalary: any) {
+  private static async employeeSalarySlipGenerator(employeeSalary: any, salarySlipBatch) {
 
     const today = new Date();
+    const monthName = moment(today).format('MMMM')
+    const referenceNumber = ReferenceGenerator.referenceNumberGenerator();
+
     const salarySlipConstructor: any = {
       employeeId: employeeSalary.employeeId._id,
       employeeSalary: employeeSalary,
-      month: today.toISOString()
+      month: today.toISOString(),
+      batchId: salarySlipBatch._id,
+      AccountNumber: "3078555402",
+      BankCode: "011",
+      BeneficiaryName: "Test Test",
+      Narration: `${monthName} ${today.getFullYear()} Salary`,
+      Reference: referenceNumber,
+      Amount:100.0
     };
+
+    // const salaryDetails = await salaryDetailsModel.findOne({employee_id: employeeSalary.employeeId._id})
 
     const salaryArrears: any = await salaryArrearsModel.findOne({
       employeeId: employeeSalary.employeeId,
@@ -259,15 +289,49 @@ class SalarySlipService {
     })
     const deductions = await calculateEmployeeDeductions(employeeSalary.employeeId._id, employeeSalary.netPay);
     salarySlipConstructor.totalDeductions = deductions.totalDeductions;
-    salarySlipConstructor.salaryAfterDeductions = deductions.salaryAfterDeductions;
+    salarySlipConstructor.salaryAfterDeductions = deductions.salaryAfterDeductions.toFixed(2);
+    salarySlipConstructor.Amount = salarySlipConstructor.salaryAfterDeductions
     if (deductions.hasDeductions) {
       salarySlipConstructor.deductions = [...deductions.deductionIds];
     }
     if (salaryArrears){
       salarySlipConstructor.salaryArrears = salaryArrears._id
-      salarySlipConstructor.salaryAfterDeductions = salaryArrears.amount + deductions.salaryAfterDeductions
+      salarySlipConstructor.salaryAfterDeductions = salaryArrears.amount + deductions.salaryAfterDeductions.toFixed(2)
+      salarySlipConstructor.Amount = salarySlipConstructor.salaryAfterDeductions
     }
     return salarySlipConstructor;
+  }
+
+  // private static axiosInstance() {
+  //    return axios.create({
+  //     timeout: 60000, //optional
+  //     httpsAgent: new https.Agent({ keepAlive: true }),
+  //     headers: {'Content-Type':'application/xml'}
+  //   })
+  // }
+
+  public async approveAndPay() {
+    const batch = await BatchModel.findOne({
+      "createdAt": {
+        "$gte": new Date(this.startOfMonth),
+        "$lte": new Date(this.endOfMonth)
+      },
+    })
+
+    console.log(batch);
+
+    const SalarySlips = await SalarySlipModel.find({
+      batchId: batch._id
+    },{
+      _id:0,
+      AccountNumber:1,
+      BankCode:1,
+      BeneficiaryName:1,
+      Narration:1,
+      Amount:1,
+    })
+
+    return SalarySlips
   }
 
   private async salarySlipExistenceCheck() {

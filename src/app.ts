@@ -17,7 +17,6 @@ import morgan from 'morgan';
 import { connect, set } from 'mongoose';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { dbConnection } from './databases';
 import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from './middlewares/error.middleware';
 import { logger, stream } from './utils/logger';
@@ -26,16 +25,11 @@ const { io } = require("@/utils/socket");
 const redis = require('redis');
 const client = redis.createClient();
 import LeaveApplicationService from "@services/leave/application.service";
-import attendanceModel  from '@models/attendance/attendance.model';
-import {getWorkTime, calculateLateness}  from '@/utils/attendanceCalculator';
-import AttendanceTypeService from '@/services/attendance/attendance.service';
-import NotificationHelper from './utils/helper/notification.helper';
 import EmployeeService from "./services/employee.service";
 
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config({ path: dirname( module.paths[1] ) + "/.env" });
 }
-import moment from 'moment';
 
 class App {
   public app: express.Application;
@@ -112,6 +106,7 @@ class App {
     if (this.env !== 'production') {
       set('debug', true);
     }
+    set('autoIndex', false)
     await connect(process.env.databaseUrl);
   }
 
@@ -226,7 +221,6 @@ class App {
   private initializeErrorHandling() {
     this.app.use(errorMiddleware);
   }
-
 
   private  initializeCron(){
 

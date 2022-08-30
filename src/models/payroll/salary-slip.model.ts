@@ -36,6 +36,24 @@ const salarySlipSchema: Schema = new Schema(
     totalInWords: {
       type: String,
     },
+    AccountNumber: {
+      type: String,
+    },
+    BankCode: {
+      type: String,
+    },
+    BeneficiaryName: {
+      type: String,
+    },
+    Narration: {
+      type: String,
+    },
+    Reference: {
+      type: String,
+    },
+    Amount: {
+      type: String,
+    },
     salaryAfterDeductions: {
       type: Number,
       default:0
@@ -55,6 +73,11 @@ const salarySlipSchema: Schema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'Employee',
     },
+    batchId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Batch',
+    },
+
   },
 
   {
