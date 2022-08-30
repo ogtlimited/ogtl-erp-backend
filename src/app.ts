@@ -17,25 +17,24 @@ import morgan from 'morgan';
 import { connect, set } from 'mongoose';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { dbConnection } from './databases';
 import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from './middlewares/error.middleware';
 import { logger, stream } from './utils/logger';
 import * as cron from 'node-cron';
 const { io } = require("@/utils/socket");
 const redis = require('redis');
-const client = redis.createClient();
+const client = redis.createClient({
+  host: "13.41.139.21",
+  port: 6379,
+  password: "redis-auth",
+  username: ""
+});
 import LeaveApplicationService from "@services/leave/application.service";
-import attendanceModel  from '@models/attendance/attendance.model';
-import {getWorkTime, calculateLateness}  from '@/utils/attendanceCalculator';
-import AttendanceTypeService from '@/services/attendance/attendance.service';
-import NotificationHelper from './utils/helper/notification.helper';
 import EmployeeService from "./services/employee.service";
 
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config({ path: dirname( module.paths[1] ) + "/.env" });
 }
-import moment from 'moment';
 
 class App {
   public app: express.Application;
@@ -91,7 +90,13 @@ class App {
   public redisConnection()
   {
     client.on('connect', function() {
-      console.log('Connected!');
+      console.log('Redis Connected!');
+    });
+    client.on("error", function (err) {
+      console.log("Error " + err);
+    });
+    client.on("error", function (err) {
+      console.log("Error " + err);
     });
   }
   public listen() {
@@ -112,6 +117,7 @@ class App {
     if (this.env !== 'production') {
       set('debug', true);
     }
+    set('autoIndex', false)
     await connect(process.env.databaseUrl);
   }
 
@@ -226,7 +232,6 @@ class App {
   private initializeErrorHandling() {
     this.app.use(errorMiddleware);
   }
-
 
   private  initializeCron(){
 
