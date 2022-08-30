@@ -85,6 +85,7 @@ import JournalRoute from './routes/journals/journals.route';
 import InvoiceRoute from './routes/invoice/invoice.routes';
 import VendorRoute from '@routes/vendor/vendor.route';
 import BillsRoute from '@routes/vendor/bills.route';
+import PublicHolidayRoute from './routes/public-holiday/public-holiday.route';
 
 
 import ProcurementRoute from '@/routes/procurement/procurement.route'
@@ -175,6 +176,7 @@ const app = new App([
   new ProductServiceRoute(),
   new JournalRoute(),
   new InvoiceRoute(),
+  new PublicHolidayRoute(),
 
   new VendorRoute(),
   new BillsRoute(),

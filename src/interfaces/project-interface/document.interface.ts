@@ -5,4 +5,6 @@ export interface IDocument {
     project_id: string;
     file_type: string;
     file_name: string;
+    document_type: string;
+    parent_folder_id: string;
 }
