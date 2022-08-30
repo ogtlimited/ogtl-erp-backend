@@ -31,10 +31,12 @@ import {getWorkTime, calculateLateness}  from '@/utils/attendanceCalculator';
 import AttendanceTypeService from '@/services/attendance/attendance.service';
 import NotificationHelper from './utils/helper/notification.helper';
 import EmployeeService from "./services/employee.service";
-
+const fs = require('fs')
+const path = require('path')
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config({ path: dirname( module.paths[1] ) + "/.env" });
 }
+
 import moment from 'moment';
 
 class App {
@@ -42,6 +44,7 @@ class App {
   public port: string | number;
   public env: string;
   constructor(routes: Routes[]) {
+    console.log(__dirname, 'DIRECTORY')
 
     this.app = express();
     this.port = process.env.PORT || 3000;
@@ -108,11 +111,18 @@ class App {
     return this.app;
   }
 
+  
   private async connectToDatabase() {
     if (this.env !== 'production') {
       set('debug', true);
     }
-    await connect(process.env.databaseUrl);
+    // const ca = [fs.readFileSync(__dirname, '/rds.pem'))];
+    try {
+      
+      connect(process.env.databaseUrl);
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   private initializeMiddlewares() {
