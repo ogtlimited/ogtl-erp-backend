@@ -311,11 +311,20 @@ class SalarySlipService {
   // }
 
   public async approveAndPay() {
+
+    /*
+
+      - update after response from bank3d
+
+
+     */
+
     const batch = await BatchModel.findOne({
       "createdAt": {
         "$gte": new Date(this.startOfMonth),
         "$lte": new Date(this.endOfMonth)
       },
+      approved: false
     })
 
     console.log(batch);
