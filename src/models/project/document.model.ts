@@ -23,7 +23,14 @@ const documentSchema: Schema = new Schema(
     file_name: {
       type: String,
       required: true,
-    }
+    },
+    document_type: {
+      type: String,
+      enum: ['employee', 'campaign', 'department'],
+    },
+    parent_folder_id: {
+      type: String
+    },
   },
   {
     timestamps: true,
