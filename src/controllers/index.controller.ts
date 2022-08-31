@@ -131,6 +131,15 @@ class IndexController {
       next(e)
     }
   }
+  public collectionCount = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const count = await this.indexS.CollectionCount()
+      res.status(200).json({ count, message: 'Collection count' });
+    }
+    catch (e) {
+      next(e)
+    }
+  }
 }
 
 export default IndexController;

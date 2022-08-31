@@ -32,6 +32,7 @@ class EmployeeSalaryController {
       const createdData = await this.salaryStructureAssignmentService.create(newData);
       res.status(201).json({ data: createdData});
     } catch (error) {
+      console.log(error);
       next(error);
     }
   };

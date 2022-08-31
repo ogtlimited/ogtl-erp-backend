@@ -15,6 +15,7 @@ class IndexRoute implements Routes {
   private initializeRoutes() {
     this.router.get(`${this.path}`, this.indexController.index);
     this.router.get(`${this.path}combine-employee-form`, this.indexController.createEmployeeFormSelection);
+    this.router.get(`${this.path}collection-count`, this.indexController.collectionCount);
     this.router.get(`${this.path}create-employee-form`, this.indexController.createEmployeeForm);
     this.router.get(`${this.path}create-shift-form`, this.indexController.createShiftForm);
     this.router.get(`${this.path}create-payroll-form`, this.indexController.createPayrollForm);

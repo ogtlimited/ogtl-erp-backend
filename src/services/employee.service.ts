@@ -1,7 +1,13 @@
 /* eslint-disable prettier/prettier */
 import bcrypt from 'bcrypt';
 
-import { CreateEmployeeDto, UpdateEmployeeDto, UpdateEmployeePermissionDto, UpdateEmployeeRoleDto, CreateMultipleEmployeeDto } from '@dtos/employee/employee.dto';
+import {
+  CreateEmployeeDto,
+  UpdateEmployeeDto,
+  UpdateEmployeePermissionDto,
+  UpdateEmployeeRoleDto,
+  CreateMultipleEmployeeDto,
+} from '@dtos/employee/employee.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
 import EmployeeModel from '@models/employee/employee.model';
@@ -10,8 +16,8 @@ import departmentModel from '@/models/department/department.model';
 import shiftTypeModel from '@models/shift/shift_type.model';
 import projectModel from '@/models/project/project.model';
 import EmployeeStatModel from '@/models/employee-stat/employee-stat.model';
-import { ObjectId } from "mongodb";
-import moment from "moment";
+import { ObjectId } from 'mongodb';
+import moment from 'moment';
 import { IProject } from './../interfaces/project-interface/project.interface';
 import { Designation } from './../interfaces/employee-interface/designation.interface';
 import { IDepartment } from './../interfaces/employee-interface/department.interface';
@@ -20,7 +26,6 @@ import { IShiftType } from '@/interfaces/shift-interface/shift_type.interface';
 import TerminationService from './employee-lifecycle/termination.service';
 import { IEmployeeStat } from './../interfaces/employee-stat/employee-stat.interface';
 import IdRequestService from './procurement/idrequest.service';
-
 
 class EmployeeService {
   // eslint-disable-next-line prettier/prettier
@@ -33,57 +38,60 @@ class EmployeeService {
   public TerminationService = new TerminationService();
   private idRequestService = new IdRequestService();
 
-
   public async findAllEmployee(): Promise<Employee[]> {
     const Employees: Employee[] = await this.Employees.find().populate('default_shift designation department branch projectId reports_to role');
     return Employees;
   }
+  public async EmployeeCount(): Promise<any> {
+    const count: number = await this.Employees.find({status: "active"}).count();
+    return count;
+  }
 
   public async findAllEmployeeByMonth(): Promise<Employee[]> {
-    const d = new Date()
-    const month: number = d.getMonth() + 1
-    const year = d.getFullYear() 
+    const d = new Date();
+    const month: number = d.getMonth() + 1;
+    const year = d.getFullYear();
     const Employees: Employee[] = await this.Employees.find({
       date_of_joining: {
-          $gte: moment(`${year}/${month}`, 'YYYY/MM').startOf('month').format('x'),
-          $lte: moment(`${year}/${month}`, 'YYYY/MM').endOf('month').format('x')
-      }
-  }).populate('default_shift designation department branch ');
+        $gte: moment(`${year}/${month}`, 'YYYY/MM').startOf('month').format('x'),
+        $lte: moment(`${year}/${month}`, 'YYYY/MM').endOf('month').format('x'),
+      },
+    }).populate('default_shift designation department branch ');
     return Employees;
   }
 
   public async EmployeeRatio() {
-    const monthlyEmployeeCount = (await this.findAllEmployeeByMonth()).length
-    const monthlyTermination = (await this.TerminationService.findAllTerminationsByMonth()).length
-    const totalEmployeeCount = (await this.Employees.find()).length
-    const ration = (Math.abs(monthlyEmployeeCount - monthlyTermination)) / totalEmployeeCount
+    const monthlyEmployeeCount = (await this.findAllEmployeeByMonth()).length;
+    const monthlyTermination = (await this.TerminationService.findAllTerminationsByMonth()).length;
+    const totalEmployeeCount = (await this.Employees.find()).length;
+    const ration = Math.abs(monthlyEmployeeCount - monthlyTermination) / totalEmployeeCount;
     const payload = {
       total_employee_count: monthlyEmployeeCount,
       total_termination_count: monthlyTermination,
-      ratio: ration
-    }
-    return await EmployeeStatModel.create(payload)
-    
+      ratio: ration,
+    };
+    return await EmployeeStatModel.create(payload);
   }
 
   public async findEmployeeRatio(): Promise<IEmployeeStat[]> {
-    const d = new Date()
-    const month: number = d.getMonth() + 1
-    const year = d.getFullYear() 
+    const d = new Date();
+    const month: number = d.getMonth() + 1;
+    const year = d.getFullYear();
     const Employees: IEmployeeStat[] = await this.employeeStatModel.find({
       createdAt: {
-          $gte: moment(`${year}/1}`, 'YYYY/MM').startOf('month').format('x'),
-          $lte: moment(`${year}/${month}`, 'YYYY/MM').endOf('month').format('x')
-      }
+        $gte: moment(`${year}/1}`, 'YYYY/MM').startOf('month').format('x'),
+        $lte: moment(`${year}/${month}`, 'YYYY/MM').endOf('month').format('x'),
+      },
     });
     return Employees;
-    
   }
 
   public async findEmployeeById(EmployeeId: string): Promise<Employee> {
     if (isEmpty(EmployeeId)) throw new HttpException(400, "You're not EmployeeId");
 
-    const findEmployee: Employee = await this.Employees.findOne({ _id: EmployeeId }).populate("default_shift department designation branch projectId reports_to role");
+    const findEmployee: Employee = await this.Employees.findOne({ _id: EmployeeId }).populate(
+      'default_shift department designation branch projectId reports_to role',
+    );
     if (!findEmployee) throw new HttpException(409, "You're not Employee");
 
     return findEmployee;
@@ -101,22 +109,22 @@ class EmployeeService {
       EmployeeData.department = null;
     }
 
-    const dateOfJoining = moment(EmployeeData['date_of_joining']).add(1, 'M')
-    const endOfyear = moment().endOf('year')
-    const duration = Math.abs(moment(dateOfJoining).diff(endOfyear, 'months', true)).toFixed(0)
+    const dateOfJoining = moment(EmployeeData['date_of_joining']).add(1, 'M');
+    const endOfyear = moment().endOf('year');
+    const duration = Math.abs(moment(dateOfJoining).diff(endOfyear, 'months', true)).toFixed(0);
     EmployeeData.leaveCount = Number(duration) * 2;
     // console.log(dateOfJoining, endOfyear, duration)
     // console.log(endOfyear)
-    console.log(EmployeeData['leaveCount'])
+    console.log(EmployeeData['leaveCount']);
     const createEmployeeData: Employee = await this.Employees.create({ ...EmployeeData, password: hashedPassword, ogid: newOgid });
     const idRequestData = {
-      employee_id:createEmployeeData._id,
+      employee_id: createEmployeeData._id,
       date: createEmployeeData.created_at,
-      notes : "None"
-    }
-    this.idRequestService.createIdRequest(idRequestData).then(result=>{
-      console.log("id Request Created")
-    })
+      notes: 'None',
+    };
+    this.idRequestService.createIdRequest(idRequestData).then(result => {
+      console.log('id Request Created');
+    });
 
     return createEmployeeData;
   }
@@ -159,7 +167,7 @@ class EmployeeService {
     // console.log('ALL Offices', AllOffices)
     const formatted = EmployeeData.map((e: any) => ({
       ...e,
-      status: "active",
+      status: 'active',
       isAdmin: e.isAdmin === 'true' ? true : false,
       isTeamLead: e.isTeamLead === 'true' ? true : false,
       isSupervisor: e.isSupervisor === 'true' ? true : false,
@@ -209,7 +217,7 @@ class EmployeeService {
   }
 
   public async updateEmployee(EmployeeId: string, EmployeeData: UpdateEmployeeDto): Promise<Employee> {
-    if (isEmpty(EmployeeData)) throw new HttpException(400, "EmployeeData is absent");
+    if (isEmpty(EmployeeData)) throw new HttpException(400, 'EmployeeData is absent');
 
     if (EmployeeData.company_email) {
       const findEmployee: Employee = await this.Employees.findOne({ company_email: EmployeeData.company_email });
@@ -221,7 +229,7 @@ class EmployeeService {
     //   EmployeeData = { ...EmployeeData, password: hashedPassword };
     // }
     // console.log(emp)
-    const updateEmployeeById: Employee = await this.Employees.findByIdAndUpdate(EmployeeId,  EmployeeData );
+    const updateEmployeeById: Employee = await this.Employees.findByIdAndUpdate(EmployeeId, EmployeeData);
     if (!updateEmployeeById) throw new HttpException(409, "You're not Employee");
 
     return updateEmployeeById;
@@ -251,24 +259,25 @@ class EmployeeService {
     if (EmployeeData._id) {
       const findEmployee: Employee = await this.Employees.findOne({ _id: EmployeeData._id });
       if (findEmployee && findEmployee._id != EmployeeId) throw new HttpException(409, `User not Found`);
-    
-    console.log(EmployeeData, 'ÉMPLOYEE');
-   
-    const updateEmployeeById: Employee = await this.Employees.findOneAndUpdate(
-      { _id: EmployeeId },
-      { $set: 
-        { role: EmployeeData.role,
-          sievedApplicationCount: findEmployee.sievedApplicationCount ? findEmployee.sievedApplicationCount : 0,
-          isRepSiever: EmployeeData.isRepSiever,
-        }
-      },
-      { new: true },
-    );
 
-    if (!updateEmployeeById) throw new HttpException(409, "You're not Employee");
+      console.log(EmployeeData, 'ÉMPLOYEE');
 
-    return updateEmployeeById;
-        }
+      const updateEmployeeById: Employee = await this.Employees.findOneAndUpdate(
+        { _id: EmployeeId },
+        {
+          $set: {
+            role: EmployeeData.role,
+            sievedApplicationCount: findEmployee.sievedApplicationCount ? findEmployee.sievedApplicationCount : 0,
+            isRepSiever: EmployeeData.isRepSiever,
+          },
+        },
+        { new: true },
+      );
+
+      if (!updateEmployeeById) throw new HttpException(409, "You're not Employee");
+
+      return updateEmployeeById;
+    }
   }
 
   public async deleteEmployee(EmployeeId: string): Promise<Employee> {
@@ -285,41 +294,43 @@ class EmployeeService {
   }
 
   public async teamLeads() {
-    const teamLeadData: any = await this.Employees.find({ isTeamLead: true }, {
-      company_email: 1,
-      status: 1,
-      projectId: 1,
-      ogid:1,
-      first_name:1,
-      last_name:1,})
-      .populate({
-        path: 'projectId',
-        select:{
-          project_name:1
-        }
-      });
-    const teamLeadMembersData = []
-    for(let idx = 0; idx < teamLeadData.length; idx++){
-      const tl = teamLeadData[idx].toObject()
-      const teamMemberData: any = await this.teamMembers(tl._id)
-      tl.teamMembers = teamMemberData
-      teamLeadMembersData.push(tl)
+    const teamLeadData: any = await this.Employees.find(
+      { isTeamLead: true },
+      {
+        company_email: 1,
+        status: 1,
+        projectId: 1,
+        ogid: 1,
+        first_name: 1,
+        last_name: 1,
+      },
+    ).populate({
+      path: 'projectId',
+      select: {
+        project_name: 1,
+      },
+    });
+    const teamLeadMembersData = [];
+    for (let idx = 0; idx < teamLeadData.length; idx++) {
+      const tl = teamLeadData[idx].toObject();
+      const teamMemberData: any = await this.teamMembers(tl._id);
+      tl.teamMembers = teamMemberData;
+      teamLeadMembersData.push(tl);
     }
     return teamLeadMembersData;
   }
   public async teamMembers(teamLeadID) {
     console.log(teamLeadID);
-    const teamLead:any = await this.Employees.findOne({_id: teamLeadID}, {_id: 1, first_name:1, last_name:1, company_email:1, ogid:1})
-    if (!teamLead){
-      throw  new HttpException(404, "lead does not exist")
+    const teamLead: any = await this.Employees.findOne({ _id: teamLeadID }, { _id: 1, first_name: 1, last_name: 1, company_email: 1, ogid: 1 });
+    if (!teamLead) {
+      throw new HttpException(404, 'lead does not exist');
     }
     console.log(teamLead);
     console.log(teamLead['_id']);
-    return await this.Employees.find({reports_to: teamLeadID}, {_id: 1, first_name:1, last_name:1, company_email:1, ogid:1})
-
+    return await this.Employees.find({ reports_to: teamLeadID }, { _id: 1, first_name: 1, last_name: 1, company_email: 1, ogid: 1 });
   }
-  genEmail(first_name: string, last_name: string){
-    return first_name.toLowerCase() + '.' + last_name.toLowerCase() + '@outsourceglobal.com'
+  genEmail(first_name: string, last_name: string) {
+    return first_name.toLowerCase() + '.' + last_name.toLowerCase() + '@outsourceglobal.com';
   }
 }
 

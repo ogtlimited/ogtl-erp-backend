@@ -36,7 +36,7 @@ const logger = winston.createLogger({
     //   json: false,
     //   zippedArchive: true,
     // }),
-    // error log setting
+    // // error log setting
     // new winstonDaily({
     //   level: 'error',
     //   datePattern: 'YYYY-MM-DD',

@@ -67,6 +67,10 @@ const employeeSchema: Schema = new Schema({
     type: Boolean,
     required: false,
   },
+  remote: {
+    type: Boolean,
+    default: false,
+  },
   isTeamLead: {
     type: Boolean,
     default: false,

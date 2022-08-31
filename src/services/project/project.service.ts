@@ -70,6 +70,10 @@ class ProjectService {
         const projects: IProject[] = await this.project.find()
         return projects;
     }
+    public async projectCount(): Promise<any> {
+        const projects = await this.project.count()
+        return projects;
+    }
 
     public async find(projectId: string): Promise<IProject> {
         if (isEmpty(projectId)) throw new HttpException(400, "Missing Id Params");

@@ -66,7 +66,6 @@ class CombineServices {
     const allPurchaseOrders = await this.PurchaseOrder.findAllPurchaseOrders()
     const clientS = await this.clientS.findAll()
     const roles = await this.roleS.findAll()
-    
 
 
     return {
@@ -177,6 +176,17 @@ class CombineServices {
     return {
       employees,
       roles
+    }
+  }
+
+  //
+  public async CollectionCount(){
+    const employees = await this.employeeS.EmployeeCount()
+    const projects = await  this.projectS.projectCount()
+
+    return {
+      employees,
+      projects
     }
   }
 
