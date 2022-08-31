@@ -313,13 +313,16 @@ class SalarySlipService {
       "createdAt": {
         "$gte": new Date(this.startOfMonth),
         "$lte": new Date(this.endOfMonth)
-      },
-      approved: false
+      }
     })
 
-    // if(!batch){
-    //   throw new HttpException(400, "Batch already created for this month")
-    // }
+    if(!batch){
+      throw new HttpException(400, "No Batch available for this month. Please Generate slips to create batch")
+    }
+
+    if(batch.approved){
+      throw new HttpException(401, "Batch and Salary Slips for this month have already be created and approved")
+    }
 
     const SalarySlips = await SalarySlipModel.find({
       batchId: batch._id
