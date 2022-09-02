@@ -26,13 +26,23 @@ class DocumentController {
 
     public getCampaigndocuments = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const documentId: any = {project_id: req.params.documentId};
+            const documentId: any = {project_id: req.params.projectId};
             const findAlldocuments: IDocument[] = await this.documentService.findAll(documentId);
             res.status(200).json({ data: findAlldocuments, message: 'findAll' });
         } catch (error) {
             next(error);
         }
     };
+
+  public getFolderDocuments = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const documentId: any = {parent_folder_id: req.params.folderId};
+      const findAlldocuments: IDocument[] = await this.documentService.findAll(documentId);
+      res.status(200).json({ data: findAlldocuments, message: 'findAll' });
+    } catch (error) {
+      next(error);
+    }
+  };
 
     public getdocument = async (req: Request, res: Response, next: NextFunction) => {
         try {
@@ -52,7 +62,7 @@ class DocumentController {
         } catch (error) {
             next(error);
         }
-           
+
     };
 
     public updatedocument = async (req: Request, res: Response, next: NextFunction) => {
@@ -62,12 +72,12 @@ class DocumentController {
             const Payload: UpdateDocumentDto = req.body;
             const updatedocument: IDocument = await this.documentService.update(documentId, Payload);
             res.status(200).json({ data: updatedocument});
-          } catch (error) {  
+          } catch (error) {
             console.log(error);
             next(error);
           }
-        
-            
+
+
     };
 
     public deletedocument = async (req: Request, res: Response, next: NextFunction) => {
