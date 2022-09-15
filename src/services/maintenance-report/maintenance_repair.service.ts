@@ -15,7 +15,7 @@ class MaintenanceAndRepairService {
 
   //Method for finding all Maintenance And Repairs
   public async findAllMaintenanceAndRepairs(): Promise<IMaintenanceAndRepairs[]>{
-    return this.MaintenanceAndRepair.find().populate("asset_id").sort({date_of_maintenance:-1});
+    return this.MaintenanceAndRepair.find().populate("asset_id").sort({date_of_maintenance:-1})
   }
 
   //Method for finding a single Maintenance And Repairs

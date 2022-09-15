@@ -277,6 +277,7 @@ class SalarySlipService {
     })
     const deductions = await calculateEmployeeDeductions(employeeSalary.employeeId._id, employeeSalary.netPay);
     salarySlipConstructor.totalDeductions = deductions.totalDeductions;
+    console.log(deductions);
     salarySlipConstructor.salaryAfterDeductions = deductions.salaryAfterDeductions.toFixed(2);
     salarySlipConstructor.Amount = salarySlipConstructor.salaryAfterDeductions
     if (deductions.hasDeductions) {
@@ -284,7 +285,7 @@ class SalarySlipService {
     }
     if (salaryArrears){
       salarySlipConstructor.salaryArrears = salaryArrears._id
-      salarySlipConstructor.salaryAfterDeductions = salaryArrears.amount + deductions.salaryAfterDeductions.toFixed(2)
+      salarySlipConstructor.salaryAfterDeductions = salaryArrears.amount + deductions.salaryAfterDeductions
       salarySlipConstructor.Amount = salarySlipConstructor.salaryAfterDeductions
     }
     return salarySlipConstructor;

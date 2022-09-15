@@ -13,7 +13,8 @@ class MaintenanceReportService {
 
   //Method for finding all Maintenance Report
   public async findAllMaintenanceReports(): Promise<IMaintenanceReport[]>{
-    return this.MaintenanceReport.find().populate("created_by");
+    return this.MaintenanceReport.find().populate("created_by").sort({
+      date_of_report:-1});
   }
 
   //Method for finding a single Maintenance Report
