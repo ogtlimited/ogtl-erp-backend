@@ -13,10 +13,10 @@ const academySchema: Schema = new Schema(
       type: String,
     },
     fav_programming_lang: {
-      type: String,
+      type: Array,
     },
     first_name: {
-      type: Number
+      type: String,
     },
     highest_qualification_attained: {
       type: String,
@@ -39,9 +39,9 @@ const academySchema: Schema = new Schema(
     mobile_number: {
       type: String,
     },
-    timestamp: {
-      type: String,
-    },
+    // timestamp: {
+    //   type: String,
+    // },
     username: {
       type: String,
       required: true,
@@ -61,5 +61,5 @@ const academySchema: Schema = new Schema(
   },
 );
 
-const academyModel = model('EmployeesSalary', academySchema);
+const academyModel = model('Academy_records', academySchema);
 export default academyModel;
