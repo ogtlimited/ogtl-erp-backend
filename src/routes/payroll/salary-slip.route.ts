@@ -5,6 +5,7 @@ import { Routes } from '@/interfaces/routes.interface';
 import validationMiddleware from '@/middlewares/validation.middleware';
 import { Router } from 'express';
 import authMiddleware from '../../middlewares/auth.middleware';
+import permissionMiddleware from "@middlewares/permission.middleware";
 
 class SalarySlipRoute implements Routes {
     public path = '/api/salary-slip';
@@ -17,11 +18,11 @@ class SalarySlipRoute implements Routes {
 
     //remember to add auths!
     private initializeRoutes() {
-        this.router.get(`${this.path}`,[], this.salarySlipController.findAll);
-        this.router.get(`${this.path}/employee-report`, [], this.salarySlipController.findById);
-        this.router.post(`${this.path}`, [], this.salarySlipController.create);
-        this.router.post(`${this.path}/approve/batch`, [], this.salarySlipController.approveAndPay);
-        this.router.post(`${this.path}/generate`, [], this.salarySlipController.createDepartmentPayroll);
+        this.router.get(`${this.path}`,[authMiddleware, permissionMiddleware('HR')], this.salarySlipController.findAll);
+        this.router.get(`${this.path}/employee-report`, [authMiddleware, permissionMiddleware('HR')], this.salarySlipController.findById);
+        this.router.post(`${this.path}`, [authMiddleware, permissionMiddleware('HR')], this.salarySlipController.create);
+        this.router.post(`${this.path}/approve/batch`, [authMiddleware], this.salarySlipController.approveAndPay);
+        this.router.post(`${this.path}/generate`, [authMiddleware], this.salarySlipController.createDepartmentPayroll);
     }
   }
   export default SalarySlipRoute;
