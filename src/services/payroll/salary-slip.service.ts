@@ -17,6 +17,7 @@ import { IBatchInterface } from "@interfaces/payroll/batch.interface";
 import { ReferenceGenerator } from "@services/payroll/reference-number.generator";
 import { Bank3DPaymentService } from "@services/payroll/bank3d.service";
 import SalarySlipModel from "@models/payroll/salary-slip.model";
+import SalaryDetailModel from "@models/employee/salary-details.model";
 
 class SalarySlipService {
 
@@ -252,15 +253,16 @@ class SalarySlipService {
     const today = new Date();
     const monthName = moment(today).format('MMMM')
     const referenceNumber = ReferenceGenerator.referenceNumberGenerator();
-
+    const employeeSalaryDetails = await SalaryDetailModel.findOne({employee_id: employeeSalary.employeeId._id})
+    const fullName = `${employeeSalary.employeeId.first_name} ${employeeSalary.employeeId.last_name}`
     const salarySlipConstructor: any = {
       employeeId: employeeSalary.employeeId._id,
       employeeSalary: employeeSalary,
       month: today.toISOString(),
       batchId: salarySlipBatch._id,
-      AccountNumber: "3078555402",
-      BankCode: "011",
-      BeneficiaryName: "Test Test",
+      AccountNumber: employeeSalaryDetails.bank_account_number,
+      BankCode: employeeSalaryDetails.bank_code,
+      BeneficiaryName: fullName,
       Narration: `${monthName} ${today.getFullYear()} Salary`,
       Reference: referenceNumber,
       Amount:100.0
