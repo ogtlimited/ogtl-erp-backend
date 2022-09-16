@@ -77,6 +77,7 @@ import AssetRoute from './routes/assets/assets.route';
 import MaintenanceReportRoute from '@routes/maintenance-report/maintenance_report.route';
 import MaintenanceAndRepairsRoute from '@routes/maintenance-report/maintenance_repair.route';
 
+import AcademyRoute from './routes/academy/academy.route';
 import AccountRoute from '@routes/account/account.route';
 import AccountTypeRoute from '@routes/account/account-type.route';
 import BudgetRoute from '@routes/budget/budget.route'
@@ -194,7 +195,9 @@ const app = new App([
   new NotesRoute(),
   new PayRollArchiveRoute(),
 
-  new TicketingRoute()
+  new TicketingRoute(),
+
+  new AcademyRoute()
 ]);
 
 const server = app.listen();
