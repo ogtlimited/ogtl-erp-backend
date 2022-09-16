@@ -42,7 +42,7 @@ const academySchema: Schema = new Schema(
     // timestamp: {
     //   type: String,
     // },
-    username: {
+    user_name: {
       type: String,
       required: true,
     },
