@@ -15,7 +15,6 @@ class AcademyRoute implements Routes {
 
     private initializeRoutes() {
         this.router.get(`${this.path}`, [authMiddleware], this.newAcademyController.findAll);
-        // this.router.get(`${this.path}/:username`,[authMiddleware], this.newAcademyController.findById);
         this.router.post(`${this.path}`,[authMiddleware], this.newAcademyController.create);
     }
   }
