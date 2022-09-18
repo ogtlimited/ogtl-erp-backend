@@ -11,7 +11,6 @@ class AcademyService {
 
   public async create(info): Promise<any> {
     const academyRecords = [];
-    const nonExistingRecords = []
     for(let idx = 0; idx < info.length; idx++){
       const record = info[idx]
 
@@ -28,3 +27,4 @@ class AcademyService {
 }
 
 export default AcademyService;
+
