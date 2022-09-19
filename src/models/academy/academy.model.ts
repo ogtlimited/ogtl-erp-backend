@@ -39,9 +39,9 @@ const academySchema: Schema = new Schema(
     mobile_number: {
       type: String,
     },
-    // timestamp: {
-    //   type: String,
-    // },
+    timestamp: {
+      type: String,
+    },
     user_name: {
       type: String,
       required: true,
