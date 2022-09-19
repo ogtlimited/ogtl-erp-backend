@@ -39,7 +39,7 @@ const academySchema: Schema = new Schema(
     mobile_number: {
       type: String,
     },
-    time_stamp: {
+    application_date: {
       type: String,
     },
     user_name: {
