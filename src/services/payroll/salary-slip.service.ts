@@ -311,6 +311,7 @@ class SalarySlipService {
      */
 
     const token = await Bank3DPaymentService.getBankToken();
+    return token
 
     const batch = await BatchModel.findOne({
       "createdAt": {

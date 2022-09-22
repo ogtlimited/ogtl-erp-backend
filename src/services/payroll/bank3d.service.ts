@@ -52,7 +52,7 @@ export class Bank3DPaymentService {
     };
     const payload = {
       BatchID: batch_id,
-      Items: salarySlips
+      Items: salarySlips,
     };
     const response = await axios({
       method: 'post',
