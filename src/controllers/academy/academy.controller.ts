@@ -36,6 +36,20 @@ class AcademyController {
     }
   };
 
+
+  public createFromGoogleForm = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const newData = req.body;
+    //   const createdData = await this.newAcademyService.create(newData);
+     console.log("From Google Form", newData)
+    //   res.status(201).json({ data: createdData});
+      res.sendStatus(200);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  };
+
  
 }
 
