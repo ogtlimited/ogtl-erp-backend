@@ -21,7 +21,12 @@ class AcademyService {
       }
    
     }
-    await academyModel.insertMany(academyRecords)
+
+    if(academyRecords.length===1){
+        await academyModel.create(academyRecords)
+    }else{
+        await academyModel.insertMany(academyRecords)
+    }
     return `${academyRecords.length} record(s) uploaded successfully`
   }
 
