@@ -7,7 +7,7 @@ const academySchema: Schema = new Schema(
       type: String,
     },
     certifications: {
-      type: String,
+      type: Array,
     },
     consent: {
       type: String,
@@ -60,23 +60,21 @@ const academySchema: Schema = new Schema(
     },
     cv: {
         type: String,
+        default: null
     },
     process_stage:{
         type: String,
-        enum: ["open","sieving","phone screening",],
+        enum: ["open","sieving","phone screening"],
         default: "open"
       },
     rep_sieving_call: {
         type: Schema.Types.ObjectId,
-        required: true,
         ref: 'Employee',
-        default: null,
     },
     interview_status: {
         type: String,
-        enum: [
-            "Open","Acknowledgement sent","onboarded"],
-        default: "Open"
+        enum: ["open","acknowledgement sent","onboarded"],
+        default: "open"
     },
   },
   {

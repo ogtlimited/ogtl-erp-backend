@@ -14,7 +14,7 @@ class AcademyService {
     for(let idx = 0; idx < info.length; idx++){
       const record = info[idx]
 
-      const academyInfo  = await academyModel.findOne({user_name: record.user_name})
+      const academyInfo  = await academyModel.findOne({email: record.email})
 
       if(academyInfo === null){
         academyRecords.push(record)
@@ -24,6 +24,7 @@ class AcademyService {
     await academyModel.insertMany(academyRecords)
     return `${academyRecords.length} record(s) uploaded successfully`
   }
+
 }
 
 export default AcademyService;
