@@ -47,7 +47,7 @@ class AcademyService {
         return await academyModel.create(info)
       }
 
-       return `0 record(s) uploaded successfully`  
+       return `Record already exist`  
   }
 
   public async updateAcademyApplicant( academyApplicantId: string, academyApplicationUpdateData: any): Promise<any> {
@@ -64,6 +64,58 @@ class AcademyService {
     const deleteAcademyApplicantById: any = await this.academyModel.findByIdAndDelete(academyApplicantId);
     if(!deleteAcademyApplicantById) throw new HttpException(409, `Academy Applicant with Id:${deleteAcademyApplicantById}, does not exist`);
     return deleteAcademyApplicantById;
+  }
+
+  public async formattedData(newData:any):Promise<any>{
+        
+    // req.body['Please upload your CV.'] =  req.body['Please upload your CV.']
+    // .split("<plain>")[1].split("</plain>")[0]
+    // req.body['Certifications in relation to the selected program above (if any)'] = req.body['Certifications in relation to the selected program above (if any)']
+    // .split("<BR/>")
+    // req.body['Favored Programming Language(s)'] = req.body['Favored Programming Language(s)'].split("<BR/>")
+   
+    newData['Email'] = newData['user_name']
+    newData['Created At'] = newData['application_date']
+    newData['Please select your gender'] = newData['gender']
+    newData['First Name'] = newData['first_name']
+    newData['Middle Name'] =  newData['middle_name']
+    newData['Last Name'] = newData['last_name']
+    newData['Mobile Number'] = newData['mobile_number']
+    newData['Alternate Phone Number'] = newData['alt_mobile_number']
+    newData['Highest Qualification Attained'] = newData['highest_qualification_attained']
+    newData["If 'Other' was selected above, please state which."] = newData['other_option']
+    newData['Interested program'] = newData['interested_program']
+    newData['What mode of engagement would you prefer '] = newData['mode_of_engagement']
+    newData['How many hours in a week can you commit to this program '] = newData['weekly_hours']
+    newData['What is your Stack?'] = newData['stack']
+    newData['Favored Programming Language(s)'] = newData['fav_programming_lang']
+    newData['Years of experience in the selected program above '] = newData['years_of_experience']
+    newData['Certifications in relation to the selected program above (if any)'] = newData['certifications']
+    newData['Please upload your CV.'] = newData['cv']
+    newData['Consent'] = newData['consent']
+
+    const formattedData= {
+      application_date: newData['Created At'],
+      gender: newData['Please select your gender'],
+      first_name: newData['First Name'],
+      middle_name: newData['Middle Name'],
+      last_name: newData['Last Name'],
+      mobile_number: newData['Mobile Number'],
+      alt_mobile_number: newData['Alternate Phone Number'],
+      highest_qualification_attained: newData['Highest Qualification Attained'],
+      other_option: newData["If 'Other' was selected above, please state which."],
+      interested_program: newData['Interested program'],
+      mode_of_engagement: newData['What mode of engagement would you prefer '],
+      weekly_hours: newData['How many hours in a week can you commit to this program '],
+      stack: newData['What is your Stack?'],
+      fav_programming_lang: newData['Favored Programming Language(s)'],
+      years_of_experience: newData['Years of experience in the selected program above '],
+      certifications: newData['Certifications in relation to the selected program above (if any)'],
+      cv: newData['Please upload your CV.'],
+      consent: newData['Consent'],
+      user_name: newData['Email'],
+  }
+    return formattedData;
   }
    
 }
