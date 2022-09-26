@@ -47,7 +47,7 @@ class AcademyService {
         return await academyModel.create(info)
       }
 
-       return `0 record(s) uploaded successfully`  
+       return `Record already exist`  
   }
 
   public async updateAcademyApplicant( academyApplicantId: string, academyApplicationUpdateData: any): Promise<any> {
