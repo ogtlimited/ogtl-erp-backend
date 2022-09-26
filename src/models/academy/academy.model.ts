@@ -44,7 +44,7 @@ const academySchema: Schema = new Schema(
     },
     user_name: {
       type: String,
-      // required: true,
+      required: true,
     },
     stack: {
         type: String,
