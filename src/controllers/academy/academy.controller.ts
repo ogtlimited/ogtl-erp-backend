@@ -94,7 +94,7 @@ class AcademyController {
   }
 
       const createdData = await this.academyService.createFromForm(formattedRequest);
-      res.status(201).json({ data: createdData});
+      res.status(200).json({ data: createdData});
     } catch (error) {
       console.log(error);
       next(error);
