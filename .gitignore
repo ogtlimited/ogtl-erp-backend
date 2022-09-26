@@ -125,3 +125,7 @@ src/services/scaffold.service.ts
 .idea/vcs.xml
 *.xml
 *.iml
+
+dev.env
+*.env
+*.env
