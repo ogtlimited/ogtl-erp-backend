@@ -18,7 +18,7 @@ class AcademyRoute implements Routes {
         this.router.get(`${this.path}/:id`, [authMiddleware], this.AcademyController.findAcademyApplicantById);
         this.router.patch(`${this.path}/update/:id`, [authMiddleware], this.AcademyController.updateAcademyApplicant);
         this.router.post(`${this.path}`,[authMiddleware], this.AcademyController.create);
-        this.router.post(`${this.path}/google_form`,[authMiddleware], this.AcademyController.createFromGoogleForm);
+        this.router.post(`${this.path}/google_form`, this.AcademyController.createFromGoogleForm);
         this.router.delete(`${this.path}/delete/:id`, authMiddleware,this.AcademyController.deleteAcademyApplicant);
     }
   }
