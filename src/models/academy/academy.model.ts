@@ -7,7 +7,7 @@ const academySchema: Schema = new Schema(
       type: String,
     },
     certifications: {
-      type: String,
+      type: Array,
     },
     consent: {
       type: String,
@@ -27,7 +27,7 @@ const academySchema: Schema = new Schema(
     other_option: {
       type: String,
     },
-    interested_position: {
+    interested_program: {
       type: String,
     },
     last_name: {
@@ -46,6 +46,10 @@ const academySchema: Schema = new Schema(
       type: String,
       required: true,
     },
+    // email: {
+    //   type: String,
+    //   required: true,
+    // },
     stack: {
         type: String,
       },
@@ -54,7 +58,28 @@ const academySchema: Schema = new Schema(
     },
     years_of_experience: {
         type: String,
-    }
+    },
+    gender: {
+        type: String,
+    },
+    cv: {
+        type: String,
+        default: null
+    },
+    process_stage:{
+        type: String,
+        enum: ["open","sieving","phone screening"],
+        default: "open"
+      },
+    rep_sieving_call: {
+        type: Schema.Types.ObjectId,
+        ref: 'Employee',
+    },
+    interview_status: {
+        type: String,
+        enum: ["open","acknowledgement sent","onboarded"],
+        default: "open"
+    },
   },
   {
     timestamps: true,
