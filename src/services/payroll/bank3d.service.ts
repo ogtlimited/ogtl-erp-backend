@@ -64,13 +64,12 @@ export class Bank3DPaymentService {
     return 'Payment Process Commenced';
   }
 
-  static async processPayments(batch_id, token, date) {
+  static async processPayments(batch_id, token) {
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
     const payload = {
-      BatchID: batch_id,
-      ProcessDate: date,
+      BatchID: batch_id
     };
     const response = await axios({
       method: 'post',
