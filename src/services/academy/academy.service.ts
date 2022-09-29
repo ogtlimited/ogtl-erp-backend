@@ -67,6 +67,16 @@ class AcademyService {
   }
 
   public async formattedData(newData:any):Promise<any>{
+
+    newData["Please upload your CV."] = newData["Please upload your CV."]
+    .split("<plain>")[1].split("</plain>")[0]
+
+    newData['Favored Programming Language(s)'] = newData['Favored Programming Language(s)']
+    .split("<BR/>")
+
+    newData['Certifications in relation to the selected program above (if any)'] = newData['Certifications in relation to the selected program above (if any)']
+    .split("<BR/>")
+    
     const formattedData= {
       application_date: newData['Created At'],
       gender: newData['Please select your gender'],
