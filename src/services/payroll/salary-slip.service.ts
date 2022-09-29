@@ -353,11 +353,11 @@ class SalarySlipService {
     // })
     await Bank3DPaymentService.loadPayments(today, SalarySlips, batch.batch_id, token)
     await Bank3DPaymentService.processPayments(batch.batch_id, token)
-    // await BatchModel.findOneAndUpdate( {_id: batch._id},{
-    //   $set: {
-    //     approved: true
-    //   }
-    // })
+    await BatchModel.findOneAndUpdate( {_id: batch._id},{
+      $set: {
+        approved: true
+      }
+    })
     return "Payments being Processed"
   }
 

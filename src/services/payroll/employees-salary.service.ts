@@ -11,7 +11,7 @@ import EmployeeModel from '@models/employee/employee.model';
 class EmployeeSalaryService {
   public employeeSalary = employeesSalaryModel;
 
-  private schema = [
+  private static schema = [
     {
       group: 300000,
       percent: 0.07,
@@ -66,12 +66,12 @@ class EmployeeSalaryService {
         nonExistingEmployees.push(record)
         continue
       }
-      const result = await this.salaryGeneratorHelper(record, employeeInfo, salarySetting)
+      const result = await EmployeeSalaryService.salaryGeneratorHelper(record, employeeInfo, salarySetting)
       result.employeeId = employeeInfo._id
       result.departmentId = employeeInfo.department
       result.projectId = employeeInfo.projectId
       const existingSalary  = await employeesSalaryModel.findOne({employeeId: result.employeeId});
-      // console.log(existingSalary, 'EXISTING----->', "record--->", record, !null, !employeeInfo, "employeeinfo", employeeInfo );
+
       if(existingSalary){
         const updateSalary = await employeesSalaryModel.findOneAndUpdate({employeeId: existingSalary.employeeId},result, {
           new: true
@@ -82,62 +82,13 @@ class EmployeeSalaryService {
       } else {
         employeesSalary.push(result);
       }
-    }
+     }
 
-    // console.log(nonExistingEmployees);
     await employeesSalaryModel.insertMany(employeesSalary)
     return `${employeesSalary.length} record(s) uploaded successfully`
 
   }
 
-  private async salaryGeneratorHelper(data, employeeInfo,  salarySetting: ISalarySetting){
-
-    console.log(employeeInfo, "in the salary helper!");
-    const salaryGenerator: ISalarySetting = {};
-    const { annualGrossSalary } = data;
-    const monthlySalary = annualGrossSalary / 12;
-    salaryGenerator.monthlyEmployeePension = 0;
-    salaryGenerator.monthlySalary = monthlySalary;
-    salaryGenerator.basic = Number(salarySetting.basic) * annualGrossSalary;
-    salaryGenerator.housing = Number(salarySetting.housing) * annualGrossSalary;
-    salaryGenerator.medical = Number(salarySetting.medical) * annualGrossSalary;
-    salaryGenerator.transport = Number(salarySetting.transport) * annualGrossSalary;
-    salaryGenerator.otherAllowances = Number(salarySetting.otherAllowances) * annualGrossSalary;
-    salaryGenerator.CRA = salarySetting.CRA * annualGrossSalary + Number(salarySetting.CRABonusAmount);
-    if (monthlySalary < 30000 || employeeInfo.isExpatriate) {
-      salaryGenerator.monthlyIncomeTax = this.taxCalculator(annualGrossSalary - salaryGenerator.CRA) / 12;
-      salaryGenerator.netPay = monthlySalary - salaryGenerator.monthlyIncomeTax;
-    }
-
-    if (monthlySalary > 30000 && employeeInfo.department.department.toLowerCase() != 'operations') {
-      salaryGenerator.monthlyEmployeePension = salarySetting.monthlyEmployeePension * Number(monthlySalary);
-      salaryGenerator.monthlyIncomeTax =
-        this.taxCalculator(annualGrossSalary - (salaryGenerator.CRA + salaryGenerator.monthlyEmployeePension * 12)) / 12;
-      salaryGenerator.netPay = Number(monthlySalary) - (salaryGenerator.monthlyEmployeePension + salaryGenerator.monthlyIncomeTax);
-    }
-
-    if (employeeInfo.department.department.toLowerCase() === 'operations') {
-      if (employeeInfo.isAdmin) {
-        salaryGenerator.monthlyEmployeePension = salarySetting.monthlyEmployeePension * Number(monthlySalary);
-      }
-      salaryGenerator.monthlyIncomeTax = this.taxCalculator(annualGrossSalary - salaryGenerator.CRA) / 12;
-      salaryGenerator.netPay = monthlySalary - salaryGenerator.monthlyIncomeTax;
-    }
-
-    return salaryGenerator;
-  }
-
-  private taxCalculator(annualTaxableIncome: number) {
-      const rates =[21000,54000,129000,224000,560000,1232000]
-      for(let i=0; i < this.schema.length; i++){
-        console.log(this.schema[i], "schema info -------->");
-        if(annualTaxableIncome <= this.schema[i]?.group){
-          console.log(`schema group: ${this.schema[i]?.group}, schema ded: ${this.schema[i -1]?.group}`);
-          const current = annualTaxableIncome - this.schema[i -1].group;
-          return rates[i-1] + current * this.schema[i].percent
-        }
-      }
-    }
 
   public async updateEmployeeSalary(payload) {
     const salarySetting = await salarySettingModel.findOne({ active: true });
@@ -145,7 +96,7 @@ class EmployeeSalaryService {
     if (!employeeInfo) {
       throw new HttpException(404, 'employee does not exist');
     }
-    const result = await this.salaryGeneratorHelper(payload, employeeInfo, salarySetting);
+    const result = await EmployeeSalaryService.salaryGeneratorHelper(payload, employeeInfo, salarySetting);
     const updateSalary = await employeesSalaryModel.findOneAndUpdate(
       { employeeId: employeeInfo._id },
       {
@@ -161,6 +112,72 @@ class EmployeeSalaryService {
     }
 
     return updateSalary;
+  }
+
+  //Private Helper Methods
+
+  private static async salaryGeneratorHelper(data, employeeInfo,  salarySetting: ISalarySetting){
+
+    console.log(employeeInfo, "in the salary helper!");
+    const salaryGenerator: ISalarySetting = {};
+    const { annualGrossSalary } = data;
+    const monthlySalary = annualGrossSalary / 12;
+    EmployeeSalaryService.salaryGeneratorInitializer(salaryGenerator, monthlySalary, salarySetting, annualGrossSalary);
+    EmployeeSalaryService.salaryGeneratorTaxNetPayPensionCalculator(monthlySalary, employeeInfo, salaryGenerator, annualGrossSalary, salarySetting, EmployeeSalaryService.taxCalculator);
+
+    salaryGenerator.monthlyIncomeTax = EmployeeSalaryService.decimalPointFormatter(salaryGenerator.monthlyIncomeTax)
+    salaryGenerator.transport = EmployeeSalaryService.decimalPointFormatter(salaryGenerator.transport)
+    salaryGenerator.netPay = EmployeeSalaryService.decimalPointFormatter(salaryGenerator.netPay)
+    return salaryGenerator;
+  }
+
+  private  static salaryGeneratorTaxNetPayPensionCalculator(monthlySalary: number, employeeInfo, salaryGenerator: ISalarySetting, annualGrossSalary, salarySetting: ISalarySetting, taxCalculator) {
+    if (monthlySalary < 30000 || employeeInfo.isExpatriate) {
+      salaryGenerator.monthlyIncomeTax = taxCalculator(annualGrossSalary - salaryGenerator.CRA) / 12;
+      salaryGenerator.netPay = monthlySalary - salaryGenerator.monthlyIncomeTax;
+    }
+
+    if (monthlySalary > 30000 && employeeInfo.department.department.toLowerCase() != "OPERATIONS") {
+      salaryGenerator.monthlyEmployeePension = salarySetting.monthlyEmployeePension * Number(monthlySalary);
+      salaryGenerator.monthlyIncomeTax =
+        taxCalculator(annualGrossSalary - (salaryGenerator.CRA + salaryGenerator.monthlyEmployeePension * 12)) / 12;
+      salaryGenerator.netPay = Number(monthlySalary) - (salaryGenerator.monthlyEmployeePension + salaryGenerator.monthlyIncomeTax);
+    }
+
+    if (employeeInfo.department.department.toLowerCase() === "OPERATIONS") {
+      if (employeeInfo.isAdmin) {
+        salaryGenerator.monthlyEmployeePension = salarySetting.monthlyEmployeePension * Number(monthlySalary);
+      }
+      salaryGenerator.monthlyIncomeTax = taxCalculator(annualGrossSalary - salaryGenerator.CRA) / 12;
+      salaryGenerator.netPay = monthlySalary - salaryGenerator.monthlyIncomeTax;
+    }
+  }
+
+  private static salaryGeneratorInitializer(salaryGenerator: ISalarySetting, monthlySalary: number, salarySetting: ISalarySetting, annualGrossSalary) {
+    salaryGenerator.monthlyEmployeePension = 0;
+    salaryGenerator.monthlySalary = monthlySalary;
+    salaryGenerator.basic = Number(salarySetting.basic) * annualGrossSalary;
+    salaryGenerator.housing = Number(salarySetting.housing) * annualGrossSalary;
+    salaryGenerator.medical = Number(salarySetting.medical) * annualGrossSalary;
+    salaryGenerator.transport = Number((Number(salarySetting.transport) * annualGrossSalary).toFixed(2));
+    salaryGenerator.otherAllowances = Number(salarySetting.otherAllowances) * annualGrossSalary;
+    salaryGenerator.CRA = salarySetting.CRA * annualGrossSalary + Number(salarySetting.CRABonusAmount);
+  }
+
+  private static decimalPointFormatter(amount, decimalPoints=2) {
+    return Number((amount).toFixed(decimalPoints));
+  }
+
+  private static taxCalculator(annualTaxableIncome: number) {
+    const rates =[21000,54000,129000,224000,560000,1232000]
+    for(let i=0; i < EmployeeSalaryService.schema.length; i++){
+      console.log(EmployeeSalaryService.schema[i], "schema info -------->");
+      if(annualTaxableIncome <= EmployeeSalaryService.schema[i]?.group){
+        console.log(`schema group: ${EmployeeSalaryService.schema[i]?.group}, schema ded: ${EmployeeSalaryService.schema[i -1]?.group}`);
+        const current = annualTaxableIncome - EmployeeSalaryService.schema[i -1].group;
+        return rates[i-1] + current * EmployeeSalaryService.schema[i].percent
+      }
+    }
   }
 }
 
