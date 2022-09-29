@@ -312,6 +312,7 @@ class SalarySlipService {
 
     const token = await Bank3DPaymentService.getBankToken();
 
+
     const batch = await BatchModel.findOne({
       "createdAt": {
         "$gte": new Date(this.startOfMonth),
@@ -339,8 +340,9 @@ class SalarySlipService {
       Reference:1
     })
 
+    // return {token, SalarySlips, batch, url: process.env.BANK_3D_URL_Update_Payment}
     const today =moment().format().split("+")[0]
-    console.log(today);
+    // console.log(today);
 
     // new Promise((resolve , reject) => {
     //   const result = Bank3DPaymentService.loadPayments(today, SalarySlips, batch._id, token)
