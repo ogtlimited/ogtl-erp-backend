@@ -41,15 +41,6 @@ class AcademyController {
 
   public createFromGoogleForm = async (req: Request, res: Response, next: NextFunction) => {
     try {
-
-      
-    // req.body['Please upload your CV.'] =  req.body['Please upload your CV.']
-    // .split("<plain>")[1].split("</plain>")[0]
-    // req.body['Certifications in relation to the selected program above (if any)'] = req.body['Certifications in relation to the selected program above (if any)']
-    // .split("<BR/>")
-    // req.body['Favored Programming Language(s)'] = req.body['Favored Programming Language(s)'].split("<BR/>")
-   
-    
       const formattedRequest = await this.academyService.formattedData(req.body)
       const createdData = await this.academyService.createFromForm(formattedRequest);
       res.status(200).json({ data: createdData});
