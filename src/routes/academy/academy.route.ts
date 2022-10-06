@@ -15,6 +15,11 @@ class AcademyRoute implements Routes {
 
     private initializeRoutes() {
         this.router.get(`${this.path}`, [authMiddleware], this.AcademyController.findAllAcademyApplicants);
+        this.router.get(`${this.path}/gender`, [authMiddleware], this.AcademyController.findByGender);
+        this.router.get(`${this.path}/qualification`, [authMiddleware], this.AcademyController.findByQualification);
+        this.router.get(`${this.path}/stack`, [authMiddleware], this.AcademyController.findByStack);
+        this.router.get(`${this.path}/mode`, [authMiddleware], this.AcademyController.findByModeOfEngagement);
+        this.router.get(`${this.path}/interested_program`, [authMiddleware], this.AcademyController.findByInterestedProgram);
         this.router.get(`${this.path}/:id`, [authMiddleware], this.AcademyController.findAcademyApplicantById);
         this.router.patch(`${this.path}/update/:id`, [authMiddleware], this.AcademyController.updateAcademyApplicant);
         this.router.post(`${this.path}`,[authMiddleware], this.AcademyController.create);
