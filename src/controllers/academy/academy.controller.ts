@@ -75,9 +75,9 @@ class AcademyController {
   };
 
 
-  public findByReportCount= async (req: Request, res: Response, next: NextFunction) => {
+  public getAcademyReport= async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const findRecordsByReportCount = await this.academyService.findByReportCount(req.query);
+      const findRecordsByReportCount = await this.academyService.generateAcademyReport(req.query);
       res.status(200).json({ data: findRecordsByReportCount});
     } catch (error) {
       next(error);
