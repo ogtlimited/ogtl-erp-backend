@@ -13,7 +13,7 @@ class AcademyService {
     return academyRecords;
   }
 
-  public async findByReportCount(query:any): Promise<any> {
+  public async generateAcademyReport(query:any): Promise<any> {
     const overAllReportCount = await academyModel.aggregate([
         {
           '$match': {}
