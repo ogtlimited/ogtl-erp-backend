@@ -16,51 +16,6 @@ class AcademyController {
     }
   };
 
-  public findByGender = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const findRecordsByGender = await this.academyService.findByGender(req.query);
-      res.status(200).json({ data: findRecordsByGender});
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  public findByQualification = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const findRecordsByQualification = await this.academyService.findByQualification(req.query);
-      res.status(200).json({ data: findRecordsByQualification});
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  public findByStack = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const findRecordsByStack = await this.academyService.findByStack(req.query);
-      res.status(200).json({ data: findRecordsByStack});
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  public findByModeOfEngagement = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const findRecordsByModeOfEngagement = await this.academyService.findByModeOfEngagement(req.query);
-      res.status(200).json({ data: findRecordsByModeOfEngagement});
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  public findByInterestedProgram= async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const findRecordsByInterestedProgram = await this.academyService.findByInterestedProgram(req.query);
-      res.status(200).json({ data: findRecordsByInterestedProgram});
-    } catch (error) {
-      next(error);
-    }
-  };
-
   //Method for returning a single academy applicant
   public findAcademyApplicantById = async (req:Request, res:Response, next:NextFunction) =>{
     try {
@@ -118,6 +73,17 @@ class AcademyController {
       next(error);
     }
   };
+
+
+  public findByReportCount= async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const findRecordsByReportCount = await this.academyService.findByReportCount(req.query);
+      res.status(200).json({ data: findRecordsByReportCount});
+    } catch (error) {
+      next(error);
+    }
+  };
+
  
 }
 
