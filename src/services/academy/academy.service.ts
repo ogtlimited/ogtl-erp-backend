@@ -13,88 +13,88 @@ class AcademyService {
     return academyRecords;
   }
 
-  public async findByGender(query:any): Promise<any> {
-    const genderCount = await academyModel.aggregate([
-      {
-        '$match': {}
-      }, {
-        '$group': {
-          '_id': '$gender', 
-          'count': {
-            '$count': {}
+  public async generateAcademyReport(query:any): Promise<any> {
+    const overAllReportCount = await academyModel.aggregate([
+        {
+          '$match': {}
+        }, {
+          '$facet': {
+            'stacks': [
+              {
+                '$group': {
+                  '_id': '$stack', 
+                  'total': {
+                    '$count': {}
+                  }
+                }
+              }
+            ], 
+            'processing_stage': [
+              {
+                '$group': {
+                  '_id': '$process_stage', 
+                  'total': {
+                    '$count': {}
+                  }
+                }
+              }
+            ], 
+            'engagement_mode': [
+              {
+                '$group': {
+                  '_id': '$mode_of_engagement', 
+                  'total': {
+                    '$count': {}
+                  }
+                }
+              }
+            ], 
+            'gender': [
+              {
+                '$group': {
+                  '_id': '$gender', 
+                  'total': {
+                    '$count': {}
+                  }
+                }
+              }
+            ], 
+            'qualification': [
+              {
+                '$group': {
+                  '_id': '$qualification', 
+                  'total': {
+                    '$count': {}
+                  }
+                }
+              }
+            ], 
+            'interested_program': [
+              {
+                '$group': {
+                  '_id': '$interested_program', 
+                  'total': {
+                    '$count': {}
+                  }
+                }
+              }
+            ], 
+            'interview_status': [
+              {
+                '$group': {
+                  '_id': '$interview_status', 
+                  'total': {
+                    '$count': {}
+                  }
+                }
+              }
+            ]
           }
         }
-      }
-    ])
-    return genderCount;
+      ])
+
+    return overAllReportCount;
   }
-
-  public async findByStack(query:any): Promise<any> {
-    const stackCount = await academyModel.aggregate([
-      {
-        '$match': {}
-      }, {
-        '$group': {
-          '_id': '$stack', 
-          'count': {
-            '$count': {}
-          }
-        }
-      }
-    ])
-    return stackCount;
-  }
-
-  public async findByModeOfEngagement(query:any): Promise<any> {
-    const modeOfEngagementCount = await academyModel.aggregate([
-      {
-        '$match': {}
-      }, {
-        '$group': {
-          '_id': '$mode_of_engagement', 
-          'count': {
-            '$count': {}
-          }
-        }
-      }
-    ])
-    return modeOfEngagementCount;
-  }
-
-  public async findByQualification(query:any): Promise<any> {
-    const qualificationCount = await academyModel.aggregate([
-      {
-        '$match': {}
-      }, {
-        '$group': {
-          '_id': '$highest_qualification_attained', 
-          'count': {
-            '$count': {}
-          }
-        }
-      }
-    ])
-
-    return qualificationCount;
-  }
-
-  public async findByInterestedProgram(query:any): Promise<any> {
-    const interestedProgramCount = await academyModel.aggregate([
-      {
-        '$match': {}
-      }, {
-        '$group': {
-          '_id': '$interested_program', 
-          'count': {
-            '$count': {}
-          }
-        }
-      }
-    ])
-
-    return interestedProgramCount;
-  }
-
 
     //Method for finding a single Academy applicant
   public async findacademyApplicantById(academyApplicantId: string): Promise<any> {
