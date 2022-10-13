@@ -14,6 +14,7 @@ class BatchRoute implements Routes {
     }
 
     private initializeRoutes() {
+        this.router.get(`${this.path}`, [authMiddleware], this.BatchController.findAllBatches);
         this.router.get(`${this.path}/:id`, [authMiddleware], this.BatchController.findBatchById);
     }
   }
