@@ -78,6 +78,7 @@ import MaintenanceReportRoute from '@routes/maintenance-report/maintenance_repor
 import MaintenanceAndRepairsRoute from '@routes/maintenance-report/maintenance_repair.route';
 
 import AcademyRoute from './routes/academy/academy.route';
+import BatchRoute from './routes/payroll/batch.route';
 import AccountRoute from '@routes/account/account.route';
 import AccountTypeRoute from '@routes/account/account-type.route';
 import BudgetRoute from '@routes/budget/budget.route'
@@ -196,8 +197,8 @@ const app = new App([
   new PayRollArchiveRoute(),
 
   new TicketingRoute(),
-
-  new AcademyRoute()
+  new AcademyRoute(),
+  new BatchRoute()
 ]);
 
 const server = app.listen();
