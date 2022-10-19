@@ -33,11 +33,11 @@ import LeaveApplicationService from "@services/leave/application.service";
 import EmployeeService from "./services/employee.service";
 const fs = require('fs')
 import moment from 'moment';
-
 const path = require('path')
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config({ path: dirname( module.paths[1] ) + "/.env" });
 }
+
 
 
 
@@ -55,12 +55,12 @@ class App {
 
 
     this.connectToDatabase();
-    this.initializeMiddlewares();
-    this.initializeRoutes(routes);
-    this.initializeSwagger();
-    this.initializeErrorHandling();
+    // this.initializeMiddlewares();
+    // this.initializeRoutes(routes);
+    // this.initializeSwagger();
+    // this.initializeErrorHandling();
     this.redisConnection();
-    this.initializeCron();
+    // this.initializeCron();
 
   }
 
@@ -120,7 +120,7 @@ class App {
     return this.app;
   }
 
-  
+
   private async connectToDatabase() {
     if (this.env !== 'production') {
       set('debug', true);
@@ -128,12 +128,19 @@ class App {
 
     // const ca = [fs.readFileSync(__dirname, '/rds.pem'))];
     try {
-      connect(process.env.databaseUrl);
+      await connect(process.env.databaseUrl, {
+        ssl: true,
+        sslCA: `rds-combined-ca-bundle.pem`, //Specify the DocDB; cert
+        // useNewUrlParser: true,
+        // useUnifiedTopology: true
+      });
+      console.log('connected');
+      set('autoIndex', false)
     } catch (error) {
       console.log(error)
     }
-    set('autoIndex', false)
-    await connect(process.env.databaseUrl);
+
+    // await connect(process.env.databaseUrl);
 
   }
 
