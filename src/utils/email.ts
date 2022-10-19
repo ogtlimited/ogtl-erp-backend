@@ -38,7 +38,8 @@ const emailTemplate = (email_subject, message, receiver, attachment=null) => {
   const subject = email_subject
   const text = message
 
-  return { from, to, subject, text, attachment }
+
+  return { from, to, subject, text, attachment, messageType: 'basic' }
 }
 
 const sendEmail = async (email_subject, message, receiver, sender) => {

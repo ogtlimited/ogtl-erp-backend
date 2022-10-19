@@ -2,6 +2,7 @@
 import { CreateSalarySlipDto } from "@dtos/payroll/salary-slip.dto";
 import { HttpException } from "@exceptions/HttpException";
 import salarySlipModel from "@models/payroll/salary-slip.model";
+import SalarySlipModel from "@models/payroll/salary-slip.model";
 import { isEmpty } from "@utils/util";
 import projectModel from "@/models/project/project.model";
 import EmployeeModel from "@/models/employee/employee.model";
@@ -16,18 +17,21 @@ import BatchModel from "@models/payroll/batch.model";
 import { IBatchInterface } from "@interfaces/payroll/batch.interface";
 import { ReferenceGenerator } from "@services/payroll/reference-number.generator";
 import { Bank3DPaymentService } from "@services/payroll/bank3d.service";
-import SalarySlipModel from "@models/payroll/salary-slip.model";
 import SalaryDetailModel from "@models/employee/salary-details.model";
+
+const { SocketLabsClient } = require('@socketlabs/email');
 
 class SalarySlipService {
 
   private startOfMonth = new Date(moment().startOf('month').format('YYYY-MM-DD')).toISOString();
   private endOfMonth   = new Date(moment().endOf('month').format('YYYY-MM-DD')).toISOString();
+  private static client = new SocketLabsClient(parseInt(process.env.SOCKETLABS_SERVER_ID), process.env.SOCKETLABS_INJECTION_API_KEY);
   // private axiosService = SalarySlipService.axiosInstance()
 
   public salarySlipModel = salarySlipModel;
   private attendanceService = new AttendanceTypeService();
   private leaveModel = applicationModel;
+  private client: any;
 
   public async findAll(query): Promise<any> {
     // console.log(query);
@@ -190,7 +194,7 @@ class SalarySlipService {
     return records;
   }
 
-  public async createDepartmentPayroll(data: CreateSalarySlipDto): Promise<any> {
+  public async createDepartmentPayroll(data: CreateSalarySlipDto, email): Promise<any> {
     /*
       The steps for this method are:
 
@@ -201,36 +205,77 @@ class SalarySlipService {
       5. If emp hasn't met threshold....TODO
 
     */
-    await this.salarySlipExistenceCheck();
-    const token = await Bank3DPaymentService.getBankToken();
-    const batchData = await Bank3DPaymentService.initiateBankPayment(token)
-    const salarySlipBatch: IBatchInterface = await  BatchModel.create({
-      batch_id: batchData.BatchID,
-      reference_id: batchData.Reference
+
+    // const client = new SocketLabsClient(parseInt(process.env.SOCKETLABS_SERVER_ID), process.env.SOCKETLABS_INJECTION_API_KEY);
+    // await this.salarySlipExistenceCheck();
+    let salarySlipBatch : IBatchInterface;
+    try {
+      const token = await Bank3DPaymentService.getBankToken();
+      const batchData = await Bank3DPaymentService.initiateBankPayment(token);
+      salarySlipBatch = await BatchModel.create({
+        batch_id: batchData.BatchID,
+        reference_id: batchData.Reference
+      });
+    }catch (e) {
+      const message = SalarySlipService.emailConstructor (
+        email,
+        "ERP@example.com",
+        'ERP Payroll',
+        "Bank3D not responsive",
+        "<html>Bank3D not responsive</html>"
+      );
+
+      await SalarySlipService.client.send(message).then((response)=> console.log(response)).catch((e) => console.log(e))
+      throw new HttpException(400, "Bank3D not connecting")
+    }
+
+    SalarySlipService.slipGenerator(email, salarySlipBatch ).then((result)=>{
+      console.log(result);
+    }).catch((e) => {
+      console.log(e)
     })
+    return `salary slips being generated created`;
+  }
 
-    // const salarySlipBatch: IBatchInterface = await  BatchModel.create({
-    //   batch_id: "qwertyu",
-    //   reference_id: "1234543223"
-    // })
+  private static emailConstructor(email, from="ERP@example.com", subject, textBody, htmlBody, mType='basic') {
+    return {
+      to: email,
+      from: from,
+      subject: subject,
+      textBody: textBody,
+      htmlBody: htmlBody,
+      messageType: mType
+    };
+  }
 
+  private static async slipGenerator(email, batch) {
 
     const records = [];
 
     const employeeSalaries = await employeesSalaryModel.find({}).populate(
-      {path: 'employeeId', select: {first_name: 1, last_name:1, date_of_joining: 1 , ogid:1, remote:1}}
-    )
+      { path: "employeeId", select: { first_name: 1, last_name: 1, date_of_joining: 1, ogid: 1, remote: 1 } }
+    );
 
     for (let index = 0; index < employeeSalaries.length; index++) {
       const employeeSalary: any = employeeSalaries[index];
 
-      if (employeeSalary.employeeId.remote){
-        const salarySlipConstructor = await SalarySlipService.employeeSalarySlipGenerator(employeeSalary, salarySlipBatch);
-        records.push(salarySlipConstructor)
+      if (employeeSalary.employeeId.remote) {
+        const salarySlipConstructor = await SalarySlipService.employeeSalarySlipGenerator(employeeSalary, batch);
+        records.push(salarySlipConstructor);
       }
     }
 
-    await this.salarySlipModel.insertMany(records);
+    await salarySlipModel.insertMany(records);
+
+    const message = SalarySlipService.emailConstructor(
+       email,
+      "ERP@example.com",
+     "Payroll Generation",
+      `${records.length} salary slips created`,
+      `<html>${records.length} salary slips created</html>`
+  )
+
+    await SalarySlipService.client.send(message).then((response)=> console.log(response)).catch((e) => console.log(e))
     return `${records.length} salary slips created`;
   }
 
@@ -292,14 +337,6 @@ class SalarySlipService {
     }
     return salarySlipConstructor;
   }
-
-  // private static axiosInstance() {
-  //    return axios.create({
-  //     timeout: 60000, //optional
-  //     httpsAgent: new https.Agent({ keepAlive: true }),
-  //     headers: {'Content-Type':'application/xml'}
-  //   })
-  // }
 
   public async approveAndPay() {
 
@@ -375,4 +412,6 @@ class SalarySlipService {
   }
 }
 
-export default SalarySlipService;
+
+export default SalarySlipService
+

@@ -59,28 +59,27 @@ export class userPermissions{
 
 
 const permissionMiddleware = (dept) => {
-  console.log('this route is only accesible to ---- ' + dept + ' users')
+  // console.log('this route is only accesible to ---- ' + dept + ' users')
   return  async (req: RequestWithUser, res: Response, next: NextFunction) =>{
       try {
         const Authorization = req.header('Authorization').split('Bearer ')[1] || null;
-        console.log('-----------------------------------------------')
         if (Authorization) {
           const secretKey: string = config.get('secretKey');
           const verificationResponse = (await jwt.verify(Authorization, secretKey)) as DataStoredInToken;
           const userId = verificationResponse._id;
           const findUser = await (await employeeModel.findById(userId).populate('department designation')).toObject();
           const userDept = findUser.department
-          console.log(findUser.department);
-          console.log(findUser.designation);
+          // console.log(findUser.department);
+          // console.log(findUser.designation);
           if(findUser.designation['designation'] === "SUPER"){
             req.user = findUser;
-            console.log('HELLO SUPER')
+            // console.log('HELLO SUPER')
             next();
           }else{
-            console.log('your department', userDept['department']);
+            // console.log('your department', userDept['department']);
             if(userDept['department'] === dept){
               const permission = new userPermissions(Number(findUser.permissionLevel)).getAllPermissions()
-              console.log(req.method)
+              // console.log(req.method)
               if(req.method === 'GET'){
                 if(permission.Read === true){
                   req.user = findUser;
@@ -90,8 +89,8 @@ const permissionMiddleware = (dept) => {
                 }
 
               }else if(req.method === 'POST'){
-                console.log('POST REQUEST !!!!')
-                console.log('Permission', permission)
+                // console.log('POST REQUEST !!!!')
+                // console.log('Permission', permission)
                 if(permission.Write === true){
                   req.user = findUser;
                   next();
