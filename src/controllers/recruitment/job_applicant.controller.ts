@@ -12,8 +12,10 @@ class JobApplicantController {
   //Method for returning all job applicants
   public getJobApplicants = async (req:Request, res:Response, next:NextFunction) =>{
     try {
+      console.log("PaginationData")
       const findAllJobApplicants: IJobApplicant[] = await this.jobApplicantService.findAllJobApplicants(req.query)
-      res.status(200).json({data:findAllJobApplicants, totalJobApplicants: findAllJobApplicants.length, message:"All job applicants"})
+      const paginationData = await this.jobApplicantService.paginationData()
+      res.status(200).json({data:findAllJobApplicants, totalJobApplicants: findAllJobApplicants.length,paginationData, message:"All job applicants"})
     }catch (error) {
       next(error)
     }
