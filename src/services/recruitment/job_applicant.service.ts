@@ -9,6 +9,7 @@ import jobApplicationsTaskModel from '@models/recruitment/job-application-task-t
 import { IJobApplicationsTasks } from '@/interfaces/recruitment/job-applications-task';
 import moment = require('moment');
 class JobApplicantService {
+  public page:number; limit:number; startIndex:number; endIndex:number; totalPage:number;
   public jobApplicant = jobApplicantModel;
   public Employee = EmployeeModel;
   private momentStartOfDay = moment().add(1, 'hour').startOf('day').format('YYYY-MM-DD');
@@ -24,11 +25,51 @@ class JobApplicantService {
   //Method for finding all job applicants
   public async findAllJobApplicants(query: any): Promise<IJobApplicant[]> {
     console.log('ALL JOB APPLICANTS');
+
+    //Pagination
+    this.page = parseInt(query.page) || 1;
+    this.limit = parseInt(query.limit) || 10;
+    this.startIndex = (this.page-1) * this.limit;
+    this.endIndex = this.page * this.limit;
+    this.totalPage = await this.jobApplicant.countDocuments();
+   
+
     return this.jobApplicant
       .find(query)
       .populate({ path: 'rep_sieving_call', model: 'Employee' })
       .populate({ path: 'job_opening_id' })
-      .populate({ path: 'default_job_opening_id' });
+      .populate({ path: 'default_job_opening_id' })
+      .skip(this.startIndex)
+      .limit(this.limit);
+  }
+
+  public paginationData(): Object{
+    const pagination:{
+      next?:{
+        page:number,
+        limit:number
+      },
+      previous?:{
+        page:number,
+        limit:number
+      },
+      numberOfPages?:number
+    } = {numberOfPages:Math.ceil(this.totalPage/this.limit)};
+
+    if(this.endIndex<this.totalPage){
+      pagination.next = {
+        page: this.page + 1,
+        limit: this.limit
+      }
+    }
+
+    if(this.startIndex > 0){
+      pagination.previous = {
+        page: this.page - 1,
+        limit: this.limit
+      }
+    }
+    return pagination;
   }
 
   public async findAllJobApplicantsThatHaveBeenScheduled(): Promise<IJobApplicant[]> {
