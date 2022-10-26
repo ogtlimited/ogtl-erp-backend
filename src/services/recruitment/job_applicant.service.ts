@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import jobApplicantModel from '@models/recruitment/job_applicant.model';
 import { IJobApplicant } from '@interfaces/recruitment/job_applicant.interface';
+import { IJobApplicantPagination } from '@/interfaces/recruitment/job_applicant_pagination.interface';
 import { isEmpty } from '@utils/util';
 import { HttpException } from '@exceptions/HttpException';
 import { CreateJobApplicantDto, UpdateJobApplicantDto } from '@dtos/recruitment/job_applicant.dto';
@@ -44,18 +45,7 @@ class JobApplicantService {
   }
 
   public paginationData(): Object{
-    const pagination:{
-      next?:{
-        page:number,
-        limit:number
-      },
-      previous?:{
-        page:number,
-        limit:number
-      },
-      numberOfPages?:number
-    } = {numberOfPages:Math.ceil(this.totalPage/this.limit)};
-
+    const pagination:IJobApplicantPagination = {numberOfPages:Math.ceil(this.totalPage/this.limit)};
     if(this.endIndex<this.totalPage){
       pagination.next = {
         page: this.page + 1,
