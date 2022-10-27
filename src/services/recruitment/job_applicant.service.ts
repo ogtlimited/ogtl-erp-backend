@@ -24,10 +24,10 @@ class JobApplicantService {
   }
 
   //Method for finding all job applicants
-  public async getJobApplicants(query: any): Promise<{jobApplicants: IJobApplicant[]; pagination:IJobApplicantPagination}> {
+  public async getJobApplicants(query: any): Promise<{jobApplicants: IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
     //Pagination
     const page = parseInt(query.page) || 1;
-    const limit = query.limit < this.MAX_LIMIT ? parseInt(query.limit) : this.MAX_LIMIT;
+    const limit = query.limit && parseInt(query.limit) > this.MAX_LIMIT ?  this.MAX_LIMIT : 10;
     const startIndex = (page-1) * limit;
     const endIndex = page * limit;
     const totalPage = await this.jobApplicant.countDocuments();
@@ -58,7 +58,8 @@ class JobApplicantService {
 
     return {
       jobApplicants: jobApplicants, 
-      pagination: pagination
+      pagination: pagination,
+      totalNumberofApplicants: jobApplicants.length
     }
   }
 
