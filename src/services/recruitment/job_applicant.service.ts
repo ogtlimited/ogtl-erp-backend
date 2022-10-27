@@ -54,8 +54,7 @@ class JobApplicantService {
     .populate({ path: 'default_job_opening_id' })
     .skip(startIndex)
     .limit(limit)
-   
-
+  
     return {
       jobApplicants: jobApplicants, 
       pagination: pagination,
