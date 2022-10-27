@@ -10,7 +10,7 @@ import jobApplicationsTaskModel from '@models/recruitment/job-application-task-t
 import { IJobApplicationsTasks } from '@/interfaces/recruitment/job-applications-task';
 import moment = require('moment');
 class JobApplicantService {
-  public page:number; limit:number; startIndex:number; endIndex:number; totalPage:number;
+  private MAX_LIMIT:number = 50;
   public jobApplicant = jobApplicantModel;
   public Employee = EmployeeModel;
   private momentStartOfDay = moment().add(1, 'hour').startOf('day').format('YYYY-MM-DD');
@@ -24,45 +24,44 @@ class JobApplicantService {
   }
 
   //Method for finding all job applicants
-  public async findAllJobApplicants(query: any): Promise<IJobApplicant[]> {
-    console.log('ALL JOB APPLICANTS');
-
+  public async getJobApplicants(query: any): Promise<{jobApplicants: IJobApplicant[]; pagination:IJobApplicantPagination}> {
     //Pagination
-    this.page = parseInt(query.page) || 1;
-    this.limit = parseInt(query.limit) || 10;
-    this.startIndex = (this.page-1) * this.limit;
-    this.endIndex = this.page * this.limit;
-    this.totalPage = await this.jobApplicant.countDocuments();
+    const page = parseInt(query.page) || 1;
+    const limit = query.limit < this.MAX_LIMIT ? parseInt(query.limit) : this.MAX_LIMIT;
+    const startIndex = (page-1) * limit;
+    const endIndex = page * limit;
+    const totalPage = await this.jobApplicant.countDocuments();
+
+    const pagination:IJobApplicantPagination = {numberOfPages:Math.ceil(totalPage/limit)};
+    if(endIndex < totalPage){
+      pagination.next = {
+        page: page + 1,
+        limit: limit
+      }
+    }
+
+    if(startIndex > 0){
+      pagination.previous = {
+        page: page - 1,
+        limit: limit
+      }
+    }
    
 
-    return this.jobApplicant
-      .find(query)
-      .populate({ path: 'rep_sieving_call', model: 'Employee' })
-      .populate({ path: 'job_opening_id' })
-      .populate({ path: 'default_job_opening_id' })
-      .skip(this.startIndex)
-      .limit(this.limit);
+    return {
+      jobApplicants: await this.jobApplicant
+          .find(query)
+          .populate({ path: 'rep_sieving_call', model: 'Employee' })
+          .populate({ path: 'job_opening_id' })
+          .populate({ path: 'default_job_opening_id' })
+          .skip(startIndex)
+          .limit(limit),
+      pagination: pagination
+
+    }
   }
 
-  public paginationData(): Object{
-    const pagination:IJobApplicantPagination = {numberOfPages:Math.ceil(this.totalPage/this.limit)};
-    if(this.endIndex<this.totalPage){
-      pagination.next = {
-        page: this.page + 1,
-        limit: this.limit
-      }
-    }
-
-    if(this.startIndex > 0){
-      pagination.previous = {
-        page: this.page - 1,
-        limit: this.limit
-      }
-    }
-    return pagination;
-  }
-
-  public async findAllJobApplicantsThatHaveBeenScheduled(): Promise<IJobApplicant[]> {
+  public async getAllJobApplicantsThatHaveBeenScheduled(): Promise<IJobApplicant[]> {
     return this.jobApplicant
       .find({},{ interview_date: { $gte: this.startOfDay, $lt: this.endOfDay } })
       .populate({ path: 'rep_sieving_call', model: 'Employee' })
