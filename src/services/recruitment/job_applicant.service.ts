@@ -46,18 +46,19 @@ class JobApplicantService {
         limit: limit
       }
     }
+
+    const jobApplicants: IJobApplicant[] = await this.jobApplicant
+    .find(query)
+    .populate({ path: 'rep_sieving_call', model: 'Employee' })
+    .populate({ path: 'job_opening_id' })
+    .populate({ path: 'default_job_opening_id' })
+    .skip(startIndex)
+    .limit(limit)
    
 
     return {
-      jobApplicants: await this.jobApplicant
-          .find(query)
-          .populate({ path: 'rep_sieving_call', model: 'Employee' })
-          .populate({ path: 'job_opening_id' })
-          .populate({ path: 'default_job_opening_id' })
-          .skip(startIndex)
-          .limit(limit),
+      jobApplicants: jobApplicants, 
       pagination: pagination
-
     }
   }
 
