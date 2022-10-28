@@ -2,6 +2,7 @@
 import JobApplicantService from '@services/recruitment/job_applicant.service';
 import { NextFunction, Request, Response } from 'express';
 import { IJobApplicant } from '@interfaces/recruitment/job_applicant.interface';
+import { IJobApplicantPagination } from '@/interfaces/recruitment/job_applicant_pagination.interface';
 import { CreateJobApplicantDto, UpdateJobApplicantDto } from '@dtos/recruitment/job_applicant.dto';
 import {IJobApplicationsTasks} from "@interfaces/recruitment/job-applications-task";
 import url from 'url';
@@ -12,8 +13,8 @@ class JobApplicantController {
   //Method for returning all job applicants
   public getJobApplicants = async (req:Request, res:Response, next:NextFunction) =>{
     try {
-      const findAllJobApplicants: IJobApplicant[] = await this.jobApplicantService.findAllJobApplicants(req.query)
-      res.status(200).json({data:findAllJobApplicants, totalJobApplicants: findAllJobApplicants.length, message:"All job applicants"})
+      const applicants: { jobApplicants: IJobApplicant[]; pagination: IJobApplicantPagination } = await this.jobApplicantService.getJobApplicants(req.query)
+      res.status(200).json({data:applicants})
     }catch (error) {
       next(error)
     }
@@ -22,8 +23,8 @@ class JobApplicantController {
   //Method for returning all job applicants scheduled for interview
   public getJobApplicantsScheduled = async (req:Request, res:Response, next:NextFunction) =>{
     try {
-      const findAllJobApplicantsScheduled: IJobApplicant[] = await this.jobApplicantService.findAllJobApplicantsThatHaveBeenScheduled()
-      res.status(200).json({data:findAllJobApplicantsScheduled, totalJobApplicants: findAllJobApplicantsScheduled.length, message:"All job applicants scheduled for interview"})
+      const getJobApplicantsScheduled: IJobApplicant[] = await this.jobApplicantService.getAllJobApplicantsThatHaveBeenScheduled()
+      res.status(200).json({data:getJobApplicantsScheduled, totalJobApplicants: getJobApplicantsScheduled.length, message:"All job applicants scheduled for interview"})
     }catch (error) {
       next(error)
     }
