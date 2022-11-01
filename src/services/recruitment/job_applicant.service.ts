@@ -24,7 +24,7 @@ class JobApplicantService {
   }
 
   //Method for finding all job applicants
-  public async getJobApplicants(query: any): Promise<{jobApplicants: IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
+  public async getJobApplicants(ogId,query: any): Promise<{jobApplicants: IJobApplicant[]; jobApplicantsForRepSievers:IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
     //Pagination
     const page = parseInt(query.page) || 1;
     const limit = query.limit && parseInt(query.limit) > this.MAX_LIMIT ?  this.MAX_LIMIT : query.limit;
@@ -54,12 +54,22 @@ class JobApplicantService {
     .populate({ path: 'default_job_opening_id' })
     .skip(startIndex)
     .limit(limit)
-  
+
+    const jobApplicantsForRepSievers: IJobApplicant[] = await this.jobApplicant
+    .find({rep_sieving_call:ogId})
+    .populate({ path: 'rep_sieving_call', model: 'Employee' })
+    .populate({ path: 'job_opening_id' })
+    .populate({ path: 'default_job_opening_id' })
+    .skip(startIndex)
+    .limit(limit)
+
     return {
       jobApplicants: jobApplicants, 
+      jobApplicantsForRepSievers: jobApplicantsForRepSievers,
       pagination: pagination,
       totalNumberofApplicants: jobApplicants.length
     }
+   
   }
 
   public async getAllJobApplicantsThatHaveBeenScheduled(): Promise<IJobApplicant[]> {
