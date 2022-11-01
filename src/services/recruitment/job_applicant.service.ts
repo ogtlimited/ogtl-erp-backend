@@ -10,6 +10,7 @@ import jobApplicationsTaskModel from '@models/recruitment/job-application-task-t
 import { IJobApplicationsTasks } from '@/interfaces/recruitment/job-applications-task';
 import moment = require('moment');
 class JobApplicantService {
+  private page: number; limit: number; startIndex: number; endIndex: number; totalPage:number
   private MAX_LIMIT:number = 50;
   public jobApplicant = jobApplicantModel;
   public Employee = EmployeeModel;
@@ -24,13 +25,25 @@ class JobApplicantService {
   }
 
   //Method for finding all job applicants
-  public async getJobApplicants(ogId,query: any): Promise<{jobApplicants: IJobApplicant[]; jobApplicantsForRepSievers:IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
+  public async getJobApplicants(seachQuery:any, paginationQuery: any): Promise<{jobApplicants: IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
+    return(
+      this.getJobApplicantsHelperMethod(seachQuery, paginationQuery)
+    )
+  }
+
+  public async getJobApplicantsForRepSievers(ogId,paginationQuery:any): Promise<{jobApplicants:IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
+    return(
+      this.getJobApplicantsHelperMethod({rep_sieving_call:ogId}, paginationQuery)
+    )
+  }
+
+  public async getJobApplicantsHelperMethod(searchQuery:any, paginationQuery: any): Promise<{jobApplicants:IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
     //Pagination
-    const page = parseInt(query.page) || 1;
-    const limit = query.limit && parseInt(query.limit) > this.MAX_LIMIT ?  this.MAX_LIMIT : query.limit;
+    const page = parseInt(paginationQuery.page) || 1;
+    const limit = paginationQuery.limit && parseInt(paginationQuery.limit) > this.MAX_LIMIT ?  this.MAX_LIMIT : paginationQuery.limit;
     const startIndex = (page-1) * limit;
     const endIndex = page * limit;
-    const totalPage = await this.jobApplicant.countDocuments();
+    const totalPage = await this.jobApplicant.find(searchQuery).countDocuments();
 
     const pagination:IJobApplicantPagination = {numberOfPages:Math.ceil(totalPage/limit)};
     if(endIndex < totalPage){
@@ -48,24 +61,15 @@ class JobApplicantService {
     }
 
     const jobApplicants: IJobApplicant[] = await this.jobApplicant
-    .find(query)
+    .find(searchQuery)
     .populate({ path: 'rep_sieving_call', model: 'Employee' })
     .populate({ path: 'job_opening_id' })
     .populate({ path: 'default_job_opening_id' })
     .skip(startIndex)
     .limit(limit)
 
-    const jobApplicantsForRepSievers: IJobApplicant[] = await this.jobApplicant
-    .find({rep_sieving_call:ogId})
-    .populate({ path: 'rep_sieving_call', model: 'Employee' })
-    .populate({ path: 'job_opening_id' })
-    .populate({ path: 'default_job_opening_id' })
-    .skip(startIndex)
-    .limit(limit)
-
-    return {
-      jobApplicants: jobApplicants, 
-      jobApplicantsForRepSievers: jobApplicantsForRepSievers,
+    return { 
+      jobApplicants: jobApplicants,
       pagination: pagination,
       totalNumberofApplicants: jobApplicants.length
     }
