@@ -18,7 +18,6 @@ class JobApplicantRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, this.jobApplicantController.getJobApplicants);
-    this.router.get(`${this.path}/rep-siever/applicants`, authMiddleware, this.jobApplicantController.getJobApplicantsForRepSievers);
     this.router.get(`${this.path}/scheduled`, this.jobApplicantController.getJobApplicantsScheduled);
     this.router.get(`${this.path}/tasks`, this.jobApplicantController.getJobApplicationTasks);
     this.router.get(`${this.path}/:id`,  this.jobApplicantController.getJobApplicantById);
