@@ -36,45 +36,6 @@ class JobApplicantService {
     )
   }
 
-  public async getJobApplicantsHelperMethod(searchQuery:any, paginationQuery: any): Promise<{jobApplicants:IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
-    //Pagination
-    const page = parseInt(paginationQuery.page) || 1;
-    const limit = paginationQuery.limit && parseInt(paginationQuery.limit) > this.MAX_LIMIT ?  this.MAX_LIMIT : paginationQuery.limit;
-    const startIndex = (page-1) * limit;
-    const endIndex = page * limit;
-    const totalPage = await this.jobApplicant.find(searchQuery).countDocuments();
-
-    const pagination:IJobApplicantPagination = {numberOfPages:Math.ceil(totalPage/limit)};
-    if(endIndex < totalPage){
-      pagination.next = {
-        page: page + 1,
-        limit: limit
-      }
-    }
-
-    if(startIndex > 0){
-      pagination.previous = {
-        page: page - 1,
-        limit: limit
-      }
-    }
-
-    const jobApplicants: IJobApplicant[] = await this.jobApplicant
-    .find(searchQuery)
-    .populate({ path: 'rep_sieving_call', model: 'Employee' })
-    .populate({ path: 'job_opening_id' })
-    .populate({ path: 'default_job_opening_id' })
-    .skip(startIndex)
-    .limit(limit)
-
-    return { 
-      jobApplicants: jobApplicants,
-      pagination: pagination,
-      totalNumberofApplicants: jobApplicants.length
-    }
-   
-  }
-
   public async getAllJobApplicantsThatHaveBeenScheduled(): Promise<IJobApplicant[]> {
     return this.jobApplicant
       .find({},{ interview_date: { $gte: this.startOfDay, $lt: this.endOfDay } })
@@ -149,6 +110,69 @@ class JobApplicantService {
     return await this.jobApplicationUpdateHelper(agent_id, jobApplicationUpdateData, jobApplication);
   }
 
+  public async getJobApplicationTasks(startOfDay: string, endOfDay: string): Promise<IJobApplicationsTasks[]> {
+    return await jobApplicationsTaskModel.find({ createdAt: { $gte: this.startOfDay, $lt: this.endOfDay } }).populate({
+      path: 'in_house_agent',
+      select: {
+        company_email: 1,
+        first_name: 1,
+        last_name: 1,
+        _id: 0,
+      },
+    });
+  }
+
+  public async getAgentJobApplicationTasks(in_house_agent_id: string): Promise<IJobApplicationsTasks[]> {
+    return await jobApplicationsTaskModel.find({ createdAt: { $gte: this.startOfDay, $lt: this.endOfDay }, in_house_agent: in_house_agent_id });
+  }
+
+  //Method for deleting job Applicant
+  public async deleteJobApplicant(jobApplicantId: string): Promise<IJobApplicant> {
+    //find job Applicant using the id provided and delete
+    const deleteJobApplicantById: IJobApplicant = await this.jobApplicant.findByIdAndDelete(jobApplicantId);
+    if (!deleteJobApplicantById) throw new HttpException(409, `Job Applicant with Id:${jobApplicantId}, does not exist`);
+    return deleteJobApplicantById;
+  }
+
+  private async getJobApplicantsHelperMethod(searchQuery:any, paginationQuery: any): Promise<{jobApplicants:IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
+    //Pagination
+    const page = parseInt(paginationQuery.page) || 1;
+    const limit = paginationQuery.limit && parseInt(paginationQuery.limit) > this.MAX_LIMIT ?  this.MAX_LIMIT : paginationQuery.limit;
+    const startIndex = (page-1) * limit;
+    const endIndex = page * limit;
+    const totalPage = await this.jobApplicant.find(searchQuery).countDocuments();
+
+    const pagination:IJobApplicantPagination = {numberOfPages:Math.ceil(totalPage/limit)};
+    if(endIndex < totalPage){
+      pagination.next = {
+        page: page + 1,
+        limit: limit
+      }
+    }
+
+    if(startIndex > 0){
+      pagination.previous = {
+        page: page - 1,
+        limit: limit
+      }
+    }
+
+    const jobApplicants: IJobApplicant[] = await this.jobApplicant
+    .find(searchQuery)
+    .populate({ path: 'rep_sieving_call', model: 'Employee' })
+    .populate({ path: 'job_opening_id' })
+    .populate({ path: 'default_job_opening_id' })
+    .skip(startIndex)
+    .limit(limit)
+
+    return { 
+      jobApplicants: jobApplicants,
+      pagination: pagination,
+      totalNumberofApplicants: jobApplicants.length
+    }
+   
+  }
+
   private async jobApplicationUpdateHelper(agent_id, jobApplicationUpdateData, jobApplication): Promise<IJobApplicant> {
     console.log(jobApplicationUpdateData, 'job application');
     if (jobApplicationUpdateData.interview_date) {
@@ -219,30 +243,6 @@ class JobApplicantService {
         $inc: { [interviewStage]: 1 },
       },
     );
-  }
-
-  public async getJobApplicationTasks(startOfDay: string, endOfDay: string): Promise<IJobApplicationsTasks[]> {
-    return await jobApplicationsTaskModel.find({ createdAt: { $gte: this.startOfDay, $lt: this.endOfDay } }).populate({
-      path: 'in_house_agent',
-      select: {
-        company_email: 1,
-        first_name: 1,
-        last_name: 1,
-        _id: 0,
-      },
-    });
-  }
-
-  public async getAgentJobApplicationTasks(in_house_agent_id: string): Promise<IJobApplicationsTasks[]> {
-    return await jobApplicationsTaskModel.find({ createdAt: { $gte: this.startOfDay, $lt: this.endOfDay }, in_house_agent: in_house_agent_id });
-  }
-
-  //Method for deleting job Applicant
-  public async deleteJobApplicant(jobApplicantId: string): Promise<IJobApplicant> {
-    //find job Applicant using the id provided and delete
-    const deleteJobApplicantById: IJobApplicant = await this.jobApplicant.findByIdAndDelete(jobApplicantId);
-    if (!deleteJobApplicantById) throw new HttpException(409, `Job Applicant with Id:${jobApplicantId}, does not exist`);
-    return deleteJobApplicantById;
   }
 }
 
