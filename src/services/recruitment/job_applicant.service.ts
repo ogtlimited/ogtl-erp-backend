@@ -10,7 +10,6 @@ import jobApplicationsTaskModel from '@models/recruitment/job-application-task-t
 import { IJobApplicationsTasks } from '@/interfaces/recruitment/job-applications-task';
 import moment = require('moment');
 class JobApplicantService {
-  private page: number; limit: number; startIndex: number; endIndex: number; totalPage:number
   private MAX_LIMIT:number = 50;
   public jobApplicant = jobApplicantModel;
   public Employee = EmployeeModel;
