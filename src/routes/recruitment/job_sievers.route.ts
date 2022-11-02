@@ -4,7 +4,7 @@ import { Routes } from '@interfaces/routes.interface';
 import { Router } from 'express';
 import JobApplicantController from '@controllers/recruitment/job_applicant.controller';
 import authMiddleware from '@middlewares/auth.middleware';
-import repSieversPermissionMiddleware from '@/middlewares/rep_siever.middleware';
+import repSieversPermissionMiddleware from '@/middlewares/rep_siever.permission.middleware';
 
 class JobApplicantForRepSieversRoute implements Routes {
   public path =  '/api/job-sievers';
