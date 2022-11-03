@@ -89,7 +89,6 @@ class DeductionService {
       const dates = days?.map(e => new Date(e).getDate())
       for(let i =0; i < dates?.length; i++){
         let temp = dates.slice(i, i+3)
-        console.log(temp)
         if(temp.length === 3 && sequceIsConsecutive(temp)){
           count++
           dayArr.push(days.slice(i, i+3))
