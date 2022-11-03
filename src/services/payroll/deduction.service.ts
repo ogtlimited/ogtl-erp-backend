@@ -4,12 +4,11 @@ import { HttpException } from '@exceptions/HttpException';
 import deductionModel  from '@models/payroll/deduction.model';
 import { isEmpty } from '@utils/util';
 import moment from "moment";
-// import omit from 'lodash/omit'
 
 class DeductionService {
   private deductionModel = deductionModel;
-  private startOfDay = new Date(moment().startOf('day').format('YYYY-MM-DD')).toISOString();
-  private endOfDay = new Date(moment().endOf('day').format('YYYY-MM-DD')).toISOString();
+  private startOfDay = moment().startOf('day').format().toString();
+  private endOfDay = moment().endOf('day').format().toString();
   private startOfMonth = new Date(moment().startOf('month').format('YYYY-MM-DD')).toISOString();
   private endOfMonth   = new Date(moment().endOf('month').format('YYYY-MM-DD')).toISOString();
 
@@ -32,8 +31,6 @@ class DeductionService {
     if(dailyDeductionExists){
       throw new HttpException(401, "daily deduction already exists for employee")
     }
-
-    //daily rate check --> set usedDailyRate field for model
     const consectiveDeductions = await this.dailyConsecutiveDeductionCheck(data.employeeId, data.deductionTypeId)
     if(!consectiveDeductions){
       const createdData = await this.deductionModel.create(data);
@@ -49,7 +46,7 @@ class DeductionService {
 
   private async dailyDeductionCheck(employeeId:string, deductionTypeId:string){
    const dailyDeductions:any = await this.deductionModel.exists({
-      _id: deductionTypeId,
+     deductionTypeId,
      employeeId,
      createdAt: {
         $gte: this.startOfDay,
@@ -57,29 +54,27 @@ class DeductionService {
       }
    })
 
-    if(dailyDeductions?.length >= 1){
+    if(dailyDeductions){
     return true;
     }
     else{
       return false;
     }
-    
   }
 
   private async dailyConsecutiveDeductionCheck(employeeId:string, deductionTypeId:string){
     const dailyDeductions: any = await this.deductionModel.exists({
-      _id: deductionTypeId,
+      deductionTypeId,
       employeeId,
       createdAt: {
         $gte: this.startOfMonth,
         $lte: this.endOfMonth
       }
     })
-
-    
-    if(dailyDeductions?.length <= 1){
+    if(!dailyDeductions){
       return false
     }
+    
 
     // eslint-disable-next-line prefer-const
     let days  = dailyDeductions
@@ -89,8 +84,6 @@ class DeductionService {
         (Number(output) + 1=== Number(lastest) ? lastest : false)
         : false)));
     }
-
-
       let count = 0
       const dayArr = []
       const dates = days?.map(e => new Date(e).getDate())
