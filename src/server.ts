@@ -45,6 +45,7 @@ import ShiftAssignmentRoute from '@routes/shift/shiftAssignment';
 import JobOpeningRoute from '@routes/recruitment/jobOpening.route';
 import JobOfferRoute from '@routes/recruitment/jobOffer.route';
 import JobApplicantRoute from '@routes/recruitment/jobApplicant.route';
+import JobApplicantForRepSieversRoute from '@routes/recruitment/job_sievers.route';
 import TestRoute from '@routes/recruitment/test.route';
 import WarningLetterRoute from '@routes/pip/warningLetter.route';
 import LoanRoute from '@routes/loan/loan.route';
@@ -140,6 +141,7 @@ const app = new App([
   new JobOpeningRoute(),
   new JobOfferRoute(),
   new JobApplicantRoute(),
+  new JobApplicantForRepSieversRoute(),
   new TestRoute(),
   new ShiftAssignmentRoute(),
   new WarningLetterRoute(),

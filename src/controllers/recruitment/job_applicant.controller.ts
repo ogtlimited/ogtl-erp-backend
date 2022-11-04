@@ -11,9 +11,18 @@ class JobApplicantController {
   public jobApplicantService = new JobApplicantService();
 
   //Method for returning all job applicants
-  public getJobApplicants = async (req:Request, res:Response, next:NextFunction) =>{
+  public getJobApplicants = async (req, res:Response, next:NextFunction) =>{
     try {
-      const applicants: { jobApplicants: IJobApplicant[]; pagination: IJobApplicantPagination } = await this.jobApplicantService.getJobApplicants(req.query)
+      const applicants: { jobApplicants: IJobApplicant[]; pagination: IJobApplicantPagination } = await this.jobApplicantService.getJobApplicants(req.query, req.query)
+      res.status(200).json({data:applicants})
+    }catch (error) {
+      next(error)
+    }
+  }
+
+  public getJobApplicantsForRepSievers = async (req, res:Response, next:NextFunction) =>{
+    try {
+      const applicants: { jobApplicants: IJobApplicant[]; pagination: IJobApplicantPagination } = await this.jobApplicantService.getJobApplicantsForRepSievers(req.user._id, req.query)
       res.status(200).json({data:applicants})
     }catch (error) {
       next(error)
