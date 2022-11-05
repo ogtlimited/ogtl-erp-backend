@@ -24,9 +24,9 @@ import * as cron from 'node-cron';
 const { io } = require("@/utils/socket");
 const redis = require('redis');
 const client = redis.createClient({
-  host: "13.41.139.21",
+  host: "dev-redis-cluster-001.zv58bt.0001.euw2.cache.amazonaws.com",
   port: 6379,
-  password: "redis-auth",
+  password: "",
   username: ""
 });
 import LeaveApplicationService from "@services/leave/application.service";
