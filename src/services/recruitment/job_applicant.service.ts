@@ -198,6 +198,7 @@ class JobApplicantService {
     .populate({ path: 'rep_sieving_call', model: 'Employee' })
     .populate({ path: 'job_opening_id' })
     .populate({ path: 'default_job_opening_id' })
+    .sort({createdAt:-1})
     .skip(startIndex)
     .limit(limit)
 
