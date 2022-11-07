@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 import jobApplicantModel from '@models/recruitment/job_applicant.model';
 import { IJobApplicant } from '@interfaces/recruitment/job_applicant.interface';
-import { IJobApplicantPagination } from '@/interfaces/recruitment/job_applicant_pagination.interface';
+import { IJobApplicantPagination } from '@/interfaces/recruitment/job_applicant_pagination_filter.interface';
+import { IJobApplicantFilteration } from '@/interfaces/recruitment/job_applicant_pagination_filter.interface';
 import { isEmpty } from '@utils/util';
 import { HttpException } from '@exceptions/HttpException';
 import { CreateJobApplicantDto, UpdateJobApplicantDto } from '@dtos/recruitment/job_applicant.dto';
@@ -9,6 +10,7 @@ import EmployeeModel from '@/models/employee/employee.model';
 import jobApplicationsTaskModel from '@models/recruitment/job-application-task-tracker';
 import { IJobApplicationsTasks } from '@/interfaces/recruitment/job-applications-task';
 import moment = require('moment');
+
 class JobApplicantService {
   private MAX_LIMIT:number = 50;
   public jobApplicant = jobApplicantModel;
@@ -24,15 +26,17 @@ class JobApplicantService {
   }
 
   //Method for finding all job applicants
-  public async getJobApplicants(seachQuery:any, paginationQuery: any): Promise<{jobApplicants: IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
+  public async getJobApplicants(searchQuery:any, paginationQuery: any): Promise<{jobApplicants: IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
+    const filteringQuery:IJobApplicantFilteration = {}
     return(
-      this.getJobApplicantsHelperMethod(seachQuery, paginationQuery)
+      this.getJobApplicantsHelperMethod(filteringQuery,searchQuery, paginationQuery)
     )
   }
 
-  public async getJobApplicantsForRepSievers(ogId,paginationQuery:any): Promise<{jobApplicants:IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
+  public async getJobApplicantsForRepSievers(searchQuery,ogId,paginationQuery:any): Promise<{jobApplicants:IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
+    const filteringQuery:IJobApplicantFilteration = {rep_sieving_call:ogId}
     return(
-      this.getJobApplicantsHelperMethod({rep_sieving_call:ogId}, paginationQuery)
+      this.getJobApplicantsHelperMethod(filteringQuery, searchQuery, paginationQuery)
     )
   }
 
@@ -134,13 +138,45 @@ class JobApplicantService {
     return deleteJobApplicantById;
   }
 
-  private async getJobApplicantsHelperMethod(searchQuery:any, paginationQuery: any): Promise<{jobApplicants:IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
+  private async getJobApplicantsHelperMethod(filteringQuery,searchQuery:any, paginationQuery: any): Promise<{jobApplicants:IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
+    //Searching
+    if(searchQuery.search){
+      filteringQuery.$or=[
+        { interview_status:{$regex:searchQuery.search, $options:"i"}},
+        { process_stage:{$regex:searchQuery.search, $options:"i"}},
+        { first_name:{$regex:searchQuery.search, $options:"i"}},
+        { last_name:{$regex:searchQuery.search, $options:"i"}},
+        { middle_name:{$regex:searchQuery.search, $options:"i"}},
+        
+      ]
+    }
+    // Filtering
+    else if(searchQuery.interview_status  && searchQuery.process_stage){
+      filteringQuery.$and=[
+        { interview_status:{$regex:searchQuery.interview_status, $options:"i"}},
+        { process_stage:{$regex:searchQuery.process_stage, $options:"i"}},
+      ]
+    }
+    // Filtering
+    else if(searchQuery.interview_status){
+      filteringQuery.$or=[
+        { interview_status:{$regex:searchQuery.interview_status, $options:"i"}},
+      ]
+    }
+    // Filtering
+    else if(searchQuery.process_stage){
+      filteringQuery.$or=[
+        { process_stage:{$regex:searchQuery.process_stage, $options:"i"}},
+      ]
+    }
+    
+    
     //Pagination
     const page = parseInt(paginationQuery.page) || 1;
     const limit = paginationQuery.limit && parseInt(paginationQuery.limit) > this.MAX_LIMIT ?  this.MAX_LIMIT : paginationQuery.limit;
     const startIndex = (page-1) * limit;
     const endIndex = page * limit;
-    const totalPage = await this.jobApplicant.find(searchQuery).countDocuments();
+    const totalPage = await this.jobApplicant.find(filteringQuery).countDocuments();
 
     const pagination:IJobApplicantPagination = {numberOfPages:Math.ceil(totalPage/limit)};
     if(endIndex < totalPage){
@@ -158,7 +194,7 @@ class JobApplicantService {
     }
 
     const jobApplicants: IJobApplicant[] = await this.jobApplicant
-    .find(searchQuery)
+    .find(filteringQuery)
     .populate({ path: 'rep_sieving_call', model: 'Employee' })
     .populate({ path: 'job_opening_id' })
     .populate({ path: 'default_job_opening_id' })
