@@ -23,7 +23,6 @@ class JobApplicantController {
   public getJobApplicantsForRepSievers = async (req, res:Response, next:NextFunction) =>{
     try {
       const applicants: { jobApplicants: IJobApplicant[]; pagination: IJobApplicantPagination } = await this.jobApplicantService.getJobApplicantsForRepSievers(req.query,req.user._id)
-      // const applicants: { jobApplicants: IJobApplicant[]; pagination: IJobApplicantPagination } = await this.jobApplicantService.getJobApplicantsForRepSievers(req.query,req.user._id, req.query)
       res.status(200).json({data:applicants})
     }catch (error) {
       next(error)
