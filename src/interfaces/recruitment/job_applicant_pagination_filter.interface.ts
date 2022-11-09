@@ -12,14 +12,6 @@ export interface IJobApplicantPagination {
 }
 
 
-export interface IJobApplicantFilteration{
-  $or? : any;
-  $and? : any;
-  interview_status?:string;
-  process_stage?:string;
-  rep_sieving_call?: string
-}
-
 
 
 
