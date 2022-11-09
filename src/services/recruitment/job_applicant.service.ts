@@ -1,8 +1,7 @@
 /* eslint-disable prettier/prettier */
 import jobApplicantModel from '@models/recruitment/job_applicant.model';
 import { IJobApplicant } from '@interfaces/recruitment/job_applicant.interface';
-import { IJobApplicantPagination } from '@/interfaces/recruitment/job_applicant_pagination_filter.interface';
-import { IJobApplicantFilteration } from '@/interfaces/recruitment/job_applicant_pagination_filter.interface';
+import { IJobApplicantPagination} from '@/interfaces/recruitment/job_applicant_pagination_filter.interface';
 import { isEmpty } from '@utils/util';
 import { HttpException } from '@exceptions/HttpException';
 import { CreateJobApplicantDto, UpdateJobApplicantDto } from '@dtos/recruitment/job_applicant.dto';
@@ -39,19 +38,6 @@ class JobApplicantService {
       this.getJobApplicantsHelperMethod(matchBy, searchQuery)
     )
   }
-  // public async getJobApplicants(searchQuery:any, paginationQuery: any): Promise<{jobApplicants: IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
-  //   const filteringQuery:IJobApplicantFilteration = {}
-  //   return(
-  //     this.getJobApplicantsHelperMethod(filteringQuery,searchQuery, paginationQuery)
-  //   )
-  // }
-
-  // public async getJobApplicantsForRepSievers(searchQuery,ogId,paginationQuery:any): Promise<{jobApplicants:IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
-  //   const filteringQuery:IJobApplicantFilteration = {rep_sieving_call:ogId}
-  //   return(
-  //     this.getJobApplicantsHelperMethod(filteringQuery, searchQuery, paginationQuery)
-  //   )
-  // }
 
   public async getAllJobApplicantsThatHaveBeenScheduled(): Promise<IJobApplicant[]> {
     return this.jobApplicant
@@ -152,10 +138,6 @@ class JobApplicantService {
   }
 
   private async getJobApplicantsHelperMethod(matchBy,searchQuery:any): Promise<{jobApplicants:IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
-    //Searching
- 
-    
-    //Pagination
     const page = parseInt(searchQuery?.page) || 1;
     let limit: number;
     if(!searchQuery.limit){
@@ -308,9 +290,7 @@ class JobApplicantService {
           { $limit: limit},
           )
         }
-    
 
-    console.log("FilteredQuery",filtrationQuery)
     const jobApplicants: IJobApplicant[] = await this.jobApplicant
     .aggregate(filtrationQuery)
     
@@ -328,7 +308,6 @@ class JobApplicantService {
         limit: limit
       }
     }
-
     if(startIndex > 0){
       pagination.previous = {
         page: page - 1,
@@ -342,78 +321,6 @@ class JobApplicantService {
     }
    
   }
-  // private async getJobApplicantsHelperMethod(filteringQuery,searchQuery:any, searchQuery: any): Promise<{jobApplicants:IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
-  //   //Searching
-  //   if(searchQuery.search){
-  //     filteringQuery.$or=[
-  //       { interview_status:{$regex:searchQuery.search, $options:"i"}},
-  //       { process_stage:{$regex:searchQuery.search, $options:"i"}},
-  //       { first_name:{$regex:searchQuery.search, $options:"i"}},
-  //       { last_name:{$regex:searchQuery.search, $options:"i"}},
-  //       { middle_name:{$regex:searchQuery.search, $options:"i"}},
-        
-  //     ]
-  //   }
-  //   // Filtering
-  //   else if(searchQuery.interview_status  && searchQuery.process_stage){
-  //     filteringQuery.$and=[
-  //       { interview_status:{$regex:searchQuery.interview_status, $options:"i"}},
-  //       { process_stage:{$regex:searchQuery.process_stage, $options:"i"}},
-  //     ]
-  //   }
-  //   // Filtering
-  //   else if(searchQuery.interview_status){
-  //     filteringQuery.$or=[
-  //       { interview_status:{$regex:searchQuery.interview_status, $options:"i"}},
-  //     ]
-  //   }
-  //   // Filtering
-  //   else if(searchQuery.process_stage){
-  //     filteringQuery.$or=[
-  //       { process_stage:{$regex:searchQuery.process_stage, $options:"i"}},
-  //     ]
-  //   }
-    
-    
-  //   //Pagination
-  //   const page = parseInt(paginationQuery.page) || 1;
-  //   const limit = paginationQuery.limit && parseInt(paginationQuery.limit) > this.MAX_LIMIT ?  this.MAX_LIMIT : paginationQuery.limit;
-  //   const startIndex = (page-1) * limit;
-  //   const endIndex = page * limit;
-  //   const totalPage = await this.jobApplicant.find(filteringQuery).countDocuments();
-
-  //   const pagination:IJobApplicantPagination = {numberOfPages:Math.ceil(totalPage/limit)};
-  //   if(endIndex < totalPage){
-  //     pagination.next = {
-  //       page: page + 1,
-  //       limit: limit
-  //     }
-  //   }
-
-  //   if(startIndex > 0){
-  //     pagination.previous = {
-  //       page: page - 1,
-  //       limit: limit
-  //     }
-  //   }
-
-  //   const jobApplicants: IJobApplicant[] = await this.jobApplicant
-  //   .find(filteringQuery)
-  //   .populate({ path: 'rep_sieving_call', model: 'Employee' })
-  //   .populate({ path: 'job_opening_id' })
-  //   .populate({ path: 'default_job_opening_id' })
-  //   .sort({createdAt:-1})
-  //   .skip(startIndex)
-  //   .limit(limit)
-
-  //   return { 
-  //     jobApplicants: jobApplicants,
-  //     pagination: pagination,
-  //     totalNumberofApplicants: jobApplicants.length
-  //   }
-   
-  // }
-
   private async jobApplicationUpdateHelper(agent_id, jobApplicationUpdateData, jobApplication): Promise<IJobApplicant> {
     console.log(jobApplicationUpdateData, 'job application');
     if (jobApplicationUpdateData.interview_date) {
