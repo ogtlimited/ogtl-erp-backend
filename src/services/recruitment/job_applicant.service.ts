@@ -26,19 +26,32 @@ class JobApplicantService {
   }
 
   //Method for finding all job applicants
-  public async getJobApplicants(searchQuery:any, paginationQuery: any): Promise<{jobApplicants: IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
-    const filteringQuery:IJobApplicantFilteration = {}
+  public async getJobApplicants(searchQuery:any): Promise<{jobApplicants: IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
+    const matchBy:any = {}
     return(
-      this.getJobApplicantsHelperMethod(filteringQuery,searchQuery, paginationQuery)
+      this.getJobApplicantsHelperMethod(matchBy,searchQuery)
     )
   }
 
-  public async getJobApplicantsForRepSievers(searchQuery,ogId,paginationQuery:any): Promise<{jobApplicants:IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
-    const filteringQuery:IJobApplicantFilteration = {rep_sieving_call:ogId}
+  public async getJobApplicantsForRepSievers(searchQuery,ogId): Promise<{jobApplicants:IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
+    const matchBy:any = {rep_sieving_call:ogId}
     return(
-      this.getJobApplicantsHelperMethod(filteringQuery, searchQuery, paginationQuery)
+      this.getJobApplicantsHelperMethod(matchBy, searchQuery)
     )
   }
+  // public async getJobApplicants(searchQuery:any, paginationQuery: any): Promise<{jobApplicants: IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
+  //   const filteringQuery:IJobApplicantFilteration = {}
+  //   return(
+  //     this.getJobApplicantsHelperMethod(filteringQuery,searchQuery, paginationQuery)
+  //   )
+  // }
+
+  // public async getJobApplicantsForRepSievers(searchQuery,ogId,paginationQuery:any): Promise<{jobApplicants:IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
+  //   const filteringQuery:IJobApplicantFilteration = {rep_sieving_call:ogId}
+  //   return(
+  //     this.getJobApplicantsHelperMethod(filteringQuery, searchQuery, paginationQuery)
+  //   )
+  // }
 
   public async getAllJobApplicantsThatHaveBeenScheduled(): Promise<IJobApplicant[]> {
     return this.jobApplicant
@@ -138,46 +151,176 @@ class JobApplicantService {
     return deleteJobApplicantById;
   }
 
-  private async getJobApplicantsHelperMethod(filteringQuery,searchQuery:any, paginationQuery: any): Promise<{jobApplicants:IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
+  private async getJobApplicantsHelperMethod(matchBy,searchQuery:any): Promise<{jobApplicants:IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
     //Searching
-    if(searchQuery.search){
-      filteringQuery.$or=[
-        { interview_status:{$regex:searchQuery.search, $options:"i"}},
-        { process_stage:{$regex:searchQuery.search, $options:"i"}},
-        { first_name:{$regex:searchQuery.search, $options:"i"}},
-        { last_name:{$regex:searchQuery.search, $options:"i"}},
-        { middle_name:{$regex:searchQuery.search, $options:"i"}},
-        
-      ]
-    }
-    // Filtering
-    else if(searchQuery.interview_status  && searchQuery.process_stage){
-      filteringQuery.$and=[
-        { interview_status:{$regex:searchQuery.interview_status, $options:"i"}},
-        { process_stage:{$regex:searchQuery.process_stage, $options:"i"}},
-      ]
-    }
-    // Filtering
-    else if(searchQuery.interview_status){
-      filteringQuery.$or=[
-        { interview_status:{$regex:searchQuery.interview_status, $options:"i"}},
-      ]
-    }
-    // Filtering
-    else if(searchQuery.process_stage){
-      filteringQuery.$or=[
-        { process_stage:{$regex:searchQuery.process_stage, $options:"i"}},
-      ]
-    }
-    
+ 
     
     //Pagination
-    const page = parseInt(paginationQuery.page) || 1;
-    const limit = paginationQuery.limit && parseInt(paginationQuery.limit) > this.MAX_LIMIT ?  this.MAX_LIMIT : paginationQuery.limit;
+    const page = parseInt(searchQuery?.page) || 1;
+    let limit: number;
+    if(!searchQuery.limit){
+      limit = 10
+    }
+    else if(parseInt(searchQuery?.limit)>this.MAX_LIMIT){
+      limit = this.MAX_LIMIT
+    }
+    else if(parseInt(searchQuery?.limit)){
+      limit = parseInt(searchQuery.limit)
+    }
+
     const startIndex = (page-1) * limit;
     const endIndex = page * limit;
-    const totalPage = await this.jobApplicant.find(filteringQuery).countDocuments();
+   
 
+    const filtrationQuery:any = [
+      {
+        $match: matchBy
+      },
+      {
+       $lookup:{
+         from: "defaultjobopenings",
+         localField: "default_job_opening_id",
+         foreignField: "_id",
+         as: "default_job_opening_id"
+      }
+      },
+      {
+       $unwind: {path :"$default_job_opening_id",
+       preserveNullAndEmptyArrays: true
+      }
+      },
+      {
+       $lookup:{
+         from: "employees",
+         localField: "rep_sieving_call",
+         foreignField: "_id",
+         as: "rep_sieving_call"
+      }
+      },
+      {
+       $unwind: {path :"$rep_sieving_call",
+       preserveNullAndEmptyArrays: true
+      }
+      },
+      {
+       $lookup:{
+         from: "jobopenings",
+         localField: "job_opening_id",
+         foreignField: "_id",
+         as: "job_opening_id"
+         }
+       },
+      {
+       $unwind: {path :"$job_opening_id",
+       preserveNullAndEmptyArrays: true
+     }
+     },
+     {
+      $sort:{
+        "createdAt": -1
+      }
+     }
+     ]
+
+
+     if(searchQuery?.search && searchQuery.interview_status  && searchQuery.process_stage){
+      filtrationQuery.push(
+        {
+          $match:{
+            $or : [
+              { interview_status:{$regex:searchQuery.search, $options:"i"}},
+              { process_stage:{$regex:searchQuery.search, $options:"i"}},
+              { first_name:{$regex:searchQuery.search, $options:"i"}},
+              { last_name:{$regex:searchQuery.search, $options:"i"}},
+              { middle_name:{$regex:searchQuery.search, $options:"i"}},
+              { "default_job_opening_id.job_title":{$regex:searchQuery.search, $options:"i"}},
+              
+            ],
+            $and: [
+              { interview_status:{$regex:searchQuery.interview_status, $options:"i"}},
+              { process_stage:{$regex:searchQuery.process_stage, $options:"i"}},
+            ]
+          }
+        }
+        
+      )
+      }
+
+      if(searchQuery?.search){
+        filtrationQuery.push(
+          {
+            $match:{
+              $or : [
+                { interview_status:{$regex:searchQuery.search, $options:"i"}},
+                { process_stage:{$regex:searchQuery.search, $options:"i"}},
+                { first_name:{$regex:searchQuery.search, $options:"i"}},
+                { last_name:{$regex:searchQuery.search, $options:"i"}},
+                { middle_name:{$regex:searchQuery.search, $options:"i"}},
+                { "default_job_opening_id.job_title":{$regex:searchQuery.search, $options:"i"}},
+                
+              ]
+            }
+          }
+          
+        )
+        }
+
+      if(searchQuery.interview_status  && searchQuery.process_stage){
+      filtrationQuery.push(
+        {
+          $match:{
+            $and: [
+                    { interview_status:{$regex:searchQuery.interview_status, $options:"i"}},
+                    { process_stage:{$regex:searchQuery.process_stage, $options:"i"}},
+                  ]
+          }
+        }
+        
+      )
+      }
+      if(searchQuery.interview_status){
+      filtrationQuery.push(
+        {
+          $match:{ 
+            interview_status:{$regex:searchQuery.interview_status, $options:"i"}
+          },
+        }
+      )
+      }
+      if(searchQuery.process_stage){
+      filtrationQuery.push(
+        {
+          $match:{ 
+            process_stage:{$regex:searchQuery.process_stage, $options:"i"},
+          },
+        }
+      )
+      }
+
+      if(searchQuery?.page){
+        filtrationQuery.push(
+          { $skip: startIndex },
+          )
+        }
+  
+      if(searchQuery?.limit){
+        filtrationQuery.push(
+          { $limit: limit},
+          )
+        }
+    
+
+    console.log("FilteredQuery",filtrationQuery)
+    const jobApplicants: IJobApplicant[] = await this.jobApplicant
+    .aggregate(filtrationQuery)
+    
+    const removeLimitAndSkip:any = filtrationQuery.filter(item => !item["$limit"] && !item["$skip"])
+    removeLimitAndSkip.push({$count:"Number of Docs"})
+    const countDocuments:any = await this.jobApplicant.aggregate(removeLimitAndSkip)
+    let totalPage:number;
+    for(let count of countDocuments){
+       totalPage = count["Number of Docs"]
+    }
     const pagination:IJobApplicantPagination = {numberOfPages:Math.ceil(totalPage/limit)};
     if(endIndex < totalPage){
       pagination.next = {
@@ -192,16 +335,6 @@ class JobApplicantService {
         limit: limit
       }
     }
-
-    const jobApplicants: IJobApplicant[] = await this.jobApplicant
-    .find(filteringQuery)
-    .populate({ path: 'rep_sieving_call', model: 'Employee' })
-    .populate({ path: 'job_opening_id' })
-    .populate({ path: 'default_job_opening_id' })
-    .sort({createdAt:-1})
-    .skip(startIndex)
-    .limit(limit)
-
     return { 
       jobApplicants: jobApplicants,
       pagination: pagination,
@@ -209,6 +342,77 @@ class JobApplicantService {
     }
    
   }
+  // private async getJobApplicantsHelperMethod(filteringQuery,searchQuery:any, searchQuery: any): Promise<{jobApplicants:IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
+  //   //Searching
+  //   if(searchQuery.search){
+  //     filteringQuery.$or=[
+  //       { interview_status:{$regex:searchQuery.search, $options:"i"}},
+  //       { process_stage:{$regex:searchQuery.search, $options:"i"}},
+  //       { first_name:{$regex:searchQuery.search, $options:"i"}},
+  //       { last_name:{$regex:searchQuery.search, $options:"i"}},
+  //       { middle_name:{$regex:searchQuery.search, $options:"i"}},
+        
+  //     ]
+  //   }
+  //   // Filtering
+  //   else if(searchQuery.interview_status  && searchQuery.process_stage){
+  //     filteringQuery.$and=[
+  //       { interview_status:{$regex:searchQuery.interview_status, $options:"i"}},
+  //       { process_stage:{$regex:searchQuery.process_stage, $options:"i"}},
+  //     ]
+  //   }
+  //   // Filtering
+  //   else if(searchQuery.interview_status){
+  //     filteringQuery.$or=[
+  //       { interview_status:{$regex:searchQuery.interview_status, $options:"i"}},
+  //     ]
+  //   }
+  //   // Filtering
+  //   else if(searchQuery.process_stage){
+  //     filteringQuery.$or=[
+  //       { process_stage:{$regex:searchQuery.process_stage, $options:"i"}},
+  //     ]
+  //   }
+    
+    
+  //   //Pagination
+  //   const page = parseInt(paginationQuery.page) || 1;
+  //   const limit = paginationQuery.limit && parseInt(paginationQuery.limit) > this.MAX_LIMIT ?  this.MAX_LIMIT : paginationQuery.limit;
+  //   const startIndex = (page-1) * limit;
+  //   const endIndex = page * limit;
+  //   const totalPage = await this.jobApplicant.find(filteringQuery).countDocuments();
+
+  //   const pagination:IJobApplicantPagination = {numberOfPages:Math.ceil(totalPage/limit)};
+  //   if(endIndex < totalPage){
+  //     pagination.next = {
+  //       page: page + 1,
+  //       limit: limit
+  //     }
+  //   }
+
+  //   if(startIndex > 0){
+  //     pagination.previous = {
+  //       page: page - 1,
+  //       limit: limit
+  //     }
+  //   }
+
+  //   const jobApplicants: IJobApplicant[] = await this.jobApplicant
+  //   .find(filteringQuery)
+  //   .populate({ path: 'rep_sieving_call', model: 'Employee' })
+  //   .populate({ path: 'job_opening_id' })
+  //   .populate({ path: 'default_job_opening_id' })
+  //   .sort({createdAt:-1})
+  //   .skip(startIndex)
+  //   .limit(limit)
+
+  //   return { 
+  //     jobApplicants: jobApplicants,
+  //     pagination: pagination,
+  //     totalNumberofApplicants: jobApplicants.length
+  //   }
+   
+  // }
 
   private async jobApplicationUpdateHelper(agent_id, jobApplicationUpdateData, jobApplication): Promise<IJobApplicant> {
     console.log(jobApplicationUpdateData, 'job application');
