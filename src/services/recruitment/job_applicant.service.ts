@@ -26,6 +26,7 @@ class JobApplicantService {
 
   //Method for finding all job applicants
   public async getJobApplicants(searchQuery:any): Promise<{jobApplicants: IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
+    console.log("Queries",Object.keys(searchQuery))
     const matchBy:any = {}
     return(
       this.getJobApplicantsHelperMethod(matchBy,searchQuery)
@@ -138,6 +139,7 @@ class JobApplicantService {
   }
 
   private async getJobApplicantsHelperMethod(matchBy,searchQuery:any): Promise<{jobApplicants:IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
+    let queryKeys = Object.keys(searchQuery)
     const page = parseInt(searchQuery?.page) || 1;
     let limit: number;
     if(!searchQuery.limit){
@@ -152,8 +154,38 @@ class JobApplicantService {
 
     const startIndex = (page-1) * limit;
     const endIndex = page * limit;
-   
+    const filtrationQuery = this.searchingForJobApplicants(matchBy, searchQuery, startIndex, limit)
+    const jobApplicants: IJobApplicant[] = await this.jobApplicant
+    .aggregate(filtrationQuery)
+    
+    const removeLimitAndSkip:any = filtrationQuery.filter(item => !item["$limit"] && !item["$skip"])
+    removeLimitAndSkip.push({$count:"Number of Docs"})
+    const countDocuments:any = await this.jobApplicant.aggregate(removeLimitAndSkip)
+    let totalPage:number;
+    for(let count of countDocuments){
+       totalPage = count["Number of Docs"]
+    }
+    const pagination:IJobApplicantPagination = {numberOfPages:Math.ceil(totalPage/limit)};
+    if(endIndex < totalPage){
+      pagination.next = {
+        page: page + 1,
+        limit: limit
+      }
+    }
+    if(startIndex > 0){
+      pagination.previous = {
+        page: page - 1,
+        limit: limit
+      }
+    }
+    return { 
+      jobApplicants: jobApplicants,
+      pagination: pagination,
+      totalNumberofApplicants: jobApplicants.length
+    }
+  }
 
+  private searchingForJobApplicants(matchBy, searchQuery, startIndex:number, limit:number){ 
     const filtrationQuery:any = [
       {
         $match: matchBy
@@ -203,9 +235,7 @@ class JobApplicantService {
       }
      }
      ]
-
-
-     if(searchQuery?.search && searchQuery.interview_status  && searchQuery.process_stage){
+     if(searchQuery.search){
       filtrationQuery.push(
         {
           $match:{
@@ -217,37 +247,12 @@ class JobApplicantService {
               { middle_name:{$regex:searchQuery.search, $options:"i"}},
               { "default_job_opening_id.job_title":{$regex:searchQuery.search, $options:"i"}},
               
-            ],
-            $and: [
-              { interview_status:{$regex:searchQuery.interview_status, $options:"i"}},
-              { process_stage:{$regex:searchQuery.process_stage, $options:"i"}},
             ]
           }
         }
-        
       )
       }
-
-      if(searchQuery?.search){
-        filtrationQuery.push(
-          {
-            $match:{
-              $or : [
-                { interview_status:{$regex:searchQuery.search, $options:"i"}},
-                { process_stage:{$regex:searchQuery.search, $options:"i"}},
-                { first_name:{$regex:searchQuery.search, $options:"i"}},
-                { last_name:{$regex:searchQuery.search, $options:"i"}},
-                { middle_name:{$regex:searchQuery.search, $options:"i"}},
-                { "default_job_opening_id.job_title":{$regex:searchQuery.search, $options:"i"}},
-                
-              ]
-            }
-          }
-          
-        )
-        }
-
-      if(searchQuery.interview_status  && searchQuery.process_stage){
+      if(searchQuery.interview_status && searchQuery.process_stage){
       filtrationQuery.push(
         {
           $match:{
@@ -257,7 +262,6 @@ class JobApplicantService {
                   ]
           }
         }
-        
       )
       }
       if(searchQuery.interview_status){
@@ -278,49 +282,20 @@ class JobApplicantService {
         }
       )
       }
-
       if(searchQuery?.page){
         filtrationQuery.push(
           { $skip: startIndex },
           )
         }
-  
       if(searchQuery?.limit){
         filtrationQuery.push(
           { $limit: limit},
           )
         }
-
-    const jobApplicants: IJobApplicant[] = await this.jobApplicant
-    .aggregate(filtrationQuery)
-    
-    const removeLimitAndSkip:any = filtrationQuery.filter(item => !item["$limit"] && !item["$skip"])
-    removeLimitAndSkip.push({$count:"Number of Docs"})
-    const countDocuments:any = await this.jobApplicant.aggregate(removeLimitAndSkip)
-    let totalPage:number;
-    for(let count of countDocuments){
-       totalPage = count["Number of Docs"]
-    }
-    const pagination:IJobApplicantPagination = {numberOfPages:Math.ceil(totalPage/limit)};
-    if(endIndex < totalPage){
-      pagination.next = {
-        page: page + 1,
-        limit: limit
-      }
-    }
-    if(startIndex > 0){
-      pagination.previous = {
-        page: page - 1,
-        limit: limit
-      }
-    }
-    return { 
-      jobApplicants: jobApplicants,
-      pagination: pagination,
-      totalNumberofApplicants: jobApplicants.length
-    }
-   
+      return filtrationQuery
   }
+
+
   private async jobApplicationUpdateHelper(agent_id, jobApplicationUpdateData, jobApplication): Promise<IJobApplicant> {
     console.log(jobApplicationUpdateData, 'job application');
     if (jobApplicationUpdateData.interview_date) {
