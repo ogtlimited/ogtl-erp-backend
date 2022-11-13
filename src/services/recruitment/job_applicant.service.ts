@@ -26,7 +26,6 @@ class JobApplicantService {
 
   //Method for finding all job applicants
   public async getJobApplicants(searchQuery:any): Promise<{jobApplicants: IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
-    console.log("Queries",Object.keys(searchQuery))
     const matchBy:any = {}
     return(
       this.getJobApplicantsHelperMethod(matchBy,searchQuery)
@@ -154,7 +153,7 @@ class JobApplicantService {
 
     const startIndex = (page-1) * limit;
     const endIndex = page * limit;
-    const filtrationQuery = this.searchingForJobApplicants(matchBy, searchQuery, startIndex, limit)
+    const filtrationQuery = this.filtrationQuerymethod(matchBy, searchQuery, startIndex, limit)
     const jobApplicants: IJobApplicant[] = await this.jobApplicant
     .aggregate(filtrationQuery)
     
@@ -185,7 +184,7 @@ class JobApplicantService {
     }
   }
 
-  private searchingForJobApplicants(matchBy, searchQuery, startIndex:number, limit:number){ 
+  private filtrationQuerymethod(matchBy, searchQuery, startIndex:number, limit:number){ 
     const filtrationQuery:any = [
       {
         $match: matchBy
