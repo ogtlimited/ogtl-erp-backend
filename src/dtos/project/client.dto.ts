@@ -39,12 +39,13 @@ export class CreateClientDto {
   @IsString()
   public company : string;
 
-
-
+  @IsOptional()
+  @IsString()
+  public status : string;
 }
 
 export class UpdateClientDto {
-    @IsNotEmpty()
+  @IsNotEmpty()
   @IsString()
   public client_name: string;
 
@@ -79,5 +80,9 @@ export class UpdateClientDto {
   @IsNotEmpty()
   @IsString()
   public company : string;
+
+  @IsOptional()
+  @IsString()
+  public status : string;
 
 }
