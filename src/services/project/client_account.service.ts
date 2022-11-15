@@ -40,10 +40,10 @@ class ClientAccountService {
     }
 
     public async deactivatingClientAccount(clientAccountId: string): Promise<IClientAccount> {
-        const findclientAccount = this.clientAccount.findOne({_id: clientAccountId});
-        findclientAccount.deactivated = true
-        findclientAccount.spammy = true
-        findclientAccount.save()
+        const findclientAccount = await this.clientAccount.findOne({_id: clientAccountId});
+        findclientAccount.deactivated = findclientAccount.deactivated ? false : true
+        findclientAccount.spammy = findclientAccount.spammy ? false : true
+        await findclientAccount.save()
         return findclientAccount;
     }
 
