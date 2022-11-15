@@ -43,11 +43,9 @@ const clientSchema :Schema = new Schema(
       type: String,
       required: true
     },
-
-    status: {
-      type: String,
-      enum: ["activated", "deactivated"],
-      default: "deactivated"
+    deactivated: {
+      type: Boolean,
+      default: false
     },
 
   },
