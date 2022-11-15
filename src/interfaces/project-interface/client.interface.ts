@@ -10,5 +10,5 @@ export interface IClient {
   state : string;
   country : string;
   company : string;
-  project_id : string;
+  status?: string
 }
