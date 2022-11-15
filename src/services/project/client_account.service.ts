@@ -4,11 +4,14 @@ import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { ClientAccountDto } from '@/dtos/project/client_account.dto';
 import clientAccountModel from '@/models/project/client_account.model';
+import clientModel from '@/models/project/client.model';
 
 class ClientAccountService {
     public clientAccount: any;
+    public client: any;
     constructor() {
         this.clientAccount = clientAccountModel;
+        this.client = clientModel;
     }
 
     public async findAllClientsAccounts(): Promise<IClientAccount[]> {
@@ -40,9 +43,13 @@ class ClientAccountService {
     }
 
     public async deactivatingClientAccount(clientAccountId: string): Promise<IClientAccount> {
+        
         const findclientAccount = await this.clientAccount.findOne({_id: clientAccountId});
+        const findClient = await this.client.findOne({_id: findclientAccount.client_id});
         findclientAccount.deactivated = findclientAccount.deactivated ? false : true
         findclientAccount.spammy = findclientAccount.spammy ? false : true
+        findClient.deactivated = findclientAccount.deactivated
+        await findClient.save()
         await findclientAccount.save()
         return findclientAccount;
     }
