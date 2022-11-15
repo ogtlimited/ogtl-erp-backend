@@ -3,6 +3,6 @@ export interface IClientAccount{
   email: string;
   password?: string;
   spammy?: boolean;
-  deactivate?: boolean;
+  deactivated?: boolean;
   client_id: string
   }
