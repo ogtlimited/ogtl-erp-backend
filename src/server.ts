@@ -57,6 +57,9 @@ import LoanTypeRoute from '@routes/loan/loan-type.route';
 import LoanApplicationRoute from '@routes/loan/loan-application.route';
 import CoachingFormRoute from './routes/coaching/coachingForm.route';
 import ClientRoute  from '@routes/project/client.route';
+import ClientAccountRoute from './routes/project/client_account.route';
+import ClientProjectsRoute from './routes/project/client_projects.route';
+import ClientAccountDeactivationRoute from './routes/project/client_account_deactivation.route';
 import AssetAssignmentRoute from '@/routes/assets/asset-assignment.route';
 import ProjectRoute from '@routes/project/project.route';
 import documentRoute from '@routes/project/document.route';
@@ -150,6 +153,9 @@ const app = new App([
 
   new ProjectRoute(),
   new ClientRoute(),
+  new ClientAccountRoute(),
+  new ClientProjectsRoute(),
+  new ClientAccountDeactivationRoute(),
   new AssetAssignmentRoute(),
   new CoachingFormRoute(),
   new scoreCardRoute(),

@@ -5,6 +5,9 @@ import { IClient } from '@/interfaces/project-interface/client.interface';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { CreateClientDto, UpdateClientDto } from '@/dtos/project/client.dto';
+import projectModel from '@/models/project/project.model';
+import { IProject } from '@/interfaces/project-interface/project.interface'
+
 const clientList = [
     {
         "client_name": "CD",
@@ -130,8 +133,10 @@ const clientList = [
 ]
 class ClientService {
     public client: any;
+    public projectModel: any;
     constructor() {
         this.client = clientModel;
+        this.projectModel = projectModel
         // this.CreateBulkClient()
     }
 
@@ -142,13 +147,25 @@ class ClientService {
 
     public async find(clientId: string): Promise<IClient> {
         if (isEmpty(clientId)) throw new HttpException(400, "Missing Id Params");
-        const findclient = this.findOne(clientId);
+        const findclient = this.client.findOne({_id:clientId});
         if (!findclient) throw new HttpException(409, "Project not found");
         return findclient;
     }
 
+    public async findClientProjects(clientId: string): Promise<{clientProjects: IProject[], totalProjects:number}> {
+        const clientProjects: IProject[] = await this.projectModel.find({client_id: clientId});
+        const totalProjects:number = await this.projectModel.find({client_id: clientId}).countDocuments();
+        return {
+            clientProjects,
+            totalProjects
+        };
+    }
+
     public async create(Payload: CreateClientDto): Promise<IClient> {
         if (isEmpty(Payload)) throw new HttpException(400, "Bad request");
+        const clientExist = await this.client.findOne({email: Payload.email})
+
+        if(clientExist)  throw new HttpException(422, "Client Already Exist");
         const newClient: IClient = await this.client.create(Payload);
         return newClient;
     }
