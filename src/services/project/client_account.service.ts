@@ -42,16 +42,15 @@ class ClientAccountService {
         return updateclientAccountDetails;
     }
 
-    public async deactivatingClientAccount(clientAccountId: string): Promise<IClientAccount> {
-        
-        const findclientAccount = await this.clientAccount.findOne({_id: clientAccountId});
-        const findClient = await this.client.findOne({_id: findclientAccount.client_id});
-        findclientAccount.deactivated = findclientAccount.deactivated ? false : true
-        findclientAccount.spammy = findclientAccount.spammy ? false : true
-        findClient.deactivated = findclientAccount.deactivated
-        await findClient.save()
-        await findclientAccount.save()
-        return findclientAccount;
+    public async deactivatingClientAccount(clientAccountId: string): Promise<IClientAccount> {  
+        const findclientAccountRecords = await this.clientAccount.findOne({_id: clientAccountId});
+        const findClientRecords = await this.client.findOne({_id: findclientAccountRecords.client_id});
+        findclientAccountRecords.deactivated = findclientAccountRecords.deactivated ? false : true
+        findclientAccountRecords.spammy = findclientAccountRecords.spammy ? false : true
+        findClientRecords.deactivated = findclientAccountRecords.deactivated
+        await findClientRecords.save()
+        await findclientAccountRecords.save()
+        return findclientAccountRecords;
     }
 
     public async deleteClientAccount(clientAccountId: string): Promise<IClientAccount> {
