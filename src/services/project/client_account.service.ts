@@ -44,11 +44,9 @@ class ClientAccountService {
 
     public async deactivatingClientAccount(clientAccountId: string): Promise<IClientAccount> {  
         const findclientAccountRecords = await this.clientAccount.findOne({_id: clientAccountId});
-        const findClientRecords = await this.client.findOne({_id: findclientAccountRecords.client_id});
         findclientAccountRecords.deactivated = findclientAccountRecords.deactivated ? false : true
         findclientAccountRecords.spammy = findclientAccountRecords.spammy ? false : true
-        findClientRecords.deactivated = findclientAccountRecords.deactivated
-        await findClientRecords.save()
+        this.findClient(findclientAccountRecords.client_id, findclientAccountRecords.deactivated)
         await findclientAccountRecords.save()
         return findclientAccountRecords;
     }
@@ -57,6 +55,12 @@ class ClientAccountService {
         const drop: IClientAccount = await this.clientAccount.findByIdAndDelete(clientAccountId);
         if (!drop) throw new HttpException(409, `${clientAccountId} does not exist`);
         return drop;
+    }
+
+    private async findClient(clientAccountId: string, deactivationStatus: boolean): Promise<void> {  
+        const findClientRecords = await this.client.findOne({_id: clientAccountId});
+        findClientRecords.deactivated = deactivationStatus
+        await findClientRecords.save()
     }
 }
 
