@@ -2,8 +2,6 @@
 import { Router } from 'express';
 
 import { Routes } from '@interfaces/routes.interface';
-import validationMiddleware from '@middlewares/validation.middleware';
-import { CreateClientDto, UpdateClientDto } from '@dtos/project/client.dto';
 import ClientController from '@/controllers/project/client.controller';
 
 
