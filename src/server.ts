@@ -59,7 +59,7 @@ import CoachingFormRoute from './routes/coaching/coachingForm.route';
 import ClientRoute  from '@routes/project/client.route';
 import ClientAccountRoute from './routes/project/client_account.route';
 import ClientProjectsRoute from './routes/project/client_projects.route';
-import ClientAccountDeactivationRoute from './routes/project/client_account_deactivation.route';
+import ClientAccountActivationRoute from './routes/project/client_account_activation.route';
 import AssetAssignmentRoute from '@/routes/assets/asset-assignment.route';
 import ProjectRoute from '@routes/project/project.route';
 import documentRoute from '@routes/project/document.route';
@@ -155,7 +155,7 @@ const app = new App([
   new ClientRoute(),
   new ClientAccountRoute(),
   new ClientProjectsRoute(),
-  new ClientAccountDeactivationRoute(),
+  new ClientAccountActivationRoute(),
   new AssetAssignmentRoute(),
   new CoachingFormRoute(),
   new scoreCardRoute(),
