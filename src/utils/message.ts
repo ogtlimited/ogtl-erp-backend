@@ -41,7 +41,7 @@ function offerMessageFunc(url) {
 
 }
 const clientAccountActivationNotice = {
-  message: `We are pleased to inform you that an account has been created for your by Outsource Global Technology Limited, Please click on the link below to activate your account.`,
+  message: `We are pleased to inform you that an account has been created for your by Outsource Global Technology Limited, Please click on the link below to activate your account, click on the link below to activate your account and change your password`,
   subject: "Your Account Has Been Successfully Created"
 }
 
