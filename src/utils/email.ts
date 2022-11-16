@@ -33,7 +33,7 @@ const campaignCreationEmail = (email, body) => {
 // }
 
 const emailTemplate = (email_subject, message, receiver, attachment=null) => {
-  const from = 'abubakarmoses@yahoo.com'
+  const from = 'hr@outsourceglobal.com'
   const to = receiver
   const subject = email_subject
   const text = message
