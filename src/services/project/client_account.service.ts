@@ -77,12 +77,12 @@ class ClientAccountService {
         const logo = "/utils/logo/logo.png"
         const imageTag = `<img src=${logo} alt="Outsource Global Technology" width="200" height="100">`
         const url = `http://${host}:${port}/auth/activate?id=${id}`
-        const html = `<div><h1 style="color:#00c2fa">Outsource Global Technology</h1><br></div><p>${clientAccountActivationNotice.message}</p><a href=${url}>Click here</a>`
+        const html = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div><p>${clientAccountActivationNotice.message}</p><a href=${url}>Click here</a>`
         return ClientEmail.sendMailToClient(clientEmail,"abubakar.moses@outsourceglobal.com",clientAccountActivationNotice.subject,clientAccountActivationNotice.message,html)
     }
     private async createJwtToken(id: string, clientEmail: string): Promise<any> {
         const secretKey: string = await config.get('secretKey');
-        const token = await jwt.sign({ id: id }, secretKey,{ expiresIn: "1m" });
+        const token = await jwt.sign({ id: id }, secretKey,{ expiresIn: "3 days" });
         const verifyToken = await jwt.verify(token, secretKey);
         this.mailSender(verifyToken.id, clientEmail)
     }
