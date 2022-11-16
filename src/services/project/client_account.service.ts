@@ -6,7 +6,6 @@ import { ClientAccountDto, UpdateClientAccountDto } from '@/dtos/project/client_
 import clientAccountModel from '@/models/project/client_account.model';
 import clientModel from '@/models/project/client.model';
 const bcrypt = require('bcrypt')
-import SendMailToClient from '@/utils/client_account_nodemailer';
 import { clientAccountActivationNotice } from '@/utils/message';
 import ClientEmail from '@/utils/client.email';
 import { dbConfig } from '@interfaces/db.interface';
@@ -27,10 +26,11 @@ class ClientAccountService {
         return clientsAccount;
     }
 
-    public async findClientAccount(clientAccountId: string): Promise<IClientAccount> {
-        if (isEmpty(clientAccountId)) throw new HttpException(400, "Missing Id Params");
-        const findclientAccount = this.clientAccount.findOne({_id: clientAccountId});
-        if (!findclientAccount) throw new HttpException(409, "Client login details not found");
+    public async findClientAccount(clientId: string): Promise<IClientAccount> {
+        if (isEmpty(clientId)) throw new HttpException(400, "Missing Id Params");
+        const findclient = this.client.findOne({_id: clientId});
+        const findclientAccount = this.clientAccount.findById({client_id: clientId});
+        if (!findclientAccount) throw new HttpException(404, "Client login details not found");
         return findclientAccount;
     }
 
@@ -43,7 +43,7 @@ class ClientAccountService {
         if(clientAccountExist)  throw new HttpException(422, "Client Login Details Already Exist");
         const newclientAccount: IClientAccount & ClientId = await this.clientAccount.create(payload);
         if(newclientAccount){
-            await this.createJwtToken(newclientAccount._id)
+            await this.createJwtToken(newclientAccount._id, newclientAccount.email)
             return newclientAccount;
         }
     }
@@ -52,7 +52,7 @@ class ClientAccountService {
         const salt = await bcrypt.genSalt(10)
         if (isEmpty(payload)) throw new HttpException(400, "Bad request");
         const findclientAccount = await this.clientAccount.findOne({_id: clientAccountId});
-        if (!findclientAccount) throw new HttpException(409, "Client login details not found");
+        if (!findclientAccount) throw new HttpException(404, "Client login details not found");
         payload.password = await bcrypt.hash(payload.password, salt)
         const updateclientAccountDetails: IClientAccount = await this.clientAccount.findByIdAndUpdate(clientAccountId, payload, {new: true});
         return updateclientAccountDetails;
@@ -71,21 +71,18 @@ class ClientAccountService {
         return drop;
     }
    
-    private async mailSender(id: string): Promise<any> {
+    private async mailSender(id: string, clientEmail: string): Promise<any> {
         const { host }: dbConfig = config.get('dbConfig');
         const port = process.env.PORT
         const url = `https://${host}:${port}/auth/activate?id=${id}`
-        const html = `<a href=${url}>Click here to generate your password</a>`
-        return SendMailToClient.send("abubakarmoses@yahoo.com","paige.hoeger@ethereal.email",clientAccountActivationNotice.subject,clientAccountActivationNotice.message,html)
+        const html = `<p>${clientAccountActivationNotice.message}</p><a href=${url}>Click here</a>`
+        return ClientEmail.sendMailToClient(clientEmail,"abubakar.moses@outsourceglobal.com",clientAccountActivationNotice.subject,clientAccountActivationNotice.message,html)
     }
-
-    private async createJwtToken(id: string): Promise<any> {
+    private async createJwtToken(id: string, clientEmail: string): Promise<any> {
         const secretKey: string = await config.get('secretKey');
         const token = await jwt.sign({ id: id }, secretKey,{ expiresIn: "1m" });
         const verifyToken = await jwt.verify(token, secretKey);
-        console.log(verifyToken)
-        console.log(token)
-        this.mailSender(verifyToken.id)
+        this.mailSender(verifyToken.id, clientEmail)
     }
 }
 
