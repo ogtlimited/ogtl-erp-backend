@@ -15,13 +15,24 @@ export class ClientAccountDto{
 
     @IsBoolean()
     @IsOptional()
-    spammy: boolean;
-
-    @IsBoolean()
-    @IsOptional()
-    deactivated: boolean;
+    activated: boolean;
 
     @IsString()
     @IsNotEmpty()
     client_id: string
     }
+
+    export class UpdateClientAccountDto{
+    
+        @IsString()
+        @IsOptional()
+        password: string;
+    
+        @IsBoolean()
+        @IsNotEmpty()
+        activated: boolean;
+    
+        @IsString()
+        @IsOptional()
+        client_id: string
+        }
