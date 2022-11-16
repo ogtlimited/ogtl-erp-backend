@@ -17,7 +17,7 @@ class ClientAccountRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`,this.clientAccount.getAllClientsAccounts);
-    this.router.get(`${this.path}/client/:clientAccountId`, this.clientAccount.getClientAccount);
+    this.router.get(`${this.path}/:clientId`, this.clientAccount.getClientAccount);
     this.router.post(`${this.path}`, validationMiddleware(ClientAccountDto, 'body'), this.clientAccount.createClientAccount);
     this.router.patch(`${this.path}/:clientAccountId`, validationMiddleware(UpdateClientAccountDto, 'body'), this.clientAccount.updateClientAccount);
     this.router.delete(`${this.path}/:clientAccountId`, this.clientAccount.deleteClientAccount);
