@@ -153,7 +153,16 @@ class ClientService {
     }
 
     public async findClientProjects(clientId: string): Promise<{clientProjects: IProject[], totalProjects:number}> {
-        const clientProjects: IProject[] = await this.projectModel.find({client_id: clientId});
+        const clientProjects: IProject[] = await this.projectModel.find({client_id: clientId},
+            {
+                team_members: 0,
+                team_leads: 0,
+                quality_analyst: 0,
+                client_id: 0,
+                supervisor: 0,
+                leave_cap: 0,
+                number_of_employees: 0
+            });
         const totalProjects:number = await this.projectModel.find({client_id: clientId}).countDocuments();
         return {
             clientProjects,
