@@ -74,8 +74,10 @@ class ClientAccountService {
     private async mailSender(id: string, clientEmail: string): Promise<any> {
         const { host }: dbConfig = config.get('dbConfig');
         const port = 3001
-        const url = `https://${host}:${port}/auth/activate?id=${id}`
-        const html = `<div><h1>Outsource Global Technology Limited</h1></div><span>${clientAccountActivationNotice.message}</span><a href=${url}>Click here</a>`
+        // const logo = "./utils/logo/logo.png"
+        // const imageTag = `<img src=${logo} alt="Outsource Global Technology" width="500" height="600">`
+        const url = `http://${host}:${port}/auth/activate?id=${id}`
+        const html = `<div><h1>Outsource Global Technology</h1></div><p>${clientAccountActivationNotice.message}</p><a href=${url}>Click here</a>`
         return ClientEmail.sendMailToClient(clientEmail,"abubakar.moses@outsourceglobal.com",clientAccountActivationNotice.subject,clientAccountActivationNotice.message,html)
     }
     private async createJwtToken(id: string, clientEmail: string): Promise<any> {
