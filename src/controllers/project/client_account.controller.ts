@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { NextFunction, Request, Response } from 'express';
-import { ClientAccountDto } from '@/dtos/project/client_account.dto'; 
+import { ClientAccountDto, UpdateClientAccountDto } from '@/dtos/project/client_account.dto'; 
 import { IClientAccount } from '@/interfaces/project-interface/client_account.interface'; 
 import ClientAccountService from '@/services/project/client_account.service';
 
@@ -43,7 +43,7 @@ class ClientAccountController {
     public updateClientAccount = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const clientAccountId: string = req.params.clientAccountId;
-            const payload: ClientAccountDto = req.body;
+            const payload: UpdateClientAccountDto = req.body;
             const updateClientAccount: IClientAccount = await this.clientAccountService.updateClientAccount(clientAccountId, payload);
             res.status(200).json({ data: updateClientAccount, message: 'updated' });
         } catch (error) {
@@ -51,10 +51,10 @@ class ClientAccountController {
         }
     };
 
-    public deactivatingClientAccount = async (req: Request, res: Response, next: NextFunction) => {
+    public activatingClientAccount = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const clientAccountId: string = req.params.clientAccountId;
-            const updateClientAccount: IClientAccount = await this.clientAccountService.deactivatingClientAccount(clientAccountId);
+            const updateClientAccount: IClientAccount = await this.clientAccountService.activatingClientAccount(clientAccountId);
             res.status(200).json({ data: updateClientAccount, message: 'updated' });
         } catch (error) {
             next(error);
