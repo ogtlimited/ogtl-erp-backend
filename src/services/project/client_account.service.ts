@@ -28,8 +28,8 @@ class ClientAccountService {
 
     public async findClientAccount(clientId: string): Promise<IClientAccount> {
         if (isEmpty(clientId)) throw new HttpException(400, "Missing Id Params");
-        const findclient = this.client.findOne({_id: clientId});
-        const findclientAccount = this.clientAccount.findById({client_id: clientId});
+        const findclient = await this.client.findOne({_id: clientId});
+        const findclientAccount = await this.clientAccount.findOne({client_id: findclient._id});
         if (!findclientAccount) throw new HttpException(404, "Client login details not found");
         return findclientAccount;
     }
