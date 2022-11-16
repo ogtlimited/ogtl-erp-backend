@@ -22,7 +22,7 @@ class ClientAccountController {
 
     public getClientAccount = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const clientAccountId: string = req.params.clientAccountId;
+            const clientAccountId: string = req.params.clientId;
             const findClientAccount: IClientAccount = await this.clientAccountService.findClientAccount(clientAccountId);
             res.status(200).json({ data: findClientAccount, message: 'findOne' });
         } catch (error) {
