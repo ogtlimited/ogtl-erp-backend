@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { model, Schema, Document } from 'mongoose';
 const bcrypt = require("bcrypt")
-import { sendEmail } from '@/utils/email';
 
 const clientAccountSchema :Schema = new Schema(
   {
@@ -21,13 +20,9 @@ const clientAccountSchema :Schema = new Schema(
     client_id:{
       type: Schema.Types.ObjectId,
       ref: 'Client',
-      required: true
+      required: true,
     },
-    spammy:{
-      type: Boolean,
-      default: false
-    },
-    deactivated:{
+    activated:{
       type: Boolean,
       default: false
     },
@@ -41,10 +36,6 @@ const clientAccountSchema :Schema = new Schema(
 clientAccountSchema.pre('save', async function(next) {
   const salt = await bcrypt.genSalt(10)
   this.password = await bcrypt.hash(this.password, salt)
-});
-
-clientAccountSchema.post('save', async function(doc) {
-  sendEmail("Testing Client Account Email", "Testing","snowdenmoses@gmail.com","Abubakarmoses@yahoo.com")
 });
 
 const clientAccountModel = model<Document>("ClientAccount", clientAccountSchema);
