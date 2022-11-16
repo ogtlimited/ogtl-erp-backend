@@ -40,6 +40,10 @@ function offerMessageFunc(url) {
     }
 
 }
+const clientAccountActivationNotice = {
+  message: `We are pleased to inform you that an account has been created for your by Outsource Global Technology Limited, Please click on the link below to activate your account.`,
+  subject: "Your Account Has Been Successfully Created"
+}
 
 const rejectionMessage = {
   message : "Thank you very much for attending the interview at Outsource Global Technologies Ltd"
@@ -50,4 +54,4 @@ const rejectionMessage = {
   subject: "Interview Results"
 }
 
-export { terminationMessage , promotionMessage, OfferMessage,acceptedOfferMessage,rejectionMessage, offerMessageFunc, ticketingMessage,resolvedTicketingMessage};
+export { terminationMessage , promotionMessage, OfferMessage,acceptedOfferMessage,rejectionMessage, offerMessageFunc, ticketingMessage,resolvedTicketingMessage, clientAccountActivationNotice};
