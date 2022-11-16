@@ -73,7 +73,7 @@ class ClientAccountService {
    
     private async mailSender(id: string, clientEmail: string): Promise<any> {
         const { host }: dbConfig = config.get('dbConfig');
-        const port = process.env.PORT
+        const port = 3001
         const url = `https://${host}:${port}/auth/activate?id=${id}`
         const html = `<p>${clientAccountActivationNotice.message}</p><a href=${url}>Click here</a>`
         return ClientEmail.sendMailToClient(clientEmail,"abubakar.moses@outsourceglobal.com",clientAccountActivationNotice.subject,clientAccountActivationNotice.message,html)
