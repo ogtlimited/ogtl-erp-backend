@@ -2,7 +2,7 @@
 import JobApplicantService from '@services/recruitment/job_applicant.service';
 import { NextFunction, Request, Response } from 'express';
 import { IJobApplicant } from '@interfaces/recruitment/job_applicant.interface';
-import { IJobApplicantPagination } from '@/interfaces/recruitment/job_applicant_pagination.interface';
+import { IJobApplicantPagination } from '@/interfaces/recruitment/job_applicant_pagination_filter.interface';
 import { CreateJobApplicantDto, UpdateJobApplicantDto } from '@dtos/recruitment/job_applicant.dto';
 import {IJobApplicationsTasks} from "@interfaces/recruitment/job-applications-task";
 import url from 'url';
@@ -13,7 +13,7 @@ class JobApplicantController {
   //Method for returning all job applicants
   public getJobApplicants = async (req, res:Response, next:NextFunction) =>{
     try {
-      const applicants: { jobApplicants: IJobApplicant[]; pagination: IJobApplicantPagination } = await this.jobApplicantService.getJobApplicants(req.query, req.query)
+      const applicants: { jobApplicants: IJobApplicant[]; pagination: IJobApplicantPagination } = await this.jobApplicantService.getJobApplicants(req.query)
       res.status(200).json({data:applicants})
     }catch (error) {
       next(error)
@@ -22,7 +22,7 @@ class JobApplicantController {
 
   public getJobApplicantsForRepSievers = async (req, res:Response, next:NextFunction) =>{
     try {
-      const applicants: { jobApplicants: IJobApplicant[]; pagination: IJobApplicantPagination } = await this.jobApplicantService.getJobApplicantsForRepSievers(req.user._id, req.query)
+      const applicants: { jobApplicants: IJobApplicant[]; pagination: IJobApplicantPagination } = await this.jobApplicantService.getJobApplicantsForRepSievers(req.query,req.user._id)
       res.status(200).json({data:applicants})
     }catch (error) {
       next(error)
