@@ -16,6 +16,10 @@ export class ClientAccountDto{
     @IsBoolean()
     @IsOptional()
     activated: boolean;
+    
+    @IsBoolean()
+    @IsOptional()
+    spammy: boolean;
 
     @IsString()
     @IsNotEmpty()
@@ -31,6 +35,10 @@ export class ClientAccountDto{
         @IsBoolean()
         @IsNotEmpty()
         activated: boolean;
+        
+        @IsBoolean()
+        @IsNotEmpty()
+        spammy: boolean;
     
         @IsString()
         @IsOptional()
