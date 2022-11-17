@@ -21,10 +21,15 @@ const clientAccountSchema :Schema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'Client',
       required: true,
+      unique: true
     },
     activated:{
       type: Boolean,
       default: false
+    },
+     spammy:{
+      type: Boolean,
+      default: true
     },
 
   },
