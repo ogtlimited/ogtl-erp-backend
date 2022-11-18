@@ -1,4 +1,4 @@
-import {IsString, IsNotEmpty, IsOptional, IsBoolean, IsEmail} from "class-validator"
+import {IsString, IsNotEmpty, IsOptional, IsBoolean, IsEmail, Length} from "class-validator"
 export class ClientAccountDto{
     @IsString()
     @IsNotEmpty()
@@ -29,7 +29,8 @@ export class ClientAccountDto{
     export class UpdateClientAccountDto{
     
         @IsString()
-        @IsOptional()
+        @IsNotEmpty()
+        @Length(8,40)
         password: string;
     
         @IsBoolean()
