@@ -54,7 +54,11 @@ class ClientAccountService {
         const findclientAccount = await this.clientAccount.findOne({_id: clientAccountId});
         if (!findclientAccount) throw new HttpException(404, "Client login details not found");
         payload.password = await bcrypt.hash(payload.password, salt)
-        const updateclientAccountDetails: IClientAccount = await this.clientAccount.findByIdAndUpdate(clientAccountId, payload, {new: true});
+        const updateclientAccountDetails: IClientAccount = await this.clientAccount.findByIdAndUpdate(clientAccountId, payload, 
+            {
+                new: true,
+                runValidators: true
+            });
         return updateclientAccountDetails;
     }
 
