@@ -2,10 +2,11 @@
 import { Router } from 'express';
 import { Routes } from '@interfaces/routes.interface';
 import ClientAccountController from '@/controllers/project/client_account.controller';
-
+import authMiddleware from '@middlewares/auth.middleware';
+import permissionMiddleware from "@middlewares/permission.middleware";
 
 class ClientAccountActivationRoute implements Routes {
-  public path = '/api/client_status';
+  public path = '/api/activate/client-account';
   public router = Router();
   public clientAccount = new ClientAccountController();
 
@@ -14,7 +15,7 @@ class ClientAccountActivationRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.post(`${this.path}/:clientAccountId`,this.clientAccount.activatingClientAccount);
+    this.router.patch(`${this.path}/:clientAccountId`,[authMiddleware], this.clientAccount.activateClientAccount);
   }
 }
 
