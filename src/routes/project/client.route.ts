@@ -9,7 +9,6 @@ import ClientController from '@/controllers/project/client.controller';
 
 class ClientRoute implements Routes {
   public path = '/api/client';
-  public project_path = '/api/project';
   public router = Router();
   public client = new ClientController();
 
@@ -20,7 +19,6 @@ class ClientRoute implements Routes {
   private initializeRoutes() {
     this.router.get(`${this.path}`, this.client.getClients);
     this.router.get(`${this.path}/:clientId`, this.client.getClient);
-    this.router.get(`${this.project_path}/:clientId`, this.client.getClientProjects);
     this.router.post(`${this.path}`, validationMiddleware(CreateClientDto, 'body'), this.client.createClient);
     this.router.patch(`${this.path}/:clientId`, validationMiddleware(UpdateClientDto, 'body'), this.client.updateClient);
     this.router.delete(`${this.path}/:clientId`, this.client.deleteClient);
