@@ -1,8 +1,10 @@
 /* eslint-disable prettier/prettier */
 import { Router } from 'express';
-
 import { Routes } from '@interfaces/routes.interface';
 import ClientController from '@/controllers/project/client.controller';
+import authMiddleware from '@middlewares/auth.middleware';
+import permissionMiddleware from "@middlewares/permission.middleware";
+
 
 
 class ClientProjectsRoute implements Routes {
@@ -15,7 +17,7 @@ class ClientProjectsRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}/:clientId`, this.client.getClientProjects);
+    this.router.get(`${this.path}/:clientId`, [authMiddleware], this.client.getClientProjects);
   }
 }
 
