@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { NextFunction, Request, Response } from 'express';
-import { ClientAccountDto, UpdateClientAccountDto } from '@/dtos/project/client_account.dto'; 
+import { ClientAccountDto, UpdateClientAccountDto, ResetClientAccountPasswordDto } from '@/dtos/project/client_account.dto'; 
 import { IClientAccount } from '@/interfaces/project-interface/client_account.interface'; 
 import ClientAccountService from '@/services/project/client_account.service';
 
@@ -34,7 +34,18 @@ class ClientAccountController {
         try {
             const payload: ClientAccountDto = req.body;
             const newClientAccount: IClientAccount = await this.clientAccountService.createClientAccount(payload);
-            res.status(201).json({ data: newClientAccount, message: 'created' });
+            res.status(201).json({ data: newClientAccount, message: 'created'});
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public resetClientAccountPassword = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const clientAccountId: string = req.params.clientAccountId;
+            const payload: ResetClientAccountPasswordDto = req.body;
+            await this.clientAccountService.updateClientAccount(clientAccountId, payload);
+            res.status(200).json({ success: true, message: 'updated' });
         } catch (error) {
             next(error);
         }
@@ -45,27 +56,27 @@ class ClientAccountController {
             const clientAccountId: string = req.params.clientAccountId;
             const payload: UpdateClientAccountDto = req.body;
             const updateClientAccount: IClientAccount = await this.clientAccountService.updateClientAccount(clientAccountId, payload);
-            res.status(200).json({ data: updateClientAccount, message: 'updated' });
+            res.status(200).json({ success: true, message: 'updated' });
         } catch (error) {
             next(error);
         }
     };
 
-    public activatingClientAccount = async (req: Request, res: Response, next: NextFunction) => {
+    public activateClientAccount = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const clientAccountId: string = req.params.clientAccountId;
-            const updateClientAccount: IClientAccount = await this.clientAccountService.activatingClientAccount(clientAccountId);
-            res.status(200).json({ data: updateClientAccount, message: 'updated' });
+            await this.clientAccountService.activateClientAccount(clientAccountId);
+            res.status(200).json({ success: true, message: 'activated' });
         } catch (error) {
             next(error);
         }
     };
 
-    public deleteClientAccount = async (req: Request, res: Response, next: NextFunction) => {
+    public deactivateClientAccount = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const id: string = req.params.clientAccountId;
-            const dropClientAccount: IClientAccount = await this.clientAccountService.deleteClientAccount(id);
-            res.status(200).json({ data: dropClientAccount, message: 'deleted' });
+            const clientAccountId: string = req.params.clientAccountId;
+            await this.clientAccountService.deactivateClientAccount(clientAccountId);
+            res.status(200).json({ success: true, message: 'deactivated' });
         } catch (error) {
             next(error);
         }
