@@ -40,10 +40,20 @@ function offerMessageFunc(url) {
     }
 
 }
-const clientAccountActivationNotice = {
-  message: `We are pleased to inform you that an account has been created for you by Outsource Global Technology Limited. Please click on the link below to activate your account, and change your password. Thank you.`,
-  subject: "Your Account Has Been Successfully Created"
+
+function clientAccountActivationNotice(username){
+ const  message = "We are pleased to inform you that a client account has been created for you by Outsource Global Technology Limited."
+ +"<br>" + " Please click on the link below to activate your account, and change your password." 
+ +"<br><br>" + " Your username is: "+ username
+ +"<br><br>"
+  const subject = "Your Account Has Been Successfully Created"
+  return {
+    message,
+    subject
+  }
 }
+
+ 
 
 const rejectionMessage = {
   message : "Thank you very much for attending the interview at Outsource Global Technologies Ltd"
