@@ -1,5 +1,6 @@
 export interface IClientAccount{
-  user_name: string
+  _id?: string;
+  user_name: string;
   email: string;
   password?: string;
   activated?: boolean;
