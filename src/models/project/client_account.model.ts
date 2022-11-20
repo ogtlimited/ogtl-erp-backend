@@ -16,7 +16,7 @@ const clientAccountSchema :Schema = new Schema(
     password:{
       type:String,
       default: "passwordOGTL",
-      minlength: 8
+      minlength: 8,
     },
     client_id:{
       type: Schema.Types.ObjectId,
