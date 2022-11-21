@@ -46,13 +46,13 @@ class ClientAccountService {
     public async resetClientAccountPassword(clientAccountId: string, payload: ClientAccountDto): Promise<IClientAccount> {
         const salt = await bcrypt.genSalt(10)
         if (isEmpty(payload)) throw new HttpException(400, "Bad request");
-        payload.password = await bcrypt.hash(payload.password, salt)
+        const hashedPassword = await bcrypt.hash(payload.password, salt)
         const findclientAccountAndResetPassword = await this.clientAccount.updateOne(
             {
             _id: clientAccountId
             },
             {
-                $set: {password: payload.password}
+                $set: {password: hashedPassword}
             });
             return findclientAccountAndResetPassword;
     }
