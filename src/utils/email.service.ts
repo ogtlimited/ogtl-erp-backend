@@ -1,5 +1,5 @@
 const { SocketLabsClient } = require('@socketlabs/email');
-class SendMail {
+class EmailService {
     private static client = new SocketLabsClient(parseInt(process.env.SOCKETLABS_SERVER_ID),process.env.SOCKETLABS_INJECTION_API_KEY);
     private static emailConstructor(email, from='ERP@example.com', subject, textBody, htmlBody, mType='basic') {
         return {
@@ -13,8 +13,8 @@ class SendMail {
     }
 
     public static sendMail (to, from="ERP@example.com", subject, textBody, htmlBody, mType='basic'){
-        return SendMail.client.send(SendMail.emailConstructor(to, from, subject, textBody, htmlBody, mType))
+        return EmailService.client.send(EmailService.emailConstructor(to, from, subject, textBody, htmlBody, mType))
     }
 }
 
-export default SendMail;
+export default EmailService;
