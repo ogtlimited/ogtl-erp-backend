@@ -57,18 +57,6 @@ class ClientAccountService {
             return findclientAccountAndResetPassword;
     }
 
-    public async updateClientAccount(clientAccountId: string, payload: ClientAccountDto): Promise<IClientAccount> {
-        if (isEmpty(payload)) throw new HttpException(400, "Bad request");
-        const findclientAccount = await this.clientAccount.findOne({_id: clientAccountId});
-        if (!findclientAccount) throw new HttpException(404, "Client login details not found");
-        const updateclientAccountDetails: IClientAccount = await this.clientAccount.findByIdAndUpdate(clientAccountId, payload, 
-            {
-                new: true,
-                runValidators: true
-            });
-        return updateclientAccountDetails;
-    }
-
     public async activateClientAccount(clientAccountId: string): Promise<IClientAccount> {  
         const findclientAccountRecords: IClientAccount = await this.clientAccount.updateOne({_id: clientAccountId}, {$set:{activated: true}});
         if(!findclientAccountRecords) throw new HttpException(404, "Cient account details not found");
