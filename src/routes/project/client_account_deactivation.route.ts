@@ -15,7 +15,7 @@ class ClientAccountDeactivationRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.patch(`${this.path}/:clientAccountId`,[authMiddleware], this.clientAccount.deactivateClientAccount);
+    this.router.patch(`${this.path}/:clientAccountId`,[authMiddleware,  permissionMiddleware('HR')], this.clientAccount.deactivateClientAccount);
   }
 }
 
