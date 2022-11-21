@@ -7,7 +7,7 @@ import clientAccountModel from '@/models/project/client_account.model';
 import clientModel from '@/models/project/client.model';
 const bcrypt = require('bcrypt')
 import { clientAccountActivationNotice } from '@/utils/message';
-import SendMail from '@/utils/email.service';
+import EmailService from '@/utils/email.service';
 import { dbConfig } from '@interfaces/db.interface';
 import config from 'config';
 const jwt  = require('jsonwebtoken');
@@ -27,7 +27,7 @@ class ClientAccountService {
         if (isEmpty(clientId)) throw new HttpException(400, "Missing Id Params");
         const findclient = await this.client.findOne({_id: clientId});
         const findclientAccount = await this.clientAccount.findOne({client_id: findclient._id});
-        if (!findclientAccount) throw new HttpException(404, "Client login details not found");
+        if (!findclientAccount) throw new HttpException(404, "Client login not found");
         return findclientAccount;
     }
 
@@ -45,6 +45,8 @@ class ClientAccountService {
     }
     public async resetClientAccountPassword(clientAccountId: string, payload: ClientAccountDto): Promise<IClientAccount> {
         const salt = await bcrypt.genSalt(10)
+        const clientAccountExist = await this.clientAccount.findOne({email: payload.email})
+        if(!clientAccountExist) throw new HttpException(404, "Cient account not found");
         if (isEmpty(payload)) throw new HttpException(400, "Bad request");
         const hashedPassword = await bcrypt.hash(payload.password, salt)
         const findclientAccountAndResetPassword = await this.clientAccount.updateOne(
@@ -59,13 +61,13 @@ class ClientAccountService {
 
     public async activateClientAccount(clientAccountId: string): Promise<IClientAccount> {  
         const findclientAccountRecords: IClientAccount = await this.clientAccount.updateOne({_id: clientAccountId}, {$set:{activated: true}});
-        if(!findclientAccountRecords) throw new HttpException(404, "Cient account details not found");
+        if(!findclientAccountRecords) throw new HttpException(404, "Cient account not found");
         return findclientAccountRecords;
     }
 
     public async deactivateClientAccount(clientAccountId: string): Promise<IClientAccount> {
         const findclientAccountRecords: IClientAccount = await this.clientAccount.updateOne({_id: clientAccountId}, {$set:{activated: false}});
-        if(!findclientAccountRecords) throw new HttpException(404, "Cient account details not found");
+        if(!findclientAccountRecords) throw new HttpException(404, "Cient account not found");
         return findclientAccountRecords;
     }
    
@@ -75,7 +77,7 @@ class ClientAccountService {
         const port = 3001
         const url = `http://${host}:${port}/auth/activate?id=${id}`
         const html = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${clientAccountActivationNoticeObj.message}<a href=${url}>Click here to change your password</a>`
-        return SendMail.sendMail(clientEmail,"hr@outsourceglobal.com",clientAccountActivationNoticeObj.subject,clientAccountActivationNoticeObj.message,html)
+        return EmailService.sendMail(clientEmail,"hr@outsourceglobal.com",clientAccountActivationNoticeObj.subject,clientAccountActivationNoticeObj.message,html)
     }
     
     private async createJwtToken(id: string, expiresIn: number = 24*60*60): Promise<any> {
