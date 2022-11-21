@@ -18,7 +18,7 @@ class ResetClientAccountPasswordRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.patch(`${this.path}/:clientAccountId`,[authMiddleware, validationMiddleware(ResetClientAccountPasswordDto, 'body')], this.clientAccount.resetClientAccountPassword);
+    this.router.patch(`${this.path}/:clientAccountId`,[validationMiddleware(ResetClientAccountPasswordDto, 'body')], this.clientAccount.resetClientAccountPassword);
   }
 }
 
