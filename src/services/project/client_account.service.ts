@@ -45,8 +45,8 @@ class ClientAccountService {
     }
     public async resetClientAccountPassword(clientAccountId: string, payload: ClientAccountDto): Promise<IClientAccount> {
         const salt = await bcrypt.genSalt(10)
-        const clientAccountExist = await this.clientAccount.findOne({email: payload.email})
-        if(!clientAccountExist) throw new HttpException(404, "Cient account not found");
+        const clientAccountExist = await this.clientAccount.findOne({_id: clientAccountId})
+        if(!clientAccountExist) throw new HttpException(404, "Client account not found");
         if (isEmpty(payload)) throw new HttpException(400, "Bad request");
         const hashedPassword = await bcrypt.hash(payload.password, salt)
         const findclientAccountAndResetPassword = await this.clientAccount.updateOne(
@@ -61,13 +61,13 @@ class ClientAccountService {
 
     public async activateClientAccount(clientAccountId: string): Promise<IClientAccount> {  
         const findclientAccountRecords: IClientAccount = await this.clientAccount.updateOne({_id: clientAccountId}, {$set:{activated: true}});
-        if(!findclientAccountRecords) throw new HttpException(404, "Cient account not found");
+        if(!findclientAccountRecords) throw new HttpException(404, "Client account not found");
         return findclientAccountRecords;
     }
 
     public async deactivateClientAccount(clientAccountId: string): Promise<IClientAccount> {
         const findclientAccountRecords: IClientAccount = await this.clientAccount.updateOne({_id: clientAccountId}, {$set:{activated: false}});
-        if(!findclientAccountRecords) throw new HttpException(404, "Cient account not found");
+        if(!findclientAccountRecords) throw new HttpException(404, "Client account not found");
         return findclientAccountRecords;
     }
    
