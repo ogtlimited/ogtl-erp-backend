@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { NextFunction, Request, Response } from 'express';
-import { ClientAccountDto, UpdateClientAccountDto, ResetClientAccountPasswordDto } from '@/dtos/project/client_account.dto'; 
+import { ClientAccountDto, ResetClientAccountPasswordDto } from '@/dtos/project/client_account.dto'; 
 import { IClientAccount } from '@/interfaces/project-interface/client_account.interface'; 
 import ClientAccountService from '@/services/project/client_account.service';
 
@@ -45,17 +45,6 @@ class ClientAccountController {
             const clientAccountId: string = req.params.clientAccountId;
             const payload: ResetClientAccountPasswordDto = req.body;
             await this.clientAccountService.resetClientAccountPassword(clientAccountId, payload);
-            res.status(200).json({ success: true, message: 'updated' });
-        } catch (error) {
-            next(error);
-        }
-    };
-
-    public updateClientAccount = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const clientAccountId: string = req.params.clientAccountId;
-            const payload: UpdateClientAccountDto = req.body;
-            const updateClientAccount: IClientAccount = await this.clientAccountService.updateClientAccount(clientAccountId, payload);
             res.status(200).json({ success: true, message: 'updated' });
         } catch (error) {
             next(error);
