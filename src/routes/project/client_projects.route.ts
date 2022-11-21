@@ -17,7 +17,7 @@ class ClientProjectsRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}/:clientId`, [authMiddleware], this.client.getClientProjects);
+    this.router.get(`${this.path}/:clientId`, [authMiddleware, permissionMiddleware('HR')], this.client.getClientProjects);
   }
 }
 
