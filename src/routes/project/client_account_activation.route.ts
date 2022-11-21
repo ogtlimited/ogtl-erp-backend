@@ -15,7 +15,7 @@ class ClientAccountActivationRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.patch(`${this.path}/:clientAccountId`,[authMiddleware], this.clientAccount.activateClientAccount);
+    this.router.patch(`${this.path}/:clientAccountId`,[authMiddleware, permissionMiddleware('HR')], this.clientAccount.activateClientAccount);
   }
 }
 
