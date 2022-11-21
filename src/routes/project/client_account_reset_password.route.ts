@@ -2,7 +2,7 @@
 import { Router } from 'express';
 import { Routes } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
-import {ResetClientAccountPasswordDto } from '@/dtos/project/client_account.dto';
+import { ResetClientAccountPasswordDto } from '@/dtos/project/client_account.dto';
 import ClientAccountController from '@/controllers/project/client_account.controller';
 import authMiddleware from '@middlewares/auth.middleware';
 import permissionMiddleware from "@middlewares/permission.middleware";
