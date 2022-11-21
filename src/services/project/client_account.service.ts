@@ -52,7 +52,7 @@ class ClientAccountService {
             _id: clientAccountId
             },
             {
-                $set: {password: hashedPassword}
+                $set: {password: hashedPassword, activated: payload.activated, spammy: payload.spammy}
             });
             return findclientAccountAndResetPassword;
     }
