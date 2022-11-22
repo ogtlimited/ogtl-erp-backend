@@ -342,7 +342,6 @@ class EmployeeService {
                    }
                  }
                }
-             
     ]);
     return {headCount}
   }
@@ -362,11 +361,11 @@ class EmployeeService {
   }
 
   public async getGenderDiversityRatio(): Promise<any>{
-      const gender = await Promise.all([this.getGenderCount()])
-      const numberOfMales = gender.map<any>(value => {
+      const getAllGender = await Promise.all([this.getGenderCount()])
+      const numberOfMales = getAllGender.map<any>(value => {
         return value.genderCount.find(gender => gender._id==="male")
       })[0].total
-      const numberOfFemales = gender.map<any>(value => {
+      const numberOfFemales = getAllGender.map<any>(value => {
         return value.genderCount.find(gender => gender._id==="female")
       })[0].total
       const genderRatio = Math.ceil((numberOfMales/numberOfFemales)*100)
