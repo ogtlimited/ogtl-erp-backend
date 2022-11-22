@@ -356,12 +356,7 @@ class EmployeeService {
               '$count': {}
             }
           }
-        },
-        {
-          $unwind: {path :"$department",
-          preserveNullAndEmptyArrays: true
-         }
-         }
+        }
     ]);
     return genderCount
   }
