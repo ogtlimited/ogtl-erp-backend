@@ -332,6 +332,46 @@ class EmployeeService {
   genEmail(first_name: string, last_name: string) {
     return first_name.toLowerCase() + '.' + last_name.toLowerCase() + '@outsourceglobal.com';
   }
+
+  public async getHeadCount(): Promise<any>{
+    const headCount: any = await this.Employees.aggregate([
+      {
+        $facet: {
+          'Head count': [
+               {
+                 '$group': {
+                   '_id': '$status', 
+                   'total': {
+                     '$count': {}
+                   }
+                 }
+               }
+             ]
+        }}
+    ]);
+    return headCount;
+
+  }
+
+  public async getGenderCount(): Promise<any>{
+    const genderCount: any = await this.Employees.aggregate([
+      {
+        $facet: {
+          'Head count': [
+               {
+                 '$group': {
+                   '_id': '$gender', 
+                   'total': {
+                     '$count': {}
+                   }
+                 }
+               }
+             ]
+        }}
+    ]);
+    return genderCount;
+
+  }
 }
 
 export default EmployeeService;
