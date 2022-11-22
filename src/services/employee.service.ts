@@ -334,9 +334,6 @@ class EmployeeService {
 
   public async getEmployeesHeadCount(): Promise<any>{
     const headCount: any = await this.Employees.aggregate([
-      {
-        $facet: {
-          'Head count': [
                {
                  '$group': {
                    '_id': '$status', 
@@ -345,34 +342,28 @@ class EmployeeService {
                    }
                  }
                }
-             ]
-        }}
+             
     ]);
-    return headCount;
+    return {headCount}
   }
 
   public async getGenderCount(): Promise<any>{
     const genderCount: any = await this.Employees.aggregate([
-      {
-        $facet: {
-          'Head count': [
-               {
-                 '$group': {
-                   '_id': '$gender', 
-                   'total': {
-                     '$count': {}
-                   }
-                 }
-               }
-             ]
-        }}
+        {
+          '$group': {
+            '_id': '$gender', 
+            'total': {
+              '$count': {}
+            }
+          }
+        }
     ]);
-    return genderCount;
+    return genderCount
   }
 
-  private async getAllDepartments(): Promise<any> {
-    const allDepartments: any = await this.Department.find()
-    return allDepartments
+  public async getGenderDiversityRatio(): Promise<any>{
+    const genderRatio = this.getGenderCount()
+    return genderRatio;
   }
 
   public async countEmployeesByDepartment(): Promise<any>{
@@ -389,11 +380,8 @@ class EmployeeService {
         $unwind: {path :"$department",
         preserveNullAndEmptyArrays: true
        }
-       },
-      {
-        $facet: {
-          'Employees By Department': [
-               {
+       }, 
+       {
                  '$group': {
                    '_id': '$department', 
                    'total': {
@@ -401,10 +389,9 @@ class EmployeeService {
                    }
                  }
                }
-             ]
-        }}
+             
     ]);
-    return employeesByDepartment
+    return {employeesByDepartment}
   }
 }
 
