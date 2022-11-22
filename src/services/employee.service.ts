@@ -358,7 +358,7 @@ class EmployeeService {
           }
         }
     ]);
-    return genderCount
+    return {genderCount}
   }
 
   public async getGenderDiversityRatio(): Promise<any>{
@@ -382,13 +382,13 @@ class EmployeeService {
        }
        }, 
        {
-                 '$group': {
-                   '_id': '$department', 
-                   'total': {
-                     '$count': {}
-                   }
-                 }
-               }
+          '$group': {
+            '_id': '$department', 
+            'total': {
+              '$count': {}
+            }
+          }
+        }
              
     ]);
     return {employeesByDepartment}
