@@ -37,7 +37,6 @@ class EmployeeService {
   public employeeStatModel = EmployeeStatModel;
   public TerminationService = new TerminationService();
   private idRequestService = new IdRequestService();
-
   public async findAllEmployee(): Promise<Employee[]> {
     const Employees: Employee[] = await this.Employees.find().populate('default_shift designation department branch projectId reports_to role');
     return Employees;
@@ -333,7 +332,7 @@ class EmployeeService {
     return first_name.toLowerCase() + '.' + last_name.toLowerCase() + '@outsourceglobal.com';
   }
 
-  public async getHeadCount(): Promise<any>{
+  public async getEmployeesHeadCount(): Promise<any>{
     const headCount: any = await this.Employees.aggregate([
       {
         $facet: {
@@ -350,7 +349,6 @@ class EmployeeService {
         }}
     ]);
     return headCount;
-
   }
 
   public async getGenderCount(): Promise<any>{
@@ -370,7 +368,43 @@ class EmployeeService {
         }}
     ]);
     return genderCount;
+  }
 
+  private async getAllDepartments(): Promise<any> {
+    const allDepartments: any = await this.Department.find()
+    return allDepartments
+  }
+
+  public async countEmployeesByDepartment(): Promise<any>{
+    const employeesByDepartment: any = await this.Employees.aggregate([
+      {
+        $lookup:{
+          from: "departments",
+          localField: "department",
+          foreignField: "_id",
+          as: "department"
+          }
+      },
+      {
+        $unwind: {path :"$department",
+        preserveNullAndEmptyArrays: true
+       }
+       },
+      {
+        $facet: {
+          'Employees By Department': [
+               {
+                 '$group': {
+                   '_id': '$department', 
+                   'total': {
+                     '$count': {}
+                   }
+                 }
+               }
+             ]
+        }}
+    ]);
+    return employeesByDepartment
   }
 }
 
