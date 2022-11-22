@@ -356,14 +356,19 @@ class EmployeeService {
               '$count': {}
             }
           }
-        }
+        },
+        {
+          $unwind: {path :"$department",
+          preserveNullAndEmptyArrays: true
+         }
+         }
     ]);
-    return {genderCount}
+    return genderCount
   }
 
   public async getGenderDiversityRatio(): Promise<any>{
     const genderRatio = this.getGenderCount()
-    return genderRatio;
+    return genderRatio
   }
 
   public async countEmployeesByDepartment(): Promise<any>{
