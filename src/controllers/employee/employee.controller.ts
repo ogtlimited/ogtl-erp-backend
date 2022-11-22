@@ -117,19 +117,26 @@ class EmployeesController {
     }
   };
 
-  public getHeadCount = async (req: Request, res: Response, next: NextFunction) => {
+  public getEmployeesHeadCount = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const headCount: Employee = await this.EmployeeService.getHeadCount();
+      const headCount: Employee = await this.EmployeeService.getEmployeesHeadCount();
       res.status(200).json({ data: headCount, success: 'true' });
     } catch (error) {
       next(error);
     }
   }
-
   public getGenderCount = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const genderCount: Employee = await this.EmployeeService.getGenderCount();
       res.status(200).json({ data: genderCount, success: 'true' });
+    } catch (error) {
+      next(error);
+    }
+  }
+  public countEmployeesByDepartment = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const employeesByDepartment: Employee = await this.EmployeeService.countEmployeesByDepartment();
+      res.status(200).json({ data: employeesByDepartment, success: 'true' });
     } catch (error) {
       next(error);
     }
