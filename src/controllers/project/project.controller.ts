@@ -158,6 +158,15 @@ class ProjectController {
             next(error);
         }
     };
+
+    public getProjectsStatus = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const projectsStatus: IProject = await this.projectService.getProjectsStatus();
+            res.status(200).json({ data: projectsStatus, success: true });
+        } catch (error) {
+            next(error);
+        }
+    };
 }
 
 export default ProjectController;
