@@ -369,7 +369,7 @@ class EmployeeService {
       const numberOfFemales = gender.map<any>(value => {
         return value.genderCount.find(gender => gender._id==="female")
       })[0].total
-      const genderRatio = Math.ceil((numberOfMales/numberOfFemales))*100
+      const genderRatio = Math.ceil((numberOfMales/numberOfFemales)*100)
       return {genderRatio}
   }
 
