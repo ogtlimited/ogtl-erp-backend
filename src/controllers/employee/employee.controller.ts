@@ -85,9 +85,6 @@ class EmployeesController {
     }
   };
 
-
-
-
   public teamLeads = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const leads = await this.EmployeeService.teamLeads();
@@ -129,6 +126,14 @@ class EmployeesController {
     try {
       const genderCount: Employee = await this.EmployeeService.getGenderCount();
       res.status(200).json({ data: genderCount, success: 'true' });
+    } catch (error) {
+      next(error);
+    }
+  }
+  public getGenderDiversityRatio = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const genderRatio: Employee = await this.EmployeeService.getGenderDiversityRatio();
+      res.status(200).json({ data: genderRatio, success: 'true' });
     } catch (error) {
       next(error);
     }
