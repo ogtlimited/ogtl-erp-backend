@@ -358,7 +358,7 @@ class EmployeeService {
           }
         }
     ]);
-    return genderCount
+    return {genderCount}
   }
 
   public async getGenderDiversityRatio(): Promise<any>{
