@@ -49,8 +49,6 @@ class ClientAccountService {
         const token = payload.token;
         const {clientAccount_id} = await this.verifyJwtToken(token)
         const salt = await bcrypt.genSalt(10)
-        const clientAccountExist = await this.clientAccount.findOne({_id: clientAccount_id})
-        if(!clientAccountExist) throw new HttpException(404, "Client account not found");
         if (isEmpty(payload)) throw new HttpException(400, "Bad request");
         const hashedPassword = await bcrypt.hash(payload.password, salt)
         const findclientAccountAndResetPassword = await this.clientAccount.updateOne(
