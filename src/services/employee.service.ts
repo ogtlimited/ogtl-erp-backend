@@ -334,14 +334,14 @@ class EmployeeService {
 
   public async getEmployeesHeadCount(): Promise<any>{
     const headCount: any = await this.Employees.aggregate([
-               {
-                 '$group': {
-                   '_id': '$status', 
-                   'total': {
-                     '$count': {}
-                   }
-                 }
-               }
+        {
+          '$group': {
+            '_id': '$status', 
+            'total': {
+              '$count': {}
+            }
+          }
+        }
     ]);
     return {headCount}
   }
@@ -378,33 +378,33 @@ class EmployeeService {
   }
 
   public async countEmployeesByDepartment(): Promise<any>{
-    const employeesByDepartment: any = await this.Employees.aggregate([
-      {
-        '$match':{
-          'status': 'active'
-        }
-      },
-      {
-        $lookup:{
-          from: "departments",
-          localField: "department",
-          foreignField: "_id",
-          as: "department"
-          }
-      },
-      {
-        $unwind: {path :"$department",
-        preserveNullAndEmptyArrays: true
-       }
-       }, 
-       {
-          '$group': {
-            '_id': '$department', 
-            'total': {
-              '$count': {}
+      const employeesByDepartment: any = await this.Employees.aggregate([
+          {
+            '$match':{
+              'status': 'active'
             }
+          },
+          {
+            $lookup:{
+              from: "departments",
+              localField: "department",
+              foreignField: "_id",
+              as: "department"
+              }
+          },
+          {
+            $unwind: {path :"$department",
+            preserveNullAndEmptyArrays: true
           }
-        }       
+          }, 
+          {
+              '$group': {
+                '_id': '$department', 
+                'total': {
+                  '$count': {}
+                }
+              }
+            }       
     ]);
     return {employeesByDepartment}
   }
