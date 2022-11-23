@@ -77,8 +77,4 @@ export class UpdateClientDto {
   @IsString()
   public company : string;
 
-  @IsOptional()
-  @IsBoolean()
-  public deactivated : boolean;
-
 }
