@@ -15,14 +15,6 @@ export class ClientAccountDto{
         email: string;
 
         @IsString()
-        @IsOptional()
-        password: string;
-
-        @IsBoolean()
-        @IsOptional()
-        activated: boolean;
-
-        @IsString()
         @IsNotEmpty()
         client_id: string
         }
@@ -44,16 +36,8 @@ export class ClientAccountDto{
         @IsNotEmpty()
         @Length(8,40)
         password: string;
-    
-        @IsBoolean()
-        @IsNotEmpty()
-        activated: boolean;
-        
-        @IsBoolean()
-        @IsNotEmpty()
-        spammy: boolean;
-    
+
         @IsString()
-        @IsOptional()
-        client_id: string
+        @IsNotEmpty()
+        token: string
         }
