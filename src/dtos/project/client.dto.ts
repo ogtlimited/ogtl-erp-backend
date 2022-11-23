@@ -26,7 +26,6 @@ export class CreateClientDto {
   @IsString()
   public code : string;
 
-
   @IsNotEmpty()
   @IsString()
   public state : string;
@@ -39,9 +38,6 @@ export class CreateClientDto {
   @IsString()
   public company : string;
 
-  @IsOptional()
-  @IsBoolean()
-  public deactivated : boolean;
 }
 
 export class UpdateClientDto {
