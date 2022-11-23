@@ -41,9 +41,10 @@ function offerMessageFunc(url) {
 
 }
 
-function clientAccountActivationNotice(username){
+function clientAccountActivationNotice(username, linkExpiresIn){
+ const convertTodays = linkExpiresIn/86400
  const  message = "We are pleased to inform you that a client account has been created for you by Outsource Global Technology Limited."
- +"<br>" + " Please click on the link below to activate your account, and change your password." 
+ +"<br>" + " Please click on the link below to activate your account, and change your password. The link expires in "+convertTodays+" day(s)"
  +"<br><br>" + " Your username is: "+ username
  +"<br><br>"
   const subject = "Your Account Has Been Successfully Created"
