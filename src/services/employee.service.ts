@@ -349,6 +349,11 @@ class EmployeeService {
   public async getGenderCount(): Promise<any>{
     const genderCount: any = await this.Employees.aggregate([
         {
+            '$match':{
+              'status': 'active'
+            }
+        },
+        {
           '$group': {
             '_id': '$gender', 
             'total': {
@@ -374,6 +379,11 @@ class EmployeeService {
 
   public async countEmployeesByDepartment(): Promise<any>{
     const employeesByDepartment: any = await this.Employees.aggregate([
+      {
+        '$match':{
+          'status': 'active'
+        }
+      },
       {
         $lookup:{
           from: "departments",
