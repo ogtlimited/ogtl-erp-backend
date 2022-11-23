@@ -21,10 +21,6 @@ export class ClientAccountDto{
         @IsBoolean()
         @IsOptional()
         activated: boolean;
-        
-        @IsBoolean()
-        @IsOptional()
-        spammy: boolean;
 
         @IsString()
         @IsNotEmpty()
