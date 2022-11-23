@@ -4,7 +4,6 @@ import { Routes } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
 import { ResetClientAccountPasswordDto } from '@/dtos/project/client_account.dto';
 import ClientAccountController from '@/controllers/project/client_account.controller';
-import authMiddleware from '@middlewares/auth.middleware';
 import permissionMiddleware from "@middlewares/permission.middleware";
 
 
@@ -18,7 +17,7 @@ class ResetDefaultClientAccountPasswordRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.post(`${this.path}`,[authMiddleware,  permissionMiddleware('HR'), validationMiddleware(ResetClientAccountPasswordDto, 'body')], this.clientAccount.resetDefaultClientAccountPasssword);
+    this.router.post(`${this.path}`,[permissionMiddleware('HR'), validationMiddleware(ResetClientAccountPasswordDto, 'body')], this.clientAccount.resetDefaultClientAccountPasssword);
   }
 }
 
