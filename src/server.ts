@@ -61,7 +61,7 @@ import ClientAccountRoute from './routes/project/client_account.route';
 import ClientProjectsRoute from './routes/project/client_projects.route';
 import ClientAccountActivationRoute from './routes/project/client_account_activation.route';
 import ClientAccountDeactivationRoute from './routes/project/client_account_deactivation.route';
-import ResetClientAccountPasswordRoute from './routes/project/client_account_reset_password.route';
+import ResetDefaultClientAccountPasswordRoute from './routes/project/client_account_reset_password.route';
 import AssetAssignmentRoute from '@/routes/assets/asset-assignment.route';
 import ProjectRoute from '@routes/project/project.route';
 import documentRoute from '@routes/project/document.route';
@@ -159,7 +159,7 @@ const app = new App([
   new ClientProjectsRoute(),
   new ClientAccountActivationRoute(),
   new ClientAccountDeactivationRoute(),
-  new ResetClientAccountPasswordRoute(),
+  new ResetDefaultClientAccountPasswordRoute(),
   new AssetAssignmentRoute(),
   new CoachingFormRoute(),
   new scoreCardRoute(),
