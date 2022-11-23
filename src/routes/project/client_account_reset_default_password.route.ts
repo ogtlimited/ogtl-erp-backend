@@ -17,7 +17,7 @@ class ResetDefaultClientAccountPasswordRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.post(`${this.path}`,[permissionMiddleware('HR'), validationMiddleware(ResetClientAccountPasswordDto, 'body')], this.clientAccount.resetDefaultClientAccountPasssword);
+    this.router.post(`${this.path}`,[validationMiddleware(ResetClientAccountPasswordDto, 'body')], this.clientAccount.resetDefaultClientAccountPasssword);
   }
 }
 
