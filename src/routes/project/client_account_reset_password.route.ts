@@ -8,7 +8,7 @@ import authMiddleware from '@middlewares/auth.middleware';
 import permissionMiddleware from "@middlewares/permission.middleware";
 
 
-class ResetClientAccountPasswordRoute implements Routes {
+class ResetDefaultClientAccountPasswordRoute implements Routes {
   public path = '/api/reset-password/client-account';
   public router = Router();
   public clientAccount = new ClientAccountController();
@@ -18,8 +18,8 @@ class ResetClientAccountPasswordRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.patch(`${this.path}/:clientAccountId`,[validationMiddleware(ResetClientAccountPasswordDto, 'body')], this.clientAccount.resetClientAccountPassword);
+    this.router.post(`${this.path}`,[authMiddleware, validationMiddleware(ResetClientAccountPasswordDto, 'body')], this.clientAccount.resetDefaultClientAccountPasssword);
   }
 }
 
-export default ResetClientAccountPasswordRoute;
+export default ResetDefaultClientAccountPasswordRoute;
