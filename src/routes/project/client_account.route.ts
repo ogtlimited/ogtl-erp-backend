@@ -8,7 +8,7 @@ import authMiddleware from '@middlewares/auth.middleware';
 import permissionMiddleware from "@middlewares/permission.middleware";
 
 class ClientAccountRoute implements Routes {
-  public path = '/api/client-accounts';
+  public path = '/api/clients-accounts';
   public router = Router();
   public clientAccount = new ClientAccountController();
 
@@ -19,7 +19,7 @@ class ClientAccountRoute implements Routes {
   private initializeRoutes() {
     this.router.get(this.path,[authMiddleware, permissionMiddleware('HR')], this.clientAccount.getAllClientsAccounts);
     this.router.get(`${this.path}/:clientId`, [authMiddleware,  permissionMiddleware('HR')], this.clientAccount.getClientAccount);
-    this.router.post(`${this.path}`, [authMiddleware,  permissionMiddleware('HR'), validationMiddleware(ClientAccountDto, 'body')], this.clientAccount.createClientAccount);
+    this.router.post(`${this.path}/client-account`, [authMiddleware,  permissionMiddleware('HR'), validationMiddleware(ClientAccountDto, 'body')], this.clientAccount.createClientAccount);
   }
 }
 
