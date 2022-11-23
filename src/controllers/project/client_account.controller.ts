@@ -40,11 +40,10 @@ class ClientAccountController {
         }
     };
 
-    public resetClientAccountPassword = async (req: Request, res: Response, next: NextFunction) => {
+    public resetDefaultClientAccountPasssword = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const clientAccountId: string = req.params.clientAccountId;
             const payload: ResetClientAccountPasswordDto = req.body;
-            await this.clientAccountService.resetClientAccountPassword(clientAccountId, payload);
+            await this.clientAccountService.resetDefaultClientAccountPasssword(payload);
             res.status(200).json({ success: true, message: 'updated' });
         } catch (error) {
             next(error);
