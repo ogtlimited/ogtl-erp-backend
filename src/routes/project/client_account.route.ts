@@ -8,7 +8,7 @@ import authMiddleware from '@middlewares/auth.middleware';
 import permissionMiddleware from "@middlewares/permission.middleware";
 
 class ClientAccountRoute implements Routes {
-  public path = '/api/client_account';
+  public path = '/api/client-accounts';
   public router = Router();
   public clientAccount = new ClientAccountController();
 
