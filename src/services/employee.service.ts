@@ -404,8 +404,7 @@ class EmployeeService {
               '$count': {}
             }
           }
-        }
-             
+        }       
     ]);
     return {employeesByDepartment}
   }
