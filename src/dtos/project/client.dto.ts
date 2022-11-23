@@ -64,7 +64,6 @@ export class UpdateClientDto {
   @IsString()
   public code: string;
 
-
   @IsNotEmpty()
   @IsString()
   public state: string;
