@@ -37,7 +37,6 @@ class EmployeeService {
   public employeeStatModel = EmployeeStatModel;
   public TerminationService = new TerminationService();
   private idRequestService = new IdRequestService();
-
   public async findAllEmployee(): Promise<Employee[]> {
     const Employees: Employee[] = await this.Employees.find().populate('default_shift designation department branch projectId reports_to role');
     return Employees;
@@ -331,6 +330,83 @@ class EmployeeService {
   }
   genEmail(first_name: string, last_name: string) {
     return first_name.toLowerCase() + '.' + last_name.toLowerCase() + '@outsourceglobal.com';
+  }
+
+  public async getEmployeesHeadCount(): Promise<any>{
+    const headCount: any = await this.Employees.aggregate([
+        {
+          '$group': {
+            '_id': '$status', 
+            'total': {
+              '$count': {}
+            }
+          }
+        }
+    ]);
+    return {headCount}
+  }
+
+  public async getGenderCount(): Promise<any>{
+    const genderCount: any = await this.Employees.aggregate([
+        {
+            '$match':{
+              'status': 'active'
+            }
+        },
+        {
+          '$group': {
+            '_id': '$gender', 
+            'total': {
+              '$count': {}
+            }
+          }
+        }
+    ])
+    return {genderCount}
+  }
+
+  public async getGenderDiversityRatio(): Promise<any>{
+      const getAllGender = await Promise.all([this.getGenderCount()])
+      const numberOfMales = getAllGender.map<any>(value => {
+        return value.genderCount.find(gender => gender._id==="male")
+      })[0].total
+      const numberOfFemales = getAllGender.map<any>(value => {
+        return value.genderCount.find(gender => gender._id==="female")
+      })[0].total
+      const genderRatio = Math.ceil((numberOfMales/numberOfFemales)*100)
+      return {genderRatio}
+  }
+
+  public async countEmployeesByDepartment(): Promise<any>{
+      const employeesByDepartment: any = await this.Employees.aggregate([
+          {
+            '$match':{
+              'status': 'active'
+            }
+          },
+          {
+            $lookup:{
+              from: "departments",
+              localField: "department",
+              foreignField: "_id",
+              as: "department"
+              }
+          },
+          {
+            $unwind: {path :"$department",
+            preserveNullAndEmptyArrays: true
+          }
+          }, 
+          {
+              '$group': {
+                '_id': '$department', 
+                'total': {
+                  '$count': {}
+                }
+              }
+            }       
+    ]);
+    return {employeesByDepartment}
   }
 }
 

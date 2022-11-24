@@ -115,6 +115,26 @@ class TicketingService {
     return deleteTicketingById;
   }
 
+  public async getTicketsStatus(): Promise<any>{
+    const ticketsStatus: any = await this.ticketing.aggregate([
+      {
+        $facet: {
+          'Tickets status': [
+               {
+                 '$group': {
+                   '_id': '$status', 
+                   'total': {
+                     '$count': {}
+                   }
+                 }
+               }
+             ]
+        }}
+    ]);
+    return ticketsStatus;
+
+  }
+
 
 }
 
