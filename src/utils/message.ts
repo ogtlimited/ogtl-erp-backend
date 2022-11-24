@@ -41,6 +41,21 @@ function offerMessageFunc(url) {
 
 }
 
+function clientAccountActivationNotice(username, linkExpiresIn){
+ const convertTodays = linkExpiresIn/86400
+ const  message = "We are pleased to inform you that a client account has been created for you by Outsource Global Technology Limited."
+ +"<br>" + " Please click on the link below to activate your account, and change your password. The link expires in "+convertTodays+" day(s)"
+ +"<br><br>" + " Your username is: "+ username
+ +"<br><br>"
+  const subject = "Your Account Has Been Successfully Created"
+  return {
+    message,
+    subject
+  }
+}
+
+ 
+
 const rejectionMessage = {
   message : "Thank you very much for attending the interview at Outsource Global Technologies Ltd"
   + "</br>" +"We regret to inform you that after careful consideration we must advise that you have not been succesful on this occasion"
@@ -50,4 +65,4 @@ const rejectionMessage = {
   subject: "Interview Results"
 }
 
-export { terminationMessage , promotionMessage, OfferMessage,acceptedOfferMessage,rejectionMessage, offerMessageFunc, ticketingMessage,resolvedTicketingMessage};
+export { terminationMessage , promotionMessage, OfferMessage,acceptedOfferMessage,rejectionMessage, offerMessageFunc, ticketingMessage,resolvedTicketingMessage, clientAccountActivationNotice};
