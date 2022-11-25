@@ -75,14 +75,18 @@ class ClientAccountService {
    
     private async sendMail(token: string, clientEmail: string, username: string, linkExpiresIn:number = this.jwtExpiresIn): Promise<any> {
         const clientAccountActivationNoticeObj = clientAccountActivationNotice(username, linkExpiresIn)
-        const { host }: dbConfig = config.get('dbConfig');
-        const port = 3001
-        const testUrl = "https://admin-erp-test.ogtlprojects.com/"
-        const prodUrl = "https://erp.outsourceglobal.com/"
-        const devUrl = "http://localhost:3001/"
-        const url = `${testUrl}auth/activate?token=${token}`
-        const html = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${clientAccountActivationNoticeObj.message}<a href=${url}>Click here to change your password</a>`
-        return EmailService.sendMail(clientEmail,"hr@outsourceglobal.com",clientAccountActivationNoticeObj.subject,clientAccountActivationNoticeObj.message,html)
+        if (process.env.NODE_ENV === "development") {
+            const hostApi = "http://localhost:3001/"
+            const url = `${hostApi}auth/activate?token=${token}`
+            const html = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${clientAccountActivationNoticeObj.message}<a href=${url}>Click here to change your password</a>`
+            return EmailService.sendMail(clientEmail,"hr@outsourceglobal.com",clientAccountActivationNoticeObj.subject,clientAccountActivationNoticeObj.message,html)
+          }
+        if (process.env.NODE_ENV === "production") {
+            const hostApi = "https://erp.outsourceglobal.com/"
+            const url = `${hostApi}auth/activate?token=${token}`
+            const html = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${clientAccountActivationNoticeObj.message}<a href=${url}>Click here to change your password</a>`
+            return EmailService.sendMail(clientEmail,"hr@outsourceglobal.com",clientAccountActivationNoticeObj.subject,clientAccountActivationNoticeObj.message,html)
+        }
     }
     
     private async createJwtToken(id: string, expiresIn: number = this.jwtExpiresIn): Promise<any> {
