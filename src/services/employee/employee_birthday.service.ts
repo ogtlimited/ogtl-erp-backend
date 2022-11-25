@@ -20,14 +20,6 @@ class EmployeeBirthDayService {
           return employeesId
       }
   
-      // public async getThisDaysBirthdayCelebrantsEmails(){
-      //   const today: any = moment(new Date()).format('MMMM Do');
-      //   const formattedBirthday = this.formatEmployeesBirthday
-      //   const employeeID = Promise.all(formattedBirthday)
-      //   const employeeID = await formattedBirthday.filter(employee => employee.date_of_birth === today).map(employee => employee.employee_id)
-      //     return filteredDate
-      //   }
-  
       public async getTodaysCelebrantsEmails(){
         const employeesId = await this.getTodaysCelebrantsId()
         const employees:any = await this.Employees.find({
@@ -35,7 +27,6 @@ class EmployeeBirthDayService {
             $in: employeesId
           }
         })
-  
         const employeesEmail = (await Promise.all(employees)).map(employee => employee.company_email)
         return employeesEmail
       }
