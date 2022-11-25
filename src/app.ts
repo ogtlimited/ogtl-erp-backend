@@ -287,8 +287,9 @@ class App {
       const {message, subject} = birthdayMessage
       const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
       if(email.length !== 0){
-        console.log("Email Found", email)
+        // console.log("Email Found", email)
         // EmailService.sendMail(email, "hr@outsourceglobal.com", subject, message, body)
+        // EmailService.sendMail(["abubakarmoses@yahoo.com", "abubakar.moses@outsourceglobal.com"], "snowdenmoses@gmail.com", subject, message, body)
       }
       
     })
