@@ -77,7 +77,10 @@ class ClientAccountService {
         const clientAccountActivationNoticeObj = clientAccountActivationNotice(username, linkExpiresIn)
         const { host }: dbConfig = config.get('dbConfig');
         const port = 3001
-        const url = `http://${host}:${port}/auth/activate?token=${token}`
+        const testUrl = "https://admin-erp-test.ogtlprojects.com/"
+        const prodUrl = "https://erp.outsourceglobal.com/"
+        const devUrl = "http://localhost:3001/"
+        const url = `${testUrl}auth/activate?token=${token}`
         const html = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${clientAccountActivationNoticeObj.message}<a href=${url}>Click here to change your password</a>`
         return EmailService.sendMail(clientEmail,"hr@outsourceglobal.com",clientAccountActivationNoticeObj.subject,clientAccountActivationNoticeObj.message,html)
     }
