@@ -280,22 +280,17 @@ class App {
       await leaveApp.updateAllLeaveCount()
     })
 
-    // const automatedEmployeesBirthdayMail = cron.schedule('0 11 * * *', async function() {
-    const automatedEmployeesBirthdayMail = cron.schedule('*/20 * * * * *', async function() {
+    const automatedEmployeesBirthdayMail = cron.schedule('0 19 * * *', async function() {
       const employeeBirthday = new EmployeeBirthDayService()
       const email = await employeeBirthday.getTodaysCelebrantsEmails()
       const {message, subject} = birthdayMessage
       const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
       if(email.length !== 0){
-        // console.log("Email Found", email)
-        // EmailService.sendMail(email, "hr@outsourceglobal.com", subject, message, body)
-        // EmailService.sendMail(["abubakarmoses@yahoo.com", "abubakar.moses@outsourceglobal.com"], "snowdenmoses@gmail.com", subject, message, body)
+        EmailService.sendMail(email, "hr@outsourceglobal.com", subject, message, body)
       }
       
     })
-    //  task.start()
-    //  task2.start()
-    //  automatedEmployeesBirthdayMail.start
+     automatedEmployeesBirthdayMail.start
      employeeStat.start()
      LeaveCountUpdate.start()
   }
