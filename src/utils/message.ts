@@ -54,6 +54,19 @@ function clientAccountActivationNotice(username, linkExpiresIn){
   }
 }
 
+function birthdayMessage(first_name) {
+ const message = "Dear "+first_name+","
+  +"<br><br>" + " Happy Birthday!!!!!!"
+  +"<br>" + " We wish you many fruitful years"
+  +"<br><br>" + " Best regards"
+  +"<br><br>"
+  const subject = "Happy Birthday"
+  return{
+    message,
+    subject
+  }
+ }
+
  
 
 const rejectionMessage = {
@@ -65,4 +78,4 @@ const rejectionMessage = {
   subject: "Interview Results"
 }
 
-export { terminationMessage , promotionMessage, OfferMessage,acceptedOfferMessage,rejectionMessage, offerMessageFunc, ticketingMessage,resolvedTicketingMessage, clientAccountActivationNotice};
+export { terminationMessage , promotionMessage, OfferMessage,acceptedOfferMessage,rejectionMessage, offerMessageFunc, ticketingMessage,resolvedTicketingMessage, clientAccountActivationNotice, birthdayMessage};

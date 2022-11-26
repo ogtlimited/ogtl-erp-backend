@@ -30,9 +30,11 @@ const client = redis.createClient({
   username: ""
 });
 import LeaveApplicationService from "@services/leave/application.service";
+import EmployeeBirthDayService from "./services/employee/employee_birthday.service";
 import EmployeeService from "./services/employee.service";
 const fs = require('fs')
-import moment from 'moment';
+import EmailService from '@/utils/email.service';
+import { birthdayMessage } from '@/utils/message';
 
 const path = require('path')
 if (process.env.NODE_ENV !== "production") {
@@ -264,7 +266,7 @@ class App {
     //     await attendanceService.generateAttendance("project")
     //   }
     })
-    const task2 = cron.schedule('* 1 * * 1-5', async function() {
+      const task2 = cron.schedule('* 1 * * 1-5', async function() {
       const applicationService = new LeaveApplicationService()
       await applicationService.addLeavesForEmployees()
     })
@@ -277,8 +279,19 @@ class App {
       const leaveApp = new LeaveApplicationService()
       await leaveApp.updateAllLeaveCount()
     })
-    //  task.start()
-    //  task2.start()
+
+    const automatedEmployeesBirthdayMail = cron.schedule('0 4 * * *', async function() {
+      const employeeBirthday = new EmployeeBirthDayService()
+      const employeesDetails = await employeeBirthday.getTodaysCelebrantsDetails()
+      if(employeesDetails.length !== 0){
+        employeesDetails.map(employee=>{
+          const {message, subject} = birthdayMessage(employee.first_name)
+          const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
+           EmailService.sendMail(employee.email, "hr@outsourceglobal.com", subject, message, body)
+          })
+      }
+    })
+     automatedEmployeesBirthdayMail.start
      employeeStat.start()
      LeaveCountUpdate.start()
   }
