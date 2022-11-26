@@ -280,7 +280,7 @@ class App {
       await leaveApp.updateAllLeaveCount()
     })
 
-    const automatedEmployeesBirthdayMail = cron.schedule('0 4 * * *', async function() {
+    const automatedEmployeesBirthdayMail = cron.schedule('0 8 * * *', async function() {
       const employeeBirthday = new EmployeeBirthDayService()
       const employeesDetails = await employeeBirthday.getTodaysCelebrantsDetails()
       if(employeesDetails.length !== 0){
