@@ -54,12 +54,17 @@ function clientAccountActivationNotice(username, linkExpiresIn){
   }
 }
 
-const birthdayMessage = {
-  message : "Happy Birthday!!!!!!"
+function birthdayMessage(first_name) {
+ const message = "Dear "+first_name+","
+  +"<br><br>" + " Happy Birthday!!!!!!"
   +"<br>" + " We wish you many fruitful years"
   +"<br><br>" + " Best regards"
-  +"<br><br>",
-  subject : "Happy Birthday"
+  +"<br><br>"
+  const subject = "Happy Birthday"
+  return{
+    message,
+    subject
+  }
  }
 
  
