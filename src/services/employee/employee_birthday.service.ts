@@ -20,15 +20,20 @@ class EmployeeBirthDayService {
           return employeesId
       }
   
-      public async getTodaysCelebrantsEmails(){
+      public async getTodaysCelebrantsDetails(){
         const employeesId = await this.getTodaysCelebrantsId()
         const employees:any = await this.Employees.find({
           '_id':{
             $in: employeesId
           }
         })
-        const employeesEmail = (await Promise.all(employees)).map(employee => employee.company_email)
-        return employeesEmail
+        const employeesDetails = (await Promise.all(employees)).map(employee =>{
+          return{
+            email: employee.company_email,
+            first_name: employee.first_name.charAt(0).toUpperCase() + employee.first_name.toLowerCase().slice(1)
+          }
+        })
+        return employeesDetails
       }
 
 }
