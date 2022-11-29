@@ -373,8 +373,7 @@ class EmployeeService {
       const numberOfFemales = getAllGender.map<any>(value => {
         return value.genderCount.find(gender => gender._id==="female")
       })[0].total
-      const genderRatio = Math.ceil((numberOfMales/numberOfFemales)*100)
-      return {genderRatio}
+      return {genderRatio:`${numberOfFemales.toString()} \: ${numberOfMales.toString()}`}
   }
 
   public async countEmployeesByDepartment(): Promise<any>{
@@ -407,6 +406,12 @@ class EmployeeService {
             }       
     ]);
     return {employeesByDepartment}
+  }
+  public async getEmployeesByDepartment(department_id: string): Promise<any>{
+      const employeesByDepartment: any = await this.Employees.find({status: "active", department: department_id})
+      const males = (await Promise.all(employeesByDepartment)).filter(gender=>gender.gender==="male").length
+      const females = (await Promise.all(employeesByDepartment)).filter(gender=>gender.gender==="female").length
+    return {employeesByDepartment, gender: {males, females}, totalEmployeesInDepartment: employeesByDepartment.length}
   }
 }
 
