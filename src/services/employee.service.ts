@@ -373,7 +373,7 @@ class EmployeeService {
       const numberOfFemales = getAllGender.map<any>(value => {
         return value.genderCount.find(gender => gender._id==="female")
       })[0].total
-      return {genderRatio:`${numberOfFemales.toString()} \: ${numberOfMales.toString()}`}
+      return {genderRatio:`${numberOfFemales/numberOfFemales} \: ${Math.round((numberOfMales/numberOfFemales)*10)/10}`}
   }
 
   public async countEmployeesByDepartment(): Promise<any>{
