@@ -21,6 +21,7 @@ class EmployeesRoute implements Routes {
     this.router.get(`${this.path}`, authMiddleware, this.employeesController.getEmployees);
     this.router.get(`${this.path}/head-count`, authMiddleware, this.employeesController.getEmployeesHeadCount);
     this.router.get(`${this.path}/department/count`, authMiddleware, this.employeesController.countEmployeesByDepartment);
+    this.router.get(`${this.path}/department/:department_id`, authMiddleware, this.employeesController.getEmployeesByDepartment);
     this.router.get(`${this.path}/gender-count`, authMiddleware, this.employeesController.getGenderCount);
     this.router.get(`${this.path}/gender-ratio`, authMiddleware, this.employeesController.getGenderDiversityRatio);
     this.router.get(`${this.path}/employees/stats`, this.employeesController.getEmployeesByMonthStats);
