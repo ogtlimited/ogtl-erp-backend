@@ -26,9 +26,11 @@ import { IShiftType } from '@/interfaces/shift-interface/shift_type.interface';
 import TerminationService from './employee-lifecycle/termination.service';
 import { IEmployeeStat } from './../interfaces/employee-stat/employee-stat.interface';
 import IdRequestService from './procurement/idrequest.service';
+const mongoose = require('mongoose')
 
 class EmployeeService {
   // eslint-disable-next-line prettier/prettier
+  private MAX_LIMIT:number = 50;
   public Employees = EmployeeModel;
   public Department = departmentModel;
   public Designation = DesignationModel;
@@ -365,6 +367,26 @@ class EmployeeService {
     return {genderCount}
   }
 
+  public async getGenderCountByDepartment(department_id: string): Promise<any>{
+    const genderCountByDepartment = await this.Employees.aggregate([
+    {
+        '$match':{
+          'status': 'active',
+          'department': mongoose.Types.ObjectId(department_id)
+        }
+    },
+    {
+        '$group': {
+          '_id': '$gender', 
+          'total': {
+            '$count': {}
+          }
+        }
+    }
+    ])
+    return {genderCountByDepartment}
+  }
+
   public async getGenderDiversityRatio(): Promise<any>{
       const getAllGender = await Promise.all([this.getGenderCount()])
       const numberOfMales = getAllGender.map<any>(value => {
@@ -407,14 +429,126 @@ class EmployeeService {
     ]);
     return {employeesByDepartment}
   }
-  public async getEmployeesByDepartment(department_id: string): Promise<any>{
-      const employeesByDepartment: any = await this.Employees.find({status: "active", department: department_id})
-      .populate("department")
-      .populate("designation")
-      const males = (await Promise.all(employeesByDepartment)).filter(gender=>gender.gender==="male").length
-      const females = (await Promise.all(employeesByDepartment)).filter(gender=>gender.gender==="female").length
-    return {employeesByDepartment, gender: {males, females}, totalEmployeesInDepartment: employeesByDepartment.length}
+  public async getEmployeesByDepartment(searchQuery:any, department_id: string): Promise<any>{
+      const matchBy:any = {status: "active", department: mongoose.Types.ObjectId(department_id)}
+      return(
+        this.getEmployeesByDepartmentHelperMethod(matchBy, searchQuery)
+      )
+   }
+
+  private async getEmployeesByDepartmentHelperMethod(matchBy,searchQuery:any): Promise<any> {
+    const page = parseInt(searchQuery?.page) || 1;
+    let limit: number;
+    if(!searchQuery.limit){
+      limit = 10
+    }
+    else if(parseInt(searchQuery?.limit)>this.MAX_LIMIT){
+      limit = this.MAX_LIMIT
+    }
+    else if(parseInt(searchQuery?.limit)){
+      limit = parseInt(searchQuery.limit)
+    }
+
+    const startIndex = (page-1) * limit;
+    const endIndex = page * limit;
+    const filtrationQuery = this.filtrationQuerymethod(matchBy, searchQuery, startIndex, limit)
+    const employeesByDepartment: Employee[] = await this.Employees
+    .aggregate(filtrationQuery)
+    
+    const removeLimitAndSkip:any = filtrationQuery.filter(item => !item["$limit"] && !item["$skip"])
+    removeLimitAndSkip.push({$count:"Number of Docs"})
+    const countDocuments:any = await this.Employees.aggregate(removeLimitAndSkip)
+    let totalPage:number;
+    for(let count of countDocuments){
+       totalPage = count["Number of Docs"]
+    }
+    const pagination: any = {numberOfPages:Math.ceil(totalPage/limit)};
+    if(endIndex < totalPage){
+      pagination.next = {
+        page: page + 1,
+        limit: limit
+      }
+    }
+    if(startIndex > 0){
+      pagination.previous = {
+        page: page - 1,
+        limit: limit
+      }
+    }
+    return { 
+      employeesByDepartment: employeesByDepartment,
+      pagination: pagination,
+      totalEmployees: employeesByDepartment.length
+    }
   }
+  
+  private filtrationQuerymethod(matchBy, searchQuery, startIndex:number, limit:number){ 
+    const filtrationQuery:any = [
+      {
+        $match: matchBy
+      },
+      {
+       $lookup:{
+         from: "departments",
+         localField: "department",
+         foreignField: "_id",
+         as: "department"
+      }
+      },
+      {
+       $unwind: {path :"$department",
+       preserveNullAndEmptyArrays: true
+      }
+      },
+      {
+       $lookup:{
+         from: "designations",
+         localField: "designation",
+         foreignField: "_id",
+         as: "designation"
+         }
+       },
+      {
+       $unwind: {path :"$designation",
+       preserveNullAndEmptyArrays: true
+     }
+     }
+     ]
+     if(searchQuery.search){
+      filtrationQuery.push(
+        {
+          $match:{
+            $or : [
+              { first_name:{$regex:searchQuery.search, $options:"i"}},
+              { last_name:{$regex:searchQuery.search, $options:"i"}},
+              { middle_name:{$regex:searchQuery.search, $options:"i"}},
+              { "designation.designation":{$regex:searchQuery.search, $options:"i"}}
+            ]
+          }
+        }
+      )
+      }
+      if(searchQuery.designation){
+      filtrationQuery.push(
+        {
+          $match: { "designation.designation":{$regex:searchQuery.designation, $options:"i"}}    
+         }
+      )
+      }
+    
+      if(searchQuery?.page){
+        filtrationQuery.push(
+          { $skip: startIndex },
+          )
+        }
+      if(searchQuery?.limit){
+        filtrationQuery.push(
+          { $limit: limit},
+          )
+        }
+      return filtrationQuery
+  }
+
 }
 
 export default EmployeeService;
