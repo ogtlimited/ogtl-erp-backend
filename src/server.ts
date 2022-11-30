@@ -12,6 +12,8 @@ import IndexRoute from '@routes/index.route';
 import UsersRoute from '@routes/users.route';
 import validateEnv from '@utils/validateEnv';
 import EmployeesRoute from '@routes/employee/employee.route';
+import DepartmentEmployeesRoute from '@routes/dashboard/hr/department_employees_count.route';
+import DepartmentGenderCountRoute from '@routes/dashboard/hr/department_employees_gender_count.route';
 import ShiftTypeRoute from './routes/shift/shiftType';
 import AttendanceRoute from './routes/attendance/attendance.route';
 import IncentiveRoute from './routes/payroll/incentive.route';
@@ -116,6 +118,8 @@ const app = new App([
   new UsersRoute(),
   new AuthRoute(),
   new EmployeesRoute(),
+  new DepartmentGenderCountRoute(),
+  new DepartmentEmployeesRoute(),
   new ShiftTypeRoute(),
   new AttendanceRoute(),
   new IncentiveRoute(),
