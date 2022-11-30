@@ -409,6 +409,8 @@ class EmployeeService {
   }
   public async getEmployeesByDepartment(department_id: string): Promise<any>{
       const employeesByDepartment: any = await this.Employees.find({status: "active", department: department_id})
+      .populate("department")
+      .populate("designation")
       const males = (await Promise.all(employeesByDepartment)).filter(gender=>gender.gender==="male").length
       const females = (await Promise.all(employeesByDepartment)).filter(gender=>gender.gender==="female").length
     return {employeesByDepartment, gender: {males, females}, totalEmployeesInDepartment: employeesByDepartment.length}
