@@ -149,8 +149,17 @@ class EmployeesController {
   public getEmployeesByDepartment = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const {department_id} = req.params
-      const employeesByDepartment: Employee = await this.EmployeeService.getEmployeesByDepartment(department_id);
+      const employeesByDepartment: Employee = await this.EmployeeService.getEmployeesByDepartment(req.query, department_id);
       res.status(200).json({ data: employeesByDepartment});
+    } catch (error) {
+      next(error);
+    }
+  }
+  public getGenderCountByDepartment = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const {department_id} = req.params
+      const genderCountByDepartment: Employee = await this.EmployeeService.getGenderCountByDepartment(department_id);
+      res.status(200).json({ data: genderCountByDepartment});
     } catch (error) {
       next(error);
     }
