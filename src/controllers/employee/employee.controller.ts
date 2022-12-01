@@ -149,6 +149,7 @@ class EmployeesController {
   public getEmployeesByDepartment = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const {department_id} = req.params
+      console.log("Department Id",department_id)
       const employeesByDepartment: Employee = await this.EmployeeService.getEmployeesByDepartment(req.query, department_id);
       res.status(200).json({ data: employeesByDepartment});
     } catch (error) {
