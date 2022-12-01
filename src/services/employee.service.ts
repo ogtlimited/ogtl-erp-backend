@@ -368,24 +368,17 @@ class EmployeeService {
   }
 
   public async getGenderCountByDepartment(department_id: string): Promise<any>{
-    const genderCountByDepartment = await this.Employees.aggregate([
-    {
-        '$match':{
-          'status': 'active',
-          'department': mongoose.Types.ObjectId(department_id)
-        }
-
-    },
-    {
-        '$group': {
-          '_id': '$gender', 
-          'total': {
-            '$count': {}
-          }
-        }
+    if(department_id === "not_specified"){
+      const matchBy = {status: "active", department: null}
+       return(
+        this.getGenderCountByDepartmentHelperMethod(matchBy)
+      )
     }
-    ])
-    return {genderCountByDepartment}
+        
+     let matchBy = {status: "active", department: mongoose.Types.ObjectId(department_id)}
+      return(
+        this.getGenderCountByDepartmentHelperMethod(matchBy)
+      )
   }
 
   public async getGenderDiversityRatio(): Promise<any>{
@@ -432,38 +425,27 @@ class EmployeeService {
     return {employeesByDepartment}
   }
    public async getDesignationsByDepartment(department_id: string): Promise<any>{
-      const designationsByDepartment: any = await this.Employees.aggregate([
-          {
-            '$match':{
-              'status': 'active',
-              'department': mongoose.Types.ObjectId(department_id),
-              'designation': { $ne: null } 
-            }
-          },
-          {
-            $lookup:{
-              from: "designations",
-              localField: "designation",
-              foreignField: "_id",
-              as: "designation"
-              }
-          },
-          {
-            $unwind: {path :"$designation",
-            preserveNullAndEmptyArrays: true
-          }
-          },
-          {
-            '$group': {
-              '_id': '$designation', 
-              
-            }
-          }  
-    ]);
-    return {designationsByDepartment}
+    if(department_id === "not_specified"){
+      const matchBy =  {
+          status: 'active',
+          department: null,
+          designation: { $ne: null } 
+        }
+       return(
+        this.getDesignationsByDepartmentHelperMethod(matchBy)
+      )
+    }
+        
+     let matchBy = {
+      status: "active", 
+      department: mongoose.Types.ObjectId(department_id),
+      designation: { $ne: null } 
+    }
+      return(
+        this.getDesignationsByDepartmentHelperMethod(matchBy)
+      )
   }
   public async getEmployeesByDepartment(searchQuery:any, department_id: string): Promise<any>{
-    // let matchBy = {status: "active", department: mongoose.Types.ObjectId(department_id)}
     if(department_id === "not_specified"){
       const matchBy = {status: "active", department: null}
        return(
@@ -476,8 +458,6 @@ class EmployeeService {
         this.getEmployeesByDepartmentHelperMethod(matchBy, searchQuery)
       )
    }
-
-
   private async getEmployeesByDepartmentHelperMethod(matchBy,searchQuery:any): Promise<any> {
     const page = parseInt(searchQuery?.page) || 1;
     let limit: number;
@@ -590,6 +570,52 @@ class EmployeeService {
         }
       return filtrationQuery
   }
+
+  private async getGenderCountByDepartmentHelperMethod(matchBy: any): Promise<any>{
+    const genderCountByDepartment = await this.Employees.aggregate([
+    {
+        '$match': matchBy
+
+    },
+    {
+        '$group': {
+          '_id': '$gender', 
+          'total': {
+            '$count': {}
+          }
+        }
+    }
+    ])
+    return {genderCountByDepartment}
+  }
+
+  private async getDesignationsByDepartmentHelperMethod(matchBy: any): Promise<any>{
+    const designationsByDepartment: any = await this.Employees.aggregate([
+        {
+          '$match': matchBy
+        },
+        {
+          $lookup:{
+            from: "designations",
+            localField: "designation",
+            foreignField: "_id",
+            as: "designation"
+            }
+        },
+        {
+          $unwind: {path :"$designation",
+          preserveNullAndEmptyArrays: true
+        }
+        },
+        {
+          '$group': {
+            '_id': '$designation', 
+            
+          }
+        }  
+  ]);
+  return {designationsByDepartment}
+}
 
 }
 
