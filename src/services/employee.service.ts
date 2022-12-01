@@ -463,7 +463,11 @@ class EmployeeService {
     return {designationsByDepartment}
   }
   public async getEmployeesByDepartment(searchQuery:any, department_id: string): Promise<any>{
-      const matchBy:any = {status: "active", department: mongoose.Types.ObjectId(department_id)}
+    let query = {status: "active", department: mongoose.Types.ObjectId(department_id)}
+     if(department_id==="not_specified") {
+        query = {status: "active", department: null}
+     }
+      const matchBy:any = query
       return(
         this.getEmployeesByDepartmentHelperMethod(matchBy, searchQuery)
       )
