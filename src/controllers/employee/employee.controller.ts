@@ -133,7 +133,7 @@ class EmployeesController {
   public getGenderDiversityRatio = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const genderRatio: Employee = await this.EmployeeService.getGenderDiversityRatio();
-      res.status(200).json({ data: genderRatio, success: 'true' });
+      res.status(200).json({ data: genderRatio });
     } catch (error) {
       next(error);
     }
@@ -151,6 +151,15 @@ class EmployeesController {
       const {department_id} = req.params
       const employeesByDepartment: Employee = await this.EmployeeService.getEmployeesByDepartment(req.query, department_id);
       res.status(200).json({ data: employeesByDepartment});
+    } catch (error) {
+      next(error);
+    }
+  }
+  public getDesignationsByDepartment = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const {department_id} = req.params
+      const designationsByDepartment: Employee = await this.EmployeeService.getDesignationsByDepartment(department_id);
+      res.status(200).json({ data: designationsByDepartment});
     } catch (error) {
       next(error);
     }

@@ -374,6 +374,7 @@ class EmployeeService {
           'status': 'active',
           'department': mongoose.Types.ObjectId(department_id)
         }
+
     },
     {
         '$group': {
@@ -395,7 +396,8 @@ class EmployeeService {
       const numberOfFemales = getAllGender.map<any>(value => {
         return value.genderCount.find(gender => gender._id==="female")
       })[0].total
-      return {genderRatio:`${numberOfFemales/numberOfFemales} \: ${Math.round((numberOfMales/numberOfFemales)*10)/10}`}
+      const totalGenderCount = numberOfMales + numberOfFemales
+      return {genderRatio:` ${Math.round((numberOfFemales/totalGenderCount)*100)}% \: ${Math.round((numberOfMales/totalGenderCount)*100)}%`}
   }
 
   public async countEmployeesByDepartment(): Promise<any>{
@@ -429,12 +431,48 @@ class EmployeeService {
     ]);
     return {employeesByDepartment}
   }
+   public async getDesignationsByDepartment(department_id: string): Promise<any>{
+      const designationsByDepartment: any = await this.Employees.aggregate([
+          {
+            '$match':{
+              'status': 'active',
+              'department': mongoose.Types.ObjectId(department_id),
+              'designation': { $ne: null } 
+            }
+          },
+          {
+            $lookup:{
+              from: "designations",
+              localField: "designation",
+              foreignField: "_id",
+              as: "designation"
+              }
+          },
+          {
+            $unwind: {path :"$designation",
+            preserveNullAndEmptyArrays: true
+          }
+          },
+          {
+            '$group': {
+              '_id': '$designation', 
+              
+            }
+          }  
+    ]);
+    return {designationsByDepartment}
+  }
   public async getEmployeesByDepartment(searchQuery:any, department_id: string): Promise<any>{
-      const matchBy:any = {status: "active", department: mongoose.Types.ObjectId(department_id)}
+    let query = {status: "active", department: mongoose.Types.ObjectId(department_id)}
+     if(department_id==="not_specified") {
+        query = {status: "active", department: null}
+     }
+      const matchBy:any = query
       return(
         this.getEmployeesByDepartmentHelperMethod(matchBy, searchQuery)
       )
    }
+
 
   private async getEmployeesByDepartmentHelperMethod(matchBy,searchQuery:any): Promise<any> {
     const page = parseInt(searchQuery?.page) || 1;

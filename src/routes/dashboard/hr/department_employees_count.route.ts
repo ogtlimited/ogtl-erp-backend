@@ -8,7 +8,7 @@ import EmployeesController from '@/controllers/employee/employee.controller';
 import authMiddleware from '@/middlewares/auth.middleware';
 
 class DepartmentEmployeesRoute implements Routes {
-  public path = '/departments';
+  public path = '/departments/employees';
   public router = Router();
   public employeesController = new EmployeesController();
 
@@ -18,6 +18,7 @@ class DepartmentEmployeesRoute implements Routes {
 
   private initializeRoutes() {  
     this.router.get(`${this.path}/count`, authMiddleware, this.employeesController.countEmployeesByDepartment);
+    this.router.get(`${this.path}/designations/:department_id`, authMiddleware, this.employeesController.getDesignationsByDepartment);
     this.router.get(`${this.path}/:department_id`, authMiddleware, this.employeesController.getEmployeesByDepartment);
     
   }
