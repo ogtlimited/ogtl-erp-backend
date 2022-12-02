@@ -173,6 +173,24 @@ class EmployeesController {
       next(error);
     }
   }
+  public getEmployeesByGender = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const {gender} = req.params
+      const employeesByGender: Employee = await this.EmployeeService.getEmployeesByGender(gender, req.query);
+      res.status(200).json({ data: employeesByGender});
+    } catch (error) {
+      next(error);
+    }
+  }
+  public getDesignationsByGender = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const {gender} = req.params
+      const designationsByGender: Employee = await this.EmployeeService.getDesignationsGender(gender);
+      res.status(200).json({ data: designationsByGender});
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default EmployeesController;

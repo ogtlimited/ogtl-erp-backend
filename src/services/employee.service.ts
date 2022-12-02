@@ -367,6 +367,58 @@ class EmployeeService {
     return {genderCount}
   }
 
+  public async getEmployeesByGender(gender: string, searchQuery: any): Promise<any>{
+    const matchBy = {status:"active", gender:gender}
+    const employeesByGender: any = await this.getEmployeesByGenderHelperMethod(matchBy, searchQuery)
+    return { employeesByGender } 
+}
+
+private async getEmployeesByGenderHelperMethod(matchBy,searchQuery:any): Promise<any> {
+    const page = parseInt(searchQuery?.page) || 1;
+    let limit: number;
+    if(!searchQuery.limit){
+      limit = 10
+    }
+    else if(parseInt(searchQuery?.limit)>this.MAX_LIMIT){
+      limit = this.MAX_LIMIT
+    }
+    else if(parseInt(searchQuery?.limit)){
+      limit = parseInt(searchQuery.limit)
+    }
+    const startIndex = (page-1) * limit;
+    const endIndex = page * limit;
+    const filtrationQuery = this.filtrationQuerymethod(matchBy, searchQuery, startIndex, limit)
+    const employeesByGender: Employee[] = await this.Employees
+    .aggregate(filtrationQuery)
+    
+    const removeLimitAndSkip:any = filtrationQuery.filter(item => !item["$limit"] && !item["$skip"])
+    removeLimitAndSkip.push({$count:"Number of Docs"})
+    const countDocuments:any = await this.Employees.aggregate(removeLimitAndSkip)
+    let totalPage:number;
+    for(let count of countDocuments){
+       totalPage = count["Number of Docs"]
+    }
+    const pagination: any = {numberOfPages:Math.ceil(totalPage/limit)};
+    if(endIndex < totalPage){
+      pagination.next = {
+        page: page + 1,
+        limit: limit
+      }
+    }
+    if(startIndex > 0){
+      pagination.previous = {
+        page: page - 1,
+        limit: limit
+      }
+    }
+    return { 
+      employeesByGender: employeesByGender,
+      pagination: pagination,
+      totalEmployees: employeesByGender.length
+    }
+  }
+  
+
   public async getGenderCountByDepartment(department_id: string): Promise<any>{
     if(department_id === "not_specified"){
       const matchBy = {status: "active", department: null}
@@ -390,7 +442,7 @@ class EmployeeService {
         return value.genderCount.find(gender => gender._id==="female")
       })[0].total
       const totalGenderCount = numberOfMales + numberOfFemales
-      return {genderRatio:` ${Math.round((numberOfFemales/totalGenderCount)*100)}% \: ${Math.round((numberOfMales/totalGenderCount)*100)}%`}
+      return {genderRatio:` ${Math.round((numberOfFemales/totalGenderCount)*100)}% \- ${Math.round((numberOfMales/totalGenderCount)*100)}%`}
   }
 
   public async countEmployeesByDepartment(): Promise<any>{
@@ -443,6 +495,15 @@ class EmployeeService {
     }
       return(
         this.getDesignationsByDepartmentHelperMethod(matchBy)
+      )
+  }
+  public async getDesignationsGender(gender: string): Promise<any>{
+      const matchBy =  {
+          status: 'active',
+          gender: gender,
+        }
+       return(
+        this.getDesignationsByGenderHelperMethod(matchBy)
       )
   }
   public async getEmployeesByDepartment(searchQuery:any, department_id: string): Promise<any>{
@@ -615,6 +676,34 @@ class EmployeeService {
         }  
   ]);
   return {designationsByDepartment}
+}
+
+private async getDesignationsByGenderHelperMethod(matchBy: any): Promise<any>{
+  const designationsByGender: any = await this.Employees.aggregate([
+      {
+        '$match': matchBy
+      },
+      {
+        $lookup:{
+          from: "designations",
+          localField: "designation",
+          foreignField: "_id",
+          as: "designation"
+          }
+      },
+      {
+        $unwind: {path :"$designation",
+        preserveNullAndEmptyArrays: true
+      }
+      },
+      {
+        '$group': {
+          '_id': '$designation', 
+          
+        }
+      }  
+]);
+return {designationsByGender}
 }
 
 }
