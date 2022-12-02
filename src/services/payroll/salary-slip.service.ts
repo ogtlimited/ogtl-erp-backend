@@ -202,8 +202,16 @@ class SalarySlipService {
 
     */
     await this.salarySlipExistenceCheck();
-    const token = await Bank3DPaymentService.getBankToken();
-    const batchData = await Bank3DPaymentService.initiateBankPayment(token)
+    // const token = await Bank3DPaymentService.getBankToken();
+    // const batchData = await Bank3DPaymentService.initiateBankPayment(token) 
+
+    const batchData = {
+      BatchID: ReferenceGenerator.referenceNumberGenerator(),
+      Reference: ReferenceGenerator.referenceNumberGenerator()
+    }
+
+    // return batchData
+
     const salarySlipBatch: IBatchInterface = await  BatchModel.create({
       batch_id: batchData.BatchID,
       reference_id: batchData.Reference
@@ -279,7 +287,7 @@ class SalarySlipService {
     })
     const deductions = await calculateEmployeeDeductions(employeeSalary.employeeId._id, employeeSalary.netPay);
     salarySlipConstructor.totalDeductions = deductions.totalDeductions;
-    console.log(deductions);
+    // console.log(deductions);
     salarySlipConstructor.salaryAfterDeductions = deductions.salaryAfterDeductions.toFixed(2);
     salarySlipConstructor.Amount = salarySlipConstructor.salaryAfterDeductions
     if (deductions.hasDeductions) {
