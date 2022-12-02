@@ -497,6 +497,15 @@ private async getEmployeesByGenderHelperMethod(matchBy,searchQuery:any): Promise
         this.getDesignationsByDepartmentHelperMethod(matchBy)
       )
   }
+  public async getDesignationsGender(gender: string): Promise<any>{
+      const matchBy =  {
+          status: 'active',
+          gender: gender,
+        }
+       return(
+        this.getDesignationsByGenderHelperMethod(matchBy)
+      )
+  }
   public async getEmployeesByDepartment(searchQuery:any, department_id: string): Promise<any>{
     if(department_id === "not_specified"){
       const matchBy = {status: "active", department: null}
@@ -667,6 +676,34 @@ private async getEmployeesByGenderHelperMethod(matchBy,searchQuery:any): Promise
         }  
   ]);
   return {designationsByDepartment}
+}
+
+private async getDesignationsByGenderHelperMethod(matchBy: any): Promise<any>{
+  const designationsByGender: any = await this.Employees.aggregate([
+      {
+        '$match': matchBy
+      },
+      {
+        $lookup:{
+          from: "designations",
+          localField: "designation",
+          foreignField: "_id",
+          as: "designation"
+          }
+      },
+      {
+        $unwind: {path :"$designation",
+        preserveNullAndEmptyArrays: true
+      }
+      },
+      {
+        '$group': {
+          '_id': '$designation', 
+          
+        }
+      }  
+]);
+return {designationsByGender}
 }
 
 }
