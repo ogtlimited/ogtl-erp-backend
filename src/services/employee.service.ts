@@ -367,6 +367,58 @@ class EmployeeService {
     return {genderCount}
   }
 
+  public async getEmployeesByGender(gender: string, searchQuery: any): Promise<any>{
+    const matchBy = {status:"active", gender:gender}
+    const employeesByGender: any = await this.getEmployeesByGenderHelperMethod(matchBy, searchQuery)
+    return { employeesByGender } 
+}
+
+private async getEmployeesByGenderHelperMethod(matchBy,searchQuery:any): Promise<any> {
+    const page = parseInt(searchQuery?.page) || 1;
+    let limit: number;
+    if(!searchQuery.limit){
+      limit = 10
+    }
+    else if(parseInt(searchQuery?.limit)>this.MAX_LIMIT){
+      limit = this.MAX_LIMIT
+    }
+    else if(parseInt(searchQuery?.limit)){
+      limit = parseInt(searchQuery.limit)
+    }
+    const startIndex = (page-1) * limit;
+    const endIndex = page * limit;
+    const filtrationQuery = this.filtrationQuerymethod(matchBy, searchQuery, startIndex, limit)
+    const employeesByGender: Employee[] = await this.Employees
+    .aggregate(filtrationQuery)
+    
+    const removeLimitAndSkip:any = filtrationQuery.filter(item => !item["$limit"] && !item["$skip"])
+    removeLimitAndSkip.push({$count:"Number of Docs"})
+    const countDocuments:any = await this.Employees.aggregate(removeLimitAndSkip)
+    let totalPage:number;
+    for(let count of countDocuments){
+       totalPage = count["Number of Docs"]
+    }
+    const pagination: any = {numberOfPages:Math.ceil(totalPage/limit)};
+    if(endIndex < totalPage){
+      pagination.next = {
+        page: page + 1,
+        limit: limit
+      }
+    }
+    if(startIndex > 0){
+      pagination.previous = {
+        page: page - 1,
+        limit: limit
+      }
+    }
+    return { 
+      employeesByGender: employeesByGender,
+      pagination: pagination,
+      totalEmployees: employeesByGender.length
+    }
+  }
+  
+
   public async getGenderCountByDepartment(department_id: string): Promise<any>{
     if(department_id === "not_specified"){
       const matchBy = {status: "active", department: null}
