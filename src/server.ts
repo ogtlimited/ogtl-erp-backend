@@ -13,6 +13,7 @@ import UsersRoute from '@routes/users.route';
 import validateEnv from '@utils/validateEnv';
 import EmployeesRoute from '@routes/employee/employee.route';
 import DepartmentEmployeesRoute from '@routes/dashboard/hr/department_employees_count.route';
+import EmployeesGenderDesignation from '@/routes/dashboard/hr/employees_gender_designation.route';
 import DepartmentGenderCountRoute from '@routes/dashboard/hr/department_employees_gender_count.route';
 import ShiftTypeRoute from './routes/shift/shiftType';
 import AttendanceRoute from './routes/attendance/attendance.route';
@@ -120,6 +121,7 @@ const app = new App([
   new EmployeesRoute(),
   new DepartmentGenderCountRoute(),
   new DepartmentEmployeesRoute(),
+  new EmployeesGenderDesignation(),
   new ShiftTypeRoute(),
   new AttendanceRoute(),
   new IncentiveRoute(),
