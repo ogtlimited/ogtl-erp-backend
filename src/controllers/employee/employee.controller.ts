@@ -182,6 +182,15 @@ class EmployeesController {
       next(error);
     }
   }
+  public getDesignationsByGender = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const {gender} = req.params
+      const designationsByGender: Employee = await this.EmployeeService.getDesignationsGender(gender);
+      res.status(200).json({ data: designationsByGender});
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default EmployeesController;
