@@ -442,7 +442,7 @@ private async getEmployeesByGenderHelperMethod(matchBy,searchQuery:any): Promise
         return value.genderCount.find(gender => gender._id==="female")
       })[0].total
       const totalGenderCount = numberOfMales + numberOfFemales
-      return {genderRatio:` ${Math.round((numberOfFemales/totalGenderCount)*100)}% \: ${Math.round((numberOfMales/totalGenderCount)*100)}%`}
+      return {genderRatio:` ${Math.round((numberOfFemales/totalGenderCount)*100)}% \- ${Math.round((numberOfMales/totalGenderCount)*100)}%`}
   }
 
   public async countEmployeesByDepartment(): Promise<any>{
