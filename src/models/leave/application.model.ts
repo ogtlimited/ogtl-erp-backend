@@ -13,50 +13,57 @@ const applicationSchema : Schema = new Schema (
             required: true,
             ref: "Employee",
         },
-        employee_project_id: {
+        project_id: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
             ref: "Project",
         },
-
+        deparment_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: "Department",
+        },
         leave_type_id:{
-                type: String,
-                enum:["Annual","Casual","Sick","Without Pay","Maternity"],
-                required: true,
-           },
-
+            type: String,
+            enum:["Annual","Casual","Sick","Without Pay","Maternity"],
+            required: true,
+        },
         from_date:{
             type: Date,
             required: true,
         },
-
         to_date : {
             type: Date,
             required: true,
         },
-
         leave_approver: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
             ref: "Employee",
         },
-        posting_date: {
-            type: Date,
+        approval_level: {
+            type: Number,
+            required: true,
         },
-
-        reason: {
-            type: String,
-        },
-
+        reason_for_application: String,
         status: {
             type: String,
-            enum: ['open','approved by supervisor','rejected','cancelled', 'approved', 'rejected by supervisor'],
-            default : 'open',
+            enum: ['pending','rejected','cancelled', 'approved'],
+            default : 'pending',
+            required: true,
         },
-
-
+        rejection_reason: String,
+        hr_stage: {
+            type: Boolean,
+            default: false,
+            required: true,
+        },
+        acted_on: {
+            type: Boolean,
+            default: false,
+            required: true,
+        }
     },
-
     {
         timestamps:true
     },
