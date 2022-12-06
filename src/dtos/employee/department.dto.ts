@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateDepartmentDto{
     @IsNotEmpty()
@@ -7,8 +7,8 @@ export class CreateDepartmentDto{
     public department: string;
 
     @IsOptional()
-    @IsString()
-    public leave_approval_level: string;
+    @IsNumber()
+    public leave_approval_level: number;
 }
 export class UpdateDepartmentDto{
     @IsString()
@@ -19,6 +19,6 @@ export class UpdateDepartmentDto{
     public department: string;
 
     @IsOptional()
-    @IsString()
-    public leave_approval_level: string;
+    @IsNumber()
+    public leave_approval_level: number;
 }
