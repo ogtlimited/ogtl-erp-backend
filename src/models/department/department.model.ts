@@ -11,7 +11,7 @@ const departmentSchema: Schema = new Schema(
         required: true,
     },
     leave_approval_level: {
-        type: String,
+        type: Number,
     },
     slug: {
         type: String,
