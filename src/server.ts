@@ -28,6 +28,7 @@ import PromotionRoute from './routes/employee-lifecycle/promotion.route';
 import TransferRoute from './routes/employee-lifecycle/transfers.route';
 import LeaveAllocationRoute from './routes/leave/allocation.route';
 import LeaveApplicationRoute from './routes/leave/application.route';
+import LeaveApprovalLevelRoute from './routes/leave/leave_approval_levels.route';
 // import LeaveTypeRoutes from './routes/leave/leave-type.route';
 // import LeavePeriodRoute from './routes/leave/period.route';
 // import LeavePolicyRoutes from './routes/leave/policy.route';
@@ -135,6 +136,7 @@ const app = new App([
   new TransferRoute(),
   new LeaveAllocationRoute(),
   new LeaveApplicationRoute(),
+  new LeaveApprovalLevelRoute(),
   new LeaveSettingsRoute(),
   new BranchRoute(),
   new ContactDetailsRoute(),
