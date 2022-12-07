@@ -5,9 +5,10 @@ import {IsBoolean, IsDate, IsDateString, IsNotEmpty, IsOptional, IsString} from 
 export class CreateLeaveApplicationDTO{
 
     @IsString()
-    public leave_type_id: string;
+    public leave_type: string;
     
     @IsString()
+    @IsNotEmpty()
     public employee_id: string;
 
     @IsString()
@@ -26,20 +27,24 @@ export class CreateLeaveApplicationDTO{
     @IsOptional()
     public reason_for_application: string;
 
-    // @IsBoolean()
-    // @IsNotEmpty()
-    // public status: boolean;
+    @IsBoolean()
+    @IsOptional()
+    public status: string;
 
     @IsString()
     @IsOptional()
     public rejection_reason: string;
 
-    // @IsBoolean()
-    // @IsNotEmpty()
-    // public hr_stage: boolean;
+    @IsBoolean()
+    @IsOptional()
+    public hr_stage: boolean;
 
     @IsBoolean()
-    @IsNotEmpty()
+    @IsOptional()
+    public approval_level: number;
+
+    @IsBoolean()
+    @IsOptional()
     public acted_on: boolean;
 
     @IsDateString()
@@ -47,9 +52,6 @@ export class CreateLeaveApplicationDTO{
 
     @IsDateString()
     public to_date : Date;
-    
-    @IsString()
-    public reason: string;
 
 }
 export class UpdateLeaveApplicationDTO{
@@ -58,10 +60,11 @@ export class UpdateLeaveApplicationDTO{
     public _id: string;
 
     @IsString()
+    @IsNotEmpty()
     public employee_id: string;
 
     @IsString()
-    public leave_type_id: string;
+    public leave_type: string;
 
     @IsDateString()
     public from_date: Date;
@@ -76,12 +79,13 @@ export class UpdateLeaveApplicationDTO{
     public posting_date: Date;
 
     @IsString()
-    public reason: string;
-
-    @IsString()
     public status: string;
 
     @IsString()
     @IsNotEmpty()
     public approval_level: string;
+
+    @IsString()
+    @IsOptional()
+    public project_id: string;
 }
