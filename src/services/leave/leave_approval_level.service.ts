@@ -24,7 +24,7 @@ class LeaveApprovalLevelService {
   public async findAllLeaveApprovalLevels(): Promise<ILeaveApprovalLevel[]> {
       const leaveApprovalLevel: ILeaveApprovalLevel[] = await this.leavApprovalLevelModel
       .find()
-      .populate("designations")
+      .populate("designation_id")
       return leaveApprovalLevel;
   }
   public async findLeaveApprovalLevelById(leaveApprovalLevelId: string): Promise<ILeaveApprovalLevel> {
