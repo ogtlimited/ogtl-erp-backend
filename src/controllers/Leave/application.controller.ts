@@ -28,9 +28,6 @@ class LeaveApplicationController {
       next(error);
     }
   };
-
-
-
   public findAllLeaveapplicationsClient = async (req: any, res: Response, next: NextFunction) => {
     try {
       const ClientId: string = req.params.id;
@@ -114,6 +111,58 @@ class LeaveApplicationController {
       const deleteLeaveApplicationData: ILeaveApplication = await this.leaveApplicationService.deleteLeaveapplication(LeaveApplicationId);
 
       res.status(200).json({ data: deleteLeaveApplicationData, message: 'deleted' });
+    } catch (error) {
+      next(error);
+    }
+  };
+  public getLeaveApplicationsForLeads = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const leaveApplicationsForTeamLeads: ILeaveApplication[] = await this.leaveApplicationService.getLeaveApplicationsForLeads(req.user);
+      res.status(200).json({ data: leaveApplicationsForTeamLeads});
+    } catch (error) {
+      next(error);
+    }
+  };
+  public getLeaveApplicationsForHr = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const leaveApplicationsForHr: ILeaveApplication[] = await this.leaveApplicationService.getLeaveApplicationsForHr();
+      res.status(200).json({ data: leaveApplicationsForHr});
+    } catch (error) {
+      next(error);
+    }
+  };
+  public approveHrLeaveApplications = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const {leaveId} = req.params
+      const leaveApplications: any = await this.leaveApplicationService.approveHrLeaveApplications(leaveId);
+      res.status(200).json({ data: leaveApplications});
+    } catch (error) {
+      next(error);
+    }
+  };
+  public rejectHrLeaveApplications = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const {leaveId} = req.params
+      const leaveApplications: any = await this.leaveApplicationService.rejectHrLeaveApplications(leaveId);
+      res.status(200).json({ data: leaveApplications});
+    } catch (error) {
+      next(error);
+    }
+  };
+  public approveLeadsLeaveApplications = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const {leaveId} = req.params
+      const leaveApplications: any = await this.leaveApplicationService.approveLeadsLeaveApplications(leaveId, req.user);
+      res.status(200).json({ data: leaveApplications});
+    } catch (error) {
+      next(error);
+    }
+  };
+  public rejectLeadsLeaveApplications = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const {leaveId} = req.params
+      const leaveApplications: any = await this.leaveApplicationService.rejectLeadsLeaveApplications(leaveId, req.user, req.body);
+      res.status(200).json({ data: leaveApplications});
     } catch (error) {
       next(error);
     }
