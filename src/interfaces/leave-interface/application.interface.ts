@@ -4,7 +4,7 @@ export interface ILeaveApplication{
     employee_id: string;
     project_id?: string;
     department_id: string;
-    leave_type_id: string;
+    leave_type: string;
     from_date: Date;
     to_date : Date;
     leave_approver: string;
