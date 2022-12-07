@@ -15,15 +15,14 @@ const applicationSchema : Schema = new Schema (
         },
         project_id: {
             type: mongoose.Schema.Types.ObjectId,
-            required: true,
             ref: "Project",
         },
-        deparment_id: {
+        department_id: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
             ref: "Department",
         },
-        leave_type_id:{
+        leave_type:{
             type: String,
             enum:["Annual","Casual","Sick","Without Pay","Maternity"],
             required: true,
@@ -43,6 +42,7 @@ const applicationSchema : Schema = new Schema (
         },
         approval_level: {
             type: Number,
+            default: 1,
             required: true,
         },
         reason_for_application: String,
