@@ -74,7 +74,10 @@ public async findDepartmentById(DepartmentId:string) : Promise<IDepartment>{
             _id: DepartmentId
           },
           {
-            $set: {department: DepartmentData.department}
+            $set: {
+              department: DepartmentData.department,
+              leave_approval_level: DepartmentData.leave_approval_level
+            }
           },
           { new: true });
         if(!updateDepartmentById) throw new HttpException(409, "Department doesn't exist");
