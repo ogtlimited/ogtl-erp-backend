@@ -45,8 +45,8 @@ class LeaveApplicationService {
           model: 'Designation',
         },
       }).populate({
-        path:'employee_project_id',
-        model : 'Project',
+        path:'project_id',
+        model : 'Project'
             });
     return application;
   }
@@ -138,18 +138,18 @@ class LeaveApplicationService {
   }
 
   public async createLeaveapplication(LeaveapplicationData: ILeaveApplication, user): Promise<ILeaveApplication> {
-    console.log(user)
-    console.log({...LeaveapplicationData, employee_project_id: user.projectId});
-    
     if (isEmpty(LeaveapplicationData)) throw new HttpException(400, 'Bad request');
     const startDate = new Date(LeaveapplicationData.from_date);
     const endDate = new Date(LeaveapplicationData.to_date);
+    const leave_period = await this.application.findOne(
+      // {$and:[{_id: LeaveapplicationData.employee_id}, {createdAt:{$gte:startDate,$lt:endDate}},{status:{$ne: "rejected"}}]})
+      {employee_id: LeaveapplicationData.employee_id, createdAt:{$gte:startDate,$lt:endDate},status:{$ne: "rejected"}})
+    if(leave_period) throw new HttpException(400, 'Your leave is being processed')
     if (startDate > endDate) throw new HttpException(400, 'Leave end date must be greater than end date');
     const date = new Date();
     // const user: Employee = await this.employeeS.findEmployeeById(LeaveapplicationData.employee_id)
     const MaxLeave = Number(user.leaveCount);
-    LeaveapplicationData.leave_approver = user.reports_to;
-    LeaveapplicationData.employee_id = user._id;
+    // LeaveapplicationData.employee_id = user._id;
     const totalApplied = this.getBusinessDatesCount(new Date(LeaveapplicationData.from_date), new Date(LeaveapplicationData.to_date));
     if (MaxLeave < totalApplied) {
       throw new HttpException(400, 'total leave days exceed available leaves');
@@ -182,7 +182,7 @@ class LeaveApplicationService {
       const totalLeaveThisYear = getLeaveDays.reduce((previousValue, currentValue) => previousValue + currentValue);
       const oldAndNewLeave = totalApplied + totalLeaveThisYear;
       const validateLeaveDay = await this.validateLeaveDay(LeaveapplicationData.from_date, user.projectId)
-      if(validateLeaveDay === false) {
+      if(validateLeaveDay === false ) {
         throw new HttpException(400, 'This leave day is not available');
       }
       if (totalLeaveThisYear > MaxLeave) {
@@ -226,7 +226,7 @@ class LeaveApplicationService {
           newArray.push(findEmployee);
         }
       }
-      console.log(newArray);
+      // console.log(newArray);
       // const results = await EmployeeModel.updateMany({type: '_id'}, newArray)
       // await EmployeeModel.updateMany({_id: {$in: [...newArray['employee_id']]}},{$set: {leaveCount: {$in: [...]}}})
 
@@ -248,8 +248,6 @@ class LeaveApplicationService {
   }
 
   public getBusinessDatesCount(startDate, endDate) {
-    console.log('start date');
-    console.log(startDate, endDate);
     let count = 0;
     const curDate = new Date(startDate.getTime());
     while (curDate <= endDate) {
@@ -271,19 +269,23 @@ class LeaveApplicationService {
       },
     );
   }
-
-  public async approveLeave(id: String, user): Promise<ILeaveApplication> {
+  public async getLeaveApplicationsForLeads(user): Promise<ILeaveApplication[]> {
+    const teamLeadsApprovalLevel = await this.getLeadsApprovalLevel(user)
+    const leaveApplications = await this.application.find({ leave_approver: user._id, approval_level:teamLeadsApprovalLevel,hr_stage:{$ne: true}});
+    return leaveApplications;
+  }
+  public async approveLeadsLeaveApplications(leaveId: String, user): Promise<ILeaveApplication> {
     const departmentHighestLeaveApprovalLevel = await this.getDepartmentHighestLeaveApprovalLevel(user)
-    const approversApprovalLevel = await this.getApproversApprovalLevel(user)
+    const leadsApprovalLevel = await this.getLeadsApprovalLevel(user)
     const leaveApplication = await this.application.findOneAndUpdate(
-      { _id: id, leave_approver: user._id, status: { $eq: 'pending' } },
+      { _id: leaveId, leave_approver: user._id, status: { $eq: 'pending' } },
       {
         $set: { 
           leave_approver: user.reports_to,
-          hr_stage: approversApprovalLevel === departmentHighestLeaveApprovalLevel ? true : false,
-          approval_level: +1,
+          hr_stage: leadsApprovalLevel === departmentHighestLeaveApprovalLevel ? true : false,
           acted_on: true
-      }
+      },
+         $inc: { approval_level: 1 },
      },
       { new: true },
     );
@@ -292,9 +294,9 @@ class LeaveApplicationService {
     }
     return leaveApplication;
   }
-  public async rejectLeave(id: String, user, query): Promise<ILeaveApplication> {
+  public async rejectLeadsLeaveApplications(leaveId: String, user, query): Promise<ILeaveApplication> {
     const leaveApplication = await this.application.findOneAndUpdate(
-      { _id: id, leave_approver: user._id, status: { $eq: 'pending' } },
+      { _id: leaveId, leave_approver: user._id, status: { $eq: 'pending' } },
       {
         $set: {
           status: "rejected",
@@ -309,21 +311,51 @@ class LeaveApplicationService {
     }
     return leaveApplication;
   }
-  public async getLeaveApplicationsForTeamLeads(user): Promise<ILeaveApplication[]> {
-    const teamLeadsApprovalLevel = await this.getApproversApprovalLevel(user)
-    const leaveApplications = await this.application.find({ leave_approver: user._id, approval_level:teamLeadsApprovalLevel});
-    return leaveApplications;
+  public async getLeaveApplicationsForHr(): Promise<ILeaveApplication[]> {
+    const leaveApplicationsForHr = await this.application.find({ hr_stage: true});
+    return leaveApplicationsForHr;
   }
-  private async getDepartmentHighestLeaveApprovalLevel(user): Promise<IDepartment>{
+  public async approveHrLeaveApplications(leaveId: string): Promise<ILeaveApplication[]> {
+    const leaveApplication: any = await this.application.findOneAndUpdate(
+      { _id: leaveId, hr_stage: true, status: { $eq: 'pending' } },
+      {
+        $set: { 
+          status: "approved"
+        }
+      },
+      { new: true }
+    );
+    if (!leaveApplication) {
+      throw new HttpException(400, 'leave application does not exist');
+    }
+    return leaveApplication;
+  }
+  public async rejectHrLeaveApplications(leaveId: string): Promise<ILeaveApplication[]> {
+    const leaveApplication: any = await this.application.findOneAndUpdate(
+      { _id: leaveId, hr_stage: true, status: { $eq: 'pending' } },
+      {
+        $set: { 
+          status: "rejected"
+        }
+      },
+      { new: true }
+    );
+    if (!leaveApplication) {
+      throw new HttpException(400, 'leave application does not exist');
+    }
+    return leaveApplication;
+  }
+  private async getDepartmentHighestLeaveApprovalLevel(user): Promise<any>{
     const departmentRecord: any = await this.departmentModel.find({department_id: user.department})
     return await departmentRecord.leave_approval_level
   }
-  private async getApproversApprovalLevel(user): Promise<ILeaveApplication>{
-    const leaveApprovalLevelRecord: any = await this.leaveApprovalLevelModel.find({designation_id: user.designation_id})
-    return await leaveApprovalLevelRecord.leave_approval_level
+  private async getLeadsApprovalLevel(user): Promise<any>{
+    const leaveApprovalLevelRecord: any = await this.leaveApprovalLevelModel.findOne({designation_id: user.designation})
+    return await leaveApprovalLevelRecord.approval_level
   }
 
   private async validateLeaveDay(date: Date, employee_project_id: string): Promise<boolean> {
+    const valid_status = "pending"  
     const year = new Date(date).getFullYear()
     const month = new Date(date).getMonth()+1
     const day = new Date(date).getDate()
@@ -348,6 +380,9 @@ class LeaveApplicationService {
             ]
           }
         ]
+      },
+      status:{
+        $ne: "rejected"
       }
     })
     if(leaves.length === 0){
