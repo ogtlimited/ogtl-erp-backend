@@ -10,6 +10,15 @@ const designationSchema: Schema = new Schema(
             required: true,
             unique: true,
           },
+        department_id: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: "Department",
+        },
+        project_id: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Project",
+        },
           slug: {
             type: String,
             required: true,

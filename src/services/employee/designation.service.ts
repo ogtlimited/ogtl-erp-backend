@@ -57,18 +57,14 @@ public async findDesignationById(DesignationId:string) : Promise<Designation>{
        const createDesignationData: Designation = await this.Designations.create(data);
        return createDesignationData;
      }
-
-
-    /**
-     *Updates existing Designation 
-     */
-
      public async updateDesignation(DesignationId:string,DesignationData: UpdateDesignationDto)  : Promise<Designation>{
-
-        //Check if data is empty
         if (isEmpty(DesignationData)) throw new HttpException(400, "No data provided");
-
-        const updateDesignationById: Designation = await this.Designations.findByIdAndUpdate(DesignationId,{$set: {designation: DesignationData.designation}});
+        const updateDesignationById: Designation = await this.Designations.findByIdAndUpdate(DesignationId,
+            {$set: {
+                designation: DesignationData.designation,
+                department_id: DesignationData.department_id,
+                project_id: DesignationData.project_id
+            }});
         if(!updateDesignationById) throw new HttpException(409, "Designation doesn't exist");
          return updateDesignationById;
    } 
