@@ -13,6 +13,7 @@ import EmployeeService from '@services/employee.service';
 import { Employee } from '@/interfaces/employee-interface/employee.interface';
 import EmployeeModel from '@models/employee/employee.model';
 import projectModel from '@/models/project/project.model';
+import { IDepartment } from '@/interfaces/employee-interface/department.interface';
 
 class LeaveApplicationService {
   public application = applicationModel;
@@ -313,12 +314,12 @@ class LeaveApplicationService {
     const leaveApplications = await this.application.find({ leave_approver: user._id, approval_level:teamLeadsApprovalLevel});
     return leaveApplications;
   }
-  private async getDepartmentHighestLeaveApprovalLevel(user){
-    const departmentRecord = await this.departmentModel.find({department_id: user.department})
+  private async getDepartmentHighestLeaveApprovalLevel(user): Promise<IDepartment>{
+    const departmentRecord: any = await this.departmentModel.find({department_id: user.department})
     return await departmentRecord.leave_approval_level
   }
-  private async getApproversApprovalLevel(user){
-    const leaveApprovalLevelRecord = await this.leaveApprovalLevelModel.find({designation_id: user.designation_id})
+  private async getApproversApprovalLevel(user): Promise<ILeaveApplication>{
+    const leaveApprovalLevelRecord: any = await this.leaveApprovalLevelModel.find({designation_id: user.designation_id})
     return await leaveApprovalLevelRecord.leave_approval_level
   }
 
