@@ -6,6 +6,8 @@ import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { CreateLeaveApplicationDTO, UpdateLeaveApplicationDTO } from '@/dtos/Leave/application.dto';
 import applicationModel from '@/models/leave/application.model';
+import leaveApprovalLevelModel from '@/models/leave/leave_approval_level.model';
+import departmentModel from '@/models/department/department.model';
 import allocationModel from '@/models/leave/allocation.model';
 import EmployeeService from '@services/employee.service';
 import { Employee } from '@/interfaces/employee-interface/employee.interface';
@@ -15,6 +17,8 @@ import projectModel from '@/models/project/project.model';
 class LeaveApplicationService {
   public application = applicationModel;
   public allocationM = allocationModel;
+  private leaveApprovalLevelModel = leaveApprovalLevelModel;
+  private departmentModel = departmentModel;
   public employeeS = new EmployeeService();
   constructor(){
     // this.updateAllLeaveCount()
@@ -265,6 +269,57 @@ class LeaveApplicationService {
         $inc: { leaveCount: 24 },
       },
     );
+  }
+
+  public async approveLeave(id: String, user): Promise<ILeaveApplication> {
+    const departmentHighestLeaveApprovalLevel = await this.getDepartmentHighestLeaveApprovalLevel(user)
+    const approversApprovalLevel = await this.getApproversApprovalLevel(user)
+    const leaveApplication = await this.application.findOneAndUpdate(
+      { _id: id, leave_approver: user._id, status: { $eq: 'pending' } },
+      {
+        $set: { 
+          leave_approver: user.reports_to,
+          hr_stage: approversApprovalLevel === departmentHighestLeaveApprovalLevel ? true : false,
+          approval_level: +1,
+          acted_on: true
+      }
+     },
+      { new: true },
+    );
+    if (!leaveApplication) {
+      throw new HttpException(400, 'leave application does not exist');
+    }
+    return leaveApplication;
+  }
+  public async rejectLeave(id: String, user, query): Promise<ILeaveApplication> {
+    const leaveApplication = await this.application.findOneAndUpdate(
+      { _id: id, leave_approver: user._id, status: { $eq: 'pending' } },
+      {
+        $set: {
+          status: "rejected",
+          acted_on: true,
+          rejection_reason: query.rejection_reason,
+      },
+      },
+      { new: true },
+    );
+    if (!leaveApplication) {
+      throw new HttpException(400, 'leave application does not exist');
+    }
+    return leaveApplication;
+  }
+  public async getLeaveApplicationsForTeamLeads(user): Promise<ILeaveApplication[]> {
+    const teamLeadsApprovalLevel = await this.getApproversApprovalLevel(user)
+    const leaveApplications = await this.application.find({ leave_approver: user._id, approval_level:teamLeadsApprovalLevel});
+    return leaveApplications;
+  }
+  private async getDepartmentHighestLeaveApprovalLevel(user){
+    const departmentRecord = await this.departmentModel.find({department_id: user.department})
+    return await departmentRecord.leave_approval_level
+  }
+  private async getApproversApprovalLevel(user){
+    const leaveApprovalLevelRecord = await this.leaveApprovalLevelModel.find({designation_id: user.designation_id})
+    return await leaveApprovalLevelRecord.leave_approval_level
   }
 
   private async validateLeaveDay(date: Date, employee_project_id: string): Promise<boolean> {
