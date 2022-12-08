@@ -89,7 +89,7 @@ class LeaveApplicationController {
       const LeaveApplicationData: UpdateLeaveApplicationDTO = req.body;
       const updateLeaveApplicationData: ILeaveApplication = await this.leaveApplicationService.updateLeaveapplication(LeaveApplicationId, LeaveApplicationData);
 
-      res.status(200).json({ data: updateLeaveApplicationData, message: 'updated' });
+      res.status(200).json({ data: updateLeaveApplicationData});
     } catch (error) {
       next(error);
     }
