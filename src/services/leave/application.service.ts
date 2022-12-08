@@ -13,6 +13,7 @@ import EmployeeService from '@services/employee.service';
 import { Employee } from '@/interfaces/employee-interface/employee.interface';
 import EmployeeModel from '@models/employee/employee.model';
 import projectModel from '@/models/project/project.model';
+const moment = require('moment')
 
 class LeaveApplicationService {
   public application = applicationModel;
@@ -21,6 +22,8 @@ class LeaveApplicationService {
   private departmentModel = departmentModel;
   public employeeS = new EmployeeService();
   public employeeModel = EmployeeModel;
+  private startOfYear = new Date(moment().startOf('year').toString()); 
+  private endOfYear = new Date(moment().endOf('year').toString());
   constructor(){
     // this.updateAllLeaveCount()
   }
@@ -135,24 +138,20 @@ class LeaveApplicationService {
   }
 
   public async createLeaveapplication(LeaveapplicationData: ILeaveApplication, user): Promise<ILeaveApplication> {
+    LeaveapplicationData.approval_level = await this.getApplicantsImmediateLeadLeaveApprovalLevel(LeaveapplicationData)
     if (isEmpty(LeaveapplicationData)) throw new HttpException(400, 'Bad request');
     const startDate = new Date(LeaveapplicationData.from_date);
     const endDate = new Date(LeaveapplicationData.to_date);
     const leave_period = await this.application.findOne(
-      // {$and:[{_id: LeaveapplicationData.employee_id}, {createdAt:{$gte:startDate,$lt:endDate}},{status:{$ne: "rejected"}}]})
       {employee_id: LeaveapplicationData.employee_id, createdAt:{$gte:startDate,$lt:endDate},status:{$ne: "rejected"}})
     if(leave_period) throw new HttpException(400, 'Your leave is being processed')
     if (startDate > endDate) throw new HttpException(400, 'Leave end date must be greater than end date');
     const date = new Date();
-    // const user: Employee = await this.employeeS.findEmployeeById(LeaveapplicationData.employee_id)
     const MaxLeave = Number(user.leaveCount);
-    // LeaveapplicationData.employee_id = user._id;
     const totalApplied = this.getBusinessDatesCount(new Date(LeaveapplicationData.from_date), new Date(LeaveapplicationData.to_date));
     if (MaxLeave < totalApplied) {
       throw new HttpException(400, 'total leave days exceed available leaves');
     };
-
-
     const monthAfterOnboarding = this.monthDiff(new Date(user.date_of_joining), new Date());
     // if(user)
     if (totalApplied > 12) {
@@ -170,8 +169,6 @@ class LeaveApplicationService {
     });
     
     if (prevLeaves.length == 0) {
-      // console.log(prevLeaves)
-      
       const createLeaveapplicationData: ILeaveApplication = await this.application.create({...LeaveapplicationData, employee_project_id: user.projectId});
       return createLeaveapplicationData;
     } else {
@@ -266,25 +263,30 @@ class LeaveApplicationService {
       },
     );
   }
-  public async getLeaveApplicationsForLeads(user): Promise<ILeaveApplication[]> {
-    const teamLeadsApprovalLevel = await this.getLeadsApprovalLevel(user)
-    const leaveApplications = await this.application.find({ leave_approver: user._id, approval_level:teamLeadsApprovalLevel,hr_stage:{$ne: true}});
-    return leaveApplications;
+  public async getLeaveapplicationByEmployeeId(employee_id: string): Promise<ILeaveApplication> {
+    if (isEmpty(employee_id)) throw new HttpException(400, "You're not LeaveapplicationId");
+    const findLeaveapplication: ILeaveApplication = await this.application.findOne({ employee_id: employee_id });
+    if (!findLeaveapplication) throw new HttpException(409, 'Leave application not found');
+    return findLeaveapplication;
+  }
+  public async getLeaveApplicationsForLeads(user, query: any): Promise<ILeaveApplication[]> {
+   let matchBy = { leave_approver: user._id, hr_stage:{$ne: true}}
+   const leaveApplications= await this.getLeaveApplicationsHelperMethod(matchBy,query)
+  return leaveApplications;
   }
   public async approveLeadsLeaveApplications(leaveId: String, user): Promise<ILeaveApplication> {
     const departmentHighestLeaveApprovalLevel = await this.getDepartmentHighestLeaveApprovalLevel(user)
-    const leadsApprovalLevel = await this.getLeadsApprovalLevel(user)
-    console.log("leadsApprovalLevel", leadsApprovalLevel)
-    console.log("departmentHighestLeaveApprovalLevel", departmentHighestLeaveApprovalLevel)
+    const leadsApprovalLevel = await this.getUsersLeaveApprovalLevel(user)
+    const immediateSupervisorsLeaveApprovalLevel = await this.getImmediateSupervisorsLeaveApprovalLevel(user)
     const leaveApplication = await this.application.findOneAndUpdate(
-      { _id: leaveId, leave_approver: user._id, status: { $eq: 'pending' } },
+      { _id: leaveId, leave_approver: user._id, status: { $eq: 'pending' }, hr_stage: { $ne: true }},
       {
         $set: { 
           leave_approver: leadsApprovalLevel === departmentHighestLeaveApprovalLevel ? user._id : user.reports_to,
           hr_stage: leadsApprovalLevel === departmentHighestLeaveApprovalLevel ? true : false,
-          acted_on: true
-      },
-         $inc: { approval_level: leadsApprovalLevel === departmentHighestLeaveApprovalLevel ? 0 : 1 },
+          acted_on: true,
+          approval_level: leadsApprovalLevel === departmentHighestLeaveApprovalLevel ? leadsApprovalLevel : immediateSupervisorsLeaveApprovalLevel,
+      }
      },
       { new: true },
     );
@@ -295,7 +297,7 @@ class LeaveApplicationService {
   }
   public async rejectLeadsLeaveApplications(leaveId: String, user, query): Promise<ILeaveApplication> {
     const leaveApplication = await this.application.findOneAndUpdate(
-      { _id: leaveId, leave_approver: user._id, status: { $eq: 'pending' } },
+      { _id: leaveId, leave_approver: user._id, status: { $eq: 'pending' }, hr_stage: { $ne: true } },
       {
         $set: {
           status: "rejected",
@@ -310,9 +312,10 @@ class LeaveApplicationService {
     }
     return leaveApplication;
   }
-  public async getLeaveApplicationsForHr(): Promise<ILeaveApplication[]> {
-    const leaveApplicationsForHr = await this.application.find({ hr_stage: true, status: "pending"});
-    return leaveApplicationsForHr;
+  public async getLeaveApplicationsForHr(query:any ): Promise<ILeaveApplication[]> {
+    let matchBy = { hr_stage: true, status: "pending"}
+    const leaveApplications= await this.getLeaveApplicationsHelperMethod(matchBy, query)
+    return leaveApplications;
   }
   public async approveHrLeaveApplications(leaveId: string): Promise<ILeaveApplication[]> {
     const leaveApplication: any = await this.application.findOneAndUpdate(
@@ -328,8 +331,7 @@ class LeaveApplicationService {
       throw new HttpException(400, 'leave application does not exist');
     }
     const leaveApplicationBusinessdays = this.getBusinessDatesCount(leaveApplication.from_date, leaveApplication.to_date)
-    const employeesRecords = await this.employeeModel
-    .findOneAndUpdate({_id: leaveApplication.employee_id},
+    await this.employeeModel.findOneAndUpdate({_id: leaveApplication.employee_id},
       {
         $inc: { 
           leaveCount: -leaveApplicationBusinessdays
@@ -353,15 +355,181 @@ class LeaveApplicationService {
     }
     return leaveApplication;
   }
+  public async checkWhetherUserIsALead(user): Promise<any>{
+    const usersRecords: any = await this.leaveApprovalLevelModel.findOne({designation_id: user.designation})
+    const usersApprovalLevel = await usersRecords.approval_level
+    if(usersApprovalLevel) return true
+    return false 
+  }
   private async getDepartmentHighestLeaveApprovalLevel(user): Promise<any>{
     const departmentRecord: any = await this.departmentModel.findOne({_id: user.department})
     return await departmentRecord.leave_approval_level
   }
-  private async getLeadsApprovalLevel(user): Promise<any>{
-    const leaveApprovalLevelRecord: any = await this.leaveApprovalLevelModel.findOne({designation_id: user.designation})
-    return await leaveApprovalLevelRecord.approval_level
+  private async getUsersLeaveApprovalLevel(user): Promise<any>{
+    const usersLeaveApprovalLevel: any = await this.leaveApprovalLevelModel.findOne({designation_id: user.designation})
+    return await usersLeaveApprovalLevel.approval_level
   }
-
+  private async getImmediateSupervisorsLeaveApprovalLevel(user): Promise<any>{
+    const supervisorsRecord: any = await this.employeeModel.findOne({_id: user.reports_to})
+    const supervisorsLeaveApprovalRecords: any = await this.leaveApprovalLevelModel.findOne({designation_id: supervisorsRecord.designation})
+    return await supervisorsLeaveApprovalRecords.approval_level
+  }
+  private async getApplicantsImmediateLeadLeaveApprovalLevel(payload): Promise<any>{
+    const leadsLeaveApprovalRecords: any = await this.employeeModel.findOne({_id: payload.leave_approver})
+    const leadsLeaveApprovalLevel: any = await this.leaveApprovalLevelModel.findOne({designation_id: leadsLeaveApprovalRecords.designation})
+    return await leadsLeaveApprovalLevel.approval_level
+  }
+  public async countHrPendingLeaves(): Promise<any>{
+    const pendingLeaves: any = await this.application.find({hr_stage: true, status: "pending"}).countDocuments()
+    return await pendingLeaves
+  }
+  public async countHrApprovedLeaves(): Promise<any>{
+    const approvedLeaves: any = await this.application.find({hr_stage: true, status: "approved"}).countDocuments()
+    return await approvedLeaves
+  }
+  public async countHrRejectedLeaves(): Promise<any>{
+    const hrRejectedLeaves: any = await this.application.find({hr_stage: true, status:"rejected"}).countDocuments()
+    return await hrRejectedLeaves
+  }
+  public async countUsedLeavesByEmployee(user): Promise<any>{
+    const employeeUsedLeaves: any = await this.getEmployeeApprovedLeaveDays(user)
+    console.log("employeeUsedLeaves", employeeUsedLeaves)
+    // let count = 0
+    // for(let i=0; i<employeeUsedLeaves.length; i++){
+    //   count += employeeUsedLeaves[i].
+    // }
+    // return await employeeUsedLeaves
+  }
+  private async getEmployeeApprovedLeaveDays(user): Promise<any>{
+    const employeeUsedLeaves: any = await this.application.find(
+      {employee_id: user._id,
+      hr_stage: false, status:"pending",
+      createdAt:{$gte:this.startOfYear,$lt:this.endOfYear}
+      })
+     const employeeUsedLeaveDaysCount = await (Promise.all(employeeUsedLeaves))
+     const formatedLeaveApplication = employeeUsedLeaveDaysCount.map(leaveApplication=>{
+      return {leaveApplication: this.getBusinessDatesCount(leaveApplication.from_date, leaveApplication.to_date)}
+     })
+    return formatedLeaveApplication
+  }
+  private async getLeaveApplicationsHelperMethod(matchBy,searchQuery:any): Promise<any> {
+    let MAX_LIMIT = 50
+    const page = parseInt(searchQuery?.page) || 1;
+    let limit: number;
+    if(!searchQuery.limit){
+      limit = 10
+    }
+    else if(parseInt(searchQuery?.limit)>MAX_LIMIT){
+      limit = MAX_LIMIT
+    }
+    else if(parseInt(searchQuery?.limit)){
+      limit = parseInt(searchQuery.limit)
+    }
+    const startIndex = (page-1) * limit;
+    const endIndex = page * limit;
+    const filtrationQuery = this.filtrationQuerymethod(matchBy, searchQuery, startIndex, limit)
+    const application: Employee[] = await this.application
+    .aggregate(filtrationQuery)
+    
+    const removeLimitAndSkip:any = filtrationQuery.filter(item => !item["$limit"] && !item["$skip"])
+    removeLimitAndSkip.push({$count:"Number of Docs"})
+    const countDocuments:any = await this.application.aggregate(removeLimitAndSkip)
+    let totalPage:number;
+    for(let count of countDocuments){
+       totalPage = count["Number of Docs"]
+    }
+    const pagination: any = {numberOfPages:Math.ceil(totalPage/limit)};
+    if(endIndex < totalPage){
+      pagination.next = {
+        page: page + 1,
+        limit: limit
+      }
+    }
+    if(startIndex > 0){
+      pagination.previous = {
+        page: page - 1,
+        limit: limit
+      }
+    }
+    return { 
+      application,
+      pagination: pagination,
+      totalLeave: application.length
+    }
+  }
+  
+  private filtrationQuerymethod(matchBy, searchQuery, startIndex:number, limit:number){ 
+    const filtrationQuery:any = [
+      {
+        $match: matchBy
+      },
+      {
+       $lookup:{
+         from: "departments",
+         localField: "department_id",
+         foreignField: "_id",
+         as: "department"
+      }
+      },
+      {
+       $unwind: {path :"$department",
+       preserveNullAndEmptyArrays: true
+      }
+      },
+      {
+       $lookup:{
+         from: "employees",
+         localField: "employee_id",
+         foreignField: "_id",
+         as: "employee"
+         }
+       },
+      {
+       $unwind: {path :"$employee",
+       preserveNullAndEmptyArrays: true
+     }
+     }
+     ]
+     if(searchQuery.search){
+      filtrationQuery.push(
+        {
+          $match:{
+            $or : [
+              { "employee.first_name":{$regex:searchQuery.search, $options:"i"}},
+              { "employee.last_name":{$regex:searchQuery.search, $options:"i"}},
+              { "employee.middle_name":{$regex:searchQuery.search, $options:"i"}},
+              { "department.department":{$regex:searchQuery.search, $options:"i"}}
+            ]
+          }
+        }
+      )
+      }
+      if(searchQuery.department){
+      filtrationQuery.push(
+        {
+          $match: { "department.department":{$regex:searchQuery.department, $options:"i"}}    
+         }
+      )
+      }
+      if(searchQuery.leave_type){
+        filtrationQuery.push(
+          {
+            $match: { leave_type:{$regex:searchQuery.leave_type, $options:"i"}}    
+            }
+        )
+        }
+      if(searchQuery?.page){
+        filtrationQuery.push(
+          { $skip: startIndex },
+          )
+        }
+      if(searchQuery?.limit){
+        filtrationQuery.push(
+          { $limit: limit},
+          )
+        }
+      return filtrationQuery
+  }
   private async validateLeaveDay(date: Date, employee_project_id: string): Promise<boolean> {
     const valid_status = "pending"  
     const year = new Date(date).getFullYear()
