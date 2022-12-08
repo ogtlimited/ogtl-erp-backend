@@ -88,4 +88,16 @@ export class UpdateLeaveApplicationDTO{
     @IsString()
     @IsOptional()
     public project_id: string;
+
+    @IsString()
+    @IsOptional()
+    public rejection_reason: string;
+
+    @IsString()
+    @IsOptional()
+    public department_id: string;
+
+    @IsString()
+    @IsOptional()
+    public reason_for_application: string;
 }
