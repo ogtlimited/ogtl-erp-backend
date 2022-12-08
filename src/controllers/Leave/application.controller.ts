@@ -115,6 +115,7 @@ class LeaveApplicationController {
       next(error);
     }
   };
+
   public getLeaveApplicationsForLeads = async (req: any, res: Response, next: NextFunction) => {
     try {
       const leaveApplicationsForTeamLeads: ILeaveApplication[] = await this.leaveApplicationService.getLeaveApplicationsForLeads(req.user);
