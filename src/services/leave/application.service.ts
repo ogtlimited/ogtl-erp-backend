@@ -13,7 +13,6 @@ import EmployeeService from '@services/employee.service';
 import { Employee } from '@/interfaces/employee-interface/employee.interface';
 import EmployeeModel from '@models/employee/employee.model';
 import projectModel from '@/models/project/project.model';
-import { IDepartment } from '@/interfaces/employee-interface/department.interface';
 
 class LeaveApplicationService {
   public application = applicationModel;
@@ -21,6 +20,7 @@ class LeaveApplicationService {
   private leaveApprovalLevelModel = leaveApprovalLevelModel;
   private departmentModel = departmentModel;
   public employeeS = new EmployeeService();
+  public employeeModel = EmployeeModel;
   constructor(){
     // this.updateAllLeaveCount()
   }
@@ -58,9 +58,6 @@ class LeaveApplicationService {
 
     return application;
   }
-
-
-
   public async findAllTeamMembersLeave(user): Promise<ILeaveApplication[]> {
     const leaveApplications = await this.application.find({ leave_approver: user._id });
     return leaveApplications;
@@ -202,7 +199,7 @@ class LeaveApplicationService {
     if (isEmpty(LeaveapplicationData)) throw new HttpException(400, 'Bad request');
 
     if (LeaveapplicationData._id) {
-      const findLeaveapplication: ILeaveApplication = await this.application.findOne({ _id: LeaveapplicationData._id });
+      const findLeaveapplication: ILeaveApplication = await this.application.findOne({ _id: LeaveapplicationData._id, acted_on: false});
       if (findLeaveapplication && findLeaveapplication._id != LeaveapplicationId)
         throw new HttpException(409, `${LeaveapplicationData._id} already exists`);
     }
@@ -277,15 +274,17 @@ class LeaveApplicationService {
   public async approveLeadsLeaveApplications(leaveId: String, user): Promise<ILeaveApplication> {
     const departmentHighestLeaveApprovalLevel = await this.getDepartmentHighestLeaveApprovalLevel(user)
     const leadsApprovalLevel = await this.getLeadsApprovalLevel(user)
+    console.log("leadsApprovalLevel", leadsApprovalLevel)
+    console.log("departmentHighestLeaveApprovalLevel", departmentHighestLeaveApprovalLevel)
     const leaveApplication = await this.application.findOneAndUpdate(
       { _id: leaveId, leave_approver: user._id, status: { $eq: 'pending' } },
       {
         $set: { 
-          leave_approver: user.reports_to,
+          leave_approver: leadsApprovalLevel === departmentHighestLeaveApprovalLevel ? user._id : user.reports_to,
           hr_stage: leadsApprovalLevel === departmentHighestLeaveApprovalLevel ? true : false,
           acted_on: true
       },
-         $inc: { approval_level: 1 },
+         $inc: { approval_level: leadsApprovalLevel === departmentHighestLeaveApprovalLevel ? 0 : 1 },
      },
       { new: true },
     );
@@ -312,7 +311,7 @@ class LeaveApplicationService {
     return leaveApplication;
   }
   public async getLeaveApplicationsForHr(): Promise<ILeaveApplication[]> {
-    const leaveApplicationsForHr = await this.application.find({ hr_stage: true});
+    const leaveApplicationsForHr = await this.application.find({ hr_stage: true, status: "pending"});
     return leaveApplicationsForHr;
   }
   public async approveHrLeaveApplications(leaveId: string): Promise<ILeaveApplication[]> {
@@ -328,6 +327,15 @@ class LeaveApplicationService {
     if (!leaveApplication) {
       throw new HttpException(400, 'leave application does not exist');
     }
+    const leaveApplicationBusinessdays = this.getBusinessDatesCount(leaveApplication.from_date, leaveApplication.to_date)
+    const employeesRecords = await this.employeeModel
+    .findOneAndUpdate({_id: leaveApplication.employee_id},
+      {
+        $inc: { 
+          leaveCount: -leaveApplicationBusinessdays
+        }
+      },
+      { new: true })
     return leaveApplication;
   }
   public async rejectHrLeaveApplications(leaveId: string): Promise<ILeaveApplication[]> {
@@ -346,7 +354,7 @@ class LeaveApplicationService {
     return leaveApplication;
   }
   private async getDepartmentHighestLeaveApprovalLevel(user): Promise<any>{
-    const departmentRecord: any = await this.departmentModel.find({department_id: user.department})
+    const departmentRecord: any = await this.departmentModel.findOne({_id: user.department})
     return await departmentRecord.leave_approval_level
   }
   private async getLeadsApprovalLevel(user): Promise<any>{
