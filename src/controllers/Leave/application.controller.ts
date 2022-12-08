@@ -118,7 +118,7 @@ class LeaveApplicationController {
 
   public getLeaveApplicationsForLeads = async (req: any, res: Response, next: NextFunction) => {
     try {
-      const leaveApplicationsForTeamLeads: ILeaveApplication[] = await this.leaveApplicationService.getLeaveApplicationsForLeads(req.user);
+      const leaveApplicationsForTeamLeads: ILeaveApplication[] = await this.leaveApplicationService.getLeaveApplicationsForLeads(req.user, req.query);
       res.status(200).json({ data: leaveApplicationsForTeamLeads});
     } catch (error) {
       next(error);
@@ -126,7 +126,7 @@ class LeaveApplicationController {
   };
   public getLeaveApplicationsForHr = async (req: any, res: Response, next: NextFunction) => {
     try {
-      const leaveApplicationsForHr: ILeaveApplication[] = await this.leaveApplicationService.getLeaveApplicationsForHr();
+      const leaveApplicationsForHr: ILeaveApplication[] = await this.leaveApplicationService.getLeaveApplicationsForHr(req.query);
       res.status(200).json({ data: leaveApplicationsForHr});
     } catch (error) {
       next(error);
@@ -164,6 +164,55 @@ class LeaveApplicationController {
       const {leaveId} = req.params
       const leaveApplications: any = await this.leaveApplicationService.rejectLeadsLeaveApplications(leaveId, req.user, req.body);
       res.status(200).json({ data: leaveApplications});
+    } catch (error) {
+      next(error);
+    }
+  };
+  public checkWhetherUserIsALead = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const isUserALead: any = await this.leaveApplicationService.checkWhetherUserIsALead(req.user);
+      res.status(200).json({ data: isUserALead});
+    } catch (error) {
+      next(error);
+    }
+  };
+  public getLeaveapplicationByEmployeeId = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const { employee_id } = req.params
+      const leaveApplication: any = await this.leaveApplicationService.getLeaveapplicationByEmployeeId(employee_id);
+      res.status(200).json({ data: leaveApplication});
+    } catch (error) {
+      next(error);
+    }
+  };
+  public countHrPendingLeaves = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const hrPendingLeaves: any = await this.leaveApplicationService.countHrPendingLeaves();
+      res.status(200).json({ data: hrPendingLeaves});
+    } catch (error) {
+      next(error);
+    }
+  };
+  public countHrApprovedLeaves = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const hrApprovedLeaves: any = await this.leaveApplicationService.countHrApprovedLeaves();
+      res.status(200).json({ data: hrApprovedLeaves});
+    } catch (error) {
+      next(error);
+    }
+  };
+  public countHrRejectedLeaves = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const hrRejectedLeaves: any = await this.leaveApplicationService.countHrRejectedLeaves();
+      res.status(200).json({ data: hrRejectedLeaves});
+    } catch (error) {
+      next(error);
+    }
+  };
+  public countUsedLeavesByEmployee = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const usedLeaves: any = await this.leaveApplicationService.countUsedLeavesByEmployee(req.user);
+      res.status(200).json({ data: usedLeaves});
     } catch (error) {
       next(error);
     }
