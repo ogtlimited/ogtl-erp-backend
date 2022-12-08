@@ -31,6 +31,7 @@ import LeaveApplicationRoute from './routes/leave/application.route';
 import LeadsLeaveApplicationsRoute from './routes/leave/leads/leads_leave_applications.route';
 import CheckWhetherUserIsALeadRoute from './routes/leave/leads/is_user_a_lead.route';
 import LeaveApprovalLevelRoute from './routes/leave/leave_approval_levels.route';
+import LeaveCount from './routes/leave/leave_count.route';
 import HrLeaveApplicationsRoute from './routes/leave/hr_leave_applications.route';
 import LeadsLeaveRejectionRoute from './routes/leave/leads/leads_leave_rejection.route';
 import LeadsLeaveApprovalRoute from './routes/leave/leads/leads_leave_approval.route';
@@ -144,6 +145,7 @@ const app = new App([
   new LeadsLeaveApplicationsRoute(),
   new CheckWhetherUserIsALeadRoute(),
   new LeaveApprovalLevelRoute(),
+  new LeaveCount(),
   new HrLeaveApplicationsRoute(),
   new LeadsLeaveRejectionRoute(),
   new LeadsLeaveApprovalRoute(),
