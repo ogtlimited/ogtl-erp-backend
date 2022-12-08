@@ -145,7 +145,7 @@ class LeaveApplicationService {
     const leave_period = await this.application.findOne(
       {employee_id: LeaveapplicationData.employee_id, createdAt:{$gte:startDate,$lt:endDate},status:{$ne: "rejected"}})
     if(leave_period) throw new HttpException(400, 'Your leave is being processed')
-    if (startDate > endDate) throw new HttpException(400, 'Leave end date must be greater than end date');
+    if (startDate > endDate) throw new HttpException(400, 'Leave end date must be greater than start date');
     const date = new Date();
     const MaxLeave = Number(user.leaveCount);
     const totalApplied = this.getBusinessDatesCount(new Date(LeaveapplicationData.from_date), new Date(LeaveapplicationData.to_date));
@@ -155,7 +155,7 @@ class LeaveApplicationService {
     const monthAfterOnboarding = this.monthDiff(new Date(user.date_of_joining), new Date());
     // if(user)
     if (totalApplied > 12) {
-      throw new HttpException(400, 'You can apply for more than 12 working days');
+      throw new HttpException(400, 'You cannot apply for more than 12 working days');
     }
 
     if (monthAfterOnboarding == 0) {
