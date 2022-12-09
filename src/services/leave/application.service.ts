@@ -373,7 +373,7 @@ class LeaveApplicationService {
     const departmentHighestLeaveApprovalLevel = await this.getDepartmentHighestLeaveApprovalLevel(user)
     const supervisorsRecord: any = await this.employeeModel.findOne({_id: user.reports_to})
     const supervisorsLeaveApprovalRecords: any = await this.leaveApprovalLevelModel.findOne({designation_id: supervisorsRecord.designation})
-   if(supervisorsLeaveApprovalRecords) return await supervisorsLeaveApprovalRecords.approval_level
+   if(supervisorsLeaveApprovalRecords>0) return await supervisorsLeaveApprovalRecords.approval_level
    else departmentHighestLeaveApprovalLevel
   }
   private async getApplicantsImmediateLeadLeaveApprovalLevel(payload): Promise<any>{
