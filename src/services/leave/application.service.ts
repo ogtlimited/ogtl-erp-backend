@@ -366,7 +366,7 @@ class LeaveApplicationService {
     return await departmentRecord.leave_approval_level
   }
   private async getUsersLeaveApprovalLevel(user): Promise<any>{
-    const usersLeaveApprovalLevel: any = await this.leaveApprovalLevelModel.findOne({designation_id: user.designation})
+    const usersLeaveApprovalLevel: any = await this.leaveApprovalLevelModel.findOne({designation_id: user?.designation})
     return await usersLeaveApprovalLevel.approval_level
   }
   private async getImmediateSupervisorsLeaveApprovalLevel(user): Promise<any>{
