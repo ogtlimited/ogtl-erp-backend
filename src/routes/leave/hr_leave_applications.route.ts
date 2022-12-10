@@ -19,11 +19,13 @@ class HrLeaveApplicationsRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, authMiddleware, this.leaveApplicationController.getLeaveApplicationsForHr);
-    this.router.post(`${this.path}/approve/:leaveId`, authMiddleware, this.leaveApplicationController.approveHrLeaveApplications);
-    this.router.post(`${this.path}/reject/:leaveId`, authMiddleware, this.leaveApplicationController.rejectHrLeaveApplications);
+    this.router.get(`${this.path}/on-leave`, authMiddleware, this.leaveApplicationController.countEmployeesOnLeave);
     this.router.get(`${this.path}/rejected`, authMiddleware, this.leaveApplicationController.countHrRejectedLeaves);
     this.router.get(`${this.path}/approved`, authMiddleware, this.leaveApplicationController.countHrApprovedLeaves);
     this.router.get(`${this.path}/pending`, authMiddleware, this.leaveApplicationController.countHrPendingLeaves);
+    this.router.post(`${this.path}/approve/:leaveId`, authMiddleware, this.leaveApplicationController.approveHrLeaveApplications);
+    this.router.post(`${this.path}/reject/:leaveId`, authMiddleware, this.leaveApplicationController.rejectHrLeaveApplications);
+    
    }
 }
 export default HrLeaveApplicationsRoute;
