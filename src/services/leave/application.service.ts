@@ -386,11 +386,11 @@ class LeaveApplicationService {
   }
   public async countHrApprovedLeaves(): Promise<number>{
     const approvedLeaves: number = await this.application.find({hr_stage: true, status: "approved"}).countDocuments()
-    return await approvedLeaves
+    return approvedLeaves
   }
   public async countHrRejectedLeaves(): Promise<number>{
     const hrRejectedLeaves: number = await this.application.find({hr_stage: true, status:"rejected"}).countDocuments()
-    return await hrRejectedLeaves
+    return hrRejectedLeaves
   }
   public async countUsedLeavesByEmployee(user: ILeaveApplication): Promise<number>{
     const matchBy = {
