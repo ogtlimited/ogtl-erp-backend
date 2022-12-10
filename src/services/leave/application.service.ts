@@ -365,16 +365,17 @@ class LeaveApplicationService {
     const departmentRecord: any = await this.departmentModel.findOne({_id: user.department})
     return await departmentRecord.leave_approval_level
   }
-  private async getUsersLeaveApprovalLevel(user): Promise<any>{
+  private async getUsersLeaveApprovalLevel(user): Promise<any>{  
+    const departmentHighestLeaveApprovalLevel = await this.getDepartmentHighestLeaveApprovalLevel(user)
     const usersLeaveApprovalLevel: any = await this.leaveApprovalLevelModel.findOne({designation_id: user?.designation})
     return await usersLeaveApprovalLevel.approval_level
   }
   private async getImmediateSupervisorsLeaveApprovalLevel(user): Promise<any>{
     const departmentHighestLeaveApprovalLevel = await this.getDepartmentHighestLeaveApprovalLevel(user)
-    const supervisorsRecord: any = await this.employeeModel.findOne({_id: user.reports_to})
-    const supervisorsLeaveApprovalRecords: any = await this.leaveApprovalLevelModel.findOne({designation_id: supervisorsRecord.designation})
-   if(supervisorsLeaveApprovalRecords>0) return await supervisorsLeaveApprovalRecords.approval_level
-   else departmentHighestLeaveApprovalLevel
+    const supervisorsRecord: any = await this.employeeModel.findOne({_id: user?.reports_to})
+    const supervisorsLeaveApprovalRecords: any = await this.leaveApprovalLevelModel.findOne({designation_id: supervisorsRecord?.designation})
+    if(supervisorsLeaveApprovalRecords !== null) return await supervisorsLeaveApprovalRecords.approval_level
+    return departmentHighestLeaveApprovalLevel
   }
   private async getApplicantsImmediateLeadLeaveApprovalLevel(payload): Promise<any>{
     const leadsLeaveApprovalRecords: any = await this.employeeModel.findOne({_id: payload.leave_approver})
