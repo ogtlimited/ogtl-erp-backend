@@ -19,9 +19,8 @@ export class CreateLeaveApplicationDTO{
     @IsNotEmpty()
     public department_id: string;
 
-    @IsString()
-    @IsNotEmpty()
-    public leave_approver: string;
+    @IsOptional()
+    public leave_approver: string | null;
 
     @IsString()
     @IsOptional()
@@ -71,9 +70,9 @@ export class UpdateLeaveApplicationDTO{
 
     @IsDateString()
     public to_date : Date;
-
-    @IsString()
-    public leave_approver: string;
+    
+    @IsOptional()
+    public leave_approver: string | null;
 
     @IsDateString()
     public posting_date: Date;
@@ -82,7 +81,7 @@ export class UpdateLeaveApplicationDTO{
     public status: string;
 
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     public approval_level: string;
 
     @IsString()
