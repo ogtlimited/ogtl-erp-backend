@@ -37,7 +37,6 @@ const applicationSchema : Schema = new Schema (
         },
         leave_approver: {
             type: mongoose.Schema.Types.ObjectId,
-            required: true,
             ref: "Employee",
         },
         approval_level: {
