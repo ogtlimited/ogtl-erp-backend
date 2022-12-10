@@ -13,6 +13,7 @@ import EmployeeService from '@services/employee.service';
 import { Employee } from '@/interfaces/employee-interface/employee.interface';
 import EmployeeModel from '@models/employee/employee.model';
 import projectModel from '@/models/project/project.model';
+import { ILeaveApprovalLevel } from '@/interfaces/leave-interface/leave_approval_level.interface';
 const moment = require('moment')
 
 class LeaveApplicationService {
@@ -24,9 +25,7 @@ class LeaveApplicationService {
   public employeeModel = EmployeeModel;
   private startOfYear = new Date(moment().startOf('year').toString()); 
   private endOfYear = new Date(moment().endOf('year').toString());
-  constructor(){
-    // this.updateAllLeaveCount()
-  }
+  private today = new Date();
   public project = projectModel;
 
   public async findAllLeaveapplication(query): Promise<ILeaveApplication[]> {
@@ -137,8 +136,10 @@ class LeaveApplicationService {
     return findLeaveapplication;
   }
 
-  public async createLeaveapplication(LeaveapplicationData: ILeaveApplication, user): Promise<ILeaveApplication> {
-    LeaveapplicationData.approval_level = await this.getApplicantsImmediateLeadLeaveApprovalLevel(LeaveapplicationData)
+  public async createLeaveapplication(LeaveapplicationData: ILeaveApplication, user: Employee): Promise<ILeaveApplication> {
+    LeaveapplicationData.approval_level = await this.getImmediateSupervisorsLeaveApprovalLevel(user)
+    const usersLeaveApprovalLevel: number = await this.getUsersLeaveApprovalLevel(user)
+    if(usersLeaveApprovalLevel === LeaveapplicationData.approval_level) LeaveapplicationData.hr_stage = true
     if (isEmpty(LeaveapplicationData)) throw new HttpException(400, 'Bad request');
     const startDate = new Date(LeaveapplicationData.from_date);
     const endDate = new Date(LeaveapplicationData.to_date);
@@ -153,7 +154,6 @@ class LeaveApplicationService {
       throw new HttpException(400, 'total leave days exceed available leaves');
     };
     const monthAfterOnboarding = this.monthDiff(new Date(user.date_of_joining), new Date());
-    // if(user)
     if (totalApplied > 12) {
       throw new HttpException(400, 'You cannot apply for more than 12 working days');
     }
@@ -220,12 +220,6 @@ class LeaveApplicationService {
           newArray.push(findEmployee);
         }
       }
-      // console.log(newArray);
-      // const results = await EmployeeModel.updateMany({type: '_id'}, newArray)
-      // await EmployeeModel.updateMany({_id: {$in: [...newArray['employee_id']]}},{$set: {leaveCount: {$in: [...]}}})
-
-      // console.log(results)
-      // res.status(201).json({ data: results, message: 'ContactDetails succesfully created' });
     } catch (error) {
       console.log(error);
     }
@@ -265,7 +259,7 @@ class LeaveApplicationService {
   }
   public async getLeaveapplicationByEmployeeId(employee_id: string): Promise<ILeaveApplication[]> {
     if (isEmpty(employee_id)) throw new HttpException(400, "You're not LeaveapplicationId");
-    const findLeaveapplication: ILeaveApplication[] = await this.application.find({ employee_id: employee_id });
+    const findLeaveapplication: ILeaveApplication[] = await this.application.find({ employee_id: employee_id }).populate("employee_id");
     if (!findLeaveapplication) throw new HttpException(409, 'Leave application not found');
     return findLeaveapplication;
   }
@@ -322,7 +316,8 @@ class LeaveApplicationService {
       { _id: leaveId, hr_stage: true, status: { $eq: 'pending' } },
       {
         $set: { 
-          status: "approved"
+          status: "approved",
+          acted_on: true,
         }
       },
       { new: true }
@@ -355,46 +350,47 @@ class LeaveApplicationService {
     }
     return leaveApplication;
   }
-  public async checkWhetherUserIsALead(user): Promise<any>{
-    const usersRecords: any = await this.leaveApprovalLevelModel.findOne({designation_id: user.designation})
-    const usersApprovalLevel = await usersRecords?.approval_level
+  public async checkWhetherUserIsALead(user): Promise<boolean>{
+    const usersRecords: ILeaveApplication = await this.leaveApprovalLevelModel.findOne({designation_id: user.designation})
+    const usersApprovalLevel = usersRecords?.approval_level
     if(usersApprovalLevel>0) return true
     return false 
   }
-  private async getDepartmentHighestLeaveApprovalLevel(user): Promise<any>{
+  private async getDepartmentHighestLeaveApprovalLevel(user): Promise<number>{
     const departmentRecord: any = await this.departmentModel.findOne({_id: user.department})
     return await departmentRecord.leave_approval_level
   }
-  private async getUsersLeaveApprovalLevel(user): Promise<any>{  
-    const departmentHighestLeaveApprovalLevel = await this.getDepartmentHighestLeaveApprovalLevel(user)
-    const usersLeaveApprovalLevel: any = await this.leaveApprovalLevelModel.findOne({designation_id: user?.designation})
-    return await usersLeaveApprovalLevel.approval_level
+  private async getUsersLeaveApprovalLevel(user: any): Promise<number>{
+    const usersLeaveApprovalLevel: ILeaveApprovalLevel = await this.leaveApprovalLevelModel.findOne({designation_id: user?.designation})
+    return usersLeaveApprovalLevel.approval_level
   }
-  private async getImmediateSupervisorsLeaveApprovalLevel(user): Promise<any>{
+  private async getImmediateSupervisorsLeaveApprovalLevel(user): Promise<number>{
+    const usersLeaveApprovalLevel = await this.getUsersLeaveApprovalLevel(user)
     const departmentHighestLeaveApprovalLevel = await this.getDepartmentHighestLeaveApprovalLevel(user)
     const supervisorsRecord: any = await this.employeeModel.findOne({_id: user?.reports_to})
-    const supervisorsLeaveApprovalRecords: any = await this.leaveApprovalLevelModel.findOne({designation_id: supervisorsRecord?.designation})
-    if(supervisorsLeaveApprovalRecords !== null) return await supervisorsLeaveApprovalRecords.approval_level
-    return departmentHighestLeaveApprovalLevel
+    const supervisorsLeaveApprovalRecords: ILeaveApplication = await this.leaveApprovalLevelModel.findOne({designation_id: supervisorsRecord?.designation})
+    if(supervisorsLeaveApprovalRecords !== null) return supervisorsLeaveApprovalRecords.approval_level
+    if(usersLeaveApprovalLevel === departmentHighestLeaveApprovalLevel)
+    return usersLeaveApprovalLevel
   }
-  private async getApplicantsImmediateLeadLeaveApprovalLevel(payload): Promise<any>{
-    const leadsLeaveApprovalRecords: any = await this.employeeModel.findOne({_id: payload.leave_approver})
-    const leadsLeaveApprovalLevel: any = await this.leaveApprovalLevelModel.findOne({designation_id: leadsLeaveApprovalRecords.designation})
-    return await leadsLeaveApprovalLevel.approval_level
+  // private async getApplicantsImmediateLeadLeaveApprovalLevel(payload: ILeaveApplication): Promise<number>{
+  //   const leadsLeaveApprovalRecords: any = await this.employeeModel.findOne({_id: payload.leave_approver})
+  //   const leadsLeaveApprovalLevel: ILeaveApplication = await this.leaveApprovalLevelModel.findOne({designation_id: leadsLeaveApprovalRecords?.designation})
+  //   return leadsLeaveApprovalLevel.approval_level
+  // }
+  public async countHrPendingLeaves(): Promise<number>{
+    const pendingLeaves: number = await this.application.find({hr_stage: true, status: "pending"}).countDocuments()
+    return pendingLeaves
   }
-  public async countHrPendingLeaves(): Promise<any>{
-    const pendingLeaves: any = await this.application.find({hr_stage: true, status: "pending"}).countDocuments()
-    return await pendingLeaves
-  }
-  public async countHrApprovedLeaves(): Promise<any>{
-    const approvedLeaves: any = await this.application.find({hr_stage: true, status: "approved"}).countDocuments()
+  public async countHrApprovedLeaves(): Promise<number>{
+    const approvedLeaves: number = await this.application.find({hr_stage: true, status: "approved"}).countDocuments()
     return await approvedLeaves
   }
-  public async countHrRejectedLeaves(): Promise<any>{
-    const hrRejectedLeaves: any = await this.application.find({hr_stage: true, status:"rejected"}).countDocuments()
+  public async countHrRejectedLeaves(): Promise<number>{
+    const hrRejectedLeaves: number = await this.application.find({hr_stage: true, status:"rejected"}).countDocuments()
     return await hrRejectedLeaves
   }
-  public async countUsedLeavesByEmployee(user): Promise<any>{
+  public async countUsedLeavesByEmployee(user: ILeaveApplication): Promise<number>{
     const matchBy = {
       employee_id: user._id,
       hr_stage: true, status:"approved",
@@ -407,7 +403,7 @@ class LeaveApplicationService {
     }
     return count
   }
-  public async countMedicalLeavesByEmployee(user): Promise<any>{
+  public async countMedicalLeavesByEmployee(user: ILeaveApplication): Promise<any>{
     const matchBy = {
       employee_id: user._id,
       hr_stage: true, status:"approved",
@@ -421,7 +417,7 @@ class LeaveApplicationService {
     }
     return count
   }
-  public async countOtherLeaves(user): Promise<any>{
+  public async countOtherLeaves(user: ILeaveApplication): Promise<number>{
     const matchBy = {
       employee_id: user._id,
       hr_stage: true, status:"approved",
@@ -435,12 +431,20 @@ class LeaveApplicationService {
     }
     return count
   }
-  public async countRemainingLeaves(user): Promise<any>{
+  public async countRemainingLeaves(user:any): Promise<number>{
     const employeeRemainingLeaves: any = await this.employeeModel.findOne({_id: user._id})
     return employeeRemainingLeaves.leaveCount
   }
+  public async countEmployeesOnLeave(user:ILeaveApplication): Promise<number>{
+    const matchBy = {
+      hr_stage: true, status:"approved",
+      to_date:{$gte:this.today}
+      }
+    const employeesOnLeave: number = await this.application.find(matchBy).countDocuments()
+    return employeesOnLeave
+  }
   private async getEmployeeApprovedLeaveDays(matchBy): Promise<any>{
-     const employeeUsedLeaves: any = await this.application.find(matchBy)
+     const employeeUsedLeaves: ILeaveApplication[] = await this.application.find(matchBy)
      const employeeUsedLeaveDaysCount = await (Promise.all(employeeUsedLeaves))
      const formatedLeaveApplication = employeeUsedLeaveDaysCount.map(leaveApplication=>{
       return {leaveApplication: this.getBusinessDatesCount(leaveApplication.from_date, leaveApplication.to_date)}
