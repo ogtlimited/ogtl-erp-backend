@@ -241,6 +241,14 @@ class LeaveApplicationController {
       next(error);
     }
   };
+  public countEmployeesOnLeave = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const employeesOnLeave: any = await this.leaveApplicationService.countEmployeesOnLeave(req.user);
+      res.status(200).json({ data: employeesOnLeave});
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default LeaveApplicationController;
