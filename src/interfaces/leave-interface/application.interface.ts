@@ -7,7 +7,7 @@ export interface ILeaveApplication{
     leave_type: string;
     from_date: Date;
     to_date : Date;
-    leave_approver: string;
+    leave_approver?: string | null;
     approval_level: number;
     reason_for_application?: string;
     status: string;
