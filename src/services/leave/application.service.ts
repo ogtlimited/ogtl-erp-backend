@@ -11,9 +11,11 @@ import departmentModel from '@/models/department/department.model';
 import allocationModel from '@/models/leave/allocation.model';
 import EmployeeService from '@services/employee.service';
 import { Employee } from '@/interfaces/employee-interface/employee.interface';
+import { IDepartment } from '@/interfaces/employee-interface/department.interface';
 import EmployeeModel from '@models/employee/employee.model';
 import projectModel from '@/models/project/project.model';
 import { ILeaveApprovalLevel } from '@/interfaces/leave-interface/leave_approval_level.interface';
+import { Request } from 'express';
 const moment = require('moment')
 
 class LeaveApplicationService {
@@ -263,12 +265,12 @@ class LeaveApplicationService {
     if (!findLeaveapplication) throw new HttpException(409, 'Leave application not found');
     return findLeaveapplication;
   }
-  public async getLeaveApplicationsForLeads(user, query: any): Promise<ILeaveApplication[]> {
+  public async getLeaveApplicationsForLeads(user: Employee, query: Request): Promise<ILeaveApplication[]> {
    let matchBy = { leave_approver: user._id, hr_stage:{$ne: true}}
    const leaveApplications= await this.getLeaveApplicationsHelperMethod(matchBy,query)
   return leaveApplications;
   }
-  public async approveLeadsLeaveApplications(leaveId: String, user): Promise<ILeaveApplication> {
+  public async approveLeadsLeaveApplications(leaveId: String, user: Employee): Promise<ILeaveApplication> {
     const departmentHighestLeaveApprovalLevel = await this.getDepartmentHighestLeaveApprovalLevel(user)
     const leadsApprovalLevel = await this.getUsersLeaveApprovalLevel(user)
     const immediateSupervisorsLeaveApprovalLevel = await this.getImmediateSupervisorsLeaveApprovalLevel(user)
@@ -289,7 +291,7 @@ class LeaveApplicationService {
     }
     return leaveApplication;
   }
-  public async rejectLeadsLeaveApplications(leaveId: String, user, query): Promise<ILeaveApplication> {
+  public async rejectLeadsLeaveApplications(leaveId: String, user: Employee, query: any): Promise<ILeaveApplication> {
     const leaveApplication = await this.application.findOneAndUpdate(
       { _id: leaveId, leave_approver: user._id, status: { $eq: 'pending' }, hr_stage: { $ne: true } },
       {
@@ -350,24 +352,24 @@ class LeaveApplicationService {
     }
     return leaveApplication;
   }
-  public async checkWhetherUserIsALead(user): Promise<boolean>{
+  public async checkWhetherUserIsALead(user: Employee): Promise<boolean>{
     const usersRecords: ILeaveApplication = await this.leaveApprovalLevelModel.findOne({designation_id: user.designation})
     const usersApprovalLevel = usersRecords?.approval_level
     if(usersApprovalLevel>0) return true
     return false 
   }
-  private async getDepartmentHighestLeaveApprovalLevel(user): Promise<number>{
-    const departmentRecord: any = await this.departmentModel.findOne({_id: user.department})
-    return await departmentRecord.leave_approval_level
+  private async getDepartmentHighestLeaveApprovalLevel(user: Employee): Promise<number>{
+    const departmentRecord: IDepartment = await this.departmentModel.findOne({_id: user.department})
+    return departmentRecord.leave_approval_level
   }
-  private async getUsersLeaveApprovalLevel(user: any): Promise<number>{
+  private async getUsersLeaveApprovalLevel(user: Employee): Promise<number>{
     const usersLeaveApprovalLevel: ILeaveApprovalLevel = await this.leaveApprovalLevelModel.findOne({designation_id: user?.designation})
     return usersLeaveApprovalLevel.approval_level
   }
-  private async getImmediateSupervisorsLeaveApprovalLevel(user): Promise<number>{
+  private async getImmediateSupervisorsLeaveApprovalLevel(user: Employee): Promise<number>{
     const usersLeaveApprovalLevel = await this.getUsersLeaveApprovalLevel(user)
     const departmentHighestLeaveApprovalLevel = await this.getDepartmentHighestLeaveApprovalLevel(user)
-    const supervisorsRecord: any = await this.employeeModel.findOne({_id: user?.reports_to})
+    const supervisorsRecord: Employee = await this.employeeModel.findOne({_id: user?.reports_to})
     const supervisorsLeaveApprovalRecords: ILeaveApplication = await this.leaveApprovalLevelModel.findOne({designation_id: supervisorsRecord?.designation})
     if(supervisorsLeaveApprovalRecords !== null) return supervisorsLeaveApprovalRecords.approval_level
     if(usersLeaveApprovalLevel === departmentHighestLeaveApprovalLevel)
@@ -431,11 +433,11 @@ class LeaveApplicationService {
     }
     return count
   }
-  public async countRemainingLeaves(user:any): Promise<number>{
-    const employeeRemainingLeaves: any = await this.employeeModel.findOne({_id: user._id})
+  public async countRemainingLeaves(user: Employee): Promise<number>{
+    const employeeRemainingLeaves: Employee = await this.employeeModel.findOne({_id: user._id})
     return employeeRemainingLeaves.leaveCount
   }
-  public async countEmployeesOnLeave(user:ILeaveApplication): Promise<number>{
+  public async countEmployeesOnLeave(): Promise<number>{
     const matchBy = {
       hr_stage: true, status:"approved",
       to_date:{$gte:this.today}
@@ -472,7 +474,7 @@ class LeaveApplicationService {
     
     const removeLimitAndSkip:any = filtrationQuery.filter(item => !item["$limit"] && !item["$skip"])
     removeLimitAndSkip.push({$count:"Number of Docs"})
-    const countDocuments:any = await this.application.aggregate(removeLimitAndSkip)
+    const countDocuments: any = await this.application.aggregate(removeLimitAndSkip)
     let totalPage:number;
     for(let count of countDocuments){
        totalPage = count["Number of Docs"]
