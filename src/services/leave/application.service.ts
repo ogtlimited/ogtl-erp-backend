@@ -342,14 +342,7 @@ class LeaveApplicationService {
     if (!leaveApplication) {
       throw new HttpException(400, 'leave application does not exist');
     }
-    const leaveApplicationBusinessdays = this.getBusinessDatesCount(leaveApplication.from_date, leaveApplication.to_date)
-    await this.employeeModel.findOneAndUpdate({_id: leaveApplication.employee_id},
-      {
-        $inc: { 
-          leaveCount: -leaveApplicationBusinessdays
-        }
-      },
-      { new: true })
+    await this.updateTotalLeaveCount(leaveApplication)
     const leaveApplicant = await this.employeeModel.findOne({_id: leaveApplication.employee_id})
     const {status_message, status_subject} = leaveApplicationStatusMessage(leaveApplicant.first_name, "approved")
     await this.sendLeaveNotificationMail(leaveApplicant.company_email, status_message, status_subject )
@@ -603,7 +596,16 @@ class LeaveApplicationService {
     employee.first_name = employee.first_name.charAt(0).toUpperCase() + employee.first_name.toLowerCase().slice(1)
     return employee.first_name
   }
-
+  private async updateTotalLeaveCount(leaveApplication){
+    const leaveApplicationBusinessdays = this.getBusinessDatesCount(leaveApplication.from_date, leaveApplication.to_date)
+    await this.employeeModel.findOneAndUpdate({_id: leaveApplication.employee_id},
+      {
+        $inc: { 
+          leaveCount: -leaveApplicationBusinessdays
+        }
+      },
+      { new: true })
+  }
   private async validateLeaveDay(date: Date, employee_project_id: string): Promise<boolean> {
     const valid_status = "pending"  
     const year = new Date(date).getFullYear()
