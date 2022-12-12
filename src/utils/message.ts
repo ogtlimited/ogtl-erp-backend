@@ -67,6 +67,30 @@ function birthdayMessage(first_name) {
   }
  }
 
+ function leaveApplicationStatusMessage(first_name, status) {
+  const status_message = "Hello "+first_name+","
+   +"<br><br>" + " Your Leave has been "+status+"."
+   +"<br><br>" + " Best regards."
+   +"<br><br>"
+   const status_subject = "Leave Status"
+   return{
+    status_message,
+    status_subject
+   }
+  }
+
+  function leadsLeaveNotificationMessage(lead_first_name, applicant) {
+    const message = "Hello "+lead_first_name+","
+     +"<br><br>" + " You have a pending leave by "+applicant+"."
+     +"<br><br>" + " Best regards."
+     +"<br><br>"
+     const subject = "Pending Leave"
+     return{
+       message,
+       subject
+     }
+    }
+
  
 
 const rejectionMessage = {
@@ -78,4 +102,6 @@ const rejectionMessage = {
   subject: "Interview Results"
 }
 
-export { terminationMessage , promotionMessage, OfferMessage,acceptedOfferMessage,rejectionMessage, offerMessageFunc, ticketingMessage,resolvedTicketingMessage, clientAccountActivationNotice, birthdayMessage};
+export { terminationMessage , promotionMessage, OfferMessage,acceptedOfferMessage,rejectionMessage, 
+  offerMessageFunc, ticketingMessage,resolvedTicketingMessage,clientAccountActivationNotice, 
+  birthdayMessage, leaveApplicationStatusMessage, leadsLeaveNotificationMessage};
