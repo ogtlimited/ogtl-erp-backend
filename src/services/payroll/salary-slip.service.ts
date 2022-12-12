@@ -125,11 +125,11 @@ class SalarySlipService {
       for (let index = 0; index < salarySlip.deductions.length; index++) {
         const deduction = salarySlip.deductions[index];
         console.log(deduction);
-        if (!additionalDeductions[deduction.description]) {
-          additionalDeductions[deduction.description] = deduction.amount;
+        if (!additionalDeductions[deduction.deductionTypeId.title]) {
+          additionalDeductions[deduction.deductionTypeId.title] = deduction.amount;
           continue;
         }
-        additionalDeductions[deduction.description] += deduction.amount;
+        additionalDeductions[deduction.deductionTypeId.title] += deduction.amount;
       }
     }
     // record.salaryStructure = salarySlip.salaryStructure
@@ -139,7 +139,7 @@ class SalarySlipService {
       employeeId: salarySlip.employeeId,
       department: salarySlip.departmentId,
     };
-    employeeSlip.netPay = salarySlip.netPay;
+    employeeSlip.netPay = salarySlip.salaryAfterDeductions;
     employeeSlip.deductionsBreakDown = salarySlip.deductions;
     employeeSlip.createdAt = salarySlip.createdAt;
     return { employeeSlip };
@@ -203,7 +203,7 @@ class SalarySlipService {
     */
     await this.salarySlipExistenceCheck();
     // const token = await Bank3DPaymentService.getBankToken();
-    // const batchData = await Bank3DPaymentService.initiateBankPayment(token) 
+    // const batchData = await Bank3DPaymentService.initiateBankPayment(token)
 
     const batchData = {
       BatchID: ReferenceGenerator.referenceNumberGenerator(),
