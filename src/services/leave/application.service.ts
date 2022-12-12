@@ -15,6 +15,8 @@ import { IDepartment } from '@/interfaces/employee-interface/department.interfac
 import EmployeeModel from '@models/employee/employee.model';
 import projectModel from '@/models/project/project.model';
 import { ILeaveApprovalLevel } from '@/interfaces/leave-interface/leave_approval_level.interface';
+import EmailService from '@/utils/email.service';
+import { leadsLeaveNotificationMessage, leaveApplicationStatusMessage } from '@/utils/message';
 import { Request } from 'express';
 const moment = require('moment')
 
@@ -139,6 +141,9 @@ class LeaveApplicationService {
   }
 
   public async createLeaveapplication(LeaveapplicationData: ILeaveApplication, user: Employee): Promise<ILeaveApplication> {
+    const leaveApplicant = await this.employeeModel.findOne({_id: LeaveapplicationData.employee_id})
+    const supervisor = await this.employeeModel.findOne({_id: leaveApplicant.reports_to})
+    const {message, subject} = leadsLeaveNotificationMessage(supervisor.first_name, leaveApplicant.first_name) 
     LeaveapplicationData.approval_level = await this.getImmediateSupervisorsLeaveApprovalLevel(user)
     const usersLeaveApprovalLevel: number = await this.getUsersLeaveApprovalLevel(user)
     if(usersLeaveApprovalLevel === LeaveapplicationData.approval_level) LeaveapplicationData.hr_stage = true
@@ -172,6 +177,7 @@ class LeaveApplicationService {
     
     if (prevLeaves.length == 0) {
       const createLeaveapplicationData: ILeaveApplication = await this.application.create({...LeaveapplicationData, employee_project_id: user.projectId});
+      await this.sendLeaveNotificationMail(supervisor.company_email, message, subject )
       return createLeaveapplicationData;
     } else {
       const getLeaveDays = prevLeaves.map(e => this.getBusinessDatesCount(new Date(e.from_date), new Date(e.to_date)));
@@ -187,13 +193,13 @@ class LeaveApplicationService {
         if (oldAndNewLeave > MaxLeave) {
           throw new HttpException(400, 'You have used ' + totalLeaveThisYear + ', you have ' + (MaxLeave - totalLeaveThisYear) + ' leave left');
         } else {
+          await this.sendLeaveNotificationMail(supervisor.company_email, message, subject )
           const createLeaveapplicationData: ILeaveApplication = await this.application.create({...LeaveapplicationData, employee_project_id: user.projectId});
           return createLeaveapplicationData;
         }
       }
     }
   }
-
   public async updateLeaveapplication(LeaveapplicationId: string, LeaveapplicationData: UpdateLeaveApplicationDTO): Promise<ILeaveApplication> {
     if (isEmpty(LeaveapplicationData)) throw new HttpException(400, 'Bad request');
 
@@ -289,6 +295,12 @@ class LeaveApplicationService {
     if (!leaveApplication) {
       throw new HttpException(400, 'leave application does not exist');
     }
+    if(leaveApplication.leave_approver!==null){
+      const immediateLeadDetails = await this.employeeModel.findOne({_id: leaveApplication.leave_approver})
+      const leaveApplicant = await this.employeeModel.findOne({_id: leaveApplication.employee_id})
+      const {message, subject} = leadsLeaveNotificationMessage(immediateLeadDetails.first_name, leaveApplicant.first_name)
+      await this.sendLeaveNotificationMail(immediateLeadDetails.company_email, message, subject )
+    }
     return leaveApplication;
   }
   public async rejectLeadsLeaveApplications(leaveId: String, user: Employee, query: any): Promise<ILeaveApplication> {
@@ -306,6 +318,9 @@ class LeaveApplicationService {
     if (!leaveApplication) {
       throw new HttpException(400, 'leave application does not exist');
     }
+    const leaveApplicant = await this.employeeModel.findOne({_id: leaveApplication.employee_id})
+    const {status_message, status_subject} = leaveApplicationStatusMessage(leaveApplicant.first_name, "rejected")
+    await this.sendLeaveNotificationMail(leaveApplicant.company_email, status_message, status_subject )
     return leaveApplication;
   }
   public async getLeaveApplicationsForHr(query:any ): Promise<ILeaveApplication[]> {
@@ -335,6 +350,9 @@ class LeaveApplicationService {
         }
       },
       { new: true })
+    const leaveApplicant = await this.employeeModel.findOne({_id: leaveApplication.employee_id})
+    const {status_message, status_subject} = leaveApplicationStatusMessage(leaveApplicant.first_name, "approved")
+    await this.sendLeaveNotificationMail(leaveApplicant.company_email, status_message, status_subject )
     return leaveApplication;
   }
   public async rejectHrLeaveApplications(leaveId: string): Promise<ILeaveApplication[]> {
@@ -350,6 +368,9 @@ class LeaveApplicationService {
     if (!leaveApplication) {
       throw new HttpException(400, 'leave application does not exist');
     }
+    const leaveApplicant = await this.employeeModel.findOne({_id: leaveApplication.employee_id})
+    const {status_message, status_subject} = leaveApplicationStatusMessage(leaveApplicant.first_name, "rejected")
+    await this.sendLeaveNotificationMail(leaveApplicant.company_email, status_message, status_subject )
     return leaveApplication;
   }
   public async checkWhetherUserIsALead(user: Employee): Promise<boolean>{
@@ -375,11 +396,6 @@ class LeaveApplicationService {
     if(usersLeaveApprovalLevel === departmentHighestLeaveApprovalLevel)
     return usersLeaveApprovalLevel
   }
-  // private async getApplicantsImmediateLeadLeaveApprovalLevel(payload: ILeaveApplication): Promise<number>{
-  //   const leadsLeaveApprovalRecords: any = await this.employeeModel.findOne({_id: payload.leave_approver})
-  //   const leadsLeaveApprovalLevel: ILeaveApplication = await this.leaveApprovalLevelModel.findOne({designation_id: leadsLeaveApprovalRecords?.designation})
-  //   return leadsLeaveApprovalLevel.approval_level
-  // }
   public async countHrPendingLeaves(): Promise<number>{
     const pendingLeaves: number = await this.application.find({hr_stage: true, status: "pending"}).countDocuments()
     return pendingLeaves
@@ -529,6 +545,11 @@ class LeaveApplicationService {
        $unwind: {path :"$employee",
        preserveNullAndEmptyArrays: true
      }
+     },
+     {
+      $sort:{
+        "createdAt": -1
+      }
      }
      ]
      if(searchQuery.search){
@@ -571,6 +592,18 @@ class LeaveApplicationService {
         }
       return filtrationQuery
   }
+  private async sendLeaveNotificationMail(to_email, message, subject){
+    const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
+    EmailService.sendMail(to_email, "hr@outsourceglobal.com", subject, message, body)
+  }
+  public async getLeaveApplicantDetails(user){
+    const employee:any = await this.employeeModel.findOne({
+      _id: user.employee_id
+    })
+    employee.first_name = employee.first_name.charAt(0).toUpperCase() + employee.first_name.toLowerCase().slice(1)
+    return employee.first_name
+  }
+
   private async validateLeaveDay(date: Date, employee_project_id: string): Promise<boolean> {
     const valid_status = "pending"  
     const year = new Date(date).getFullYear()
