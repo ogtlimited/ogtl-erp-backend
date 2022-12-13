@@ -19,6 +19,10 @@ const designationSchema: Schema = new Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: "Project",
         },
+        approval_level: {
+          type: String,
+          required: true,
+        },
           slug: {
             type: String,
             required: true,
