@@ -132,46 +132,38 @@ class LeaveApplicationController {
       next(error);
     }
   };
-  public approveHrLeaveApplications = async (req: any, res: Response, next: NextFunction) => {
+  public approveLeaveApplicationsByHr = async (req: any, res: Response, next: NextFunction) => {
     try {
       const {leaveId} = req.params
-      const leaveApplications: any = await this.leaveApplicationService.approveHrLeaveApplications(leaveId);
+      const leaveApplications: any = await this.leaveApplicationService.approveLeaveApplicationsByHr(leaveId);
       res.status(200).json({ data: leaveApplications});
     } catch (error) {
       next(error);
     }
   };
-  public rejectHrLeaveApplications = async (req: any, res: Response, next: NextFunction) => {
+  public rejectLeaveApplicationsByHr = async (req: any, res: Response, next: NextFunction) => {
     try {
       const {leaveId} = req.params
-      const leaveApplications: any = await this.leaveApplicationService.rejectHrLeaveApplications(leaveId);
+      const leaveApplications: any = await this.leaveApplicationService.rejectLeaveApplicationsByHr(leaveId);
       res.status(200).json({ data: leaveApplications});
     } catch (error) {
       next(error);
     }
   };
-  public approveLeadsLeaveApplications = async (req: any, res: Response, next: NextFunction) => {
+  public approveLeaveApplicationByLead = async (req: any, res: Response, next: NextFunction) => {
     try {
       const {leaveId} = req.params
-      const leaveApplications: any = await this.leaveApplicationService.approveLeadsLeaveApplications(leaveId, req.user);
+      const leaveApplications: any = await this.leaveApplicationService.approveLeaveApplicationByLead(leaveId, req.user);
       res.status(200).json({ data: leaveApplications});
     } catch (error) {
       next(error);
     }
   };
-  public rejectLeadsLeaveApplications = async (req: any, res: Response, next: NextFunction) => {
+  public rejectLeaveApplicationByLead = async (req: any, res: Response, next: NextFunction) => {
     try {
       const {leaveId} = req.params
-      const leaveApplications: any = await this.leaveApplicationService.rejectLeadsLeaveApplications(leaveId, req.user, req.body);
+      const leaveApplications: any = await this.leaveApplicationService.rejectLeaveApplicationByLead(leaveId, req.user, req.body);
       res.status(200).json({ data: leaveApplications});
-    } catch (error) {
-      next(error);
-    }
-  };
-  public checkWhetherUserIsALead = async (req: any, res: Response, next: NextFunction) => {
-    try {
-      const isUserALead: any = await this.leaveApplicationService.checkWhetherUserIsALead(req.user);
-      res.status(200).json({ data: isUserALead});
     } catch (error) {
       next(error);
     }
