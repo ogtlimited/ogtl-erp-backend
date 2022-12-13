@@ -21,9 +21,9 @@ class LeaveApprovalLevelService {
       if(leaveApprovalLevel.length >= 1 ) throw new HttpException(400, 'Record already exist');
       return await this.leavApprovalLevelModel.create(query);
   }
-  public async findAllLeaveApprovalLevels(): Promise<ILeaveApprovalLevel[]> {
+  public async findAllLeaveApprovalLevels(query): Promise<ILeaveApprovalLevel[]> {
       const leaveApprovalLevel: ILeaveApprovalLevel[] = await this.leavApprovalLevelModel
-      .find()
+      .find({query})
       .populate("designation_id")
       return leaveApprovalLevel;
   }
@@ -31,7 +31,7 @@ class LeaveApprovalLevelService {
       if (isEmpty(leaveApprovalLevelId)) throw new HttpException(400, "Bad Request");
       const leaveApprovalLevel: ILeaveApprovalLevel = await this.leavApprovalLevelModel
       .findOne({ _id: leaveApprovalLevelId });
-      if (!leaveApprovalLevel) throw new HttpException(409, 'Leave approval level not found');
+      if (!leaveApprovalLevel) throw new HttpException(404, 'Leave approval level not found');
       return leaveApprovalLevel;
   }
 
@@ -40,6 +40,13 @@ class LeaveApprovalLevelService {
       .find({designation_id})
       .populate('designation_id');
       return recordsWithPopulatedDesignation.designation_id.department_id;
+}
+  public async updateLeaveApprovalLevel(leaveApprovalLevelId: string, payload): Promise<any> {
+    if (isEmpty(payload)) throw new HttpException(400, 'Bad request');
+      const updatedLeaveApprovalLevel: any = await this.leavApprovalLevelModel
+      .findOneAndUpdate({_id: leaveApprovalLevelId}, payload, {new: true})
+      if (!updatedLeaveApprovalLevel) throw new HttpException(404, 'leave does not exist');
+      return updatedLeaveApprovalLevel;
 }
   private async findDesignationsDepartmentLeaveApprovalLevel(designation_id: string): Promise<any> {
       const department_id = await this.findDesignationsDepartmentId(designation_id)
