@@ -17,7 +17,7 @@ class LeaveApprovalLevelController {
   };
   public findAllLeaveApprovalLevels = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const allLeaveApprovalLevels: ILeaveApprovalLevel[] = await this.leaveApprovalLevelService.findAllLeaveApprovalLevels();
+      const allLeaveApprovalLevels: ILeaveApprovalLevel[] = await this.leaveApprovalLevelService.findAllLeaveApprovalLevels(req.query);
       res.status(200).json({ data: allLeaveApprovalLevels});
     } catch (error) {
       next(error);
@@ -27,6 +27,15 @@ class LeaveApprovalLevelController {
     try {
       const { leaveApprovalLevelId } = req.params
       const leaveApprovalLevel: ILeaveApprovalLevel = await this.leaveApprovalLevelService.findLeaveApprovalLevelById(leaveApprovalLevelId);
+      res.status(200).json({ data: leaveApprovalLevel});
+    } catch (error) {
+      next(error);
+    }
+  };
+  public updateLeaveApprovalLevel = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { leaveApprovalLevelId } = req.params
+      const leaveApprovalLevel: ILeaveApprovalLevel = await this.leaveApprovalLevelService.updateLeaveApprovalLevel(leaveApprovalLevelId, req.body);
       res.status(200).json({ data: leaveApprovalLevel});
     } catch (error) {
       next(error);
