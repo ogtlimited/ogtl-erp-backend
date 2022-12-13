@@ -12,6 +12,10 @@ export class CreateDesignationDto{
    @IsOptional()
    @IsString()
    public project_id: string;
+
+   @IsOptional()
+   @IsString()
+   public approval_level: string;
 }
 
 export class UpdateDesignationDto{
@@ -29,4 +33,8 @@ export class UpdateDesignationDto{
     @IsOptional()
     @IsString()
     public project_id: string;
+
+    @IsOptional()
+    @IsString()
+    public approval_level: string;
 }
