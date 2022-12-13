@@ -69,7 +69,7 @@ function birthdayMessage(first_name) {
 
  function leaveApplicationStatusMessage(first_name, status) {
   const status_message = "Hello "+first_name+","
-   +"<br><br>" + " Your Leave has been "+status+"."
+   +"<br><br>" + " Your leave application has been "+status+"."
    +"<br><br>" + " Best regards."
    +"<br><br>"
    const status_subject = "Leave Status"
@@ -81,7 +81,7 @@ function birthdayMessage(first_name) {
 
   function leadsLeaveNotificationMessage(lead_first_name, applicant) {
     const message = "Hello "+lead_first_name+","
-     +"<br><br>" + " You have a pending leave by "+applicant+"."
+     +"<br><br>" + " You have a pending leave application from "+applicant+"."
      +"<br><br>" + " Best regards."
      +"<br><br>"
      const subject = "Pending Leave"
