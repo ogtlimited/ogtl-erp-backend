@@ -13,6 +13,12 @@ const leaveApprovalLevelSchema : Schema = new Schema (
             ref: "Designation",
             unique: true,
         },
+        department_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: "Department",
+            unique: true,
+        },
         approval_level: {
             type: Number,
             required: true,
