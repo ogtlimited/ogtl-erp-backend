@@ -17,7 +17,7 @@ class LeadsLeaveRejectionRoute implements Routes {
     this.initializeRoutes();
   }
   private initializeRoutes() {
-    this.router.post(`${this.path}/:leaveId`, [authMiddleware], this.leaveApplicationController.rejectLeadsLeaveApplications);
+    this.router.post(`${this.path}/:leaveId`, [authMiddleware], this.leaveApplicationController.rejectLeaveApplicationByLead);
   }
 }
 export default LeadsLeaveRejectionRoute;
