@@ -6,6 +6,10 @@ export class LeaveApprovalLevelDto{
     @IsString()
     @IsNotEmpty()
     public designation_id: string;
+    
+    @IsString()
+    @IsNotEmpty()
+    public department_id: string;
 
     @IsNumber()
     @IsNotEmpty()
