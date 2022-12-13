@@ -141,9 +141,6 @@ class LeaveApplicationService {
   }
 
   public async createLeaveapplication(LeaveapplicationData: ILeaveApplication, user: Employee): Promise<ILeaveApplication> {
-    const leaveApplicant = await this.employeeModel.findOne({_id: LeaveapplicationData.employee_id})
-    const supervisor = await this.employeeModel.findOne({_id: leaveApplicant.reports_to})
-    const {message, subject} = leadsLeaveNotificationMessage(supervisor.first_name, leaveApplicant.first_name) 
     LeaveapplicationData.approval_level = await this.getImmediateSupervisorsLeaveApprovalLevel(user)
     const usersLeaveApprovalLevel: number = await this.getUsersLeaveApprovalLevel(user)
     if(usersLeaveApprovalLevel === LeaveapplicationData.approval_level) LeaveapplicationData.hr_stage = true
@@ -177,7 +174,7 @@ class LeaveApplicationService {
     
     if (prevLeaves.length == 0) {
       const createLeaveapplicationData: ILeaveApplication = await this.application.create({...LeaveapplicationData, employee_project_id: user.projectId});
-      await this.sendLeaveNotificationMail(supervisor.company_email, message, subject )
+      await this.sendPendingLeaveNotificationMail(LeaveapplicationData)
       return createLeaveapplicationData;
     } else {
       const getLeaveDays = prevLeaves.map(e => this.getBusinessDatesCount(new Date(e.from_date), new Date(e.to_date)));
@@ -193,7 +190,7 @@ class LeaveApplicationService {
         if (oldAndNewLeave > MaxLeave) {
           throw new HttpException(400, 'You have used ' + totalLeaveThisYear + ', you have ' + (MaxLeave - totalLeaveThisYear) + ' leave left');
         } else {
-          await this.sendLeaveNotificationMail(supervisor.company_email, message, subject )
+          await this.sendPendingLeaveNotificationMail(LeaveapplicationData)
           const createLeaveapplicationData: ILeaveApplication = await this.application.create({...LeaveapplicationData, employee_project_id: user.projectId});
           return createLeaveapplicationData;
         }
@@ -217,7 +214,6 @@ class LeaveApplicationService {
   }
   public async updateLeaveCount(updatedLeaveCount: ILeaveCount[]) {
     try {
-      // const salaryDetailsData = req.body;
       const newArray = [];
       for (let index = 0; index < updatedLeaveCount.length; index++) {
         const findEmployee: Employee = await EmployeeModel.findOneAndUpdate(
@@ -295,12 +291,9 @@ class LeaveApplicationService {
     if (!leaveApplication) {
       throw new HttpException(400, 'leave application does not exist');
     }
-    if(leaveApplication.leave_approver!==null){
-      const immediateLeadDetails = await this.employeeModel.findOne({_id: leaveApplication.leave_approver})
-      const leaveApplicant = await this.employeeModel.findOne({_id: leaveApplication.employee_id})
-      const {message, subject} = leadsLeaveNotificationMessage(immediateLeadDetails.first_name, leaveApplicant.first_name)
-      await this.sendLeaveNotificationMail(immediateLeadDetails.company_email, message, subject )
-    }
+    if(leaveApplication.leave_approver!==null && leaveApplication.hr_stage!==true){
+     await this.sendPendingLeaveNotificationMail(leaveApplication)    
+     }
     return leaveApplication;
   }
   public async rejectLeadsLeaveApplications(leaveId: String, user: Employee, query: any): Promise<ILeaveApplication> {
@@ -318,9 +311,7 @@ class LeaveApplicationService {
     if (!leaveApplication) {
       throw new HttpException(400, 'leave application does not exist');
     }
-    const leaveApplicant = await this.employeeModel.findOne({_id: leaveApplication.employee_id})
-    const {status_message, status_subject} = leaveApplicationStatusMessage(leaveApplicant.first_name, "rejected")
-    await this.sendLeaveNotificationMail(leaveApplicant.company_email, status_message, status_subject )
+    await this.sendLeaveStatusNotificationMail(leaveApplication, "rejected")
     return leaveApplication;
   }
   public async getLeaveApplicationsForHr(query:any ): Promise<ILeaveApplication[]> {
@@ -343,9 +334,7 @@ class LeaveApplicationService {
       throw new HttpException(400, 'leave application does not exist');
     }
     await this.updateTotalLeaveCount(leaveApplication)
-    const leaveApplicant = await this.employeeModel.findOne({_id: leaveApplication.employee_id})
-    const {status_message, status_subject} = leaveApplicationStatusMessage(leaveApplicant.first_name, "approved")
-    await this.sendLeaveNotificationMail(leaveApplicant.company_email, status_message, status_subject )
+    await this.sendLeaveStatusNotificationMail(leaveApplication, "approved")
     return leaveApplication;
   }
   public async rejectHrLeaveApplications(leaveId: string): Promise<ILeaveApplication[]> {
@@ -361,9 +350,7 @@ class LeaveApplicationService {
     if (!leaveApplication) {
       throw new HttpException(400, 'leave application does not exist');
     }
-    const leaveApplicant = await this.employeeModel.findOne({_id: leaveApplication.employee_id})
-    const {status_message, status_subject} = leaveApplicationStatusMessage(leaveApplicant.first_name, "rejected")
-    await this.sendLeaveNotificationMail(leaveApplicant.company_email, status_message, status_subject )
+    await this.sendLeaveStatusNotificationMail(leaveApplication, "rejected")
     return leaveApplication;
   }
   public async checkWhetherUserIsALead(user: Employee): Promise<boolean>{
@@ -585,9 +572,21 @@ class LeaveApplicationService {
         }
       return filtrationQuery
   }
-  private async sendLeaveNotificationMail(to_email, message, subject){
+  private async sendPendingLeaveNotificationMail(applicant){
+    const leaveApplicant = await this.employeeModel.findOne({_id: applicant.employee_id})
+    const formattedLeaveApplicantFirstName = leaveApplicant.first_name.charAt(0) + leaveApplicant.first_name.toLowerCase().slice(1)
+    const supervisor = await this.employeeModel.findOne({_id: applicant?.leave_approver})
+    const formattedSupervisorFirstName = supervisor.first_name.charAt(0) + supervisor.first_name.toLowerCase().slice(1)
+    const {message, subject} = leadsLeaveNotificationMessage(formattedSupervisorFirstName, formattedLeaveApplicantFirstName) 
     const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
-    EmailService.sendMail(to_email, "hr@outsourceglobal.com", subject, message, body)
+    EmailService.sendMail(supervisor.company_email, "hr@outsourceglobal.com", subject, message, body)
+  }
+  private async sendLeaveStatusNotificationMail(applicant, status){
+    const leaveApplicant = await this.employeeModel.findOne({_id: applicant.employee_id})
+    const formattedFirstName = leaveApplicant.first_name.charAt(0) + leaveApplicant.first_name.toLowerCase().slice(1)
+    const {status_message, status_subject} = leaveApplicationStatusMessage(formattedFirstName, status)
+    const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${status_message}`
+    EmailService.sendMail(leaveApplicant.company_email, "hr@outsourceglobal.com", status_subject, status_message, body)
   }
   public async getLeaveApplicantDetails(user){
     const employee:any = await this.employeeModel.findOne({
