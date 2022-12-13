@@ -6,7 +6,7 @@ export class CreateDepartmentDto{
     @IsString()
     public department: string;
 
-    @IsOptional()
+    @IsNotEmpty()
     @IsNumber()
     public leave_approval_level: number;
 }
@@ -17,8 +17,8 @@ export class UpdateDepartmentDto{
     @IsNotEmpty()
     @IsString()
     public department: string;
-
-    @IsOptional()
+    
+    @IsNotEmpty()
     @IsNumber()
     public leave_approval_level: number;
 }
