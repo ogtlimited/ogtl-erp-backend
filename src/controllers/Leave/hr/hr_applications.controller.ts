@@ -48,6 +48,13 @@ class HrLeaveApplicationController {
       next(error);
     }
   };
-
+  public getTypesOfLeaveTaken = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const typesOfLeaveTaken: any = await this.hrLeaveApplicationService.getTypesOfLeaveTaken();
+      res.status(200).json({ data: typesOfLeaveTaken});
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 export default HrLeaveApplicationController;
