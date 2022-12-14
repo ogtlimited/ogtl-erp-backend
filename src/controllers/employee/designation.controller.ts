@@ -40,6 +40,16 @@ class DesignationController {
     }
   };
 
+  public getDesignationByDepartmentId = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const {department_id} = req.params;
+      const findDesignationData: Designation[] = await this.DesignationService.findDesignationBydepartmentId(department_id);
+      res.status(200).json({ data: findDesignationData });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   //update Designation
   public updateDesignation = async (req: Request, res: Response, next: NextFunction) => {
     try {
