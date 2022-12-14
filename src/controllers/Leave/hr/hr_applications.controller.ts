@@ -32,9 +32,9 @@ class HrLeaveApplicationController {
       next(error);
     }
   };
-  public getLeaveStatusCountForHrDashboard = async (req: any, res: Response, next: NextFunction) => {
+  public getLeaveStatusCountForHrDashboardAnalytics = async (req: any, res: Response, next: NextFunction) => {
     try {
-      const leaveStatus: any = await this.hrLeaveApplicationService.getLeaveStatusCountForHrDashboard();
+      const leaveStatus: any = await this.hrLeaveApplicationService.getLeaveStatusCountForHrDashboardAnalytics();
       res.status(200).json({ data: leaveStatus});
     } catch (error) {
       next(error);
