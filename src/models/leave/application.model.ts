@@ -22,10 +22,10 @@ const applicationSchema : Schema = new Schema (
             required: true,
             ref: "Department",
         },
-        leave_type:{
-            type: String,
-            enum:["Annual","Casual","Sick","Without Pay","Maternity"],
+        leave_type_id:{
+            type: mongoose.Schema.Types.ObjectId,
             required: true,
+        ref: "LeaveType",
         },
         from_date:{
             type: Date,
