@@ -5,7 +5,7 @@ import {IsBoolean, IsDate, IsDateString, IsNotEmpty, IsOptional, IsString} from 
 export class CreateLeaveApplicationDTO{
 
     @IsString()
-    public leave_type: string;
+    public leave_type_id: string;
 
     @IsString()
     @IsOptional()
