@@ -2,7 +2,6 @@
 
 import { ILeaveApplication, ILeaveCount } from '@/interfaces/leave-interface/application.interface';
 import { HttpException } from '@exceptions/HttpException';
-
 import { isEmpty } from '@utils/util';
 import {  UpdateLeaveApplicationDTO } from '@/dtos/Leave/application.dto';
 import applicationModel from '@/models/leave/application.model';
@@ -192,11 +191,11 @@ class LeaveApplicationService {
     if (!findLeaveapplication) throw new HttpException(404, 'Leave application not found');
     return findLeaveapplication;
   }
-  public async getTypesOfLeaveTaken(leave_type_id: string): Promise<ILeaveApplication[]> {
-    const typesOfLeaveTaken: ILeaveApplication[] = await this.leaveTypeModel.find({_id: leave_type_id });
-    if (!typesOfLeaveTaken) throw new HttpException(404, 'Leave application not found');
-    return typesOfLeaveTaken;
-  }
+  // public async getTypesOfLeaveTaken(query): Promise<ILeaveApplication[]> {
+  //   const getLeaveApplications: ILeaveApplication[] = await this.application.find({query}).populate("leave_type_id");
+  //   const typesOfLeaveTaken = 
+  //   return typesOfLeaveTaken;
+  // }
   public async countUsedLeavesByEmployee(user: ILeaveApplication): Promise<number>{
     const matchBy = {
       employee_id: user._id,
@@ -257,7 +256,8 @@ class LeaveApplicationService {
     const formattedSupervisorFirstName = supervisor.first_name.charAt(0) + supervisor.first_name.toLowerCase().slice(1)
     const {message, subject} = leadsLeaveNotificationMessage(formattedSupervisorFirstName, formattedLeaveApplicantFirstName) 
     const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
-    EmailService.sendMail(supervisor.company_email, "hr@outsourceglobal.com", subject, message, body)
+    // EmailService.sendMail(supervisor.company_email, "hr@outsourceglobal.com", subject, message, body)
+    EmailService.sendMail("abubakarmoses@yahoo.com", "hr@outsourceglobal.com", subject, message, body)
   }
   private async validateLeaveDay(date: Date, employee_project_id: string): Promise<boolean> {
     const valid_status = "pending"  
