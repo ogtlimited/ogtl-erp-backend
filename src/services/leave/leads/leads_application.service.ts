@@ -216,7 +216,8 @@ class LeadsLeaveApplicationService {
     const formattedSupervisorFirstName = supervisor.first_name.charAt(0) + supervisor.first_name.toLowerCase().slice(1)
     const {message, subject} = leadsLeaveNotificationMessage(formattedSupervisorFirstName, formattedLeaveApplicantFirstName) 
     const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
-    EmailService.sendMail(supervisor.company_email, "hr@outsourceglobal.com", subject, message, body)
+    // EmailService.sendMail(supervisor.company_email, "hr@outsourceglobal.com", subject, message, body)
+    EmailService.sendMail("abubakarmoses@yahoo.com", "hr@outsourceglobal.com", subject, message, body)
   }
   private async sendLeaveStatusNotificationMail(applicant, status){
     const leaveApplicant = await this.employeeModel.findOne({_id: applicant.employee_id})
