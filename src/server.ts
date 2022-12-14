@@ -87,6 +87,7 @@ import EmailRoute from '@routes/notification/email.route';
 const socketio = require('socket.io');
 
 import LeaveSettingsRoute from './routes/leave/leave-settings.route';
+import LeaveTypeRoute from './routes/leave/leave_type.route';
 import PurchaseOrderRoute from './routes/assets/purchase-order.route';
 import AssetRoute from './routes/assets/assets.route';
 import MaintenanceReportRoute from '@routes/maintenance-report/maintenance_report.route';
@@ -148,6 +149,7 @@ const app = new App([
   new LeadsLeaveRejectionRoute(),
   new LeadsLeaveApprovalRoute(),
   new LeaveSettingsRoute(),
+  new LeaveTypeRoute(),
   new BranchRoute(),
   new ContactDetailsRoute(),
   new DesignationRoute(),
