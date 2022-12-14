@@ -3,7 +3,7 @@
 import { ILeaveApplication, ILeaveCount } from '@/interfaces/leave-interface/application.interface';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
-import {  UpdateLeaveApplicationDTO } from '@/dtos/Leave/application.dto';
+import {  CreateLeaveApplicationDTO, UpdateLeaveApplicationDTO } from '@/dtos/Leave/application.dto';
 import applicationModel from '@/models/leave/application.model';
 import allocationModel from '@/models/leave/allocation.model';
 import EmployeeService from '@services/employee.service';
@@ -64,7 +64,7 @@ class LeaveApplicationService {
     if (!findLeaveapplication) throw new HttpException(404, 'Leave application not found');
     return findLeaveapplication;
   }
-  public async createLeaveapplication(LeaveapplicationData: ILeaveApplication, user: Employee): Promise<ILeaveApplication> {
+  public async createLeaveapplication(LeaveapplicationData: CreateLeaveApplicationDTO, user: Employee): Promise<ILeaveApplication> {
     const newLeaveapplicationData:ILeaveApplication = LeaveapplicationData
     newLeaveapplicationData.approval_level = await this.leadsLeaveApplicationService.getImmediateSupervisorsLeaveApprovalLevel(user)
     const usersLeaveApprovalLevel: number = await this.leadsLeaveApplicationService.getLeadLeaveApprovalLevel(user)
@@ -98,7 +98,7 @@ class LeaveApplicationService {
     });
     
     if (prevLeaves.length == 0) {
-      const createLeaveapplicationData: ILeaveApplication = await this.application.create({...LeaveapplicationData, employee_project_id: user.projectId});
+      const createLeaveapplicationData: ILeaveApplication = await this.application.create({...newLeaveapplicationData, employee_project_id: user.projectId});
       await this.sendPendingLeaveNotificationMail(LeaveapplicationData)
       return createLeaveapplicationData;
     } else {
@@ -116,7 +116,7 @@ class LeaveApplicationService {
           throw new HttpException(400, 'You have used ' + totalLeaveThisYear + ', you have ' + (MaxLeave - totalLeaveThisYear) + ' leave left');
         } else {
           await this.sendPendingLeaveNotificationMail(LeaveapplicationData)
-          const createLeaveapplicationData: ILeaveApplication = await this.application.create({...LeaveapplicationData, employee_project_id: user.projectId});
+          const createLeaveapplicationData: ILeaveApplication = await this.application.create({...newLeaveapplicationData, employee_project_id: user.projectId});
           return createLeaveapplicationData;
         }
       }
