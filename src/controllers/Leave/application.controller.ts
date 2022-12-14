@@ -99,38 +99,6 @@ class LeaveApplicationController {
       next(error);
     }
   };
-  public countUsedLeavesByEmployee = async (req: any, res: Response, next: NextFunction) => {
-    try {
-      const usedLeaves: any = await this.leaveApplicationService.countUsedLeavesByEmployee(req.user);
-      res.status(200).json({ data: usedLeaves});
-    } catch (error) {
-      next(error);
-    }
-  };
-  public countMedicalLeavesByEmployee = async (req: any, res: Response, next: NextFunction) => {
-    try {
-      const medicalLeaves: any = await this.leaveApplicationService.countMedicalLeavesByEmployee(req.user);
-      res.status(200).json({ data: medicalLeaves});
-    } catch (error) {
-      next(error);
-    }
-  };
-  public countOtherLeaves = async (req: any, res: Response, next: NextFunction) => {
-    try {
-      const otherLeaves: any = await this.leaveApplicationService.countOtherLeaves(req.user);
-      res.status(200).json({ data: otherLeaves});
-    } catch (error) {
-      next(error);
-    }
-  };
-  public countRemainingLeaves = async (req: any, res: Response, next: NextFunction) => {
-    try {
-      const remainingLeaves: any = await this.leaveApplicationService.countRemainingLeaves(req.user);
-      res.status(200).json({ data: remainingLeaves});
-    } catch (error) {
-      next(error);
-    }
-  };
 }
 
 export default LeaveApplicationController;
