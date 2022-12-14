@@ -50,7 +50,7 @@ class LeaveApplicationController {
 
   public createLeaveApplication = async (req: any, res: Response, next: NextFunction) => {
     try {
-      const LeaveApplicationData: CreateLeaveApplicationDTO = req.body;
+      const LeaveApplicationData = req.body;
       const createLeaveApplicationData: ILeaveApplication = await this.leaveApplicationService.createLeaveapplication(LeaveApplicationData, req.user);
       res.status(201).json({ data: createLeaveApplicationData, message: 'created' });
     } catch (error) {
