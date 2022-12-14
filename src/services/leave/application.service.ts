@@ -191,11 +191,7 @@ class LeaveApplicationService {
     if (!findLeaveapplication) throw new HttpException(404, 'Leave application not found');
     return findLeaveapplication;
   }
-  // public async getTypesOfLeaveTaken(query): Promise<ILeaveApplication[]> {
-  //   const getLeaveApplications: ILeaveApplication[] = await this.application.find({query}).populate("leave_type_id");
-  //   const typesOfLeaveTaken = 
-  //   return typesOfLeaveTaken;
-  // }
+  
   private async sendPendingLeaveNotificationMail(applicant){
     const leaveApplicant = await this.employeeModel.findOne({_id: applicant.employee_id})
     const formattedLeaveApplicantFirstName = leaveApplicant.first_name.charAt(0) + leaveApplicant.first_name.toLowerCase().slice(1)
