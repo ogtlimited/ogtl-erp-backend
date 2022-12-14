@@ -11,9 +11,9 @@ class LeaveApprovalLevelService {
   private departmentModel = departmentModel;
 
   public async createLeaveApprovalLevel(query: any): Promise<ILeaveApprovalLevel> {
-      const departmentLeaveApprovalLevel = this.findDesignationsDepartmentLeaveApprovalLevel(query.designation_id)
+      const departmentHighestLeaveApprovalLevel = this.findDepartmentHighestLeaveApprovalLevel(query.designation_id)
       if (isEmpty(query)) throw new HttpException(400, 'Bad request');
-      if(query.leave_approval_level > departmentLeaveApprovalLevel) {
+      if(query.leave_approval_level > departmentHighestLeaveApprovalLevel) {
          throw new HttpException(401, 'Approval level cannot be greater than that of department');
       }
       const leaveApprovalLevel: ILeaveApprovalLevel[] = await this.leavApprovalLevelModel.find({designation_id: query.designation_id})
@@ -34,13 +34,6 @@ class LeaveApprovalLevelService {
       if (!leaveApprovalLevel) throw new HttpException(404, 'Leave approval level not found');
       return leaveApprovalLevel;
   }
-
-  private async findDesignationsDepartmentId(designation_id: string): Promise<any> {
-      const recordsWithPopulatedDesignation: any = await this.leavApprovalLevelModel
-      .find({designation_id})
-      .populate('designation_id');
-      return recordsWithPopulatedDesignation.designation_id.department_id;
-}
   public async updateLeaveApprovalLevel(leaveApprovalLevelId: string, payload): Promise<any> {
     if (isEmpty(payload)) throw new HttpException(400, 'Bad request');
       const updatedLeaveApprovalLevel: any = await this.leavApprovalLevelModel
@@ -48,8 +41,7 @@ class LeaveApprovalLevelService {
       if (!updatedLeaveApprovalLevel) throw new HttpException(404, 'leave does not exist');
       return updatedLeaveApprovalLevel;
 }
-  private async findDesignationsDepartmentLeaveApprovalLevel(designation_id: string): Promise<any> {
-      const department_id = await this.findDesignationsDepartmentId(designation_id)
+  private async findDepartmentHighestLeaveApprovalLevel(department_id: string): Promise<any> {
       const departmentRecords: any = await this.departmentModel.find({department_id});
       return departmentRecords.leave_approval_level;
 }
