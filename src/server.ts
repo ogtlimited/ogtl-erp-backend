@@ -30,7 +30,6 @@ import LeaveAllocationRoute from './routes/leave/allocation.route';
 import LeaveApplicationRoute from './routes/leave/application.route';
 import LeadsLeaveApplicationsRoute from './routes/leave/leads/leads_leave_applications.route';
 import LeaveApprovalLevelRoute from './routes/leave/leave_approval_levels.route';
-import LeaveCount from './routes/leave/leave_count.route';
 import HrLeaveApplicationsRoute from './routes/leave/hr_leave_applications.route';
 import LeadsLeaveRejectionRoute from './routes/leave/leads/leads_leave_rejection.route';
 import LeadsLeaveApprovalRoute from './routes/leave/leads/leads_leave_approval.route';
@@ -40,6 +39,7 @@ import LeadsLeaveApprovalRoute from './routes/leave/leads/leads_leave_approval.r
 import BranchRoute from './routes/employee/branch.route';
 import ContactDetailsRoute from './routes/employee/contact-details.route';
 import DesignationRoute from './routes/employee/designation.route';
+import DesignationByDepartmentRoute from './routes/employee/designation_by_departmentId.route';
 import EducationRoute from './routes/employee/education.route';
 import EmergencyContactRoute from './routes/employee/emergency-contact.route';
 import EmployeeTypeRoute from './routes/employee/employee-type.route';
@@ -144,7 +144,6 @@ const app = new App([
   new LeaveApplicationRoute(),
   new LeadsLeaveApplicationsRoute(),
   new LeaveApprovalLevelRoute(),
-  new LeaveCount(),
   new HrLeaveApplicationsRoute(),
   new LeadsLeaveRejectionRoute(),
   new LeadsLeaveApprovalRoute(),
@@ -153,6 +152,7 @@ const app = new App([
   new BranchRoute(),
   new ContactDetailsRoute(),
   new DesignationRoute(),
+  new DesignationByDepartmentRoute(),
   new EducationRoute(),
   new EmployeeTypeRoute(),
   new EmergencyContactRoute(),
