@@ -196,59 +196,6 @@ class LeaveApplicationService {
   //   const typesOfLeaveTaken = 
   //   return typesOfLeaveTaken;
   // }
-  public async countUsedLeavesByEmployee(user: ILeaveApplication): Promise<number>{
-    const matchBy = {
-      employee_id: user._id,
-      hr_stage: true, status:"approved",
-      createdAt:{$gte:this.startOfYear,$lt:this.endOfYear}
-      }
-    const employeeUsedLeaves: any = await this.getEmployeeApprovedLeaveDays(matchBy)
-    let count = 0
-    for(let i=0; i<employeeUsedLeaves.length; i++){
-      count += employeeUsedLeaves[i].leaveApplication
-    }
-    return count
-  }
-  public async countMedicalLeavesByEmployee(user: ILeaveApplication): Promise<any>{
-    const matchBy = {
-      employee_id: user._id,
-      hr_stage: true, status:"approved",
-      leave_type: "Sick",
-      createdAt:{$gte:this.startOfYear,$lt:this.endOfYear}
-      }
-    const employeeUsedLeaves: any = await this.getEmployeeApprovedLeaveDays(matchBy)
-    let count = 0
-    for(let i=0; i<employeeUsedLeaves.length; i++){
-      count += employeeUsedLeaves[i].leaveApplication
-    }
-    return count
-  }
-  public async countOtherLeaves(user: ILeaveApplication): Promise<number>{
-    const matchBy = {
-      employee_id: user._id,
-      hr_stage: true, status:"approved",
-      leave_type:{$ne: "Sick"},
-      createdAt:{$gte:this.startOfYear,$lt:this.endOfYear}
-      }
-    const employeeUsedLeaves: any = await this.getEmployeeApprovedLeaveDays(matchBy)
-    let count = 0
-    for(let i=0; i<employeeUsedLeaves.length; i++){
-      count += employeeUsedLeaves[i].leaveApplication
-    }
-    return count
-  }
-  public async countRemainingLeaves(user: Employee): Promise<number>{
-    const employeeRemainingLeaves: Employee = await this.employeeModel.findOne({_id: user._id})
-    return employeeRemainingLeaves.leaveCount
-  }
-  private async getEmployeeApprovedLeaveDays(matchBy): Promise<any>{
-     const employeeUsedLeaves: ILeaveApplication[] = await this.application.find(matchBy)
-     const employeeUsedLeaveDaysCount = await (Promise.all(employeeUsedLeaves))
-     const formatedLeaveApplication = employeeUsedLeaveDaysCount.map(leaveApplication=>{
-      return {leaveApplication: this.getBusinessDatesCount(leaveApplication.from_date, leaveApplication.to_date)}
-     })
-    return formatedLeaveApplication
-  }
   private async sendPendingLeaveNotificationMail(applicant){
     const leaveApplicant = await this.employeeModel.findOne({_id: applicant.employee_id})
     const formattedLeaveApplicantFirstName = leaveApplicant.first_name.charAt(0) + leaveApplicant.first_name.toLowerCase().slice(1)
