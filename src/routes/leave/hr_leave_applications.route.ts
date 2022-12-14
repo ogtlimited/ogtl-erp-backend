@@ -5,26 +5,24 @@ import { Router } from 'express';
 import  permissionMiddleware  from '@/middlewares/permission.middleware';
 
 import { Routes } from '@interfaces/routes.interface';
-import LeaveApplicationController from '@/controllers/Leave/application.controller';
+import HrLeaveApplicationController from '@/controllers/Leave/hr/hr_applications.controller';
 
 
 class HrLeaveApplicationsRoute implements Routes {
   public path = '/hr-leave-applications';
   public router = Router();
-  public leaveApplicationController = new LeaveApplicationController();
+  public hrleaveApplicationController = new HrLeaveApplicationController();
 
   constructor() {
     this.initializeRoutes();
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, authMiddleware, this.leaveApplicationController.getLeaveApplicationsForHr);
-    this.router.get(`${this.path}/on-leave`, authMiddleware, this.leaveApplicationController.countEmployeesOnLeave);
-    this.router.get(`${this.path}/rejected`, authMiddleware, this.leaveApplicationController.countHrRejectedLeaves);
-    this.router.get(`${this.path}/approved`, authMiddleware, this.leaveApplicationController.countHrApprovedLeaves);
-    this.router.get(`${this.path}/pending`, authMiddleware, this.leaveApplicationController.countHrPendingLeaves);
-    this.router.post(`${this.path}/approve/:leaveId`, authMiddleware, this.leaveApplicationController.approveLeaveApplicationsByHr);
-    this.router.post(`${this.path}/reject/:leaveId`, authMiddleware, this.leaveApplicationController.rejectLeaveApplicationsByHr);
+    this.router.get(`${this.path}`, authMiddleware, this.hrleaveApplicationController.getLeaveApplicationsForHr);
+    this.router.get(`${this.path}/on-leave`, authMiddleware, this.hrleaveApplicationController.countEmployeesOnLeave);
+    this.router.get(`${this.path}/status-count`, authMiddleware, this.hrleaveApplicationController.getLeaveStatusCountForHrDashboard);
+    this.router.post(`${this.path}/approve/:leaveId`, authMiddleware, this.hrleaveApplicationController.approveLeaveApplicationsByHr);
+    this.router.post(`${this.path}/reject/:leaveId`, authMiddleware, this.hrleaveApplicationController.rejectLeaveApplicationsByHr);
     
    }
 }
