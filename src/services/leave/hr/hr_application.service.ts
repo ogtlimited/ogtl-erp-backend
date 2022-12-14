@@ -234,5 +234,34 @@ class HrLeaveApplicationService {
   ])
   return leaveCount
   }
+  public async getTypesOfLeaveTaken(): Promise<ILeaveApplication[]> {
+    const typesOfLeaveTaken: ILeaveApplication[] = await this.application.aggregate([
+    {
+        '$match': {status: "approved"}
+    },
+    {
+      $lookup:{
+        from: "leavetypes",
+        localField: "leave_type_id",
+        foreignField: "_id",
+        as: "leavetype"
+        }
+     },
+     {
+      $unwind: {path :"$leavetype",
+      preserveNullAndEmptyArrays: true
+     }
+     },
+    {
+        '$group': {
+          '_id': '$leavetype.leave_type', 
+          'total': {
+            '$count': {}
+          }
+        }
+    }
+  ])
+    return typesOfLeaveTaken;
+  }
 }
 export default HrLeaveApplicationService;
