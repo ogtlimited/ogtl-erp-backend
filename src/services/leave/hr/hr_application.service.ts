@@ -39,7 +39,7 @@ class HrLeaveApplicationService {
       throw new HttpException(400, 'leave application does not exist');
     }
     await this.updateTotalLeaveCount(leaveApplication)
-    await this.sendLeaveStatusNotificationMail(leaveApplication, "approved")
+    Promise.all([this.sendLeaveStatusNotificationMail(leaveApplication, "approved")])
     return leaveApplication;
   }
   public async rejectLeaveApplicationsByHr(leaveId: string): Promise<ILeaveApplication[]> {
@@ -55,7 +55,7 @@ class HrLeaveApplicationService {
     if (!leaveApplication) {
       throw new HttpException(400, 'leave application does not exist');
     }
-    await this.sendLeaveStatusNotificationMail(leaveApplication, "rejected")
+     Promise.all([this.sendLeaveStatusNotificationMail(leaveApplication, "rejected")])
     return leaveApplication;
   }
  
