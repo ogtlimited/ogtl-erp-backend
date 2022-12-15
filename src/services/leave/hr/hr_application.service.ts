@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-
 import { ILeaveApplication } from '@/interfaces/leave-interface/application.interface';
 import { HttpException } from '@exceptions/HttpException';
 import applicationModel from '@/models/leave/application.model';
@@ -92,8 +91,7 @@ class HrLeaveApplicationService {
       {
           '$match': {hr_stage: true}
       },
-      {
-          '$group': {
+      {'$group': {
             '_id': '$status', 
             'total': {
               '$count': {}
@@ -108,8 +106,7 @@ class HrLeaveApplicationService {
       {
           '$match': {status: "approved"}
       },
-      {
-        $lookup:{
+      {$lookup:{
           from: "leavetypes",
           localField: "leave_type_id",
           foreignField: "_id",
@@ -121,8 +118,7 @@ class HrLeaveApplicationService {
         preserveNullAndEmptyArrays: true
       }
       },
-      {
-          '$group': {
+      { '$group': {
             '_id': '$leavetype.leave_type', 
             'total': {
               '$count': {}
