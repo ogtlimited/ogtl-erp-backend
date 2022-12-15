@@ -47,7 +47,7 @@ class LeadsLeaveApplicationService {
       throw new HttpException(400, 'leave application does not exist');
     }
     if(leaveApplication.leave_approver!==null && leaveApplication.hr_stage!==true){
-     await this.sendPendingLeaveNotificationMail(leaveApplication)    
+     Promise.all([this.sendPendingLeaveNotificationMail(leaveApplication)])   
      }
     return leaveApplication;
   }
@@ -66,7 +66,7 @@ class LeadsLeaveApplicationService {
     if (!leaveApplication) {
       throw new HttpException(400, 'leave application does not exist');
     }
-    await this.sendLeaveStatusNotificationMail(leaveApplication, "rejected")
+     Promise.all([this.sendLeaveStatusNotificationMail(leaveApplication, "rejected")])
     return leaveApplication;
   }
    private async getDepartmentHighestLeaveApprovalLevel(user: Employee): Promise<number>{
@@ -212,8 +212,8 @@ class LeadsLeaveApplicationService {
   private async sendPendingLeaveNotificationMail(applicant){
     const leaveApplicant = await this.employeeModel.findOne({_id: applicant.employee_id})
     const formattedLeaveApplicantFirstName = leaveApplicant.first_name.charAt(0) + leaveApplicant.first_name.toLowerCase().slice(1)
-    const supervisor = await this.employeeModel.findOne({_id: applicant?.leave_approver})
-    const formattedSupervisorFirstName = supervisor.first_name.charAt(0) + supervisor.first_name.toLowerCase().slice(1)
+    const supervisor = applicant.leave_approver ? await this.employeeModel.findOne({_id: applicant?.leave_approver}): null
+    const formattedSupervisorFirstName = supervisor?.first_name.charAt(0) + supervisor?.first_name.toLowerCase().slice(1)
     const {message, subject} = leadsLeaveNotificationMessage(formattedSupervisorFirstName, formattedLeaveApplicantFirstName) 
     const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
     // EmailService.sendMail(supervisor.company_email, "hr@outsourceglobal.com", subject, message, body)
