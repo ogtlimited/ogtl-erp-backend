@@ -87,6 +87,7 @@ class HrLeaveApplicationService {
       return employeesOnLeave
   }
   public async getLeaveStatusCountForHrDashboardAnalytics() {
+      let data = {rejected:0,approved:0,pending:0}
       const leaveCount = await this.application.aggregate([
       {
           '$match': {hr_stage: true}
@@ -99,12 +100,17 @@ class HrLeaveApplicationService {
           }
       }
     ])
-    return leaveCount
+    leaveCount.map<any>(status=>{
+      if (status._id==="rejected"){ data.rejected = status.total}
+      if (status._id==="pending"){ data.pending = status.total}
+      if (status._id==="approved"){ data.approved = status.total}
+    })
+    return data
   }
   public async getTypesOfLeaveTaken(): Promise<ILeaveApplication[]> {
       const typesOfLeaveTaken: ILeaveApplication[] = await this.application.aggregate([
       {
-          '$match': {status: "approved"}
+          '$match': {hr_stage: true}
       },
       {$lookup:{
           from: "leavetypes",
