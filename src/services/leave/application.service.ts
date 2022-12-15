@@ -60,7 +60,7 @@ class LeaveApplicationService {
   }
   public async findLeaveapplicationById(LeaveapplicationId: string): Promise<ILeaveApplication> {
     if (isEmpty(LeaveapplicationId)) throw new HttpException(400, "You're not LeaveapplicationId");
-    const findLeaveapplication: ILeaveApplication = await this.application.findOne({ _id: LeaveapplicationId });
+    const findLeaveapplication: ILeaveApplication = await (await this.application.findOne({ _id: LeaveapplicationId })).populate("leave_type_id");
     if (!findLeaveapplication) throw new HttpException(404, 'Leave application not found');
     return findLeaveapplication;
   }
@@ -187,7 +187,7 @@ class LeaveApplicationService {
   }
   public async getLeaveapplicationByEmployeeId(employee_id: string): Promise<ILeaveApplication[]> {
     if (isEmpty(employee_id)) throw new HttpException(400, "You're not LeaveapplicationId");
-    const findLeaveapplication: ILeaveApplication[] = await this.application.find({ employee_id: employee_id }).populate("employee_id");
+    const findLeaveapplication: ILeaveApplication[] = await this.application.find({ employee_id: employee_id }).populate("employee_id").populate("leave_type_id");
     if (!findLeaveapplication) throw new HttpException(404, 'Leave application not found');
     return findLeaveapplication;
   }
