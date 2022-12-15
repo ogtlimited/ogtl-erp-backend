@@ -99,7 +99,7 @@ class LeaveApplicationService {
     
     if (prevLeaves.length == 0) {
       const createLeaveapplicationData: ILeaveApplication = await this.application.create({...newLeaveapplicationData, employee_project_id: user.projectId});
-      await this.sendPendingLeaveNotificationMail(LeaveapplicationData)
+      newLeaveapplicationData.leave_approver!==null ? Promise.all([this.sendPendingLeaveNotificationMail(newLeaveapplicationData)]):""
       return createLeaveapplicationData;
     } else {
       const getLeaveDays = prevLeaves.map(e => this.getBusinessDatesCount(new Date(e.from_date), new Date(e.to_date)));
@@ -115,7 +115,7 @@ class LeaveApplicationService {
         if (oldAndNewLeave > MaxLeave) {
           throw new HttpException(400, 'You have used ' + totalLeaveThisYear + ', you have ' + (MaxLeave - totalLeaveThisYear) + ' leave left');
         } else {
-          await this.sendPendingLeaveNotificationMail(LeaveapplicationData)
+          newLeaveapplicationData.leave_approver!==null ? Promise.all([this.sendPendingLeaveNotificationMail(newLeaveapplicationData)]):""
           const createLeaveapplicationData: ILeaveApplication = await this.application.create({...newLeaveapplicationData, employee_project_id: user.projectId});
           return createLeaveapplicationData;
         }
@@ -194,9 +194,9 @@ class LeaveApplicationService {
   
   private async sendPendingLeaveNotificationMail(applicant){
     const leaveApplicant = await this.employeeModel.findOne({_id: applicant.employee_id})
-    const formattedLeaveApplicantFirstName = leaveApplicant.first_name.charAt(0) + leaveApplicant.first_name.toLowerCase().slice(1)
+    const formattedLeaveApplicantFirstName = leaveApplicant?.first_name.charAt(0) + leaveApplicant?.first_name.toLowerCase().slice(1)
     const supervisor = await this.employeeModel.findOne({_id: applicant?.leave_approver})
-    const formattedSupervisorFirstName = supervisor.first_name.charAt(0) + supervisor.first_name.toLowerCase().slice(1)
+    const formattedSupervisorFirstName = supervisor?.first_name.charAt(0) + supervisor?.first_name.toLowerCase().slice(1)
     const {message, subject} = leadsLeaveNotificationMessage(formattedSupervisorFirstName, formattedLeaveApplicantFirstName) 
     const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
     // EmailService.sendMail(supervisor.company_email, "hr@outsourceglobal.com", subject, message, body)
