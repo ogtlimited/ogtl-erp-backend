@@ -63,7 +63,6 @@ class LeaveApplicationController {
       const LeaveApplicationId: string = req.params.id;
       const LeaveApplicationData: UpdateLeaveApplicationDTO = req.body;
       const updateLeaveApplicationData: ILeaveApplication = await this.leaveApplicationService.updateLeaveapplication(LeaveApplicationId, LeaveApplicationData);
-
       res.status(200).json({ data: updateLeaveApplicationData});
     } catch (error) {
       next(error);

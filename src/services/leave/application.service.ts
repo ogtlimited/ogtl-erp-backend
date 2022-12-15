@@ -126,7 +126,7 @@ class LeaveApplicationService {
       if (findLeaveapplication && findLeaveapplication._id != LeaveapplicationId)
         throw new HttpException(409, `${LeaveapplicationData._id} already exists`);
     }
-    const updateLeaveapplicationById: ILeaveApplication = await this.application.findByIdAndUpdate(LeaveapplicationId, LeaveapplicationData, {
+    const updateLeaveapplicationById: ILeaveApplication = await this.application.findByIdAndUpdate({_id: LeaveapplicationId}, LeaveapplicationData, {
       new: true,
     });
     if (!updateLeaveapplicationById) throw new HttpException(404, 'leave does not exist');
