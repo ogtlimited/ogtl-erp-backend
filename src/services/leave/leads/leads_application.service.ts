@@ -151,6 +151,19 @@ class LeadsLeaveApplicationService {
       }
       },
       {
+        $lookup:{
+          from: "leavetypes",
+          localField: "leave_type_id",
+          foreignField: "_id",
+          as: "leave_type_id"
+       }
+       },
+      {
+       $unwind: {path :"$leave_type_id",
+       preserveNullAndEmptyArrays: true
+      }
+      },
+      {
        $lookup:{
          from: "employees",
          localField: "employee_id",
