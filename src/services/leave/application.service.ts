@@ -8,21 +8,18 @@ import applicationModel from '@/models/leave/application.model';
 import allocationModel from '@/models/leave/allocation.model';
 import EmployeeService from '@services/employee.service';
 import LeadsLeaveApplicationService from '@services/leave/leads/leads_application.service';
+import LeaveMailingService from '@services/leave/leave_mailing.service';
 import { Employee } from '@/interfaces/employee-interface/employee.interface';
 import EmployeeModel from '@models/employee/employee.model';
 import projectModel from '@/models/project/project.model';
-import EmailService from '@/utils/email.service';
-import { leadsLeaveNotificationMessage } from '@/utils/message';
-const moment = require('moment')
 
 class LeaveApplicationService {
   public application = applicationModel;
   public allocationM = allocationModel;
   public employeeS = new EmployeeService();
   public leadsLeaveApplicationService = new LeadsLeaveApplicationService();
+  public leaveMailingService = new LeaveMailingService();
   public employeeModel = EmployeeModel;
-  private startOfYear = new Date(moment().startOf('year').toString()); 
-  private endOfYear = new Date(moment().endOf('year').toString());
   public project = projectModel;
 
   public async findAllLeaveapplication(query): Promise<ILeaveApplication[]> {
@@ -99,7 +96,7 @@ class LeaveApplicationService {
     
     if (prevLeaves.length == 0) {
       const createLeaveapplicationData: ILeaveApplication = await this.application.create({...newLeaveapplicationData, employee_project_id: user.projectId});
-      newLeaveapplicationData.leave_approver!==null ? Promise.all([this.sendPendingLeaveNotificationMail(newLeaveapplicationData)]):""
+      newLeaveapplicationData.leave_approver!==null ? Promise.all([this.leaveMailingService.sendPendingLeaveNotificationMail(newLeaveapplicationData, this.employeeModel)]):""
       return createLeaveapplicationData;
     } else {
       const getLeaveDays = prevLeaves.map(e => this.getBusinessDatesCount(new Date(e.from_date), new Date(e.to_date)));
@@ -115,7 +112,7 @@ class LeaveApplicationService {
         if (oldAndNewLeave > MaxLeave) {
           throw new HttpException(400, 'You have used ' + totalLeaveThisYear + ', you have ' + (MaxLeave - totalLeaveThisYear) + ' leave left');
         } else {
-          newLeaveapplicationData.leave_approver!==null ? Promise.all([this.sendPendingLeaveNotificationMail(newLeaveapplicationData)]):""
+          newLeaveapplicationData.leave_approver!==null ? Promise.all([this.leaveMailingService.sendPendingLeaveNotificationMail(newLeaveapplicationData, this.employeeModel)]):""
           const createLeaveapplicationData: ILeaveApplication = await this.application.create({...newLeaveapplicationData, employee_project_id: user.projectId});
           return createLeaveapplicationData;
         }
@@ -155,14 +152,11 @@ class LeaveApplicationService {
   public async updateAllLeaveCount(){
     return EmployeeModel.updateMany({}, {$inc : {'leaveCount' : 2}});
   }
-
   public async deleteLeaveapplication(LeaveapplicationId: string): Promise<ILeaveApplication> {
     const deleteLeaveapplicationById: ILeaveApplication = await this.application.findByIdAndDelete(LeaveapplicationId);
     if (!deleteLeaveapplicationById) throw new HttpException(404, 'shift does not exist');
-
     return deleteLeaveapplicationById;
   }
-
   private getBusinessDatesCount(startDate, endDate) {
     let count = 0;
     const curDate = new Date(startDate.getTime());
@@ -190,17 +184,6 @@ class LeaveApplicationService {
     const findLeaveapplication: ILeaveApplication[] = await this.application.find({ employee_id: employee_id }).populate("employee_id").populate("leave_type_id");
     if (!findLeaveapplication) throw new HttpException(404, 'Leave application not found');
     return findLeaveapplication;
-  }
-  
-  private async sendPendingLeaveNotificationMail(applicant){
-    const leaveApplicant = await this.employeeModel.findOne({_id: applicant.employee_id})
-    const formattedLeaveApplicantFirstName = leaveApplicant?.first_name.charAt(0) + leaveApplicant?.first_name.toLowerCase().slice(1)
-    const supervisor = await this.employeeModel.findOne({_id: applicant?.leave_approver})
-    const formattedSupervisorFirstName = supervisor?.first_name.charAt(0) + supervisor?.first_name.toLowerCase().slice(1)
-    const {message, subject} = leadsLeaveNotificationMessage(formattedSupervisorFirstName, formattedLeaveApplicantFirstName) 
-    const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
-    // EmailService.sendMail(supervisor.company_email, "hr@outsourceglobal.com", subject, message, body)
-    EmailService.sendMail("abubakarmoses@yahoo.com", "hr@outsourceglobal.com", subject, message, body)
   }
   private async validateLeaveDay(date: Date, employee_project_id: string): Promise<boolean> {
     const valid_status = "pending"  
@@ -252,6 +235,4 @@ class LeaveApplicationService {
     return 2
   }
 }
-
-
 export default LeaveApplicationService;
