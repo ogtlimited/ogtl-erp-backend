@@ -22,6 +22,12 @@ class LeaveTypeService {
     const leaveType: any = await this.leaveTypeModel.create(payload);
     return leaveType;
   }
+  public async deleteLeaveTypeById(leaveTypeId:string ): Promise<any> {
+    if (isEmpty(leaveTypeId)) throw new HttpException(400, "Bad request");
+    const leaveType: any = await this.leaveTypeModel.findOneAndDelete({_id: leaveTypeId})
+    if (!leaveType) throw new HttpException(404, 'Leave type not found');
+    return leaveType;
+  }
   
 }
 export default LeaveTypeService;

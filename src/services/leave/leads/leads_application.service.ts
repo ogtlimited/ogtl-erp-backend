@@ -2,18 +2,16 @@
 
 import { ILeaveApplication } from '@/interfaces/leave-interface/application.interface';
 import { HttpException } from '@exceptions/HttpException';
-
 import applicationModel from '@/models/leave/application.model';
 import leaveApprovalLevelModel from '@/models/leave/leave_approval_level.model';
 import departmentModel from '@/models/department/department.model';
 import EmployeeService from '@services/employee.service';
 import FiltrationService from '@services/leave/filtration.service';
+import LeaveMailingService from '@services/leave/leave_mailing.service';
 import { Employee } from '@/interfaces/employee-interface/employee.interface';
 import { IDepartment } from '@/interfaces/employee-interface/department.interface';
 import EmployeeModel from '@models/employee/employee.model';
 import { ILeaveApprovalLevel } from '@/interfaces/leave-interface/leave_approval_level.interface';
-import EmailService from '@/utils/email.service';
-import { leadsLeaveNotificationMessage, leaveApplicationStatusMessage } from '@/utils/message';
 import { Request } from 'express';
 
 class LeadsLeaveApplicationService {
@@ -22,7 +20,7 @@ class LeadsLeaveApplicationService {
   private departmentModel = departmentModel;
   public employeeS = new EmployeeService();
   public filtrationService = new FiltrationService();
-
+  public leaveMailingService = new LeaveMailingService();
   public employeeModel = EmployeeModel;
 
   public async getLeaveApplicationsForLeads(user: Employee, query: Request): Promise<ILeaveApplication[]> {
@@ -50,7 +48,7 @@ class LeadsLeaveApplicationService {
       throw new HttpException(400, 'leave application does not exist');
     }
     if(leaveApplication.leave_approver!==null && leaveApplication.hr_stage!==true){
-     Promise.all([this.sendPendingLeaveNotificationMail(leaveApplication)])   
+     Promise.all([this.leaveMailingService.sendPendingLeaveNotificationMail(leaveApplication, this.employeeModel)])   
      }
     return leaveApplication;
   }
@@ -69,7 +67,7 @@ class LeadsLeaveApplicationService {
     if (!leaveApplication) {
       throw new HttpException(400, 'leave application does not exist');
     }
-     Promise.all([this.sendLeaveStatusNotificationMail(leaveApplication, "rejected")])
+     Promise.all([this.leaveMailingService.sendLeaveStatusNotificationMail(leaveApplication, "rejected", this.employeeModel)])
     return leaveApplication;
   }
    private async getDepartmentHighestLeaveApprovalLevel(user: Employee): Promise<number>{
@@ -89,24 +87,5 @@ class LeadsLeaveApplicationService {
     if(leadLeaveApprovalLevel === departmentHighestLeaveApprovalLevel)
     return leadLeaveApprovalLevel
   }
-  private async sendPendingLeaveNotificationMail(applicant){
-    const leaveApplicant = await this.employeeModel.findOne({_id: applicant.employee_id})
-    const formattedLeaveApplicantFirstName = leaveApplicant.first_name.charAt(0) + leaveApplicant.first_name.toLowerCase().slice(1)
-    const supervisor = applicant.leave_approver ? await this.employeeModel.findOne({_id: applicant?.leave_approver}): null
-    const formattedSupervisorFirstName = supervisor?.first_name.charAt(0) + supervisor?.first_name.toLowerCase().slice(1)
-    const {message, subject} = leadsLeaveNotificationMessage(formattedSupervisorFirstName, formattedLeaveApplicantFirstName) 
-    const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
-    // EmailService.sendMail(supervisor.company_email, "hr@outsourceglobal.com", subject, message, body)
-    EmailService.sendMail("abubakarmoses@yahoo.com", "hr@outsourceglobal.com", subject, message, body)
-  }
-  private async sendLeaveStatusNotificationMail(applicant, status){
-    const leaveApplicant = await this.employeeModel.findOne({_id: applicant.employee_id})
-    const formattedFirstName = leaveApplicant.first_name.charAt(0) + leaveApplicant.first_name.toLowerCase().slice(1)
-    const {status_message, status_subject} = leaveApplicationStatusMessage(formattedFirstName, status)
-    const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${status_message}`
-    EmailService.sendMail("abubakarmoses@yahoo.com", "hr@outsourceglobal.com", status_subject, status_message, body)
-    // EmailService.sendMail(leaveApplicant.company_email, "hr@outsourceglobal.com", status_subject, status_message, body)
-  }
- 
 }
 export default LeadsLeaveApplicationService;

@@ -31,5 +31,14 @@ class LeaveTypeController {
       next(error);
     }
   };
+  public deleteLeaveTypeById = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const {id} = req.params
+      const leaveType: any = await this.leaveType.deleteLeaveTypeById(id);
+      res.status(200).json({ data: leaveType});
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 export default LeaveTypeController;

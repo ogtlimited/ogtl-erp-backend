@@ -1,6 +1,8 @@
+import EmailService from '@/utils/email.service';
+import { leadsLeaveNotificationMessage, leaveApplicationStatusMessage } from '@/utils/message';
 
 class LeaveMailingService{
-    private async sendPendingLeaveNotificationMail(applicant, employeeModel){
+    public async sendPendingLeaveNotificationMail(applicant, employeeModel){
         const leaveApplicant = await employeeModel.findOne({_id: applicant.employee_id})
         const formattedLeaveApplicantFirstName = leaveApplicant.first_name.charAt(0) + leaveApplicant.first_name.toLowerCase().slice(1)
         const supervisor = applicant.leave_approver ? await employeeModel.findOne({_id: applicant?.leave_approver}): null
@@ -10,7 +12,7 @@ class LeaveMailingService{
         // EmailService.sendMail(supervisor.company_email, "hr@outsourceglobal.com", subject, message, body)
         EmailService.sendMail("abubakarmoses@yahoo.com", "hr@outsourceglobal.com", subject, message, body)
     }
-    private async sendLeaveStatusNotificationMail(applicant, status, employeeModel){
+    public async sendLeaveStatusNotificationMail(applicant, status, employeeModel){
         const leaveApplicant = await employeeModel.findOne({_id: applicant.employee_id})
         const formattedFirstName = leaveApplicant.first_name.charAt(0) + leaveApplicant.first_name.toLowerCase().slice(1)
         const {status_message, status_subject} = leaveApplicationStatusMessage(formattedFirstName, status)
@@ -20,5 +22,6 @@ class LeaveMailingService{
     }
 
 }
+export default LeaveMailingService
       
  

@@ -6,6 +6,7 @@ import applicationModel from '@/models/leave/application.model';
 import allocationModel from '@/models/leave/allocation.model';
 import EmployeeService from '@services/employee.service';
 import FiltrationService from '@services/leave/filtration.service';
+import LeaveMailingService from '@services/leave/leave_mailing.service';
 import { Employee } from '@/interfaces/employee-interface/employee.interface';
 import EmployeeModel from '@models/employee/employee.model';
 import projectModel from '@/models/project/project.model';
