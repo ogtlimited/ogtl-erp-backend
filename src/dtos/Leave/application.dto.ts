@@ -45,6 +45,17 @@ export class UpdateLeaveApplicationDTO{
 
     @IsString()
     public leave_type_id: string;
+    @IsString()
+    @IsOptional()
+    public employee_id: string;
+    
+    @IsString()
+    @IsOptional()
+    public department_id: string;
+
+    @IsString()
+    @IsOptional()
+    public leave_approver: string;
 
     @IsDateString()
     public from_date: Date;
