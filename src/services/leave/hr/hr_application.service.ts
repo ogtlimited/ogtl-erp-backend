@@ -7,17 +7,15 @@ import allocationModel from '@/models/leave/allocation.model';
 import EmployeeService from '@services/employee.service';
 import FiltrationService from '@services/leave/filtration.service';
 import LeaveMailingService from '@services/leave/leave_mailing.service';
-import { Employee } from '@/interfaces/employee-interface/employee.interface';
 import EmployeeModel from '@models/employee/employee.model';
 import projectModel from '@/models/project/project.model';
-import EmailService from '@/utils/email.service';
-import { leaveApplicationStatusMessage } from '@/utils/message';
 
 class HrLeaveApplicationService {
   public application = applicationModel;
   public allocationM = allocationModel;
   public employeeS = new EmployeeService();
   public filtrationService = new FiltrationService();
+  public leaveMailingService = new LeaveMailingService();
   public employeeModel = EmployeeModel;
   public project = projectModel;
   private today = new Date();
@@ -42,7 +40,7 @@ class HrLeaveApplicationService {
       throw new HttpException(400, 'leave application does not exist');
     }
     await this.updateTotalLeaveCount(leaveApplication)
-    Promise.all([this.sendLeaveStatusNotificationMail(leaveApplication, "approved")])
+    Promise.all([this.leaveMailingService.sendLeaveStatusNotificationMail(leaveApplication, "approved", this.employeeModel)])
     return leaveApplication;
   }
   public async rejectLeaveApplicationsByHr(leaveId: string): Promise<ILeaveApplication[]> {
@@ -58,16 +56,8 @@ class HrLeaveApplicationService {
     if (!leaveApplication) {
       throw new HttpException(400, 'leave application does not exist');
     }
-     Promise.all([this.sendLeaveStatusNotificationMail(leaveApplication, "rejected")])
+     Promise.all([this.leaveMailingService.sendLeaveStatusNotificationMail(leaveApplication, "rejected",this.employeeModel)])
     return leaveApplication;
-  }
-  private async sendLeaveStatusNotificationMail(applicant, status){
-    const leaveApplicant = await this.employeeModel.findOne({_id: applicant.employee_id})
-    const formattedFirstName = leaveApplicant.first_name.charAt(0) + leaveApplicant.first_name.toLowerCase().slice(1)
-    const {status_message, status_subject} = leaveApplicationStatusMessage(formattedFirstName, status)
-    const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${status_message}`
-    // EmailService.sendMail(leaveApplicant.company_email, "hr@outsourceglobal.com", status_subject, status_message, body)
-    EmailService.sendMail("abubakarmoses@yahoo.com", "hr@outsourceglobal.com", status_subject, status_message, body)
   }
   private async updateTotalLeaveCount(leaveApplication){
     const leaveApplicationBusinessdays = this.getBusinessDatesCount(leaveApplication.from_date, leaveApplication.to_date)
