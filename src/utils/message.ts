@@ -67,8 +67,8 @@ function birthdayMessage(first_name) {
   }
  }
 
- function leaveApplicationStatusMessage(first_name, status) {
-  const status_message = "Hello "+first_name+","
+ function leaveApplicationStatusMessage(fullname, status) {
+  const status_message = "Hello "+fullname+","
    +"<br><br>" + " Your leave application has been "+status+"."
    +"<br><br>" + " Best regards."
    +"<br><br>"
@@ -79,9 +79,9 @@ function birthdayMessage(first_name) {
    }
   }
 
-  function leadsLeaveNotificationMessage(lead_first_name, applicant) {
-    const message = "Hello "+lead_first_name+","
-     +"<br><br>" + " You have a pending leave application from "+applicant+"."
+  function leadsLeaveNotificationMessage(lead_fullname, applicant, ogId) {
+    const message = "Hello "+lead_fullname+","
+     +"<br><br>" + " You have a pending leave application from "+applicant+" with OGID "+ogId+"."
      +"<br><br>" + " Best regards."
      +"<br><br>"
      const subject = "Pending Leave"
