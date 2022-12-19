@@ -7,6 +7,10 @@ const LeaveTypeSchema : Schema = new Schema (
         leave_type: {
             type: String,
             required: true
+        },
+        delete: {
+            type: Boolean,
+            default: false
         }
     },
     {
