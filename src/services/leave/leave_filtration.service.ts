@@ -120,7 +120,7 @@ class LeaveFiltrationService{
         if(searchQuery.leave_type){
             filtrationQuery.push(
             {
-                $match: { leave_type:{$regex:searchQuery.leave_type, $options:"i"}}    
+                $match: { "leave_type_id.leave_type":{$regex:searchQuery.leave_type, $options:"i"}}    
                 }
             )
             }

@@ -120,17 +120,16 @@ class LeaveApplicationService {
     }
   }
   public async updateLeaveapplication(LeaveapplicationId: string, LeaveapplicationData: UpdateLeaveApplicationDTO): Promise<ILeaveApplication> {
+    let newLeaveapplicationData:ILeaveApplication = LeaveapplicationData
     if (isEmpty(LeaveapplicationData)) throw new HttpException(400, 'Bad request');
-    if (LeaveapplicationData._id) {
-      const findLeaveapplication: ILeaveApplication = await this.leaveApplicationModel.findOne({ _id: LeaveapplicationData._id, acted_on: false});
+    if (LeaveapplicationId) {
+      const findLeaveapplication: ILeaveApplication = await this.leaveApplicationModel.findOne({ _id: LeaveapplicationId, acted_on: false});
       if (findLeaveapplication && findLeaveapplication._id != LeaveapplicationId)
-        throw new HttpException(409, `${LeaveapplicationData._id} already exists`);
+        throw new HttpException(404, `${newLeaveapplicationData._id} does not exists`);
     }
-    const updateLeaveapplicationById: ILeaveApplication = await this.leaveApplicationModel.findByIdAndUpdate({_id: LeaveapplicationId}, LeaveapplicationData, {
+    const updateLeaveapplicationById: ILeaveApplication = await this.leaveApplicationModel.findByIdAndUpdate({_id: newLeaveapplicationData}, newLeaveapplicationData, {
       new: true,
     });
-    if (!updateLeaveapplicationById) throw new HttpException(404, 'leave does not exist');
-
     return updateLeaveapplicationById;
   }
   public async updateLeaveCount(updatedLeaveCount: ILeaveCount[]) {
