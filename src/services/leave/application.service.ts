@@ -178,15 +178,10 @@ class LeaveApplicationService {
       },
     );
   }
-  public async getLeaveapplication(query): Promise<ILeaveApplication[]> {
-    if(query.id){
-      const employee_id = query.id
-      const findLeaveapplication: ILeaveApplication[] = await this.leaveApplicationModel.find({employee_id}).populate("employee_id").populate("leave_type_id");
+  public async getLeaveApplication(query): Promise<ILeaveApplication[]> {
+      const findLeaveapplication: ILeaveApplication[] = await this.leaveApplicationModel.find(query).populate("employee_id").populate("leave_type_id");
       if (!findLeaveapplication) throw new HttpException(404, 'Leave application not found');
       return findLeaveapplication;
-    }
-    const findLeaveapplication: ILeaveApplication[] = await this.leaveApplicationModel.find({query}).populate("employee_id").populate("leave_type_id");
-    return findLeaveapplication;
   }
   private async validateLeaveDay(date: Date, employee_project_id: string): Promise<boolean> {
     const valid_status = "pending"  

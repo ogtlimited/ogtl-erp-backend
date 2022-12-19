@@ -8,7 +8,7 @@ class LeaveTypeService {
   public leaveTypeModel = leaveTypeModel;
 
   public async getAllLeaveTypes(query:any ): Promise<any> {
-    const leaveTypes: any = await this.leaveTypeModel.find({query,delete:{$ne: true}})
+    const leaveTypes: any = await this.leaveTypeModel.find(query)
     return leaveTypes;
   }
   public async getLeaveTypeByID(leaveTypeId:string ): Promise<any> {
@@ -28,7 +28,9 @@ class LeaveTypeService {
       $set:{
         delete: true
       }
-    })
+    },
+    { new: true },
+    )
     if (!leaveType) throw new HttpException(404, 'Leave type not found');
     return leaveType;
   }
