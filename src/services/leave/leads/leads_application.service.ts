@@ -6,7 +6,7 @@ import applicationModel from '@/models/leave/application.model';
 import leaveApprovalLevelModel from '@/models/leave/leave_approval_level.model';
 import departmentModel from '@/models/department/department.model';
 import EmployeeService from '@services/employee.service';
-import FiltrationService from '@services/leave/filtration.service';
+import LeaveFiltrationService from '@/services/leave/leave_filtration.service';
 import LeaveMailingService from '@services/leave/leave_mailing.service';
 import { Employee } from '@/interfaces/employee-interface/employee.interface';
 import { IDepartment } from '@/interfaces/employee-interface/department.interface';
@@ -19,7 +19,7 @@ class LeadsLeaveApplicationService {
   private leaveApprovalLevelModel = leaveApprovalLevelModel;
   private departmentModel = departmentModel;
   public employeeS = new EmployeeService();
-  public filtrationService = new FiltrationService();
+  public filtrationService = new LeaveFiltrationService();
   public leaveMailingService = new LeaveMailingService();
   public employeeModel = EmployeeModel;
 
@@ -28,7 +28,7 @@ class LeadsLeaveApplicationService {
    const leaveApplications= await this.filtrationService.getLeaveApplicationsHelperMethod(matchBy, query, this.application)
   return leaveApplications;
   }
-  public async approveLeaveApplicationByLead(leaveId: String, user: Employee): Promise<ILeaveApplication> {
+  public async approveLeaveApplication(leaveId: String, user: Employee): Promise<ILeaveApplication> {
     const departmentHighestLeaveApprovalLevel = await this.getDepartmentHighestLeaveApprovalLevel(user)
     const leadsApprovalLevel = await this.getLeadLeaveApprovalLevel(user)
     const immediateSupervisorsLeaveApprovalLevel = await this.getImmediateSupervisorsLeaveApprovalLevel(user)
@@ -52,7 +52,7 @@ class LeadsLeaveApplicationService {
      }
     return leaveApplication;
   }
-  public async rejectLeaveApplicationByLead(leaveId: String, user: Employee, query: any): Promise<ILeaveApplication> {
+  public async rejectLeaveApplication(leaveId: String, user: Employee, query: any): Promise<ILeaveApplication> {
     const leaveApplication = await this.application.findOneAndUpdate(
       { _id: leaveId, leave_approver: user._id, status: { $eq: 'pending' }, hr_stage: { $ne: true } },
       {
