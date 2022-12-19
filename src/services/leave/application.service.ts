@@ -88,7 +88,7 @@ class LeaveApplicationService {
       throw new HttpException(400, 'You can only apply exactly one month after onboarding');
     }
     const prevLeaves: ILeaveApplication[] = await this.leaveApplicationModel.find({
-      employee_id: LeaveapplicationData.employee_id,
+      employee_id: newLeaveapplicationData.employee_id,
       createdAt: {
         $gte: new Date(date.getFullYear().toString()),
       },

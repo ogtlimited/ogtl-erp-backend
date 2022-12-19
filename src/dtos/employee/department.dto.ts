@@ -14,11 +14,11 @@ export class UpdateDepartmentDto{
     @IsString()
     public _id: string;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     public department: string;
     
-    @IsNotEmpty()
+    @IsOptional()
     @IsNumber()
     public leave_approval_level: number;
 }

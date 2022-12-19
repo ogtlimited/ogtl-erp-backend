@@ -9,22 +9,6 @@ export class CreateLeaveApplicationDTO{
 
     @IsString()
     @IsOptional()
-    public employee_id: string;
-    
-    @IsString()
-    @IsOptional()
-    public department_id: string;
-
-    @IsString()
-    @IsOptional()
-    public leave_approver: string;
-
-    @IsString()
-    @IsOptional()
-    public project_id: string;
-
-    @IsString()
-    @IsOptional()
     public reason_for_application: string;
 
     @IsString()
@@ -39,9 +23,6 @@ export class CreateLeaveApplicationDTO{
 
 }
 export class UpdateLeaveApplicationDTO{
-
-    @IsString()
-    public _id: string;
 
     @IsString()
     public leave_type_id: string;

@@ -6,7 +6,7 @@ import authMiddleware from '@/middlewares/auth.middleware';
 
 
 class DesignationByDepartmentRoute implements Routes {
-    public path = '/designation-by-departmentId';
+    public path = '/department-designation';
     public router = Router();
     public DesignationController = new DesignationController();
   
@@ -15,7 +15,7 @@ class DesignationByDepartmentRoute implements Routes {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}/:department_id`,authMiddleware, this.DesignationController.getDesignationByDepartmentId);
+        this.router.get(`${this.path}/:departmentId`,authMiddleware, this.DesignationController.getDesignationByDepartmentId);
       }
     }
 
