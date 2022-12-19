@@ -4,7 +4,7 @@ import { HttpException } from '@exceptions/HttpException';
 import applicationModel from '@/models/leave/application.model';
 import allocationModel from '@/models/leave/allocation.model';
 import EmployeeService from '@services/employee.service';
-import FiltrationService from '@services/leave/filtration.service';
+import LeaveFiltrationService from '@/services/leave/leave_filtration.service';
 import LeaveMailingService from '@services/leave/leave_mailing.service';
 import EmployeeModel from '@models/employee/employee.model';
 import projectModel from '@/models/project/project.model';
@@ -13,7 +13,7 @@ class HrLeaveApplicationService {
   public application = applicationModel;
   public allocationM = allocationModel;
   public employeeS = new EmployeeService();
-  public filtrationService = new FiltrationService();
+  public filtrationService = new LeaveFiltrationService();
   public leaveMailingService = new LeaveMailingService();
   public employeeModel = EmployeeModel;
   public project = projectModel;
