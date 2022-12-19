@@ -5,8 +5,6 @@ import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import {  CreateLeaveApplicationDTO, UpdateLeaveApplicationDTO } from '@/dtos/Leave/application.dto';
 import applicationModel from '@/models/leave/application.model';
-import allocationModel from '@/models/leave/allocation.model';
-import EmployeeService from '@services/employee.service';
 import LeadsLeaveApplicationService from '@services/leave/leads/leads_application.service';
 import LeaveMailingService from '@services/leave/leave_mailing.service';
 import { Employee } from '@/interfaces/employee-interface/employee.interface';
@@ -14,16 +12,14 @@ import EmployeeModel from '@models/employee/employee.model';
 import projectModel from '@/models/project/project.model';
 
 class LeaveApplicationService {
-  public application = applicationModel;
-  public allocationM = allocationModel;
-  public employeeS = new EmployeeService();
-  public leadsLeaveApplicationService = new LeadsLeaveApplicationService();
-  public leaveMailingService = new LeaveMailingService();
-  public employeeModel = EmployeeModel;
-  public project = projectModel;
+  private leaveApplicationModel = applicationModel;
+  private leadsLeaveApplicationService = new LeadsLeaveApplicationService();
+  private leaveMailingService = new LeaveMailingService();
+  private employeeModel = EmployeeModel;
+  private project = projectModel;
 
   public async findAllLeaveapplication(query): Promise<ILeaveApplication[]> {
-    const application: ILeaveApplication[] = await this.application
+    const application: ILeaveApplication[] = await this.leaveApplicationModel
       .find(query)
       .populate({
         path: 'employee_id',
@@ -47,29 +43,33 @@ class LeaveApplicationService {
     return application;
   }
   public async findAllLeaveapplicationsClient(ClientId: string): Promise<ILeaveApplication[]> {
-    const application: ILeaveApplication[] = await this.application
+    const application: ILeaveApplication[] = await this.leaveApplicationModel
       .find({employee_project_id : ClientId})
     return application;
   }
   public async findAllTeamMembersLeave(user): Promise<ILeaveApplication[]> {
-    const leaveApplications = await this.application.find({ leave_approver: user._id });
+    const leaveApplications = await this.leaveApplicationModel.find({ leave_approver: user._id });
     return leaveApplications;
   }
   public async findLeaveapplicationById(LeaveapplicationId: string): Promise<ILeaveApplication> {
     if (isEmpty(LeaveapplicationId)) throw new HttpException(400, "You're not LeaveapplicationId");
-    const findLeaveapplication: ILeaveApplication = await (await this.application.findOne({ _id: LeaveapplicationId })).populate("leave_type_id");
+    const findLeaveapplication: ILeaveApplication = await (await this.leaveApplicationModel.findOne({ _id: LeaveapplicationId })).populate("leave_type_id");
     if (!findLeaveapplication) throw new HttpException(404, 'Leave application not found');
     return findLeaveapplication;
   }
   public async createLeaveapplication(LeaveapplicationData: CreateLeaveApplicationDTO, user: Employee): Promise<ILeaveApplication> {
-    const newLeaveapplicationData:ILeaveApplication = LeaveapplicationData
+    let newLeaveapplicationData:ILeaveApplication = LeaveapplicationData
+    newLeaveapplicationData.department_id = user.department
+    newLeaveapplicationData.employee_id = user._id
+    newLeaveapplicationData.leave_approver = user.reports_to
+    newLeaveapplicationData.project_id = user.projectId
     newLeaveapplicationData.approval_level = await this.leadsLeaveApplicationService.getImmediateSupervisorsLeaveApprovalLevel(user)
     const usersLeaveApprovalLevel: number = await this.leadsLeaveApplicationService.getLeadLeaveApprovalLevel(user)
     if(usersLeaveApprovalLevel === newLeaveapplicationData.approval_level) newLeaveapplicationData.hr_stage = true
     if (isEmpty(LeaveapplicationData)) throw new HttpException(400, 'Bad request');
     const startDate = new Date(newLeaveapplicationData.from_date);
     const endDate = new Date(newLeaveapplicationData.to_date);
-    const leave_period = await this.application.findOne(
+    const leave_period = await this.leaveApplicationModel.findOne(
       {employee_id: newLeaveapplicationData.employee_id, createdAt:{$gte:startDate,$lt:endDate},status:{$ne: "rejected"}})
     if(leave_period) throw new HttpException(400, 'Your leave is being processed')
     if (startDate > endDate) throw new HttpException(400, 'Leave end date must be greater than start date');
@@ -87,7 +87,7 @@ class LeaveApplicationService {
     if (monthAfterOnboarding == 0) {
       throw new HttpException(400, 'You can only apply exactly one month after onboarding');
     }
-    const prevLeaves: ILeaveApplication[] = await this.application.find({
+    const prevLeaves: ILeaveApplication[] = await this.leaveApplicationModel.find({
       employee_id: LeaveapplicationData.employee_id,
       createdAt: {
         $gte: new Date(date.getFullYear().toString()),
@@ -95,7 +95,7 @@ class LeaveApplicationService {
     });
     
     if (prevLeaves.length == 0) {
-      const createLeaveapplicationData: ILeaveApplication = await this.application.create({...newLeaveapplicationData, employee_project_id: user.projectId});
+      const createLeaveapplicationData: ILeaveApplication = await this.leaveApplicationModel.create({...newLeaveapplicationData, employee_project_id: user.projectId});
       newLeaveapplicationData.leave_approver!==null ? Promise.all([this.leaveMailingService.sendPendingLeaveNotificationMail(newLeaveapplicationData, this.employeeModel)]):""
       return createLeaveapplicationData;
     } else {
@@ -113,7 +113,7 @@ class LeaveApplicationService {
           throw new HttpException(400, 'You have used ' + totalLeaveThisYear + ', you have ' + (MaxLeave - totalLeaveThisYear) + ' leave left');
         } else {
           newLeaveapplicationData.leave_approver!==null ? Promise.all([this.leaveMailingService.sendPendingLeaveNotificationMail(newLeaveapplicationData, this.employeeModel)]):""
-          const createLeaveapplicationData: ILeaveApplication = await this.application.create({...newLeaveapplicationData, employee_project_id: user.projectId});
+          const createLeaveapplicationData: ILeaveApplication = await this.leaveApplicationModel.create({...newLeaveapplicationData, employee_project_id: user.projectId});
           return createLeaveapplicationData;
         }
       }
@@ -122,11 +122,11 @@ class LeaveApplicationService {
   public async updateLeaveapplication(LeaveapplicationId: string, LeaveapplicationData: UpdateLeaveApplicationDTO): Promise<ILeaveApplication> {
     if (isEmpty(LeaveapplicationData)) throw new HttpException(400, 'Bad request');
     if (LeaveapplicationData._id) {
-      const findLeaveapplication: ILeaveApplication = await this.application.findOne({ _id: LeaveapplicationData._id, acted_on: false});
+      const findLeaveapplication: ILeaveApplication = await this.leaveApplicationModel.findOne({ _id: LeaveapplicationData._id, acted_on: false});
       if (findLeaveapplication && findLeaveapplication._id != LeaveapplicationId)
         throw new HttpException(409, `${LeaveapplicationData._id} already exists`);
     }
-    const updateLeaveapplicationById: ILeaveApplication = await this.application.findByIdAndUpdate({_id: LeaveapplicationId}, LeaveapplicationData, {
+    const updateLeaveapplicationById: ILeaveApplication = await this.leaveApplicationModel.findByIdAndUpdate({_id: LeaveapplicationId}, LeaveapplicationData, {
       new: true,
     });
     if (!updateLeaveapplicationById) throw new HttpException(404, 'leave does not exist');
@@ -153,7 +153,7 @@ class LeaveApplicationService {
     return EmployeeModel.updateMany({}, {$inc : {'leaveCount' : 2}});
   }
   public async deleteLeaveapplication(LeaveapplicationId: string): Promise<ILeaveApplication> {
-    const deleteLeaveapplicationById: ILeaveApplication = await this.application.findByIdAndDelete(LeaveapplicationId);
+    const deleteLeaveapplicationById: ILeaveApplication = await this.leaveApplicationModel.findByIdAndDelete(LeaveapplicationId);
     if (!deleteLeaveapplicationById) throw new HttpException(404, 'shift does not exist');
     return deleteLeaveapplicationById;
   }
@@ -172,17 +172,21 @@ class LeaveApplicationService {
   }
 
   public async addLeavesForEmployees(): Promise<void> {
-    await this.application.updateMany(
+    await this.leaveApplicationModel.updateMany(
       { status: 'active' },
       {
         $inc: { leaveCount: 24 },
       },
     );
   }
-  public async getLeaveapplicationByEmployeeId(employee_id: string): Promise<ILeaveApplication[]> {
-    if (isEmpty(employee_id)) throw new HttpException(400, "You're not LeaveapplicationId");
-    const findLeaveapplication: ILeaveApplication[] = await this.application.find({ employee_id: employee_id }).populate("employee_id").populate("leave_type_id");
-    if (!findLeaveapplication) throw new HttpException(404, 'Leave application not found');
+  public async getLeaveapplication(query): Promise<ILeaveApplication[]> {
+    if(query.id){
+      const employee_id = query.id
+      const findLeaveapplication: ILeaveApplication[] = await this.leaveApplicationModel.find({employee_id}).populate("employee_id").populate("leave_type_id");
+      if (!findLeaveapplication) throw new HttpException(404, 'Leave application not found');
+      return findLeaveapplication;
+    }
+    const findLeaveapplication: ILeaveApplication[] = await this.leaveApplicationModel.find({query}).populate("employee_id").populate("leave_type_id");
     return findLeaveapplication;
   }
   private async validateLeaveDay(date: Date, employee_project_id: string): Promise<boolean> {
@@ -190,7 +194,7 @@ class LeaveApplicationService {
     const year = new Date(date).getFullYear()
     const month = new Date(date).getMonth()+1
     const day = new Date(date).getDate()
-    const leaves = await this.application.find({
+    const leaves = await this.leaveApplicationModel.find({
       "employee_project_id": employee_project_id,
       $expr: {
         $and: [
