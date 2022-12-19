@@ -4,10 +4,9 @@ import { NextFunction, Request, Response } from 'express';
 import LeadsLeaveApplicationService from '@/services/leave/leads/leads_application.service';
 
 
-
-class LeaveApplicationController {
-  public leadsLeaveApplicationService = new LeadsLeaveApplicationService();
- public getLeaveApplicationsForLeads = async (req: any, res: Response, next: NextFunction) => {
+class LeadsLeaveApplicationController {
+  private leadsLeaveApplicationService = new LeadsLeaveApplicationService();
+  public getLeaveApplicationsForLeads = async (req: any, res: Response, next: NextFunction) => {
     try {
       const leaveApplicationsForTeamLeads: ILeaveApplication[] = await this.leadsLeaveApplicationService.getLeaveApplicationsForLeads(req.user, req.query);
       res.status(200).json({ data: leaveApplicationsForTeamLeads});
@@ -15,19 +14,19 @@ class LeaveApplicationController {
       next(error);
     }
   };
-  public approveLeaveApplicationByLead = async (req: any, res: Response, next: NextFunction) => {
+  public approveLeaveApplication = async (req: any, res: Response, next: NextFunction) => {
     try {
       const {leaveId} = req.params
-      const leaveApplications: any = await this.leadsLeaveApplicationService.approveLeaveApplicationByLead(leaveId, req.user);
+      const leaveApplications: any = await this.leadsLeaveApplicationService.approveLeaveApplication(leaveId, req.user);
       res.status(200).json({ data: leaveApplications});
     } catch (error) {
       next(error);
     }
   };
-  public rejectLeaveApplicationByLead = async (req: any, res: Response, next: NextFunction) => {
+  public rejectLeaveApplication = async (req: any, res: Response, next: NextFunction) => {
     try {
       const {leaveId} = req.params
-      const leaveApplications: any = await this.leadsLeaveApplicationService.rejectLeaveApplicationByLead(leaveId, req.user, req.body);
+      const leaveApplications: any = await this.leadsLeaveApplicationService.rejectLeaveApplication(leaveId, req.user, req.body);
       res.status(200).json({ data: leaveApplications});
     } catch (error) {
       next(error);
@@ -36,4 +35,4 @@ class LeaveApplicationController {
   
 }
 
-export default LeaveApplicationController;
+export default LeadsLeaveApplicationController;
