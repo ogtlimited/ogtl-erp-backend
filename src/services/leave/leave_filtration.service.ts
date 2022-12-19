@@ -1,5 +1,5 @@
 
-class FiltrationService{
+class LeaveFiltrationService{
     public async getLeaveApplicationsHelperMethod(matchBy,searchQuery:any, modelName): Promise<any> {
         let MAX_LIMIT = 50
         const page = parseInt(searchQuery?.page) || 1;
@@ -138,4 +138,4 @@ class FiltrationService{
     }
 }
 
-export default FiltrationService
+export default LeaveFiltrationService
