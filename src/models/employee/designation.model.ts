@@ -23,11 +23,15 @@ const designationSchema: Schema = new Schema(
           type: String,
           required: true,
         },
-          slug: {
-            type: String,
-            required: true,
-            unique: true,
-          },
+        slug: {
+          type: String,
+          required: true,
+          unique: true,
+        },
+        delete: {
+          type: Boolean,
+          default: false
+      }
     },
     {
         timestamps: true,

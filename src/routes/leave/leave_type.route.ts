@@ -19,7 +19,7 @@ class LeaveTypeRoute implements Routes {
   private initializeRoutes() {
     this.router.get(`${this.path}`, authMiddleware, this.leaveTypeController.getAllLeaveTypes);
     this.router.get(`${this.path}/:id`, authMiddleware, this.leaveTypeController.getLeaveTypeById);
-    this.router.delete(`${this.path}/:id`, authMiddleware, this.leaveTypeController.deleteLeaveTypeById);
+    this.router.patch(`${this.path}/:id`, authMiddleware, this.leaveTypeController.deleteLeaveTypeById);
     this.router.post(`${this.path}`, authMiddleware, this.leaveTypeController.createLeaveType);
    }
 }

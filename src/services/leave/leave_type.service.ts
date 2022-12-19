@@ -24,7 +24,11 @@ class LeaveTypeService {
   }
   public async deleteLeaveTypeById(leaveTypeId:string ): Promise<any> {
     if (isEmpty(leaveTypeId)) throw new HttpException(400, "Bad request");
-    const leaveType: any = await this.leaveTypeModel.findOneAndDelete({_id: leaveTypeId})
+    const leaveType: any = await this.leaveTypeModel.findOneAndUpdate({_id: leaveTypeId},{
+      $set:{
+        delete: true
+      }
+    })
     if (!leaveType) throw new HttpException(404, 'Leave type not found');
     return leaveType;
   }

@@ -27,8 +27,6 @@ class DesignationService{
     
         //Check if Id is empty
         if (isEmpty(DesignationId)) throw new HttpException(400, "No Id provided");
-
-        //find Designation with Id given
         const findDesignation:Designation = await this.Designations.findOne({ _id:DesignationId });
 
         if(!findDesignation) throw new HttpException(409, "Designation with that Id doesnt exist");
@@ -37,7 +35,7 @@ class DesignationService{
         }
     public async findDesignationBydepartmentId(DepartmentId:string) : Promise<Designation[]>{
         if (isEmpty(DepartmentId)) throw new HttpException(400, "No Id provided");
-        const findDesignation:Designation[] = await this.Designations.find({ department_id: DepartmentId });
+        const findDesignation:Designation[] = await this.Designations.find({ department_id: DepartmentId, delete: false});
         if(!findDesignation) throw new HttpException(409, "Designation with that DepartmentId doesnt exist");
         return findDesignation;
         }
@@ -63,7 +61,11 @@ class DesignationService{
     } 
     //deletes existing designation
     public async deleteDesignation(DesignationId:string) : Promise<Designation>{
-    const deleteDesignationById : Designation = await this.Designations.findByIdAndDelete(DesignationId);
+    const deleteDesignationById : Designation = await this.Designations.findByIdAndUpdate({DesignationId},{
+        $set:{
+            delete: true
+        }
+    });
     if(!deleteDesignationById) throw new HttpException(409, "Designation doesn't exist");
     return deleteDesignationById;
     }
