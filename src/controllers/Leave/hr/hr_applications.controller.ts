@@ -5,7 +5,7 @@ import { NextFunction, Request, Response } from 'express';
 import HrLeaveApplicationService from '@/services/leave/hr/hr_application.service';
 
 class HrLeaveApplicationController {
-  public hrLeaveApplicationService = new HrLeaveApplicationService();
+  private hrLeaveApplicationService = new HrLeaveApplicationService();
   public getLeaveApplicationsForHr = async (req: any, res: Response, next: NextFunction) => {
     try {
       const leaveApplicationsForHr: ILeaveApplication[] = await this.hrLeaveApplicationService.getLeaveApplicationsForHr(req.query);
