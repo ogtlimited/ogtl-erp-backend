@@ -61,6 +61,14 @@ const applicationSchema : Schema = new Schema (
             type: Boolean,
             default: false,
             required: true,
+        },
+        list_of_approvers: {
+            type: [String],
+            default: []
+        },
+        first_approver: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Employee",
         }
     },
     {
