@@ -91,8 +91,30 @@ function birthdayMessage(first_name) {
      }
     }
 
- 
+  function LeaveRejectionHrNotificationMessage(lead_fullname, applicant, ogId, hr) {
+    const message = "Hello " + hr + ","
+      + "<br><br>" + lead_fullname + " has rejected the leave application of " + applicant + " with OGID " + ogId + "."
+      + "<br><br>" + " Best regards."
+      + "<br><br>"
+    const subject = "Leave Status"
+    return {
+      message,
+      subject
+    }
+  }
 
+function requestForLeaveModification(lead_fullname, applicant, reasons) {
+  const message = "Hello " + applicant + ","
+    + "<br><br>" + lead_fullname + " wants you to modify your leave due to the following reasons" 
+    + "<br><br>" + reasons + "."
+    + "<br><br>" + " Best regards."
+    + "<br><br>"
+  const subject = "Request for Leave Modification"
+  return {
+    message,
+    subject
+  }
+}
 const rejectionMessage = {
   message : "Thank you very much for attending the interview at Outsource Global Technologies Ltd"
   + "</br>" +"We regret to inform you that after careful consideration we must advise that you have not been succesful on this occasion"
@@ -104,4 +126,5 @@ const rejectionMessage = {
 
 export { terminationMessage , promotionMessage, OfferMessage,acceptedOfferMessage,rejectionMessage, 
   offerMessageFunc, ticketingMessage,resolvedTicketingMessage,clientAccountActivationNotice, 
-  birthdayMessage, leaveApplicationStatusMessage, leadsLeaveNotificationMessage};
+  birthdayMessage, leaveApplicationStatusMessage, leadsLeaveNotificationMessage, LeaveRejectionHrNotificationMessage,
+  requestForLeaveModification};
