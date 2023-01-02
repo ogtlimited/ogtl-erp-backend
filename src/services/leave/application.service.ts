@@ -5,6 +5,7 @@ import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import {  CreateLeaveApplicationDTO, UpdateLeaveApplicationDTO } from '@/dtos/Leave/application.dto';
 import applicationModel from '@/models/leave/application.model';
+import leaveTypeModel from '@/models/leave/leave_type.model';
 import LeadsLeaveApplicationService from '@services/leave/leads/leads_application.service';
 import LeaveMailingService from '@services/leave/leave_mailing.service';
 import { Employee } from '@/interfaces/employee-interface/employee.interface';
@@ -13,6 +14,7 @@ import projectModel from '@/models/project/project.model';
 
 class LeaveApplicationService {
   private leaveApplicationModel = applicationModel;
+  private leaveTypeModel = leaveTypeModel;
   private leadsLeaveApplicationService = new LeadsLeaveApplicationService();
   private leaveMailingService = new LeaveMailingService();
   private employeeModel = EmployeeModel;
@@ -63,14 +65,21 @@ class LeaveApplicationService {
     newLeaveapplicationData.employee_id = user._id
     newLeaveapplicationData.leave_approver = user.reports_to
     newLeaveapplicationData.project_id = user.projectId
+    newLeaveapplicationData.first_approver = user.reports_to
     newLeaveapplicationData.approval_level = await this.leadsLeaveApplicationService.getImmediateSupervisorsLeaveApprovalLevel(user)
+    const leave_type = await this.leaveTypeModel.findOne({ leave_type: /^Emergency Leave$/i})
+    console.log("Leave type id", leave_type._id)
+    console.log("Payload Leave type id", newLeaveapplicationData.leave_type_id)
     const usersLeaveApprovalLevel: number = await this.leadsLeaveApplicationService.getLeadLeaveApprovalLevel(user)
     if(usersLeaveApprovalLevel === newLeaveapplicationData.approval_level) newLeaveapplicationData.hr_stage = true
     if (isEmpty(LeaveapplicationData)) throw new HttpException(400, 'Bad request');
+    const today = new Date();
+    const noticePeriod = today.setDate(today.getDate() + 14);
     const startDate = new Date(newLeaveapplicationData.from_date);
     const endDate = new Date(newLeaveapplicationData.to_date);
     const leave_period = await this.leaveApplicationModel.findOne(
-      {employee_id: newLeaveapplicationData.employee_id, createdAt:{$gte:startDate,$lt:endDate},status:{$ne: "rejected"}})
+      { employee_id: newLeaveapplicationData.employee_id, createdAt: { $gte: new Date(today.getFullYear().toString()) },status:{$ne: "rejected"}})
+    if (newLeaveapplicationData.leave_type_id !== leave_type._id.toString() && startDate < new Date(noticePeriod)) throw new HttpException(400, 'Your noticed period must be 14 days')
     if(leave_period) throw new HttpException(400, 'Your leave is being processed')
     if (startDate > endDate) throw new HttpException(400, 'Leave end date must be greater than start date');
     const date = new Date();
@@ -80,8 +89,8 @@ class LeaveApplicationService {
       throw new HttpException(400, 'total leave days exceed available leaves');
     };
     const monthAfterOnboarding = this.monthDiff(new Date(user.date_of_joining), new Date());
-    if (totalApplied > 12) {
-      throw new HttpException(400, 'You cannot apply for more than 12 working days');
+    if (totalApplied > 14) {
+      throw new HttpException(400, 'You cannot apply for more than 14 working days');
     }
 
     if (monthAfterOnboarding == 0) {
@@ -182,6 +191,33 @@ class LeaveApplicationService {
       const findLeaveapplication: ILeaveApplication[] = await this.leaveApplicationModel.find(query).populate("employee_id").populate("leave_type_id");
       if (!findLeaveapplication) throw new HttpException(404, 'Leave application not found');
       return findLeaveapplication;
+  }
+  public async getLeaveApplicationProgress(user): Promise<any> {
+    const leaveapplication: ILeaveApplication = await this.leaveApplicationModel.findOne({ status: "pending", employee_id: user._id });
+    const list_of_approvers = leaveapplication.list_of_approvers
+    const allLeaveapprovers: any = await this.getAllLeaveAprovers(user);
+    let progressObj = {}
+    for (let approver in allLeaveapprovers){
+      if (allLeaveapprovers[approver].toString().indexOf(list_of_approvers) > -1){
+         progressObj[approver] = "done" 
+      }
+      else{
+         progressObj[approver] = "not done"
+      } 
+    }
+    return progressObj
+  }
+  public async getAllLeaveAprovers(user): Promise<any> {
+    const leaveapplication: ILeaveApplication = await this.leaveApplicationModel.findOne({status:"pending",employee_id: user._id});
+    if (!leaveapplication) throw new HttpException(404, 'Leave application not found');
+    let leaveApprover = leaveapplication.first_approver
+    let leaveApproversObj = {}
+    while (leaveApprover !== null ){
+      const findEmployee = await this.employeeModel.findOne({ _id: leaveApprover })
+      leaveApprover = findEmployee.reports_to
+      leaveApproversObj[findEmployee.first_name] = findEmployee._id
+    }
+    return leaveApproversObj;
   }
   private async validateLeaveDay(date: Date, employee_project_id: string): Promise<boolean> {
     const valid_status = "pending"  
