@@ -137,5 +137,10 @@ class HrLeaveApplicationService {
     ])
       return typesOfLeaveTaken;
     }
+  public async getLeaveApplicationHistory(): Promise<ILeaveApplication[]> {
+    const leaveApplications: ILeaveApplication[] = await this.application.find(
+      { hr_stage: true, status:{$ne: "pending"} })
+    return leaveApplications
+  }
 }
 export default HrLeaveApplicationService;
