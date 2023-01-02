@@ -40,7 +40,8 @@ class LeadsLeaveApplicationService {
           hr_stage: leadsApprovalLevel === departmentHighestLeaveApprovalLevel ? true : false,
           acted_on: true,
           approval_level: leadsApprovalLevel === departmentHighestLeaveApprovalLevel ? leadsApprovalLevel : immediateSupervisorsLeaveApprovalLevel,
-      }
+      },
+        $push:{list_of_approvers: user._id}
      },
       { new: true },
     );
@@ -53,6 +54,8 @@ class LeadsLeaveApplicationService {
     return leaveApplication;
   }
   public async rejectLeaveApplication(leaveId: String, user: Employee, query: any): Promise<ILeaveApplication> {
+    const topLead = await this.employeeModel.findOne({_id:user.reports_to})
+    const topLeadFirstName = topLead?.first_name.charAt(0) + topLead?.first_name.toLowerCase().slice(1)
     const leaveApplication = await this.application.findOneAndUpdate(
       { _id: leaveId, leave_approver: user._id, status: { $eq: 'pending' }, hr_stage: { $ne: true } },
       {
@@ -67,12 +70,14 @@ class LeadsLeaveApplicationService {
     if (!leaveApplication) {
       throw new HttpException(400, 'leave application does not exist');
     }
-     Promise.all([this.leaveMailingService.sendLeaveStatusNotificationMail(leaveApplication, "rejected", this.employeeModel)])
+     Promise.all(
+      [this.leaveMailingService.sendLeaveStatusNotificationMail(leaveApplication, "rejected", this.employeeModel),
+         this.leaveMailingService.sendRejectionNotificationToHr(leaveApplication, this.employeeModel, "HR", "abubakarmoses@yahoo.com")
+    ])
+    if (topLead !== null){
+      Promise.all([this.leaveMailingService.sendRejectionNotificationToHr(leaveApplication, this.employeeModel, topLeadFirstName, "abubakarmoses@yahoo.com")])
+    } 
     return leaveApplication;
-  }
-   private async getDepartmentHighestLeaveApprovalLevel(user: Employee): Promise<number>{
-    const departmentRecord: IDepartment = await this.departmentModel.findOne({_id: user.department})
-    return departmentRecord.leave_approval_level
   }
   public async getLeadLeaveApprovalLevel(user: Employee): Promise<number>{
     const usersLeaveApprovalLevel: ILeaveApprovalLevel = await this.leaveApprovalLevelModel.findOne({designation_id: user?.designation})
@@ -86,6 +91,29 @@ class LeadsLeaveApplicationService {
     if(supervisorsLeaveApprovalRecords !== null) return supervisorsLeaveApprovalRecords.approval_level
     if(leadLeaveApprovalLevel === departmentHighestLeaveApprovalLevel)
     return leadLeaveApprovalLevel
+  }
+  public async sendReminderForLeaveActions(): Promise<ILeaveApplication[]> {
+    const leaveApplication: ILeaveApplication[] = await this.application.find(
+      { hr_stage:false, status: "pending" })
+    return leaveApplication
+  }
+  public async getLeaveApplicationHistory(user: Employee): Promise<ILeaveApplication[]> {
+    const leaveApplications: ILeaveApplication[] = await this.application.find(
+      { $or: [{leave_approver: user._id},{list_of_approvers: user._id}]})
+    return leaveApplications
+  }
+  public async requestLeaveModification(query, body, user): Promise<void> {
+    const leaveApplications: ILeaveApplication = await this.application.findOne(query)
+    const leaveApplicant = await this.employeeModel.findOne({_id: leaveApplications.employee_id})
+    const leaveApplicantFirstName = leaveApplicant.first_name
+    const leaveApproverFirstName = user.first_name.charAt(0) + user.first_name.toLowerCase().slice(1)
+    const leaveApplicantEmail = leaveApplicant.company_email
+    Promise
+      .all([this.leaveMailingService.requestForLeaveModificationMail(leaveApproverFirstName, leaveApplicantFirstName, body.reasons, "abubakarmoses@yahoo.com")])
+  }
+  private async getDepartmentHighestLeaveApprovalLevel(user: Employee): Promise<number> {
+    const departmentRecord: IDepartment = await this.departmentModel.findOne({ _id: user.department })
+    return departmentRecord.leave_approval_level
   }
 }
 export default LeadsLeaveApplicationService;
