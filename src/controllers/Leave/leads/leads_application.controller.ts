@@ -32,7 +32,22 @@ class LeadsLeaveApplicationController {
       next(error);
     }
   };
-  
+  public getLeaveApplicationHistory = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const leaveApplications: any = await this.leadsLeaveApplicationService.getLeaveApplicationHistory(req.user);
+      res.status(200).json({ data: leaveApplications });
+    } catch (error) {
+      next(error);
+    }
+  };  
+  public requestLeaveModification = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const leaveApplications: any = await this.leadsLeaveApplicationService.requestLeaveModification(req.query, req.body, req.user);
+      res.status(200).json({ data: leaveApplications });
+    } catch (error) {
+      next(error);
+    }
+  };  
 }
 
 export default LeadsLeaveApplicationController;
