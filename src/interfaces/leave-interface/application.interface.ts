@@ -14,6 +14,8 @@ export interface ILeaveApplication{
     rejection_reason: string;
     hr_stage?: boolean;
     acted_on?: boolean;
+    list_of_approvers?: string[];
+    first_approver?: string | null;
 }
 export interface ILeaveCount{
    ogid: string;
