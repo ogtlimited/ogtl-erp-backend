@@ -30,11 +30,13 @@ const client = redis.createClient({
   username: ""
 });
 import LeaveApplicationService from "@services/leave/application.service";
+import LeadsLeaveApplicationService from "@services/leave/leads/leads_application.service";
+import employeeModel from "@models/employee/employee.model";
 import EmployeeBirthDayService from "./services/employee/employee_birthday.service";
 import EmployeeService from "./services/employee.service";
 const fs = require('fs')
 import EmailService from '@/utils/email.service';
-import { birthdayMessage } from '@/utils/message';
+import { leadsLeaveNotificationMessage, birthdayMessage } from '@/utils/message';
 
 const path = require('path')
 if (process.env.NODE_ENV !== "production") {
@@ -291,6 +293,25 @@ class App {
           })
       }
     })
+    // const leadsLeaveApplicationActionReminder = cron.schedule('* */24 * * *', async function() {
+    //   const leadsLeaveApplicationService = new LeadsLeaveApplicationService()
+    //   const leaveApplication = await leadsLeaveApplicationService.sendReminderForLeaveActions()
+    //   if (leaveApplication.length !== 0){
+    //     leaveApplication.map(async (leave)=>{
+    //       const leaveApplicant = await employeeModel.findOne({_id: leave.employee_id})
+    //       const leaveApprover = await employeeModel.findOne({_id: leave.leave_approver})
+    //       const leaveApproverFirstName = leaveApprover?.first_name.charAt(0) + leaveApprover?.first_name.toLowerCase().slice(1)
+    //       const { message, subject } = leadsLeaveNotificationMessage(leaveApproverFirstName, leaveApplicant.first_name, leaveApplicant.ogid)
+    //       const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
+    //       if (leave.leave_approver!==null){
+    //          EmailService.sendMail("abubakarmoses@yahoo.com", "hr@outsourceglobal.com", subject, message, body)
+    //     //  EmailService.sendMail(leaveApprover.company_email, "hr@outsourceglobal.com", subject, message, body)
+
+    //         }
+    //       })
+    //   }
+    // })
+    // leadsLeaveApplicationActionReminder.start()
      automatedEmployeesBirthdayMail.start
      employeeStat.start()
      LeaveCountUpdate.start()
