@@ -97,9 +97,10 @@ class LeadsLeaveApplicationService {
       { hr_stage:false, status: "pending" })
     return leaveApplication
   }
-  public async getLeaveApplicationHistory(user: Employee): Promise<ILeaveApplication[]> {
-    const leaveApplications: ILeaveApplication[] = await this.application.find(
-      { $or: [{leave_approver: user._id},{list_of_approvers: user._id}]})
+  public async getLeaveApplicationHistory(user: Employee, query): Promise<ILeaveApplication[]> {
+    const userIdToString = user._id.toString()
+    let matchBy = { $and: [{ acted_on: true }, { $or: [{ leave_approver: userIdToString }, { list_of_approvers: userIdToString }]}]} 
+    const leaveApplications = await this.filtrationService.getLeaveApplicationsHelperMethod(matchBy, query, this.application)
     return leaveApplications
   }
   public async requestLeaveModification(query, body, user): Promise<void> {
