@@ -113,6 +113,14 @@ class LeaveApplicationController {
       next(error);
     }
   };
+  public appealRejectedLeave = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const leaveApplicationProgress: any = await this.leaveApplicationService.appealRejectedLeave(req.query, req.body, req.user);
+      res.status(200).json({ data: leaveApplicationProgress });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default LeaveApplicationController;
