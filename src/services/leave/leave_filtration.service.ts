@@ -56,11 +56,11 @@ class LeaveFiltrationService{
             from: "departments",
             localField: "department_id",
             foreignField: "_id",
-            as: "department"
+            as: "department_id"
         }
         },
         {
-        $unwind: {path :"$department",
+        $unwind: {path :"$department_id",
         preserveNullAndEmptyArrays: true
         }
         },
@@ -104,7 +104,7 @@ class LeaveFiltrationService{
                 { "employee.first_name":{$regex:searchQuery.search, $options:"i"}},
                 { "employee.last_name":{$regex:searchQuery.search, $options:"i"}},
                 { "employee.middle_name":{$regex:searchQuery.search, $options:"i"}},
-                { "department.department":{$regex:searchQuery.search, $options:"i"}}
+                { "department_id.department":{$regex:searchQuery.search, $options:"i"}}
                 ]
             }
             }
@@ -113,7 +113,7 @@ class LeaveFiltrationService{
         if(searchQuery.department){
         filtrationQuery.push(
             {
-            $match: { "department.department":{$regex:searchQuery.department, $options:"i"}}    
+            $match: { "department_id.department":{$regex:searchQuery.department, $options:"i"}}    
             }
         )
         }
@@ -123,7 +123,14 @@ class LeaveFiltrationService{
                 $match: { "leave_type_id.leave_type":{$regex:searchQuery.leave_type, $options:"i"}}    
                 }
             )
-            }
+        }
+        if (searchQuery.status) {
+            filtrationQuery.push(
+                {
+                    $match: { "status": { $regex: searchQuery.status, $options: "i" } }
+                }
+            )
+        }
         if(searchQuery?.page){
             filtrationQuery.push(
             { $skip: startIndex },
