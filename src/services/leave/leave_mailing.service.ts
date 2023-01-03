@@ -3,7 +3,8 @@ import { leadsLeaveNotificationMessage,
        leaveApplicationStatusMessage, 
        LeaveRejectionHrNotificationMessage,
        requestForLeaveModification,
-       appealRejectedLeave
+       appealRejectedLeaveMessageToLead,
+       appealRejectedLeaveMessageToTopLead
 } from '@/utils/message';
 
 class LeaveMailingService{
@@ -52,11 +53,17 @@ class LeaveMailingService{
         const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
         EmailService.sendMail(applicantsMail, "hr@outsourceglobal.com", subject, message, body)
     }
-    public async appealRejectedLeaveMail(leads_fullname, applicant_full_name, ogId, reasons, leads_mail) {
-        const { message, subject } = appealRejectedLeave(leads_fullname, applicant_full_name, ogId, reasons)
+    public async appealRejectedLeaveMailToLead(leads_fullname, applicant_full_name, ogId, reasons, leads_mail) {
+        const { message, subject } = appealRejectedLeaveMessageToLead(leads_fullname, applicant_full_name, ogId, reasons)
         const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
         EmailService.sendMail(leads_mail, "hr@outsourceglobal.com", subject, message, body)
     }
+    public async appealRejectedLeaveMailToTopLead(leads_fullname, top_lead_firstname, applicant_full_name, ogId, reasons, leads_mail) {
+        const { message, subject } = appealRejectedLeaveMessageToTopLead(leads_fullname, top_lead_firstname, applicant_full_name, ogId, reasons)
+        const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
+        EmailService.sendMail(leads_mail, "hr@outsourceglobal.com", subject, message, body)
+    }
+    
 }
 export default LeaveMailingService
       
