@@ -115,9 +115,21 @@ function requestForLeaveModification(lead_fullname, applicant, reasons) {
     subject
   }
 }
-function appealRejectedLeave(lead_firstname, applicantFullName, ogId, reasons) {
+function appealRejectedLeaveMessageToLead(lead_firstname, applicantFullName, ogId, reasons) {
   const message = "Hello " + lead_firstname + ","
-    + "<br><br>" + applicantFullName + " with " +ogId+ " wishes to appeal a rejected leave due to the following reasons:"
+    + "<br><br>" + applicantFullName + " with OGID " +ogId+ " wishes to appeal a rejected leave due to the following reasons:"
+    + "<br><br>" + reasons + "."
+    + "<br><br>" + " Best regards."
+    + "<br><br>"
+  const subject = "Appealing a Rejected Leave"
+  return {
+    message,
+    subject
+  }
+}
+function appealRejectedLeaveMessageToTopLead(lead_fullname, top_lead_firstname, applicantFullName, ogId, reasons) {
+  const message = "Hello " + top_lead_firstname + ","
+    + "<br><br>" + applicantFullName + " with OGID " +ogId+ " wishes to appeal a leave that was rejected by "+lead_fullname+ " due to the following reasons:"
     + "<br><br>" + reasons + "."
     + "<br><br>" + " Best regards."
     + "<br><br>"
@@ -139,4 +151,4 @@ const rejectionMessage = {
 export { terminationMessage , promotionMessage, OfferMessage,acceptedOfferMessage,rejectionMessage, 
   offerMessageFunc, ticketingMessage,resolvedTicketingMessage,clientAccountActivationNotice, 
   birthdayMessage, leaveApplicationStatusMessage, leadsLeaveNotificationMessage, LeaveRejectionHrNotificationMessage,
-  requestForLeaveModification, appealRejectedLeave };
+  requestForLeaveModification, appealRejectedLeaveMessageToLead, appealRejectedLeaveMessageToTopLead };
