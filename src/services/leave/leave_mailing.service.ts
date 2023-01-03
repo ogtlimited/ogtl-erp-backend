@@ -2,7 +2,8 @@ import EmailService from '@/utils/email.service';
 import { leadsLeaveNotificationMessage,
        leaveApplicationStatusMessage, 
        LeaveRejectionHrNotificationMessage,
-       requestForLeaveModification
+       requestForLeaveModification,
+       appealRejectedLeave
 } from '@/utils/message';
 
 class LeaveMailingService{
@@ -14,8 +15,12 @@ class LeaveMailingService{
         const ogId = leaveApplicant.ogid
         const supervisor = applicant.leave_approver ? await employeeModel.findOne({_id: applicant?.leave_approver}): null
         const formattedSupervisorFirstName = supervisor?.first_name.charAt(0) + supervisor?.first_name.toLowerCase().slice(1)
+        let url = ""
+        if (process.env.development) { url = "http://localhost:3001/auth/login"}
+        else if (process.env.production) { url = "http://erp.outsourceglobal.com/dashboard" }
+        else { url = "https://admin-erp-test.ogtlprojects.com/" }
         const {message, subject} = leadsLeaveNotificationMessage(formattedSupervisorFirstName, fullname, ogId) 
-        const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
+        const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}<a href=${url}>Click here to login</a>`
         // EmailService.sendMail(supervisor.company_email, "hr@outsourceglobal.com", subject, message, body)
         EmailService.sendMail("abubakarmoses@yahoo.com", "hr@outsourceglobal.com", subject, message, body)
     }
@@ -46,9 +51,12 @@ class LeaveMailingService{
         const { message, subject } = requestForLeaveModification(leads_fullname, applicant, reasons)
         const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
         EmailService.sendMail(applicantsMail, "hr@outsourceglobal.com", subject, message, body)
-        // EmailService.sendMail(leaveApplicant.company_email, "hr@outsourceglobal.com", status_subject, status_message, body)
     }
-
+    public async appealRejectedLeaveMail(leads_fullname, applicant_full_name, ogId, reasons, leads_mail) {
+        const { message, subject } = appealRejectedLeave(leads_fullname, applicant_full_name, ogId, reasons)
+        const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
+        EmailService.sendMail(leads_mail, "hr@outsourceglobal.com", subject, message, body)
+    }
 }
 export default LeaveMailingService
       
