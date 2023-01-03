@@ -58,7 +58,7 @@ class HrLeaveApplicationController {
   };
   public getLeaveApplicationHistory = async (req: any, res: Response, next: NextFunction) => {
     try {
-      const leaveApplications: ILeaveApplication[] = await this.hrLeaveApplicationService.getLeaveApplicationHistory();
+      const leaveApplications: ILeaveApplication[] = await this.hrLeaveApplicationService.getLeaveApplicationHistory(req.query);
       res.status(200).json({ data: leaveApplications });
     } catch (error) {
       next(error);
