@@ -34,7 +34,7 @@ class LeadsLeaveApplicationController {
   };
   public getLeaveApplicationHistory = async (req: any, res: Response, next: NextFunction) => {
     try {
-      const leaveApplications: any = await this.leadsLeaveApplicationService.getLeaveApplicationHistory(req.user);
+      const leaveApplications: any = await this.leadsLeaveApplicationService.getLeaveApplicationHistory(req.user, req.query);
       res.status(200).json({ data: leaveApplications });
     } catch (error) {
       next(error);
