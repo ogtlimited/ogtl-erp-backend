@@ -2,15 +2,18 @@
 import { ILeaveApplication } from '@/interfaces/leave-interface/application.interface';
 import { HttpException } from '@exceptions/HttpException';
 import applicationModel from '@/models/leave/application.model';
+import leaveTypeModel from '@/models/leave/leave_type.model';
 import allocationModel from '@/models/leave/allocation.model';
 import EmployeeService from '@services/employee.service';
 import LeaveFiltrationService from '@/services/leave/leave_filtration.service';
 import LeaveMailingService from '@services/leave/leave_mailing.service';
 import EmployeeModel from '@models/employee/employee.model';
 import projectModel from '@/models/project/project.model';
+import { formatDiagnosticsWithColorAndContext } from 'typescript';
 
 class HrLeaveApplicationService {
   public application = applicationModel;
+  public leaveTypeModel = leaveTypeModel;
   public allocationM = allocationModel;
   public employeeS = new EmployeeService();
   public filtrationService = new LeaveFiltrationService();
@@ -142,5 +145,69 @@ class HrLeaveApplicationService {
     const leaveApplications = await this.filtrationService.getLeaveApplicationsHelperMethod(matchBy, query, this.application)
     return leaveApplications
   };
+  public async getEmployeesBasedOnLeaveTypesTaken(query): Promise<ILeaveApplication[]> {
+    const leaveType = await this.leaveTypeModel.findOne(query)
+    const leaveApplications: ILeaveApplication[] = await this.application.find({leave_type_id: leaveType?._id}).populate("employee_id")
+    return leaveApplications
+  };
+  public async getEmployeesBasedOnLeaveStatus(query): Promise<ILeaveApplication[]> {
+    const leaveApplications: ILeaveApplication[] = await this.application.find(query).populate("employee_id")
+    return leaveApplications
+  };
+  public async generateLeaveReport(query): Promise<any> {
+    const fromDate = query.from;
+    const toDate = query.to;
+    let data = { rejected: 0, approved: 0, pending: 0 }
+    const leaveReport = await this.application.aggregate([{
+      $facet: {
+        typesOfLeaveTaken: [{
+          '$match': { hr_stage: true, createdAt: { $gte: new Date(fromDate), $lte: new Date(toDate)}  }
+        },
+        {
+          $lookup: {
+            from: "leavetypes",
+            localField: "leave_type_id",
+            foreignField: "_id",
+            as: "leavetype"
+          }
+        },
+        {
+          $unwind: {
+            path: "$leavetype",
+            preserveNullAndEmptyArrays: true
+          }
+        },
+        {
+          '$group': {
+            '_id': '$leavetype.leave_type',
+            'total': {
+              '$count': {}
+            }
+          }
+        }],
+        leaveStatusCount: [{
+          '$match': {
+            hr_stage: true, createdAt: { $gte: new Date(fromDate), $lte: new Date(toDate) }}
+        },
+        {
+          '$group': {
+            '_id': '$status',
+            'total': {
+              '$count': {}
+            }
+          }
+        }]
+      }
+  }])
+    const leaveStatusCount = leaveReport.find(report => report).leaveStatusCount
+    const typesOfLeaveTaken = leaveReport.find(report => report).typesOfLeaveTaken
+    leaveStatusCount.map(status => {
+        if (status._id === "rejected") { data.rejected = status.total }
+        if (status._id === "pending") { data.pending = status.total }
+        if (status._id === "approved") { data.approved = status.total }
+      
+    })
+    return {leaveStatus: data, typesOfLeaveTaken}
+  }
 }
 export default HrLeaveApplicationService;
