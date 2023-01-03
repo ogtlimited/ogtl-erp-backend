@@ -105,11 +105,23 @@ function birthdayMessage(first_name) {
 
 function requestForLeaveModification(lead_fullname, applicant, reasons) {
   const message = "Hello " + applicant + ","
-    + "<br><br>" + lead_fullname + " wants you to modify your leave due to the following reasons" 
+    + "<br><br>" + lead_fullname + " wants you to modify your leave due to the following reasons:" 
     + "<br><br>" + reasons + "."
     + "<br><br>" + " Best regards."
     + "<br><br>"
   const subject = "Request for Leave Modification"
+  return {
+    message,
+    subject
+  }
+}
+function appealRejectedLeave(lead_firstname, applicantFullName, ogId, reasons) {
+  const message = "Hello " + lead_firstname + ","
+    + "<br><br>" + applicantFullName + " with " +ogId+ " wishes to appeal a rejected leave due to the following reasons:"
+    + "<br><br>" + reasons + "."
+    + "<br><br>" + " Best regards."
+    + "<br><br>"
+  const subject = "Appealing a Rejected Leave"
   return {
     message,
     subject
@@ -127,4 +139,4 @@ const rejectionMessage = {
 export { terminationMessage , promotionMessage, OfferMessage,acceptedOfferMessage,rejectionMessage, 
   offerMessageFunc, ticketingMessage,resolvedTicketingMessage,clientAccountActivationNotice, 
   birthdayMessage, leaveApplicationStatusMessage, leadsLeaveNotificationMessage, LeaveRejectionHrNotificationMessage,
-  requestForLeaveModification};
+  requestForLeaveModification, appealRejectedLeave };
