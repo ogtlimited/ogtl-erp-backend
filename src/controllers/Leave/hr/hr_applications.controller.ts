@@ -64,5 +64,29 @@ class HrLeaveApplicationController {
       next(error);
     }
   };
+  public generateLeaveReport = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const leaveApplications: ILeaveApplication[] = await this.hrLeaveApplicationService.generateLeaveReport(req.query);
+      res.status(200).json({ data: leaveApplications });
+    } catch (error) {
+      next(error);
+    }
+  };
+  public getEmployeesBasedOnLeaveTypesTaken = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const leaveApplications: ILeaveApplication[] = await this.hrLeaveApplicationService.getEmployeesBasedOnLeaveTypesTaken(req.query);
+      res.status(200).json({ data: leaveApplications });
+    } catch (error) {
+      next(error);
+    }
+  };
+  public getEmployeesBasedOnLeaveStatus = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const leaveApplications: ILeaveApplication[] = await this.hrLeaveApplicationService.getEmployeesBasedOnLeaveStatus(req.query);
+      res.status(200).json({ data: leaveApplications });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 export default HrLeaveApplicationController;
