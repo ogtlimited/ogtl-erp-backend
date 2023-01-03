@@ -229,14 +229,16 @@ class LeaveApplicationService {
     const leaveApplicantFullName = `${leaveApplicantFirstName} ${leaveApplicantLastName}`
     const leaveApprover = await this.employeeModel.findOne({ _id: leaveApplications?.leave_approver })
     const leaveApproverFirstName = leaveApprover?.first_name.charAt(0) + leaveApprover?.first_name.toLowerCase().slice(1)
+    const leaveApproverLastName = leaveApprover?.last_name.charAt(0) + leaveApprover?.last_name.toLowerCase().slice(1)
+    const leaveApproverFullName = `${leaveApproverFirstName} ${leaveApproverLastName}`
     const leaveApproverEmail = leaveApprover?.company_email
     const topLeads = await this.employeeModel.findOne({ _id: leaveApprover?.reports_to })
     const topLeadsEmail = topLeads?.company_email
     const topLeadsFirstName = topLeads?.first_name.charAt(0) + topLeads?.first_name.toLowerCase().slice(1)
     if (leaveApprover !== null){
-      Promise.all([this.leaveMailingService.appealRejectedLeaveMail(leaveApproverFirstName, leaveApplicantFullName, leaveApplicant.ogid, body.reasons, "abubakarmoses@yahoo.com")])}
+      Promise.all([this.leaveMailingService.appealRejectedLeaveMailToLead(leaveApproverFirstName, leaveApplicantFullName, leaveApplicant.ogid, body.reasons, "abubakarmoses@yahoo.com")])}
     if (topLeads!==null){
-      Promise.all([this.leaveMailingService.appealRejectedLeaveMail(topLeadsFirstName, leaveApplicantFullName, leaveApplicant.ogid, body.reasons, "abubakarmoses@yahoo.com")])
+      Promise.all([this.leaveMailingService.appealRejectedLeaveMailToTopLead(leaveApproverFullName, topLeadsFirstName, leaveApplicantFullName, leaveApplicant.ogid, body.reasons, "abubakarmoses@yahoo.com")])
     } 
   }
   private async validateLeaveDay(date: Date, employee_project_id: string): Promise<boolean> {
