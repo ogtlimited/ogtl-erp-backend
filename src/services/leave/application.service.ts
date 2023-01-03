@@ -193,31 +193,51 @@ class LeaveApplicationService {
       return findLeaveapplication;
   }
   public async getLeaveApplicationProgress(user): Promise<any> {
-    const leaveapplication: ILeaveApplication = await this.leaveApplicationModel.findOne({ status: "pending", employee_id: user._id });
-    const list_of_approvers = leaveapplication.list_of_approvers
+    const leaveapplication: ILeaveApplication = await this.leaveApplicationModel.findOne({employee_id: user._id });
+    const list_of_approvers = leaveapplication?.list_of_approvers
     const allLeaveapprovers: any = await this.getAllLeaveAprovers(user);
     let progressObj = {}
     for (let approver in allLeaveapprovers){
-      if (allLeaveapprovers[approver].toString().indexOf(list_of_approvers) > -1){
+      if (list_of_approvers?.indexOf(allLeaveapprovers[approver].toString()) > -1){
          progressObj[approver] = "done" 
       }
       else{
          progressObj[approver] = "not done"
       } 
     }
+      if (leaveapplication.status !== "approved"){ progressObj["HR"] = "not done" }
+      else{ progressObj["HR"] = "done" }
     return progressObj
   }
   public async getAllLeaveAprovers(user): Promise<any> {
-    const leaveapplication: ILeaveApplication = await this.leaveApplicationModel.findOne({status:"pending",employee_id: user._id});
+    const leaveapplication: ILeaveApplication = await this.leaveApplicationModel.findOne({employee_id: user._id});
     if (!leaveapplication) throw new HttpException(404, 'Leave application not found');
-    let leaveApprover = leaveapplication.first_approver
+    let leaveApprover = leaveapplication?.first_approver
     let leaveApproversObj = {}
     while (leaveApprover !== null ){
       const findEmployee = await this.employeeModel.findOne({ _id: leaveApprover })
-      leaveApprover = findEmployee.reports_to
-      leaveApproversObj[findEmployee.first_name] = findEmployee._id
+      leaveApprover = findEmployee?.reports_to
+      leaveApproversObj[findEmployee?.first_name] = findEmployee?._id
     }
     return leaveApproversObj;
+  }
+  public async appealRejectedLeave(query, body, user): Promise<void> {
+    const leaveApplications = await this.leaveApplicationModel.findOne(query)
+    const leaveApplicant = await this.employeeModel.findOne({ _id: leaveApplications.employee_id })
+    const leaveApplicantFirstName = leaveApplicant.first_name.charAt(0) + leaveApplicant.first_name.toLowerCase().slice(1)
+    const leaveApplicantLastName = leaveApplicant.last_name.charAt(0) + leaveApplicant.last_name.toLowerCase().slice(1)
+    const leaveApplicantFullName = `${leaveApplicantFirstName} ${leaveApplicantLastName}`
+    const leaveApprover = await this.employeeModel.findOne({ _id: leaveApplications?.leave_approver })
+    const leaveApproverFirstName = leaveApprover?.first_name.charAt(0) + leaveApprover?.first_name.toLowerCase().slice(1)
+    const leaveApproverEmail = leaveApprover?.company_email
+    const topLeads = await this.employeeModel.findOne({ _id: leaveApprover?.reports_to })
+    const topLeadsEmail = topLeads?.company_email
+    const topLeadsFirstName = topLeads?.first_name.charAt(0) + topLeads?.first_name.toLowerCase().slice(1)
+    if (leaveApprover !== null){
+      Promise.all([this.leaveMailingService.appealRejectedLeaveMail(leaveApproverFirstName, leaveApplicantFullName, leaveApplicant.ogid, body.reasons, "abubakarmoses@yahoo.com")])}
+    if (topLeads!==null){
+      Promise.all([this.leaveMailingService.appealRejectedLeaveMail(topLeadsFirstName, leaveApplicantFullName, leaveApplicant.ogid, body.reasons, "abubakarmoses@yahoo.com")])
+    } 
   }
   private async validateLeaveDay(date: Date, employee_project_id: string): Promise<boolean> {
     const valid_status = "pending"  
