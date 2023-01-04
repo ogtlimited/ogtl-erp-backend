@@ -222,23 +222,27 @@ class LeaveApplicationService {
     return leaveApproversObj;
   }
   public async appealRejectedLeave(query, body, user): Promise<void> {
-    const leaveApplications = await this.leaveApplicationModel.findOne(query)
-    const leaveApplicant = await this.employeeModel.findOne({ _id: leaveApplications.employee_id })
-    const leaveApplicantFirstName = leaveApplicant.first_name.charAt(0) + leaveApplicant.first_name.toLowerCase().slice(1)
-    const leaveApplicantLastName = leaveApplicant.last_name.charAt(0) + leaveApplicant.last_name.toLowerCase().slice(1)
+    const leaveApplications = await this.leaveApplicationModel.findOne(query).populate("employee_id").populate("leave_approver")
+    if (leaveApplications){
+      await this.leaveApplicationModel.findOneAndUpdate(query,{$set:{
+        isAppealled: true,
+        status: "pending"
+      }})
+    }
+    const leaveApplicantFirstName = leaveApplications?.employee_id?.first_name.charAt(0) + leaveApplications?.employee_id?.first_name.toLowerCase().slice(1)
+    const leaveApplicantLastName = leaveApplications?.employee_id?.last_name.charAt(0) + leaveApplications?.employee_id?.last_name.toLowerCase().slice(1)
     const leaveApplicantFullName = `${leaveApplicantFirstName} ${leaveApplicantLastName}`
-    const leaveApprover = await this.employeeModel.findOne({ _id: leaveApplications?.leave_approver })
-    const leaveApproverFirstName = leaveApprover?.first_name.charAt(0) + leaveApprover?.first_name.toLowerCase().slice(1)
-    const leaveApproverLastName = leaveApprover?.last_name.charAt(0) + leaveApprover?.last_name.toLowerCase().slice(1)
+    const leaveApproverFirstName = leaveApplications?.leave_approver?.first_name.charAt(0) + leaveApplications?.leave_approver?.first_name.toLowerCase().slice(1)
+    const leaveApproverLastName = leaveApplications?.leave_approver?.last_name.charAt(0) + leaveApplications?.leave_approver?.last_name.toLowerCase().slice(1)
     const leaveApproverFullName = `${leaveApproverFirstName} ${leaveApproverLastName}`
-    const leaveApproverEmail = leaveApprover?.company_email
-    const topLeads = await this.employeeModel.findOne({ _id: leaveApprover?.reports_to })
+    const leaveApproverEmail = leaveApplications?.leave_approver?.company_email
+    const topLeads = await this.employeeModel.findOne({ _id: leaveApplications?.leave_approver?.reports_to })
     const topLeadsEmail = topLeads?.company_email
     const topLeadsFirstName = topLeads?.first_name.charAt(0) + topLeads?.first_name.toLowerCase().slice(1)
-    if (leaveApprover !== null){
-      Promise.all([this.leaveMailingService.appealRejectedLeaveMailToLead(leaveApproverFirstName, leaveApplicantFullName, leaveApplicant.ogid, body.reasons, "abubakarmoses@yahoo.com")])}
+    if (leaveApplications?.leave_approver !== null){
+      Promise.all([this.leaveMailingService.appealRejectedLeaveMailToLead(leaveApproverFirstName, leaveApplicantFullName, leaveApplications?.employee_id?.ogid, body.reasons, "abubakarmoses@yahoo.com")])}
     if (topLeads!==null){
-      Promise.all([this.leaveMailingService.appealRejectedLeaveMailToTopLead(leaveApproverFullName, topLeadsFirstName, leaveApplicantFullName, leaveApplicant.ogid, body.reasons, "abubakarmoses@yahoo.com")])
+      Promise.all([this.leaveMailingService.appealRejectedLeaveMailToTopLead(leaveApproverFullName, topLeadsFirstName, leaveApplicantFullName, leaveApplications?.employee_id?.ogid, body.reasons, "abubakarmoses@yahoo.com")])
     } 
   }
   private async validateLeaveDay(date: Date, employee_project_id: string): Promise<boolean> {
