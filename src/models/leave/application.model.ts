@@ -69,6 +69,10 @@ const applicationSchema : Schema = new Schema (
         first_approver: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Employee",
+        },
+        isAppealled: {
+            type: Boolean,
+            default: false,
         }
     },
     {
@@ -94,6 +98,6 @@ applicationSchema.post('delete', function(doc) {
 });
 
 
-const applicationModel = model<ILeaveApplication & Document>('LeaveApplication', applicationSchema);
+const applicationModel = model('LeaveApplication', applicationSchema);
 
 export default applicationModel;
