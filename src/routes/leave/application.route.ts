@@ -25,7 +25,7 @@ class LeaveApplicationRoute implements Routes {
     this.router.get(`${this.path}/all-leave-approvers`, authMiddleware, this.leaveApplicationController.getAllLeaveAprovers);
     this.router.get(`${this.path}/team-member/all`, authMiddleware, this.leaveApplicationController.findAllTeamMembersLeave);
     this.router.get(`${this.path}/client-approval/:id`, authMiddleware, this.leaveApplicationController.findAllLeaveapplicationsClient);
-    this.router.post(`${this.path}/appeal-rejected-leave`, authMiddleware, this.leaveApplicationController.appealRejectedLeave);
+    this.router.patch(`${this.path}/appeal-rejected-leave`, authMiddleware, this.leaveApplicationController.appealRejectedLeave);
     this.router.post(`${this.path}`, [validationMiddleware(CreateLeaveApplicationDTO, 'body'),authMiddleware], this.leaveApplicationController.createLeaveApplication);
     this.router.put(`${this.path}/update-leavecount`, [authMiddleware, permissionMiddleware('HR')], this.leaveApplicationController.updateLeaveCount);
     this.router.put(`${this.path}/:id`, [validationMiddleware(UpdateLeaveApplicationDTO, 'body', true), authMiddleware], this.leaveApplicationController.updateLeaveApplication);
