@@ -24,7 +24,7 @@ class LeadsLeaveApplicationService {
   public employeeModel = EmployeeModel;
 
   public async getLeaveApplicationsForLeads(user: Employee, query: Request): Promise<ILeaveApplication[]> {
-   let matchBy = { leave_approver: user._id, hr_stage:{$ne: true}}
+    let matchBy = { leave_approver: user._id, hr_stage: { $ne: true }, isAppealled: false, status: "pending"}
    const leaveApplications= await this.filtrationService.getLeaveApplicationsHelperMethod(matchBy, query, this.application)
   return leaveApplications;
   }
