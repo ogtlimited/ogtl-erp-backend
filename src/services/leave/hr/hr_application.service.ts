@@ -9,7 +9,6 @@ import LeaveFiltrationService from '@/services/leave/leave_filtration.service';
 import LeaveMailingService from '@services/leave/leave_mailing.service';
 import EmployeeModel from '@models/employee/employee.model';
 import projectModel from '@/models/project/project.model';
-import { formatDiagnosticsWithColorAndContext } from 'typescript';
 
 class HrLeaveApplicationService {
   public application = applicationModel;
