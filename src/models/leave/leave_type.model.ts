@@ -18,5 +18,5 @@ const LeaveTypeSchema : Schema = new Schema (
     }
 );
 
-const LeaveTypeModel = model<Document>('LeaveType', LeaveTypeSchema);
+const LeaveTypeModel = model('LeaveType', LeaveTypeSchema);
 export default LeaveTypeModel;
