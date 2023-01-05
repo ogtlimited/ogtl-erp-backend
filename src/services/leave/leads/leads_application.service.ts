@@ -112,6 +112,11 @@ class LeadsLeaveApplicationService {
     Promise
       .all([this.leaveMailingService.requestForLeaveModificationMail(leaveApproverFirstName, leaveApplicantFirstName, body.reasons, "abubakarmoses@yahoo.com")])
   }
+  public async getAppealedLeavesApplicationsForLeads(user: Employee, query: Request): Promise<ILeaveApplication[]> {
+    let matchBy = { leave_approver: user._id, hr_stage: { $ne: true }, isAppealled: true, status: "pending" }
+    const leaveApplications = await this.filtrationService.getLeaveApplicationsHelperMethod(matchBy, query, this.application)
+    return leaveApplications;
+  }
   private async getDepartmentHighestLeaveApprovalLevel(user: Employee): Promise<number> {
     const departmentRecord: IDepartment = await this.departmentModel.findOne({ _id: user.department })
     return departmentRecord.leave_approval_level
