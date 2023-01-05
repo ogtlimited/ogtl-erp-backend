@@ -9,7 +9,6 @@ import LeaveFiltrationService from '@/services/leave/leave_filtration.service';
 import LeaveMailingService from '@services/leave/leave_mailing.service';
 import EmployeeModel from '@models/employee/employee.model';
 import projectModel from '@/models/project/project.model';
-import { Employee } from '@/interfaces/employee-interface/employee.interface';
 
 class HrLeaveApplicationService {
   public application = applicationModel;
@@ -145,6 +144,18 @@ class HrLeaveApplicationService {
     const leaveApplications = await this.filtrationService.getLeaveApplicationsHelperMethod(matchBy, query, this.application)
     return leaveApplications
   };
+  public async sendReminderForNonEmergencyLeaves(): Promise<ILeaveApplication[]> {
+    const leaveType = await this.leaveTypeModel.findOne({leave_type: /Emergency Leave/i})
+    const leaveApplication: ILeaveApplication[] = await this.application.find(
+      { hr_stage: false, status: "pending", leave_type_id:{$ne:leaveType._id}})
+    return leaveApplication
+  }
+  public async sendReminderForEmergencyLeaves(): Promise<ILeaveApplication[]> {
+    const leaveType = await this.leaveTypeModel.findOne({ leave_type: /Emergency Leave/i })
+    const leaveApplication: ILeaveApplication[] = await this.application.find(
+      { hr_stage: false, status: "pending", leave_type_id: leaveType._id })
+    return leaveApplication
+  }
   public async getEmployeesBasedOnLeaveTypesTaken(query): Promise<ILeaveApplication[]> {
     const leaveType = await this.leaveTypeModel.findOne({leave_type: query.leave_type})
     const leaveApplications: ILeaveApplication[] = await this.application.find(
@@ -189,13 +200,13 @@ class HrLeaveApplicationService {
     return leaveApplications
   };
   public async generateLeaveReport(query): Promise<any> {
-    const fromDate = query.from;
-    const toDate = query.to;
-    let data = { rejected: 0, approved: 0, pending: 0 }
+    const leavetypes = {}
+    const allLeaveTypes = await this.leaveTypeModel.find()
+    allLeaveTypes.map(type=> leavetypes[type.leave_type] = 0)
     const leaveReport = await this.application.aggregate([{
       $facet: {
         typesOfLeaveTaken: [{
-          '$match': { status: "approved", createdAt: { $gte: new Date(fromDate), $lte: new Date(toDate)}  }
+          '$match': { status: "approved", createdAt: { $gte: new Date(query.from), $lte: new Date(query.to)}  }
         },
         {
           $lookup: {
@@ -221,7 +232,7 @@ class HrLeaveApplicationService {
         }],
         leaveStatusCount: [{
           '$match': {
-            hr_stage: true, createdAt: { $gte: new Date(fromDate), $lte: new Date(toDate) }}
+            hr_stage: true, createdAt: { $gte: new Date(query.from), $lte: new Date(query.to) }}
         },
         {
           '$group': {
@@ -235,13 +246,10 @@ class HrLeaveApplicationService {
   }])
     const leaveStatusCount = leaveReport.find(report => report).leaveStatusCount
     const typesOfLeaveTaken = leaveReport.find(report => report).typesOfLeaveTaken
-    leaveStatusCount.map(status => {
-        if (status._id === "rejected") { data.rejected = status.total }
-        if (status._id === "pending") { data.pending = status.total }
-        if (status._id === "approved") { data.approved = status.total }
-      
-    })
-    return {leaveStatus: data, typesOfLeaveTaken}
+    let data = { rejected: 0, approved: 0, pending: 0 }
+    typesOfLeaveTaken.map(types => leavetypes[types._id] = types.total )
+    leaveStatusCount.map(status => data[status._id] = status.total)
+    return {leaveStatus: data, typesOfLeaveTaken: leavetypes}
   }
 }
 export default HrLeaveApplicationService;
