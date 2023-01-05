@@ -92,11 +92,6 @@ class LeadsLeaveApplicationService {
     if(leadLeaveApprovalLevel === departmentHighestLeaveApprovalLevel)
     return leadLeaveApprovalLevel
   }
-  public async sendReminderForLeaveActions(): Promise<ILeaveApplication[]> {
-    const leaveApplication: ILeaveApplication[] = await this.application.find(
-      { hr_stage:false, status: "pending" })
-    return leaveApplication
-  }
   public async getLeaveApplicationHistory(user: Employee, query): Promise<ILeaveApplication[]> {
     const userIdToString = user._id.toString()
     let matchBy = { $and: [{ acted_on: true }, { $or: [{ leave_approver: user._id }, { list_of_approvers: userIdToString }]}]} 
@@ -113,7 +108,8 @@ class LeadsLeaveApplicationService {
       .all([this.leaveMailingService.requestForLeaveModificationMail(leaveApproverFirstName, leaveApplicantFirstName, body.reasons, "abubakarmoses@yahoo.com")])
   }
   public async getAppealedLeavesApplicationsForLeads(user: Employee, query: Request): Promise<ILeaveApplication[]> {
-    let matchBy = { leave_approver: user._id, hr_stage: { $ne: true }, isAppealled: true, status: "pending" }
+    const user_id = user._id.toString()
+    let matchBy = { leave_approver: user._id, hr_stage: { $ne: true }, isAppealled: true, status: "pending", list_of_approvers: { $ne: user_id } }
     const leaveApplications = await this.filtrationService.getLeaveApplicationsHelperMethod(matchBy, query, this.application)
     return leaveApplications;
   }
