@@ -195,7 +195,7 @@ class HrLeaveApplicationService {
     const leaveReport = await this.application.aggregate([{
       $facet: {
         typesOfLeaveTaken: [{
-          '$match': { hr_stage: true, createdAt: { $gte: new Date(fromDate), $lte: new Date(toDate)}  }
+          '$match': { status: "approved", createdAt: { $gte: new Date(fromDate), $lte: new Date(toDate)}  }
         },
         {
           $lookup: {
