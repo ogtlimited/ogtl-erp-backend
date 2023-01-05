@@ -78,6 +78,18 @@ function birthdayMessage(first_name) {
     status_subject
    }
   }
+function leaveApplicationRejectionMessage(fullname, reasons) {
+  const status_message = "Hello " + fullname + ","
+    + "<br><br>" + " Your leave application has been rejected due to the following reasons:"
+    + "<br><br>" + reasons + "."
+    + "<br><br>" + " Best regards."
+    + "<br><br>"
+  const status_subject = "Leave Status"
+  return {
+    status_message,
+    status_subject
+  }
+}
 
   function leadsLeaveNotificationMessage(lead_fullname, applicant, ogId) {
     const message = "Hello "+lead_fullname+","
@@ -93,7 +105,8 @@ function birthdayMessage(first_name) {
 
   function LeaveRejectionHrNotificationMessage(lead_fullname, applicant, ogId, hr, reasons) {
     const message = "Hello " + hr + ","
-      + "<br><br>" + lead_fullname + " has rejected the leave application of " + applicant + " with OGID " + ogId + "."
+      + "<br><br>" + lead_fullname + " has rejected the leave application of " + applicant + " with OGID " + ogId + " due to the following reasons:"
+      + "<br><br>" + reasons + "."
       + "<br><br>" + " Best regards."
       + "<br><br>"
     const subject = "Leave Status"
@@ -151,4 +164,5 @@ const rejectionMessage = {
 export { terminationMessage , promotionMessage, OfferMessage,acceptedOfferMessage,rejectionMessage, 
   offerMessageFunc, ticketingMessage,resolvedTicketingMessage,clientAccountActivationNotice, 
   birthdayMessage, leaveApplicationStatusMessage, leadsLeaveNotificationMessage, LeaveRejectionHrNotificationMessage,
-  requestForLeaveModification, appealRejectedLeaveMessageToLead, appealRejectedLeaveMessageToTopLead };
+  requestForLeaveModification, appealRejectedLeaveMessageToLead, appealRejectedLeaveMessageToTopLead,
+  leaveApplicationRejectionMessage };
