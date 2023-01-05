@@ -48,6 +48,14 @@ class LeadsLeaveApplicationController {
       next(error);
     }
   };  
+  public getAppealedLeavesApplicationsForLeads = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const leaveApplications: any = await this.leadsLeaveApplicationService.getAppealedLeavesApplicationsForLeads(req.user, req.query);
+      res.status(200).json({ data: leaveApplications });
+    } catch (error) {
+      next(error);
+    }
+  };  
 }
 
 export default LeadsLeaveApplicationController;
