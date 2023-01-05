@@ -91,7 +91,7 @@ function birthdayMessage(first_name) {
      }
     }
 
-  function LeaveRejectionHrNotificationMessage(lead_fullname, applicant, ogId, hr) {
+  function LeaveRejectionHrNotificationMessage(lead_fullname, applicant, ogId, hr, reasons) {
     const message = "Hello " + hr + ","
       + "<br><br>" + lead_fullname + " has rejected the leave application of " + applicant + " with OGID " + ogId + "."
       + "<br><br>" + " Best regards."
