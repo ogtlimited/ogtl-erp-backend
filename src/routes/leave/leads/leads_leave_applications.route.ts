@@ -18,6 +18,7 @@ class LeadsLeaveApplicationsRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, authMiddleware, this.leadsLeaveApplicationController.getLeaveApplicationsForLeads);
+    this.router.get(`${this.path}/appealed-leaves`, authMiddleware, this.leadsLeaveApplicationController.getAppealedLeavesApplicationsForLeads);
     this.router.get(`${this.path}/history`, authMiddleware, this.leadsLeaveApplicationController.getLeaveApplicationHistory);
     this.router.post(`${this.path}/request-modification`, authMiddleware, this.leadsLeaveApplicationController.requestLeaveModification);
    }
