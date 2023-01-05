@@ -9,6 +9,7 @@ import LeaveFiltrationService from '@/services/leave/leave_filtration.service';
 import LeaveMailingService from '@services/leave/leave_mailing.service';
 import EmployeeModel from '@models/employee/employee.model';
 import projectModel from '@/models/project/project.model';
+import { Employee } from '@/interfaces/employee-interface/employee.interface';
 
 class HrLeaveApplicationService {
   public application = applicationModel;
@@ -146,11 +147,35 @@ class HrLeaveApplicationService {
   };
   public async getEmployeesBasedOnLeaveTypesTaken(query): Promise<ILeaveApplication[]> {
     const leaveType = await this.leaveTypeModel.findOne(query)
-    const leaveApplications: ILeaveApplication[] = await this.application.find({leave_type_id: leaveType?._id}).populate("employee_id")
+    const leaveApplications: ILeaveApplication[] = await this.application.find({leave_type_id: leaveType?._id})
+      .populate([{
+        path: 'employee_id',
+        populate: [{
+          path: 'department',
+        },{
+          path: 'designation',
+        }] 
+        },
+        { 
+          path: 'leave_type_id' 
+        } 
+        ])
     return leaveApplications
   };
   public async getEmployeesBasedOnLeaveStatus(query): Promise<ILeaveApplication[]> {
-    const leaveApplications: ILeaveApplication[] = await this.application.find(query).populate("employee_id")
+    const leaveApplications: ILeaveApplication[] = await this.application.find(query)
+      .populate([{
+        path: 'employee_id',
+        populate: [{
+          path: 'department',
+        }, {
+          path: 'designation',
+        }]
+      },
+      { 
+        path: 'leave_type_id' 
+      }
+      ])
     return leaveApplications
   };
   public async generateLeaveReport(query): Promise<any> {
