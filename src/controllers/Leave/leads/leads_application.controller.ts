@@ -26,7 +26,7 @@ class LeadsLeaveApplicationController {
   public rejectLeaveApplication = async (req: any, res: Response, next: NextFunction) => {
     try {
       const {leaveId} = req.params
-      const leaveApplications: any = await this.leadsLeaveApplicationService.rejectLeaveApplication(leaveId, req.user, req.body);
+      const leaveApplications: any = await this.leadsLeaveApplicationService.rejectLeaveApplication(leaveId, req.user, req.body, req.body);
       res.status(200).json({ data: leaveApplications});
     } catch (error) {
       next(error);
