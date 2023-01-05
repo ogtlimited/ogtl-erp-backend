@@ -146,8 +146,7 @@ class HrLeaveApplicationService {
     return leaveApplications
   };
   public async getEmployeesBasedOnLeaveTypesTaken(query): Promise<ILeaveApplication[]> {
-    const leaveType = await this.leaveTypeModel.findOne(query)
-    const leaveApplications: ILeaveApplication[] = await this.application.find({leave_type_id: leaveType?._id})
+    const leaveApplications: ILeaveApplication[] = await this.application.find(query)
       .populate([{
         path: 'employee_id',
         populate: [{
