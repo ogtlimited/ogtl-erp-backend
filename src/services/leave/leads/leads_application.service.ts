@@ -53,7 +53,7 @@ class LeadsLeaveApplicationService {
      }
     return leaveApplication;
   }
-  public async rejectLeaveApplication(leaveId: String, user: Employee, query: any): Promise<ILeaveApplication> {
+  public async rejectLeaveApplication(leaveId: String, user: Employee, query: any, body): Promise<ILeaveApplication> {
     const topLead = await this.employeeModel.findOne({_id:user.reports_to})
     const topLeadFirstName = topLead?.first_name.charAt(0) + topLead?.first_name.toLowerCase().slice(1)
     const leaveApplication = await this.application.findOneAndUpdate(
@@ -71,11 +71,11 @@ class LeadsLeaveApplicationService {
       throw new HttpException(400, 'leave application does not exist');
     }
      Promise.all(
-      [this.leaveMailingService.sendLeaveStatusNotificationMail(leaveApplication, "rejected", this.employeeModel),
-         this.leaveMailingService.sendRejectionNotificationToHr(leaveApplication, this.employeeModel, "HR", "abubakarmoses@yahoo.com")
+       [this.leaveMailingService.sendLeaveRejectionNotificationMail(leaveApplication, body.rejection_reason, this.employeeModel),
+         this.leaveMailingService.sendRejectionNotificationToHr(leaveApplication, this.employeeModel, "HR", "abubakarmoses@yahoo.com", body.rejection_reason)
     ])
     if (topLead !== null){
-      Promise.all([this.leaveMailingService.sendRejectionNotificationToHr(leaveApplication, this.employeeModel, topLeadFirstName, "abubakarmoses@yahoo.com")])
+      Promise.all([this.leaveMailingService.sendRejectionNotificationToHr(leaveApplication, this.employeeModel, topLeadFirstName, "abubakarmoses@yahoo.com", body.rejection_reason)])
     } 
     return leaveApplication;
   }
