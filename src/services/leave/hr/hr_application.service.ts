@@ -146,8 +146,13 @@ class HrLeaveApplicationService {
     return leaveApplications
   };
   public async getEmployeesBasedOnLeaveTypesTaken(query): Promise<ILeaveApplication[]> {
-    const leaveType = await this.leaveTypeModel.findOne(query)
-    const leaveApplications: ILeaveApplication[] = await this.application.find({leave_type_id: leaveType?._id})
+    const leaveType = await this.leaveTypeModel.findOne({leave_type: query.leave_type})
+    const leaveApplications: ILeaveApplication[] = await this.application.find(
+      {
+      status: "approved",
+      leave_type_id: leaveType?._id,
+      createdAt: { $gte: new Date(query.from), $lte: new Date(query.to) }
+     })
       .populate([{
         path: 'employee_id',
         populate: [{
@@ -163,7 +168,12 @@ class HrLeaveApplicationService {
     return leaveApplications
   };
   public async getEmployeesBasedOnLeaveStatus(query): Promise<ILeaveApplication[]> {
-    const leaveApplications: ILeaveApplication[] = await this.application.find(query)
+    const leaveApplications: ILeaveApplication[] = await this.application.find(
+      {
+        createdAt: { $gte: new Date(query.from), $lte: new Date(query.to)},
+        hr_stage: true,
+        status: query.status
+      })
       .populate([{
         path: 'employee_id',
         populate: [{
