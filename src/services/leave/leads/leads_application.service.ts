@@ -81,7 +81,7 @@ class LeadsLeaveApplicationService {
   }
   public async getLeadLeaveApprovalLevel(user: Employee): Promise<number>{
     const usersLeaveApprovalLevel: ILeaveApprovalLevel = await this.leaveApprovalLevelModel.findOne({designation_id: user?.designation})
-    return usersLeaveApprovalLevel.approval_level
+    return usersLeaveApprovalLevel?.approval_level
   }
   public async getImmediateSupervisorsLeaveApprovalLevel(user: Employee): Promise<number>{
     const leadLeaveApprovalLevel = await this.getLeadLeaveApprovalLevel(user)
