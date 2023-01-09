@@ -240,9 +240,9 @@ class LeaveApplicationService {
     const topLeadsEmail = topLeads?.company_email
     const topLeadsFirstName = topLeads?.first_name.charAt(0) + topLeads?.first_name.toLowerCase().slice(1)
     if (leaveApplications?.leave_approver !== null){
-      Promise.all([this.leaveMailingService.appealRejectedLeaveMailToLead(leaveApproverFirstName, leaveApplicantFullName, leaveApplications?.employee_id?.ogid, body.reasons, "abubakarmoses@yahoo.com")])}
+      Promise.all([this.leaveMailingService.appealRejectedLeaveMailToLead(leaveApproverFirstName, leaveApplicantFullName, leaveApplications?.employee_id?.ogid, body.reasons, "clicksketch60@gmail.com")])}
     if (topLeads!==null){
-      Promise.all([this.leaveMailingService.appealRejectedLeaveMailToTopLead(leaveApproverFullName, topLeadsFirstName, leaveApplicantFullName, leaveApplications?.employee_id?.ogid, body.reasons, "abubakarmoses@yahoo.com")])
+      Promise.all([this.leaveMailingService.appealRejectedLeaveMailToTopLead(leaveApproverFullName, topLeadsFirstName, leaveApplicantFullName, leaveApplications?.employee_id?.ogid, body.reasons, "clicksketch60@gmail.com")])
     } 
   }
   private async validateLeaveDay(date: Date, employee_project_id: string): Promise<boolean> {
