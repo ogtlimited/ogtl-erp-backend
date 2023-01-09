@@ -28,12 +28,18 @@ import PromotionRoute from './routes/employee-lifecycle/promotion.route';
 import TransferRoute from './routes/employee-lifecycle/transfers.route';
 import LeaveAllocationRoute from './routes/leave/allocation.route';
 import LeaveApplicationRoute from './routes/leave/application.route';
+import LeadsLeaveApplicationsRoute from './routes/leave/leads/leads_leave_applications.route';
+import LeaveApprovalLevelRoute from './routes/leave/leave_approval_levels.route';
+import HrLeaveApplicationsRoute from './routes/leave/hr_leave_applications.route';
+import LeadsLeaveRejectionRoute from './routes/leave/leads/leads_leave_rejection.route';
+import LeadsLeaveApprovalRoute from './routes/leave/leads/leads_leave_approval.route';
 // import LeaveTypeRoutes from './routes/leave/leave-type.route';
 // import LeavePeriodRoute from './routes/leave/period.route';
 // import LeavePolicyRoutes from './routes/leave/policy.route';
 import BranchRoute from './routes/employee/branch.route';
 import ContactDetailsRoute from './routes/employee/contact-details.route';
 import DesignationRoute from './routes/employee/designation.route';
+import DesignationByDepartmentRoute from './routes/employee/designation_by_departmentId.route';
 import EducationRoute from './routes/employee/education.route';
 import EmergencyContactRoute from './routes/employee/emergency-contact.route';
 import EmployeeTypeRoute from './routes/employee/employee-type.route';
@@ -81,6 +87,7 @@ import EmailRoute from '@routes/notification/email.route';
 const socketio = require('socket.io');
 
 import LeaveSettingsRoute from './routes/leave/leave-settings.route';
+import LeaveTypeRoute from './routes/leave/leave_type.route';
 import PurchaseOrderRoute from './routes/assets/purchase-order.route';
 import AssetRoute from './routes/assets/assets.route';
 import MaintenanceReportRoute from '@routes/maintenance-report/maintenance_report.route';
@@ -135,10 +142,17 @@ const app = new App([
   new TransferRoute(),
   new LeaveAllocationRoute(),
   new LeaveApplicationRoute(),
+  new LeadsLeaveApplicationsRoute(),
+  new LeaveApprovalLevelRoute(),
+  new HrLeaveApplicationsRoute(),
+  new LeadsLeaveRejectionRoute(),
+  new LeadsLeaveApprovalRoute(),
   new LeaveSettingsRoute(),
+  new LeaveTypeRoute(),
   new BranchRoute(),
   new ContactDetailsRoute(),
   new DesignationRoute(),
+  new DesignationByDepartmentRoute(),
   new EducationRoute(),
   new EmployeeTypeRoute(),
   new EmergencyContactRoute(),
