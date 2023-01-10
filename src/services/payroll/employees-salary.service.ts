@@ -51,47 +51,23 @@ class EmployeeSalaryService {
 
   //remember to validate salary structure and employees for matching project and departments
   //refactor. consider getting all employees.
-  public async create(info): Promise<any> {
-    const {data} = info
-    const salarySetting = await salarySettingModel.findOne({active: true})
-    const employeesSalary = [];
-    const nonExistingEmployees = []
-    for(let idx = 0; idx < data.length; idx++){
-      const record = data[idx]
-      const employeeInfo  = await EmployeeModel.findOne({company_email: record.company_email}).populate({path: 'department'});
-      if(employeeInfo.department == null){
-        nonExistingEmployees.push(employeeInfo)
-      }
-      if(!employeeInfo){
-        nonExistingEmployees.push(record)
-        continue
-      }
-      const result = await EmployeeSalaryService.salaryGeneratorHelper(record, employeeInfo, salarySetting)
-      result.employeeId = employeeInfo._id
-      result.departmentId = employeeInfo.department
-      result.projectId = employeeInfo.projectId
-      const existingSalary  = await employeesSalaryModel.findOne({employeeId: result.employeeId});
-
-      if(existingSalary){
-        const updateSalary = await employeesSalaryModel.findOneAndUpdate({employeeId: existingSalary.employeeId},result, {
-          new: true
-        })
-        if(!updateSalary){
-          throw new HttpException(404, 'employee salary record does not exist')
-        }
-      } else {
-        employeesSalary.push(result);
-      }
-     }
-
-    await employeesSalaryModel.insertMany(employeesSalary)
-    return `${employeesSalary.length} record(s) uploaded successfully`
+  public async create(info, user): Promise<any> {
+    const salarySetting: ISalarySetting = await salarySettingModel.findOne({ active: true })
+    const employeeInfo = await EmployeeModel.findOne({ company_email: info.company_email }).populate({ path: 'department' });
+    const employeeSalaryExist = await this.employeeSalary.findOne({employeeId: employeeInfo._id})
+    if (employeeSalaryExist) throw new HttpException(409, 'Salary already exist');
+    const result = await EmployeeSalaryService.salaryGeneratorHelper(info, employeeInfo, salarySetting)
+    result.employeeId = employeeInfo._id
+    result.departmentId = employeeInfo.department
+    result.projectId = employeeInfo.projectId
+    result.addedBy = user._id
+    return await employeesSalaryModel.create(result)
 
   }
 
 
   public async updateEmployeeSalary(payload) {
-    const salarySetting = await salarySettingModel.findOne({ active: true });
+    const salarySetting: ISalarySetting = await salarySettingModel.findOne({ active: true });
     const employeeInfo = await EmployeeModel.findOne({ company_email: payload.company_email }).populate({ path: 'department' });
     if (!employeeInfo) {
       throw new HttpException(404, 'employee does not exist');
