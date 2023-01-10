@@ -61,36 +61,6 @@ class EmployeeSalaryService {
     result.departmentId = employeeInfo.department
     result.projectId = employeeInfo.projectId
     result.addedBy = user._id
-     
-      
-    // for(let idx = 0; idx < data.length; idx++){
-    //   const record = data[idx]
-    //   const employeeInfo  = await EmployeeModel.findOne({company_email: record.company_email}).populate({path: 'department'});
-    //   if(employeeInfo.department == null){
-    //     nonExistingEmployees.push(employeeInfo)
-    //   }
-    //   if(!employeeInfo){
-    //     nonExistingEmployees.push(record)
-    //     continue
-    //   }
-    //   const result = await EmployeeSalaryService.salaryGeneratorHelper(record, employeeInfo, salarySetting)
-    //   result.employeeId = employeeInfo._id
-    //   result.departmentId = employeeInfo.department
-    //   result.projectId = employeeInfo.projectId
-    //   const existingSalary  = await employeesSalaryModel.findOne({employeeId: result.employeeId});
-
-    //   if(existingSalary){
-    //     const updateSalary = await employeesSalaryModel.findOneAndUpdate({employeeId: existingSalary.employeeId},result, {
-    //       new: true
-    //     })
-    //     if(!updateSalary){
-    //       throw new HttpException(404, 'employee salary record does not exist')
-    //     }
-    //   } else {
-    //     employeesSalary.push(result);
-    //   }
-    //  }
-
     return await employeesSalaryModel.create(result)
 
   }
