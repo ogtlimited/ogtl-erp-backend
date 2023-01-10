@@ -7,7 +7,6 @@ import { isEmpty } from '@utils/util';
 import { CreateEmployeeSalaryDto, UpdateEmployeeSalaryDto } from '@dtos/payroll/employees-salary.dto';
 import salarySettingModel from '@models/payroll/salary-setting';
 import EmployeeModel from '@models/employee/employee.model';
-import { Request } from 'express';
 
 class EmployeeSalaryService {
   public employeeSalary = employeesSalaryModel;
@@ -53,7 +52,7 @@ class EmployeeSalaryService {
   //remember to validate salary structure and employees for matching project and departments
   //refactor. consider getting all employees.
   public async create(info, user): Promise<any> {
-    const salarySetting = await salarySettingModel.findOne({ active: true })
+    const salarySetting: ISalarySetting = await salarySettingModel.findOne({ active: true })
     const employeeInfo = await EmployeeModel.findOne({ company_email: info.company_email }).populate({ path: 'department' });
     const result = await EmployeeSalaryService.salaryGeneratorHelper(info, employeeInfo, salarySetting)
     result.employeeId = employeeInfo._id
@@ -96,7 +95,7 @@ class EmployeeSalaryService {
 
 
   public async updateEmployeeSalary(payload) {
-    const salarySetting = await salarySettingModel.findOne({ active: true });
+    const salarySetting: ISalarySetting = await salarySettingModel.findOne({ active: true });
     const employeeInfo = await EmployeeModel.findOne({ company_email: payload.company_email }).populate({ path: 'department' });
     if (!employeeInfo) {
       throw new HttpException(404, 'employee does not exist');
