@@ -54,6 +54,8 @@ class EmployeeSalaryService {
   public async create(info, user): Promise<any> {
     const salarySetting: ISalarySetting = await salarySettingModel.findOne({ active: true })
     const employeeInfo = await EmployeeModel.findOne({ company_email: info.company_email }).populate({ path: 'department' });
+    const employeeSalaryExist = await this.employeeSalary.findOne({employeeId: employeeInfo._id})
+    if (employeeSalaryExist) throw new HttpException(409, 'Salary already exist');
     const result = await EmployeeSalaryService.salaryGeneratorHelper(info, employeeInfo, salarySetting)
     result.employeeId = employeeInfo._id
     result.departmentId = employeeInfo.department
