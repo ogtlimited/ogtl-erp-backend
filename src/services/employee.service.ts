@@ -120,7 +120,7 @@ class EmployeeService {
     const createEmployeeData: Employee = await this.Employees.create({ ...EmployeeData, password: hashedPassword, ogid: newOgid });
     const idRequestData = {
       employee_id: createEmployeeData._id,
-      date: createEmployeeData.created_at,
+      date: (new Date()).toISOString(),
       notes: 'None',
     };
     this.idRequestService.createIdRequest(idRequestData).then(result => {
