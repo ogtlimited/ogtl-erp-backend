@@ -106,10 +106,9 @@ class EmployeeService {
     const randomstring = Math.random().toString(36).slice(2);
     const hashedPassword = await bcrypt.hash(randomstring, 10);
     const newOgid = this.generateOGID();
-    if (!EmployeeData.department) {
-      EmployeeData.department = null;
-    }
-
+    if (!EmployeeData.department) EmployeeData.department = null;
+    if (!EmployeeData.projectId) EmployeeData.projectId = null;
+    if (!EmployeeData.default_shift) EmployeeData.default_shift = null;
     const dateOfJoining = moment(EmployeeData['date_of_joining']).add(1, 'M');
     const endOfyear = moment().endOf('year');
     const duration = Math.abs(moment(dateOfJoining).diff(endOfyear, 'months', true)).toFixed(0);
@@ -117,16 +116,17 @@ class EmployeeService {
     // console.log(dateOfJoining, endOfyear, duration)
     // console.log(endOfyear)
     console.log(EmployeeData['leaveCount']);
+    const employee: Employee = await this.Employees.findOne({company_email: EmployeeData.company_email})
+    if (employee) throw new HttpException(409, 'Employee already exist');
     const createEmployeeData: Employee = await this.Employees.create({ ...EmployeeData, password: hashedPassword, ogid: newOgid });
     const idRequestData = {
       employee_id: createEmployeeData._id,
-      date: createEmployeeData.created_at,
+      date: createEmployeeData.createdAt,
       notes: 'None',
     };
     this.idRequestService.createIdRequest(idRequestData).then(result => {
       console.log('id Request Created');
     });
-
     return createEmployeeData;
   }
   public async createMultipleEmployee(EmployeeData: any): Promise<any> {
