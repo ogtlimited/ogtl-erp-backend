@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import { IsString, IsNumber } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsBoolean } from 'class-validator';
 
 export class CreateDeductionDto {
   @IsString()
@@ -11,7 +11,7 @@ export class CreateDeductionDto {
   public employeeId: string;
 
 
-  @IsString()
+  @IsBoolean()
   public useDailyRate: boolean;
 
   // @IsNumber()
@@ -19,5 +19,6 @@ export class CreateDeductionDto {
   // public quantity: Number;
 
   @IsNumber()
+  @IsOptional()
   public amount : Number;
 }

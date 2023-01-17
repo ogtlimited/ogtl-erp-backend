@@ -12,6 +12,9 @@ import IndexRoute from '@routes/index.route';
 import UsersRoute from '@routes/users.route';
 import validateEnv from '@utils/validateEnv';
 import EmployeesRoute from '@routes/employee/employee.route';
+import DepartmentEmployeesRoute from '@routes/dashboard/hr/department_employees_count.route';
+import EmployeesGenderDesignation from '@/routes/dashboard/hr/employees_gender_designation.route';
+import DepartmentGenderCountRoute from '@routes/dashboard/hr/department_employees_gender_count.route';
 import ShiftTypeRoute from './routes/shift/shiftType';
 import AttendanceRoute from './routes/attendance/attendance.route';
 import IncentiveRoute from './routes/payroll/incentive.route';
@@ -25,12 +28,18 @@ import PromotionRoute from './routes/employee-lifecycle/promotion.route';
 import TransferRoute from './routes/employee-lifecycle/transfers.route';
 import LeaveAllocationRoute from './routes/leave/allocation.route';
 import LeaveApplicationRoute from './routes/leave/application.route';
+import LeadsLeaveApplicationsRoute from './routes/leave/leads/leads_leave_applications.route';
+import LeaveApprovalLevelRoute from './routes/leave/leave_approval_levels.route';
+import HrLeaveApplicationsRoute from './routes/leave/hr_leave_applications.route';
+import LeadsLeaveRejectionRoute from './routes/leave/leads/leads_leave_rejection.route';
+import LeadsLeaveApprovalRoute from './routes/leave/leads/leads_leave_approval.route';
 // import LeaveTypeRoutes from './routes/leave/leave-type.route';
 // import LeavePeriodRoute from './routes/leave/period.route';
 // import LeavePolicyRoutes from './routes/leave/policy.route';
 import BranchRoute from './routes/employee/branch.route';
 import ContactDetailsRoute from './routes/employee/contact-details.route';
 import DesignationRoute from './routes/employee/designation.route';
+import DesignationByDepartmentRoute from './routes/employee/designation_by_departmentId.route';
 import EducationRoute from './routes/employee/education.route';
 import EmergencyContactRoute from './routes/employee/emergency-contact.route';
 import EmployeeTypeRoute from './routes/employee/employee-type.route';
@@ -45,6 +54,7 @@ import ShiftAssignmentRoute from '@routes/shift/shiftAssignment';
 import JobOpeningRoute from '@routes/recruitment/jobOpening.route';
 import JobOfferRoute from '@routes/recruitment/jobOffer.route';
 import JobApplicantRoute from '@routes/recruitment/jobApplicant.route';
+import JobApplicantForRepSieversRoute from '@routes/recruitment/job_sievers.route';
 import TestRoute from '@routes/recruitment/test.route';
 import WarningLetterRoute from '@routes/pip/warningLetter.route';
 import LoanRoute from '@routes/loan/loan.route';
@@ -56,6 +66,11 @@ import LoanTypeRoute from '@routes/loan/loan-type.route';
 import LoanApplicationRoute from '@routes/loan/loan-application.route';
 import CoachingFormRoute from './routes/coaching/coachingForm.route';
 import ClientRoute  from '@routes/project/client.route';
+import ClientAccountRoute from './routes/project/client_account.route';
+import ClientProjectsRoute from './routes/project/client_projects.route';
+import ClientAccountActivationRoute from './routes/project/client_account_activation.route';
+import ClientAccountDeactivationRoute from './routes/project/client_account_deactivation.route';
+import ResetDefaultClientAccountPasswordRoute from './routes/project/client_account_reset_default_password.route';
 import AssetAssignmentRoute from '@/routes/assets/asset-assignment.route';
 import ProjectRoute from '@routes/project/project.route';
 import documentRoute from '@routes/project/document.route';
@@ -72,6 +87,7 @@ import EmailRoute from '@routes/notification/email.route';
 const socketio = require('socket.io');
 
 import LeaveSettingsRoute from './routes/leave/leave-settings.route';
+import LeaveTypeRoute from './routes/leave/leave_type.route';
 import PurchaseOrderRoute from './routes/assets/purchase-order.route';
 import AssetRoute from './routes/assets/assets.route';
 import MaintenanceReportRoute from '@routes/maintenance-report/maintenance_report.route';
@@ -110,6 +126,9 @@ const app = new App([
   new UsersRoute(),
   new AuthRoute(),
   new EmployeesRoute(),
+  new DepartmentGenderCountRoute(),
+  new DepartmentEmployeesRoute(),
+  new EmployeesGenderDesignation(),
   new ShiftTypeRoute(),
   new AttendanceRoute(),
   new IncentiveRoute(),
@@ -123,10 +142,17 @@ const app = new App([
   new TransferRoute(),
   new LeaveAllocationRoute(),
   new LeaveApplicationRoute(),
+  new LeadsLeaveApplicationsRoute(),
+  new LeaveApprovalLevelRoute(),
+  new HrLeaveApplicationsRoute(),
+  new LeadsLeaveRejectionRoute(),
+  new LeadsLeaveApprovalRoute(),
   new LeaveSettingsRoute(),
+  new LeaveTypeRoute(),
   new BranchRoute(),
   new ContactDetailsRoute(),
   new DesignationRoute(),
+  new DesignationByDepartmentRoute(),
   new EducationRoute(),
   new EmployeeTypeRoute(),
   new EmergencyContactRoute(),
@@ -140,6 +166,7 @@ const app = new App([
   new JobOpeningRoute(),
   new JobOfferRoute(),
   new JobApplicantRoute(),
+  new JobApplicantForRepSieversRoute(),
   new TestRoute(),
   new ShiftAssignmentRoute(),
   new WarningLetterRoute(),
@@ -149,6 +176,11 @@ const app = new App([
 
   new ProjectRoute(),
   new ClientRoute(),
+  new ClientAccountRoute(),
+  new ClientProjectsRoute(),
+  new ClientAccountActivationRoute(),
+  new ClientAccountDeactivationRoute(),
+  new ResetDefaultClientAccountPasswordRoute(),
   new AssetAssignmentRoute(),
   new CoachingFormRoute(),
   new scoreCardRoute(),
