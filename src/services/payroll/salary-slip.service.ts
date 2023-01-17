@@ -222,6 +222,7 @@ class SalarySlipService {
     //   reference_id: "1234543223"
     // })
 
+    // return salarySlipBatch;
 
     const records = [];
 

@@ -16,6 +16,11 @@ const BatchSchema: Schema = new Schema(
       type: Boolean,
       default: false
     },
+    status:{
+      type: String,
+      enum: ['generating', 'generated'],
+      default: 'generating'
+    },
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: 'Employee',
