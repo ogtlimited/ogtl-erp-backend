@@ -72,10 +72,10 @@ class LeadsLeaveApplicationService {
     }
      Promise.all(
        [this.leaveMailingService.sendLeaveRejectionNotificationMail(leaveApplication, body.rejection_reason, this.employeeModel),
-         this.leaveMailingService.sendRejectionNotificationToHr(leaveApplication, this.employeeModel, "HR", "clicksketch60@gmail.com", body.rejection_reason)
+         this.leaveMailingService.sendRejectionNotificationToHr(leaveApplication, this.employeeModel, "HR", "hr@outsourceglobal.com", body.rejection_reason)
     ])
     if (topLead !== null){
-      Promise.all([this.leaveMailingService.sendRejectionNotificationToHr(leaveApplication, this.employeeModel, topLeadFirstName, "clicksketch60@gmail.com", body.rejection_reason)])
+      Promise.all([this.leaveMailingService.sendRejectionNotificationToHr(leaveApplication, this.employeeModel, topLeadFirstName, "hr@outsourceglobal.com", body.rejection_reason)])
     } 
     return leaveApplication;
   }
@@ -105,7 +105,7 @@ class LeadsLeaveApplicationService {
     const leaveApproverFirstName = user.first_name.charAt(0) + user.first_name.toLowerCase().slice(1)
     const leaveApplicantEmail = leaveApplicant.company_email
     Promise
-      .all([this.leaveMailingService.requestForLeaveModificationMail(leaveApproverFirstName, leaveApplicantFirstName, body.reasons, "clicksketch60@gmail.com")])
+      .all([this.leaveMailingService.requestForLeaveModificationMail(leaveApproverFirstName, leaveApplicantFirstName, body.reasons, leaveApplicantEmail)])
   }
   public async getAppealedLeavesApplicationsForLeads(user: Employee, query: Request): Promise<ILeaveApplication[]> {
     const user_id = user._id.toString()
