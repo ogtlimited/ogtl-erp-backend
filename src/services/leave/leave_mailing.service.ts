@@ -18,21 +18,18 @@ class LeaveMailingService{
         const supervisor = applicant.leave_approver ? await employeeModel.findOne({_id: applicant?.leave_approver}): null
         const formattedSupervisorFirstName = supervisor?.first_name.charAt(0) + supervisor?.first_name.toLowerCase().slice(1)
         let url = ""
-        if (process.env.development) { url = "http://localhost:3001/auth/login"}
-        else if (process.env.production) { url = "http://erp.outsourceglobal.com/dashboard" }
+        if (process.env.NODE_ENV === "production") { url = "http://erp.outsourceglobal.com/dashboard" }
         else { url = "https://admin-erp-test.ogtlprojects.com/" }
         const {message, subject} = leadsLeaveNotificationMessage(formattedSupervisorFirstName, fullname, ogId) 
         const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}<a href=${url}>Click here to login</a>`
-        // EmailService.sendMail(supervisor.company_email, "hr@outsourceglobal.com", subject, message, body)
-        EmailService.sendMail("clicksketch60@gmail.com", "hr@outsourceglobal.com", subject, message, body)
+        EmailService.sendMail(supervisor.company_email, "hr@outsourceglobal.com", subject, message, body)
     }
     public async sendLeaveStatusNotificationMail(applicant, status, employeeModel){
         const leaveApplicant = await employeeModel.findOne({_id: applicant.employee_id})
         const formattedFirstName = leaveApplicant.first_name.charAt(0) + leaveApplicant.first_name.toLowerCase().slice(1)
         const {status_message, status_subject} = leaveApplicationStatusMessage(formattedFirstName, status)
         const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${status_message}`
-        EmailService.sendMail("clicksketch60@gmail", "hr@outsourceglobal.com", status_subject, status_message, body)
-        // EmailService.sendMail(leaveApplicant.company_email, "hr@outsourceglobal.com", status_subject, status_message, body)
+        EmailService.sendMail(leaveApplicant.company_email, "hr@outsourceglobal.com", status_subject, status_message, body)
     }
 
     public async sendLeaveRejectionNotificationMail(applicant, reasons, employeeModel) {
@@ -40,8 +37,7 @@ class LeaveMailingService{
         const formattedFirstName = leaveApplicant.first_name.charAt(0) + leaveApplicant.first_name.toLowerCase().slice(1)
         const { status_message, status_subject } = leaveApplicationRejectionMessage(formattedFirstName, reasons)
         const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${status_message}`
-        EmailService.sendMail("clicksketch60@gmail.com", "hr@outsourceglobal.com", status_subject, status_message, body)
-        // EmailService.sendMail(leaveApplicant.company_email, "hr@outsourceglobal.com", status_subject, status_message, body)
+        EmailService.sendMail(leaveApplicant.company_email, "hr@outsourceglobal.com", status_subject, status_message, body)
     }
 
     public async sendRejectionNotificationToHr(applicant, employeeModel, recipientName,recipientEmail, reasons) {
