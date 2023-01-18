@@ -121,6 +121,14 @@ class LeaveApplicationController {
       next(error);
     }
   };
+  public getNumberOfLeaveDaysApplied = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const leaveDaysApplied: any = await this.leaveApplicationService.getNumberOfLeaveDaysApplied(req.query);
+      res.status(200).json({ data: leaveDaysApplied });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default LeaveApplicationController;
