@@ -97,14 +97,6 @@ class LeaveApplicationController {
       next(error);
     }
   };
-  public getAllLeaveAprovers = async (req: any, res: Response, next: NextFunction) => {
-    try {
-      const leaveApprovers: any = await this.leaveApplicationService.getAllLeaveAprovers(req.user);
-      res.status(200).json({ data: leaveApprovers });
-    } catch (error) {
-      next(error);
-    }
-  };
   public getLeaveApplicationProgress = async (req: any, res: Response, next: NextFunction) => {
     try {
       const leaveApplicationProgress: any = await this.leaveApplicationService.getLeaveApplicationProgress(req.user);
