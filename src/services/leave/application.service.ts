@@ -221,6 +221,12 @@ class LeaveApplicationService {
     }
     return leaveApproversObj;
   }
+  public async getNumberOfLeaveDaysApplied(query): Promise<any> {
+    const leaveapplication: ILeaveApplication = await this.leaveApplicationModel.findOne(query);
+    if (!leaveapplication) throw new HttpException(404, 'Leave application not found');
+    const leaveDays = this.getBusinessDatesCount(leaveapplication.from_date, leaveapplication.to_date)
+    return leaveDays;
+  }
   public async appealRejectedLeave(query, body, user): Promise<void> {
     const leaveApplications = await this.leaveApplicationModel.findOne(query).populate("employee_id").populate("leave_approver")
     if (leaveApplications){
