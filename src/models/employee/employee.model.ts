@@ -2,6 +2,7 @@
 import { model, Schema, Document } from 'mongoose';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
 import NotificationHelper from '@/utils/helper/notification.helper';
+import { timeStamp } from 'console';
 
 const employeeSchema: Schema = new Schema({
   ogid: {
@@ -143,7 +144,11 @@ const employeeSchema: Schema = new Schema({
     type:Boolean,
     default:false
   }
-});
+}, 
+{
+  timestamps: true
+},
+);
 
 // employeeSchema.virtual('full_name').get(function () {
 //   return this.first_name + ' ' + this.last_name;

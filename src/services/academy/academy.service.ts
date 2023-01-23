@@ -13,6 +13,89 @@ class AcademyService {
     return academyRecords;
   }
 
+  public async generateAcademyReport(query:any): Promise<any> {
+    const overAllReportCount = await academyModel.aggregate([
+        {
+          '$match': {}
+        }, {
+          '$facet': {
+            'stacks': [
+              {
+                '$group': {
+                  '_id': '$stack', 
+                  'total': {
+                    '$count': {}
+                  }
+                }
+              }
+            ], 
+            'processing_stage': [
+              {
+                '$group': {
+                  '_id': '$process_stage', 
+                  'total': {
+                    '$count': {}
+                  }
+                }
+              }
+            ], 
+            'engagement_mode': [
+              {
+                '$group': {
+                  '_id': '$mode_of_engagement', 
+                  'total': {
+                    '$count': {}
+                  }
+                }
+              }
+            ], 
+            'gender': [
+              {
+                '$group': {
+                  '_id': '$gender', 
+                  'total': {
+                    '$count': {}
+                  }
+                }
+              }
+            ], 
+            'qualification': [
+              {
+                '$group': {
+                  '_id': '$qualification', 
+                  'total': {
+                    '$count': {}
+                  }
+                }
+              }
+            ], 
+            'interested_program': [
+              {
+                '$group': {
+                  '_id': '$interested_program', 
+                  'total': {
+                    '$count': {}
+                  }
+                }
+              }
+            ], 
+            'interview_status': [
+              {
+                '$group': {
+                  '_id': '$interview_status', 
+                  'total': {
+                    '$count': {}
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ])
+
+    return overAllReportCount;
+  }
+
     //Method for finding a single Academy applicant
   public async findacademyApplicantById(academyApplicantId: string): Promise<any> {
     if (isEmpty(academyApplicantId
@@ -67,6 +150,16 @@ class AcademyService {
   }
 
   public async formattedData(newData:any):Promise<any>{
+
+    newData["Please upload your CV."] = newData["Please upload your CV."]
+    .split("<plain>")[1].split("</plain>")[0]
+
+    newData['Favored Programming Language(s)'] = newData['Favored Programming Language(s)']
+    .split("<BR/>")
+
+    newData['Certifications in relation to the selected program above (if any)'] = newData['Certifications in relation to the selected program above (if any)']
+    .split("<BR/>")
+    
     const formattedData= {
       application_date: newData['Created At'],
       gender: newData['Please select your gender'],

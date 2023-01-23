@@ -17,6 +17,7 @@ class TicketingRoute implements Routes{
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, authMiddleware,this.ticketingController.getTicketings);
+    this.router.get(`${this.path}/status`, authMiddleware,this.ticketingController.getTicketsStatus);
     this.router.get(`${this.path}/:id`, authMiddleware,this.ticketingController.getTicketingsById);
     this.router.get(`${this.path}/employee/:employeeId`, authMiddleware,this.ticketingController.getTicketingsByEmployeeId);
     this.router.get(`${this.path}/department/:departmentId`, authMiddleware,this.ticketingController.getTicketingsByDepartmentId);
