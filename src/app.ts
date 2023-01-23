@@ -304,9 +304,7 @@ class App {
           const { message, subject } = leadsLeaveNotificationMessage(leaveApproverFirstName, leaveApplicant.first_name, leaveApplicant.ogid)
           const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
           if (leave.leave_approver!==null){
-             EmailService.sendMail("abubakarmoses@yahoo.com", "hr@outsourceglobal.com", subject, message, body)
-        //  EmailService.sendMail(leaveApprover.company_email, "hr@outsourceglobal.com", subject, message, body)
-
+              EmailService.sendMail(leaveApprover.company_email, "hr@outsourceglobal.com", subject, message, body)
             }
           })
       }
@@ -322,9 +320,7 @@ class App {
           const { message, subject } = leadsLeaveNotificationMessage(leaveApproverFirstName, leaveApplicant.first_name, leaveApplicant.ogid)
           const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
           if (leave.leave_approver !== null) {
-            EmailService.sendMail("abubakarmoses@yahoo.com", "hr@outsourceglobal.com", subject, message, body)
-            //  EmailService.sendMail(leaveApprover.company_email, "hr@outsourceglobal.com", subject, message, body)
-
+             EmailService.sendMail(leaveApprover.company_email, "hr@outsourceglobal.com", subject, message, body)
           }
         })
       }
