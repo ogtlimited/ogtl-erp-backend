@@ -54,6 +54,10 @@ export class CreateProjectDto {
 
   @IsString()
   public quality_analyst: string;
+  
+  @IsNumber()
+  @IsOptional()
+  public leave_approval_level: number;
 }
 
 export class UpdateProjectDto {
@@ -110,6 +114,10 @@ export class UpdateProjectDto {
     @IsOptional()
     @IsString()
     public quality_analyst: string;
+
+    @IsNumber()
+    @IsOptional()
+    public leave_approval_level: number;
   }
 
 

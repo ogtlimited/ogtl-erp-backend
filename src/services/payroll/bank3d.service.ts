@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { HttpException } from '@exceptions/HttpException';
+import { ReferenceGenerator } from '@services/payroll/reference-number.generator';
 
 export class Bank3DPaymentService {
   static async getBankToken() {
@@ -22,7 +23,7 @@ export class Bank3DPaymentService {
       FromAccountNumber: process.env.BANK_3D_From_Account_Number,
       FromBankCode: process.env.BANK_3D_From_Bank_Code,
       Narration: process.env.BANK_3D_Narration,
-      Reference: process.env.BANK_3D_Reference,
+      Reference: ReferenceGenerator.referenceNumberGenerator(),
       PaymentType: 'SALARY',
       DebitMode: 'BATCH',
     };
