@@ -10,5 +10,5 @@ export interface IClient {
   state : string;
   country : string;
   company : string;
-  deactivated?: boolean
+  project_id : string;
 }

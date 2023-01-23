@@ -18,7 +18,6 @@ class InvoiceRoute implements Routes {
 
     private initializeRoutes() {
         this.router.get(`${this.path}`,authMiddleware, this.InvoiceController.getInvoices);
-        this.router.get(`${this.path}/status`,authMiddleware, this.InvoiceController.getInvoiceStatus);
         this.router.get(`${this.path}/:id`,authMiddleware, this.InvoiceController.getInvoiceById);
         this.router.post(`${this.path}` ,  [validationMiddleware(CreateInvoiceDto, 'body'),authMiddleware],  this.InvoiceController.CreateInvoice);
         this.router.patch(`${this.path}/:id`,[validationMiddleware(UpdateInvoiceDto, 'body', true),authMiddleware],  this.InvoiceController.updateInvoice);

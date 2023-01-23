@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { model, Schema, Document } from 'mongoose';
 import { IClient } from '@interfaces/project-interface/client.interface';
-import { sendEmail } from '@utils/sendEmail';
 
 const clientSchema :Schema = new Schema(
   {
@@ -39,13 +38,14 @@ const clientSchema :Schema = new Schema(
       type: String,
         required: true
     },
+    project_id: {
+      type: Schema.Types.ObjectId,
+      ref: 'Project',
+    },
+
     company: {
       type: String,
-      required: true
-    },
-    deactivated: {
-      type: Boolean,
-      default: false
+        required: true
     },
 
   },
@@ -53,10 +53,6 @@ const clientSchema :Schema = new Schema(
     timestamps: true,
   }
 );
-
-clientSchema.post('save', function(doc) {
-  // sendEmail("New Client Account", "You client account has been created",[doc.email])
-});
 
 //Use a pre method to add , to range when you want to retrieve data
 const clientModel = model<IClient & Document>("Client", clientSchema);

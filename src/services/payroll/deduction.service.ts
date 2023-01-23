@@ -4,11 +4,14 @@ import { HttpException } from '@exceptions/HttpException';
 import deductionModel  from '@models/payroll/deduction.model';
 import { isEmpty } from '@utils/util';
 import moment from "moment";
+// import omit from 'lodash/omit'
 
 class DeductionService {
   private deductionModel = deductionModel;
-  private startOfDay = moment().startOf('day').format().toString();
-  private endOfDay = moment().endOf('day').format().toString();
+  // private deductionModel =  deductionModel;
+  private startOfDay = new Date(moment().startOf('day').format('YYYY-MM-DD')).toISOString();
+  private endOfDay = new Date(moment().endOf('day').format('YYYY-MM-DD')).toISOString();
+
   private startOfMonth = new Date(moment().startOf('month').format('YYYY-MM-DD')).toISOString();
   private endOfMonth   = new Date(moment().endOf('month').format('YYYY-MM-DD')).toISOString();
 
@@ -28,14 +31,17 @@ class DeductionService {
   public async create(data: CreateDeductionDto){
     if (isEmpty(data)) throw new HttpException(400, "Bad request");
     const dailyDeductionExists: any = await this.dailyDeductionCheck(data.employeeId, data.deductionTypeId)
-    if(dailyDeductionExists){
+    if(dailyDeductionExists.length == 1){
       throw new HttpException(401, "daily deduction already exists for employee")
     }
-    const consectiveDeductions = await this.dailyConsecutiveDeductionCheck(data.employeeId, data.deductionTypeId)
+
+    //daily rate check --> set usedDailyRate field for model
+    const consectiveDeductions = this.dailyConsecutiveDeductionCheck(data.employeeId, data.deductionTypeId)
     if(!consectiveDeductions){
       const createdData = await this.deductionModel.create(data);
       return createdData;
     }
+    data.amount = 10000
     const createdData = await this.deductionModel.create(data);
 
     //update previous deductions
@@ -44,51 +50,49 @@ class DeductionService {
     return createdData;
   }
 
-  private async dailyDeductionCheck(employeeId:string, deductionTypeId:string){
-   const dailyDeductions:any = await this.deductionModel.exists({
-     deductionTypeId,
+  private async dailyDeductionCheck(employeeId, deductionTypeId){
+   const dailyDeductions = await this.deductionModel.exists({
+      _id: deductionTypeId,
      employeeId,
      createdAt: {
         $gte: this.startOfDay,
         $lte: this.endOfDay
       }
    })
-
-    if(dailyDeductions){
-    return true;
-    }
-    else{
-      return false;
-    }
+    return dailyDeductions
   }
 
-  private async dailyConsecutiveDeductionCheck(employeeId:string, deductionTypeId:string){
+  private async dailyConsecutiveDeductionCheck(employeeId, deductionTypeId){
     const dailyDeductions: any = await this.deductionModel.exists({
-      deductionTypeId,
+      _id: deductionTypeId,
       employeeId,
       createdAt: {
         $gte: this.startOfMonth,
         $lte: this.endOfMonth
       }
     })
-    if(!dailyDeductions){
+
+    let days;
+    if(dailyDeductions.length <= 1){
       return false
     }
-    
 
     // eslint-disable-next-line prefer-const
-    let days  = dailyDeductions
+    days  = dailyDeductions
 
     const sequceIsConsecutive = (obj) =>{
       return Boolean(obj.reduce((output, lastest) => (output ?
         (Number(output) + 1=== Number(lastest) ? lastest : false)
         : false)));
     }
+
+
       let count = 0
       const dayArr = []
-      const dates = days?.map(e => new Date(e).getDate())
-      for(let i =0; i < dates?.length; i++){
+      const dates = days.map(e => new Date(e).getDate())
+      for(let i =0; i < dates.length; i++){
         let temp = dates.slice(i, i+3)
+        console.log(temp)
         if(temp.length === 3 && sequceIsConsecutive(temp)){
           count++
           dayArr.push(days.slice(i, i+3))

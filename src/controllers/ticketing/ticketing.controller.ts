@@ -84,16 +84,7 @@ public getTicketingsByDepartmentId = async (req:Request, res:Response, next:Next
     } catch (error) {
       next(error);
     }
-  }
-
-  public getTicketsStatus = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const ticketsStatus: any = await this.ticketingService.getTicketsStatus();
-      res.status(200).json({ data: ticketsStatus, success: 'true' });
-    } catch (error) {
-      next(error);
-    }
-  }
+  };
 
 }
 

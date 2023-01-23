@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsString,IsEnum ,IsOptional,IsNotEmpty, IsBoolean} from 'class-validator';
+import { IsString,IsEnum ,IsOptional,IsNotEmpty} from 'class-validator';
 import { IClient } from '@interfaces/project-interface/client.interface';
 
 export class CreateClientDto {
@@ -26,6 +26,7 @@ export class CreateClientDto {
   @IsString()
   public code : string;
 
+
   @IsNotEmpty()
   @IsString()
   public state : string;
@@ -38,10 +39,12 @@ export class CreateClientDto {
   @IsString()
   public company : string;
 
+
+
 }
 
 export class UpdateClientDto {
-  @IsNotEmpty()
+    @IsNotEmpty()
   @IsString()
   public client_name: string;
 
@@ -63,6 +66,7 @@ export class UpdateClientDto {
   @IsNotEmpty()
   @IsString()
   public code: string;
+
 
   @IsNotEmpty()
   @IsString()

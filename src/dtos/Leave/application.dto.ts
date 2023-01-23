@@ -1,28 +1,29 @@
 /* eslint-disable prettier/prettier */
 
-import {IsBoolean, IsDateString, IsNotEmpty, IsOptional, IsString} from 'class-validator';
+import {IsDate, IsDateString, IsOptional, IsString} from 'class-validator';
 
 export class CreateLeaveApplicationDTO{
 
     @IsString()
     public leave_type_id: string;
 
-    @IsString()
-    @IsOptional()
-    public reason_for_application: string;
-
-    @IsString()
-    @IsOptional()
-    public rejection_reason: string;
-
     @IsDateString()
     public from_date: Date;
 
     @IsDateString()
     public to_date : Date;
+    
+    @IsString()
+    public reason: string;
 
 }
 export class UpdateLeaveApplicationDTO{
+
+    @IsString()
+    public _id: string;
+
+    @IsString()
+    public employee_id: string;
 
     @IsString()
     public leave_type_id: string;
@@ -33,14 +34,15 @@ export class UpdateLeaveApplicationDTO{
     @IsDateString()
     public to_date : Date;
 
+    @IsString()
+    public leave_approver: string;
+
     @IsDateString()
     public posting_date: Date;
 
     @IsString()
-    @IsOptional()
-    public rejection_reason: string;
+    public reason: string;
 
     @IsString()
-    @IsOptional()
-    public reason_for_application: string;
+    public status: string;
 }

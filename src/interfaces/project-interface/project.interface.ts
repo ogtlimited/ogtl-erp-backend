@@ -18,5 +18,4 @@ export interface IProject {
   team_leads: string;
   team_members: string;
   leave_cap: string;
-  leave_approval_level?: number;
 }

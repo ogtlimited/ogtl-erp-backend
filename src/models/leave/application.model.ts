@@ -13,68 +13,50 @@ const applicationSchema : Schema = new Schema (
             required: true,
             ref: "Employee",
         },
-        project_id: {
+        employee_project_id: {
             type: mongoose.Schema.Types.ObjectId,
+            required: true,
             ref: "Project",
         },
-        department_id: {
-            type: mongoose.Schema.Types.ObjectId,
-            required: true,
-            ref: "Department",
-        },
+
         leave_type_id:{
-            type: mongoose.Schema.Types.ObjectId,
-            required: true,
-        ref: "LeaveType",
-        },
+                type: String,
+                enum:["Annual","Casual","Sick","Without Pay","Maternity"],
+                required: true,
+           },
+
         from_date:{
             type: Date,
             required: true,
         },
+
         to_date : {
             type: Date,
             required: true,
         },
+
         leave_approver: {
             type: mongoose.Schema.Types.ObjectId,
+            required: true,
             ref: "Employee",
         },
-        approval_level: {
-            type: Number,
-            default: 1,
-            required: true,
+        posting_date: {
+            type: Date,
         },
-        reason_for_application: String,
+
+        reason: {
+            type: String,
+        },
+
         status: {
             type: String,
-            enum: ['pending','rejected','cancelled', 'approved'],
-            default : 'pending',
-            required: true,
+            enum: ['open','approved by supervisor','rejected','cancelled', 'approved', 'rejected by supervisor'],
+            default : 'open',
         },
-        rejection_reason: String,
-        hr_stage: {
-            type: Boolean,
-            default: false,
-            required: true,
-        },
-        acted_on: {
-            type: Boolean,
-            default: false,
-            required: true,
-        },
-        list_of_approvers: {
-            type: [String],
-            default: []
-        },
-        first_approver: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Employee",
-        },
-        isAppealled: {
-            type: Boolean,
-            default: false,
-        }
+
+
     },
+
     {
         timestamps:true
     },
@@ -98,6 +80,6 @@ applicationSchema.post('delete', function(doc) {
 });
 
 
-const applicationModel = model('LeaveApplication', applicationSchema);
+const applicationModel = model<ILeaveApplication & Document>('LeaveApplication', applicationSchema);
 
 export default applicationModel;

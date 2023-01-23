@@ -125,11 +125,11 @@ class SalarySlipService {
       for (let index = 0; index < salarySlip.deductions.length; index++) {
         const deduction = salarySlip.deductions[index];
         console.log(deduction);
-        if (!additionalDeductions[deduction.deductionTypeId.title]) {
-          additionalDeductions[deduction.deductionTypeId.title] = deduction.amount;
+        if (!additionalDeductions[deduction.description]) {
+          additionalDeductions[deduction.description] = deduction.amount;
           continue;
         }
-        additionalDeductions[deduction.deductionTypeId.title] += deduction.amount;
+        additionalDeductions[deduction.description] += deduction.amount;
       }
     }
     // record.salaryStructure = salarySlip.salaryStructure
@@ -139,7 +139,7 @@ class SalarySlipService {
       employeeId: salarySlip.employeeId,
       department: salarySlip.departmentId,
     };
-    employeeSlip.netPay = salarySlip.salaryAfterDeductions;
+    employeeSlip.netPay = salarySlip.netPay;
     employeeSlip.deductionsBreakDown = salarySlip.deductions;
     employeeSlip.createdAt = salarySlip.createdAt;
     return { employeeSlip };
@@ -202,16 +202,8 @@ class SalarySlipService {
 
     */
     await this.salarySlipExistenceCheck();
-    // const token = await Bank3DPaymentService.getBankToken();
-    // const batchData = await Bank3DPaymentService.initiateBankPayment(token)
-
-    const batchData = {
-      BatchID: ReferenceGenerator.referenceNumberGenerator(),
-      Reference: ReferenceGenerator.referenceNumberGenerator()
-    }
-
-    // return batchData
-
+    const token = await Bank3DPaymentService.getBankToken();
+    const batchData = await Bank3DPaymentService.initiateBankPayment(token)
     const salarySlipBatch: IBatchInterface = await  BatchModel.create({
       batch_id: batchData.BatchID,
       reference_id: batchData.Reference
@@ -287,7 +279,7 @@ class SalarySlipService {
     })
     const deductions = await calculateEmployeeDeductions(employeeSalary.employeeId._id, employeeSalary.netPay);
     salarySlipConstructor.totalDeductions = deductions.totalDeductions;
-    // console.log(deductions);
+    console.log(deductions);
     salarySlipConstructor.salaryAfterDeductions = deductions.salaryAfterDeductions.toFixed(2);
     salarySlipConstructor.Amount = salarySlipConstructor.salaryAfterDeductions
     if (deductions.hasDeductions) {

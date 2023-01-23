@@ -85,9 +85,6 @@ const projectSchema: Schema = new Schema(
     team_members: {
       type: [Schema.Types.ObjectId],
       ref: 'Employee',
-    },
-    leave_approval_level: {
-      type: Number,
     }
   },
   {

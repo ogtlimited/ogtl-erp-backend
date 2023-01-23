@@ -30,7 +30,7 @@ class DeductionController {
     try {
       const newData: CreateDeductionDto = req.body;
       const createdData = await this.deductionService.create(newData); 
-      res.status(201).json({ data: createdData, message:"Deduction successfully added"});
+      res.status(201).json({ data: createdData});
     } catch (error) {
       next(error);
     }
