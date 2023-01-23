@@ -32,26 +32,10 @@ class HrLeaveApplicationController {
       next(error);
     }
   };
-  public getLeaveStatusCountForHrDashboardAnalytics = async (req: any, res: Response, next: NextFunction) => {
-    try {
-      const leaveStatus: any = await this.hrLeaveApplicationService.getLeaveStatusCountForHrDashboardAnalytics();
-      res.status(200).json({ data: leaveStatus});
-    } catch (error) {
-      next(error);
-    }
-  };
   public countEmployeesOnLeave = async (req: any, res: Response, next: NextFunction) => {
     try {
       const employeesOnLeave: any = await this.hrLeaveApplicationService.countEmployeesOnLeave();
       res.status(200).json({ data: employeesOnLeave});
-    } catch (error) {
-      next(error);
-    }
-  };
-  public getTypesOfLeaveTaken = async (req: any, res: Response, next: NextFunction) => {
-    try {
-      const typesOfLeaveTaken: any = await this.hrLeaveApplicationService.getTypesOfLeaveTaken();
-      res.status(200).json({ data: typesOfLeaveTaken});
     } catch (error) {
       next(error);
     }
