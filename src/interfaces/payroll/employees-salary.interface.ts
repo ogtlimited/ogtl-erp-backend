@@ -11,8 +11,7 @@ export interface IEmployeesSalary {
   monthlyIncomeTax: Number,
   monthlyEmployeePension: Number,
   netPay: Number,
-  updatedBy: String,
-  addedBy?: String,
+  updatedBy: String
   _id: String
 }
 
@@ -33,5 +32,4 @@ export interface ISalarySetting {
   pension?: number
   netPay?: number
   employeeId?:string
-  addedBy?: string,
 }

@@ -10,28 +10,11 @@ const designationSchema: Schema = new Schema(
             required: true,
             unique: true,
           },
-        department_id: {
-          type: mongoose.Schema.Types.ObjectId,
-          required: true,
-          ref: "Department",
-        },
-        project_id: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Project",
-        },
-        approval_level: {
-          type: String,
-          required: true,
-        },
-        slug: {
-          type: String,
-          required: true,
-          unique: true,
-        },
-        delete: {
-          type: Boolean,
-          default: false
-      }
+          slug: {
+            type: String,
+            required: true,
+            unique: true,
+          },
     },
     {
         timestamps: true,

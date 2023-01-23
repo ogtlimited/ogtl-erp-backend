@@ -190,25 +190,6 @@ class ProjectService {
         return drop;
     }
 
-    public async getProjectsStatus(): Promise<any> {
-        const projectStatus: any = await this.project.aggregate([
-            {
-              $facet: {
-                'Project status': [
-                     {
-                       '$group': {
-                         '_id': '$status', 
-                         'total': {
-                           '$count': {}
-                         }
-                       }
-                     }
-                   ]
-              }}
-          ]);
-        return projectStatus;
-    }
-
     private async findOne(id: string): Promise<IProject> {
         const findproject: IProject = await this.project.findOne({ _id: id }).populate("manager quality_analyst client_id creator team_leads").populate({
           path: 'team_members',

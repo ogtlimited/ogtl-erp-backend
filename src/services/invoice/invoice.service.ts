@@ -142,25 +142,6 @@ class InvoiceService {
          return deleteInvoiceById;
      }
 
-     public async getInvoiceStatus() : Promise<IInvoice>{
-        const invoiceStatus : any = await this.Invoices.aggregate([
-            {
-              $facet: {
-                'Invoice status': [
-                     {
-                       '$group': {
-                         '_id': '$status', 
-                         'total': {
-                           '$count': {}
-                         }
-                       }
-                     }
-                   ]
-              }}
-          ]);
-        return invoiceStatus;
-    }
-
      private static generateRefID(){
         return "OGI"+ Math.floor(1000 + Math.random() * 9000)
       }

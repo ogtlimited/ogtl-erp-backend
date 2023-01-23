@@ -26,10 +26,10 @@ class EmployeeSalaryController {
     }
   };
 
-  public create = async (req: any, res: Response, next: NextFunction) => {
+  public create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const newData = req.body;
-      const createdData = await this.salaryStructureAssignmentService.create(newData, req.user);
+      const createdData = await this.salaryStructureAssignmentService.create(newData);
       res.status(201).json({ data: createdData});
     } catch (error) {
       console.log(error);

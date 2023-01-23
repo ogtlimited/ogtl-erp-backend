@@ -3,7 +3,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { CreateClientDto, UpdateClientDto } from '@/dtos/project/client.dto';
 import { IClient } from '@/interfaces/project-interface/client.interface';
-import { IProject } from '@/interfaces/project-interface/project.interface'
 import ClientService from '@/services/project/client.service';
 
 class ClientController {
@@ -27,16 +26,6 @@ class ClientController {
             const clientId: string = req.params.clientId;
             const findClient: IClient = await this.clientService.find(clientId);
             res.status(200).json({ data: findClient, message: 'findOne' });
-        } catch (error) {
-            next(error);
-        }
-    };
-
-    public getClientProjects = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const clientId: string = req.params.clientId;
-            const clientProjects: IProject = await this.clientService.findClientProjects(clientId);
-            res.status(200).json({ data: clientProjects});
         } catch (error) {
             next(error);
         }

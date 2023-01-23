@@ -66,15 +66,23 @@ public async findDepartmentById(DepartmentId:string) : Promise<IDepartment>{
      */
 
      public async updateDepartment(DepartmentId:string,DepartmentData: UpdateDepartmentDto)  : Promise<IDepartment>{
+      console.log(DepartmentData)
+        //Check if data is empty
         if (isEmpty(DepartmentData)) throw new HttpException(400, "No data provided");
+        console.log(DepartmentData)
         const updateDepartmentById: IDepartment = await this.Departments.findByIdAndUpdate({
-            _id: DepartmentId},
-            DepartmentData,
-           { new: true });
+            _id: DepartmentId
+          },
+          {
+            $set: {department: DepartmentData.department}
+          },
+          { new: true });
         if(!updateDepartmentById) throw new HttpException(409, "Department doesn't exist");
          return updateDepartmentById;
    } 
 
+
+     //deletes existing Department
      public async deleteDepartment(DepartmentId:string) : Promise<IDepartment>{
         const deleteDepartmentById : IDepartment = await this.Departments.findByIdAndDelete(DepartmentId);
         if(!deleteDepartmentById) throw new HttpException(409, "Department doesn't exist");

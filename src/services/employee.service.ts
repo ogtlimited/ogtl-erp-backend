@@ -26,11 +26,9 @@ import { IShiftType } from '@/interfaces/shift-interface/shift_type.interface';
 import TerminationService from './employee-lifecycle/termination.service';
 import { IEmployeeStat } from './../interfaces/employee-stat/employee-stat.interface';
 import IdRequestService from './procurement/idrequest.service';
-const mongoose = require('mongoose')
 
 class EmployeeService {
   // eslint-disable-next-line prettier/prettier
-  private MAX_LIMIT:number = 50;
   public Employees = EmployeeModel;
   public Department = departmentModel;
   public Designation = DesignationModel;
@@ -39,6 +37,7 @@ class EmployeeService {
   public employeeStatModel = EmployeeStatModel;
   public TerminationService = new TerminationService();
   private idRequestService = new IdRequestService();
+
   public async findAllEmployee(): Promise<Employee[]> {
     const Employees: Employee[] = await this.Employees.find().populate('default_shift designation department branch projectId reports_to role');
     return Employees;
@@ -106,9 +105,10 @@ class EmployeeService {
     const randomstring = Math.random().toString(36).slice(2);
     const hashedPassword = await bcrypt.hash(randomstring, 10);
     const newOgid = this.generateOGID();
-    if (!EmployeeData.department) EmployeeData.department = null;
-    if (!EmployeeData.projectId) EmployeeData.projectId = null;
-    if (!EmployeeData.default_shift) EmployeeData.default_shift = null;
+    if (!EmployeeData.department) {
+      EmployeeData.department = null;
+    }
+
     const dateOfJoining = moment(EmployeeData['date_of_joining']).add(1, 'M');
     const endOfyear = moment().endOf('year');
     const duration = Math.abs(moment(dateOfJoining).diff(endOfyear, 'months', true)).toFixed(0);
@@ -116,17 +116,16 @@ class EmployeeService {
     // console.log(dateOfJoining, endOfyear, duration)
     // console.log(endOfyear)
     console.log(EmployeeData['leaveCount']);
-    const employee: Employee = await this.Employees.findOne({company_email: EmployeeData.company_email})
-    if (employee) throw new HttpException(409, 'Employee already exist');
     const createEmployeeData: Employee = await this.Employees.create({ ...EmployeeData, password: hashedPassword, ogid: newOgid });
     const idRequestData = {
       employee_id: createEmployeeData._id,
-      date: createEmployeeData.createdAt,
+      date: createEmployeeData.created_at,
       notes: 'None',
     };
     this.idRequestService.createIdRequest(idRequestData).then(result => {
       console.log('id Request Created');
     });
+
     return createEmployeeData;
   }
   public async createMultipleEmployee(EmployeeData: any): Promise<any> {
@@ -333,379 +332,6 @@ class EmployeeService {
   genEmail(first_name: string, last_name: string) {
     return first_name.toLowerCase() + '.' + last_name.toLowerCase() + '@outsourceglobal.com';
   }
-
-  public async getEmployeesHeadCount(): Promise<any>{
-    const headCount: any = await this.Employees.aggregate([
-        {
-          '$group': {
-            '_id': '$status', 
-            'total': {
-              '$count': {}
-            }
-          }
-        }
-    ]);
-    return {headCount}
-  }
-
-  public async getGenderCount(): Promise<any>{
-    const genderCount: any = await this.Employees.aggregate([
-        {
-            '$match':{
-              'status': 'active'
-            }
-        },
-        {
-          '$group': {
-            '_id': '$gender', 
-            'total': {
-              '$count': {}
-            }
-          }
-        }
-    ])
-    return {genderCount}
-  }
-
-  public async getEmployeesByGender(gender: string, searchQuery: any): Promise<any>{
-    const matchBy = {status:"active", gender:gender}
-    const employeesByGender: any = await this.getEmployeesByGenderHelperMethod(matchBy, searchQuery)
-    return { employeesByGender } 
-}
-
-private async getEmployeesByGenderHelperMethod(matchBy,searchQuery:any): Promise<any> {
-    const page = parseInt(searchQuery?.page) || 1;
-    let limit: number;
-    if(!searchQuery.limit){
-      limit = 10
-    }
-    else if(parseInt(searchQuery?.limit)>this.MAX_LIMIT){
-      limit = this.MAX_LIMIT
-    }
-    else if(parseInt(searchQuery?.limit)){
-      limit = parseInt(searchQuery.limit)
-    }
-    const startIndex = (page-1) * limit;
-    const endIndex = page * limit;
-    const filtrationQuery = this.filtrationQuerymethod(matchBy, searchQuery, startIndex, limit)
-    const employeesByGender: Employee[] = await this.Employees
-    .aggregate(filtrationQuery)
-    
-    const removeLimitAndSkip:any = filtrationQuery.filter(item => !item["$limit"] && !item["$skip"])
-    removeLimitAndSkip.push({$count:"Number of Docs"})
-    const countDocuments:any = await this.Employees.aggregate(removeLimitAndSkip)
-    let totalPage:number;
-    for(let count of countDocuments){
-       totalPage = count["Number of Docs"]
-    }
-    const pagination: any = {numberOfPages:Math.ceil(totalPage/limit)};
-    if(endIndex < totalPage){
-      pagination.next = {
-        page: page + 1,
-        limit: limit
-      }
-    }
-    if(startIndex > 0){
-      pagination.previous = {
-        page: page - 1,
-        limit: limit
-      }
-    }
-    return { 
-      employeesByGender: employeesByGender,
-      pagination: pagination,
-      totalEmployees: employeesByGender.length
-    }
-  }
-  
-
-  public async getGenderCountByDepartment(department_id: string): Promise<any>{
-    if(department_id === "not_specified"){
-      const matchBy = {status: "active", department: null}
-       return(
-        this.getGenderCountByDepartmentHelperMethod(matchBy)
-      )
-    }
-        
-     let matchBy = {status: "active", department: mongoose.Types.ObjectId(department_id)}
-      return(
-        this.getGenderCountByDepartmentHelperMethod(matchBy)
-      )
-  }
-
-  public async getGenderDiversityRatio(): Promise<any>{
-      const getAllGender = await Promise.all([this.getGenderCount()])
-      const numberOfMales = getAllGender.map<any>(value => {
-        return value.genderCount.find(gender => gender._id==="male")
-      })[0].total
-      const numberOfFemales = getAllGender.map<any>(value => {
-        return value.genderCount.find(gender => gender._id==="female")
-      })[0].total
-      const totalGenderCount = numberOfMales + numberOfFemales
-      return {genderRatio:` ${Math.round((numberOfFemales/totalGenderCount)*100)}% \- ${Math.round((numberOfMales/totalGenderCount)*100)}%`}
-  }
-
-  public async countEmployeesByDepartment(): Promise<any>{
-      const employeesByDepartment: any = await this.Employees.aggregate([
-          {
-            '$match':{
-              'status': 'active'
-            }
-          },
-          {
-            $lookup:{
-              from: "departments",
-              localField: "department",
-              foreignField: "_id",
-              as: "department"
-              }
-          },
-          {
-            $unwind: {path :"$department",
-            preserveNullAndEmptyArrays: true
-          }
-          }, 
-          {
-              '$group': {
-                '_id': '$department', 
-                'total': {
-                  '$count': {}
-                }
-              }
-            }       
-    ]);
-    return {employeesByDepartment}
-  }
-   public async getDesignationsByDepartment(department_id: string): Promise<any>{
-    if(department_id === "not_specified"){
-      const matchBy =  {
-          status: 'active',
-          department: null,
-          designation: { $ne: null } 
-        }
-       return(
-        this.getDesignationsByDepartmentHelperMethod(matchBy)
-      )
-    }
-        
-     let matchBy = {
-      status: "active", 
-      department: mongoose.Types.ObjectId(department_id),
-      designation: { $ne: null } 
-    }
-      return(
-        this.getDesignationsByDepartmentHelperMethod(matchBy)
-      )
-  }
-  public async getDesignationsGender(gender: string): Promise<any>{
-      const matchBy =  {
-          status: 'active',
-          gender: gender,
-        }
-       return(
-        this.getDesignationsByGenderHelperMethod(matchBy)
-      )
-  }
-  public async getEmployeesByDepartment(searchQuery:any, department_id: string): Promise<any>{
-    if(department_id === "not_specified"){
-      const matchBy = {status: "active", department: null}
-       return(
-        this.getEmployeesByDepartmentHelperMethod(matchBy, searchQuery)
-      )
-    }
-        let matchBy = {status: "active", department: mongoose.Types.ObjectId(department_id)}
-
-      return(
-        this.getEmployeesByDepartmentHelperMethod(matchBy, searchQuery)
-      )
-   }
-  private async getEmployeesByDepartmentHelperMethod(matchBy,searchQuery:any): Promise<any> {
-    const page = parseInt(searchQuery?.page) || 1;
-    let limit: number;
-    if(!searchQuery.limit){
-      limit = 10
-    }
-    else if(parseInt(searchQuery?.limit)>this.MAX_LIMIT){
-      limit = this.MAX_LIMIT
-    }
-    else if(parseInt(searchQuery?.limit)){
-      limit = parseInt(searchQuery.limit)
-    }
-
-    const startIndex = (page-1) * limit;
-    const endIndex = page * limit;
-    const filtrationQuery = this.filtrationQuerymethod(matchBy, searchQuery, startIndex, limit)
-    const employeesByDepartment: Employee[] = await this.Employees
-    .aggregate(filtrationQuery)
-    
-    const removeLimitAndSkip:any = filtrationQuery.filter(item => !item["$limit"] && !item["$skip"])
-    removeLimitAndSkip.push({$count:"Number of Docs"})
-    const countDocuments:any = await this.Employees.aggregate(removeLimitAndSkip)
-    let totalPage:number;
-    for(let count of countDocuments){
-       totalPage = count["Number of Docs"]
-    }
-    const pagination: any = {numberOfPages:Math.ceil(totalPage/limit)};
-    if(endIndex < totalPage){
-      pagination.next = {
-        page: page + 1,
-        limit: limit
-      }
-    }
-    if(startIndex > 0){
-      pagination.previous = {
-        page: page - 1,
-        limit: limit
-      }
-    }
-    return { 
-      employeesByDepartment: employeesByDepartment,
-      pagination: pagination,
-      totalEmployees: employeesByDepartment.length
-    }
-  }
-  
-  private filtrationQuerymethod(matchBy, searchQuery, startIndex:number, limit:number){ 
-    const filtrationQuery:any = [
-      {
-        $match: matchBy
-      },
-      {
-       $lookup:{
-         from: "departments",
-         localField: "department",
-         foreignField: "_id",
-         as: "department"
-      }
-      },
-      {
-       $unwind: {path :"$department",
-       preserveNullAndEmptyArrays: true
-      }
-      },
-      {
-       $lookup:{
-         from: "designations",
-         localField: "designation",
-         foreignField: "_id",
-         as: "designation"
-         }
-       },
-      {
-       $unwind: {path :"$designation",
-       preserveNullAndEmptyArrays: true
-     }
-     }
-     ]
-     if(searchQuery.search){
-      filtrationQuery.push(
-        {
-          $match:{
-            $or : [
-              { first_name:{$regex:searchQuery.search, $options:"i"}},
-              { last_name:{$regex:searchQuery.search, $options:"i"}},
-              { middle_name:{$regex:searchQuery.search, $options:"i"}},
-              { "designation.designation":{$regex:searchQuery.search, $options:"i"}}
-            ]
-          }
-        }
-      )
-      }
-      if(searchQuery.designation){
-      filtrationQuery.push(
-        {
-          $match: { "designation.designation":{$regex:searchQuery.designation, $options:"i"}}    
-         }
-      )
-      }
-    
-      if(searchQuery?.page){
-        filtrationQuery.push(
-          { $skip: startIndex },
-          )
-        }
-      if(searchQuery?.limit){
-        filtrationQuery.push(
-          { $limit: limit},
-          )
-        }
-      return filtrationQuery
-  }
-
-  private async getGenderCountByDepartmentHelperMethod(matchBy: any): Promise<any>{
-    const genderCountByDepartment = await this.Employees.aggregate([
-    {
-        '$match': matchBy
-
-    },
-    {
-        '$group': {
-          '_id': '$gender', 
-          'total': {
-            '$count': {}
-          }
-        }
-    }
-    ])
-    return {genderCountByDepartment}
-  }
-
-  private async getDesignationsByDepartmentHelperMethod(matchBy: any): Promise<any>{
-    const designationsByDepartment: any = await this.Employees.aggregate([
-        {
-          '$match': matchBy
-        },
-        {
-          $lookup:{
-            from: "designations",
-            localField: "designation",
-            foreignField: "_id",
-            as: "designation"
-            }
-        },
-        {
-          $unwind: {path :"$designation",
-          preserveNullAndEmptyArrays: true
-        }
-        },
-        {
-          '$group': {
-            '_id': '$designation', 
-            
-          }
-        }  
-  ]);
-  return {designationsByDepartment}
-}
-
-private async getDesignationsByGenderHelperMethod(matchBy: any): Promise<any>{
-  const designationsByGender: any = await this.Employees.aggregate([
-      {
-        '$match': matchBy
-      },
-      {
-        $lookup:{
-          from: "designations",
-          localField: "designation",
-          foreignField: "_id",
-          as: "designation"
-          }
-      },
-      {
-        $unwind: {path :"$designation",
-        preserveNullAndEmptyArrays: true
-      }
-      },
-      {
-        '$group': {
-          '_id': '$designation', 
-          
-        }
-      }  
-]);
-return {designationsByGender}
-}
-
 }
 
 export default EmployeeService;
