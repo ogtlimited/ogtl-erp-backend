@@ -24,15 +24,19 @@ import * as cron from 'node-cron';
 const { io } = require("@/utils/socket");
 const redis = require('redis');
 const client = redis.createClient({
-  host: "13.41.139.21",
+  host: "dev-redis-cluster-001.zv58bt.0001.euw2.cache.amazonaws.com",
   port: 6379,
-  password: "redis-auth",
+  password: "",
   username: ""
 });
 import LeaveApplicationService from "@services/leave/application.service";
+import HrLeaveApplicationService from "@services/leave/hr/hr_application.service";
+import employeeModel from "@models/employee/employee.model";
+import EmployeeBirthDayService from "./services/employee/employee_birthday.service";
 import EmployeeService from "./services/employee.service";
 const fs = require('fs')
-import moment from 'moment';
+import EmailService from '@/utils/email.service';
+import { leadsLeaveNotificationMessage, birthdayMessage } from '@/utils/message';
 
 const path = require('path')
 if (process.env.NODE_ENV !== "production") {
@@ -264,7 +268,7 @@ class App {
     //     await attendanceService.generateAttendance("project")
     //   }
     })
-    const task2 = cron.schedule('* 1 * * 1-5', async function() {
+      const task2 = cron.schedule('* 1 * * 1-5', async function() {
       const applicationService = new LeaveApplicationService()
       await applicationService.addLeavesForEmployees()
     })
@@ -277,8 +281,53 @@ class App {
       const leaveApp = new LeaveApplicationService()
       await leaveApp.updateAllLeaveCount()
     })
-    //  task.start()
-    //  task2.start()
+
+    const automatedEmployeesBirthdayMail = cron.schedule('0 8 * * *', async function() {
+      const employeeBirthday = new EmployeeBirthDayService()
+      const employeesDetails = await employeeBirthday.getTodaysCelebrantsDetails()
+      if(employeesDetails.length !== 0){
+        employeesDetails.map(employee=>{
+          const {message, subject} = birthdayMessage(employee.first_name)
+          const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
+           EmailService.sendMail(employee.email, "hr@outsourceglobal.com", subject, message, body)
+          })
+      }
+    })
+    const leadsLeaveApplicationActionReminderForNonEmergencyLeaves = cron.schedule('0 */24 * * *', async function() {
+      const hrLeaveApplicationService = new HrLeaveApplicationService()
+      const leaveApplication = await hrLeaveApplicationService.sendReminderForNonEmergencyLeaves()
+      if (leaveApplication.length !== 0){
+        leaveApplication.map(async (leave)=>{
+          const leaveApplicant = await employeeModel.findOne({_id: leave.employee_id})
+          const leaveApprover = await employeeModel.findOne({_id: leave.leave_approver})
+          const leaveApproverFirstName = leaveApprover?.first_name.charAt(0) + leaveApprover?.first_name.toLowerCase().slice(1)
+          const { message, subject } = leadsLeaveNotificationMessage(leaveApproverFirstName, leaveApplicant.first_name, leaveApplicant.ogid)
+          const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
+          if (leave.leave_approver!==null){
+              EmailService.sendMail(leaveApprover.company_email, "hr@outsourceglobal.com", subject, message, body)
+            }
+          })
+      }
+    })
+    const leadsLeaveApplicationActionReminderForEmergencyLeaves = cron.schedule('0 */1 * * *', async function () {
+      const hrLeaveApplicationService = new HrLeaveApplicationService()
+      const leaveApplication = await hrLeaveApplicationService.sendReminderForEmergencyLeaves()
+      if (leaveApplication.length !== 0) {
+        leaveApplication.map(async (leave) => {
+          const leaveApplicant = await employeeModel.findOne({ _id: leave.employee_id })
+          const leaveApprover = await employeeModel.findOne({ _id: leave.leave_approver })
+          const leaveApproverFirstName = leaveApprover?.first_name.charAt(0) + leaveApprover?.first_name.toLowerCase().slice(1)
+          const { message, subject } = leadsLeaveNotificationMessage(leaveApproverFirstName, leaveApplicant.first_name, leaveApplicant.ogid)
+          const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
+          if (leave.leave_approver !== null) {
+             EmailService.sendMail(leaveApprover.company_email, "hr@outsourceglobal.com", subject, message, body)
+          }
+        })
+      }
+    })
+    leadsLeaveApplicationActionReminderForEmergencyLeaves.start()
+    leadsLeaveApplicationActionReminderForNonEmergencyLeaves.start()
+     automatedEmployeesBirthdayMail.start
      employeeStat.start()
      LeaveCountUpdate.start()
   }

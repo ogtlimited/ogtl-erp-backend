@@ -82,6 +82,15 @@ class InvoiceController {
       next(error);
     }
   };
+
+  public getInvoiceStatus = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const invoiceStatus: IInvoice = await this.InvoiceService.getInvoiceStatus();
+      res.status(200).json({ data: invoiceStatus, success: 'true' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default InvoiceController;
