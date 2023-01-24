@@ -1,0 +1,20 @@
+first_name,last_name,company_email,gender,date_of_joining,middle_name,default_shift,actual_shift_start,actual_shift_end,department,reports_to,designation,isAdmin,status,gender,employeeType,projectId,ogid,branch
+AKUDINMA,UGORJI,henrietta.ugorji@outsourceglobal.net,female,12/8/2022,HENRIETTA,MORNING,7:00,16:00,Operations,Team Lead,AGENT,false,ACTIVE,female,FullTime,220549,OG220549,61922dd6258184bec83103b4
+UCHENNA,GWACHAM,sandra.gwacham@outsourceglobal.net,female,12/12/2022,SANDRA,MORNING,8:00,16:00,Operations,Team Lead,AGENT,false,ACTIVE,female,FullTime,220150,OG220150,61922dd6258184bec83103b4
+JONATHAN,OMOLUABI,jonathan.olusola@outsourceglobal.net,male,12/12/2022,OLUSOLA,MORNING,8:00,16:00,Operations,Team Lead,AGENT,false,ACTIVE,male,FullTime,220250,OG220250,61922dd6258184bec83103b4
+AISHA,MUHAMMED,aisha.ado@outsourceglobal.net,female,12/12/2022,,MORNING,8:00,16:00,Operations,Team Lead,AGENT,false,ACTIVE,female,FullTime,220350,OG220350,61922dd6258184bec83103b4
+JOSEPH,NWAKAMA,joseph.nwakama@outsourceglobal.net,male,12/12/2022,,MORNING,8:00,17:00,Operations,Team Lead,AGENT,false,ACTIVE,male,FullTime,220450,OG220450,61922dd6258184bec83103b4
+JOEL,DALONG,joel.dalong@outsourceglobal.net,male,12/13/2022,,MORNING,8:30,17:00,Operations,Team Lead,AGENT,false,ACTIVE,male,FullTime,220550,OG220550,61922dd6258184bec83103b4
+ESTHER,OKWORI,esther.okwori@outsourceglobal.net,female,12/13/2022,MICHAEL,MORNING,8:30,17:00,Operations,Team Lead,AGENT,false,ACTIVE,female,FullTime,220650,OG220650,61922dd6258184bec83103b4
+GREATNESS,EZEONWUKA,greatness.ezeonwuka@outsourceglobal.net,female,12/8/2022,VIVIAN,MORNING,8:30,17:00,Operations,Team Lead,AGENT,false,ACTIVE,female,FullTime,220349,OG220349,61922dd6258184bec83103b4
+FATIMA,SANNI,fatima.sanni@outsourceglobal.net,female,12/8/2022,JESSICA,MORNING,8:30,17:00,Operations,Team Lead,AGENT,false,ACTIVE,female,FullTime,220449,OG220449,61922dd6258184bec83103b4
+ADAM,MUSTAPHA,adam.mustapha@outsourceglobal.com,male,12/9/2022,,MORNING,9:00,17:00,Software Development,Team Lead,Software Tester,false,ACTIVE,male,FullTime,220149,OG220149,61922dd6258184bec83103b4
+ESTHER,ZEKERI,esther.zekeri@outsourceglobal.net,female,11/29/2022,FATU,MORNING,9:00,18:00,Operations,Team Lead,AGENT,false,ACTIVE,female,FullTime,220348,OG220348,61922dd6258184bec83103b4
+CHIOMA,IBEKWE,ibekwe.christiana@outsourceglobal.net,female,11/29/2022,CYNTHIA,MORNING,9:00,18:00,Operations,Team Lead,AGENT,false,ACTIVE,female,FullTime,220548,OG220548,61922dd6258184bec83103b4
+PRECIOUS,USMAN,precious.usman@outsourceglobal.net,female,12/7/2022,,EVENING,19:00,4:00,Operations,Team Lead,AGENT,false,ACTIVE,female,FullTime,220249,OG220249,61922dd6258184bec83103b4
+GRACE,POPOOLA,grace.popoola@outsourceglobal.net,female,12/16/2022,ATANDA,AFTERNOON,13:30,22:30,Operations,Team Lead,AGENT,false,ACTIVE,female,FullTime,220750,OG220750,61922dd6258184bec83103b4
+CHRISTIAN,ILOABUCHI,christian.iloabuchi@outsourceglobal.net,female,12/16/2022,JECINTA,AFTERNOON,13:30,22:30,Operations,Team Lead,AGENT,false,ACTIVE,female,FullTime,220850,OG220850,61922dd6258184bec83103b4
+LUKMAN,MUSA,lukman.musa@outsourceglobal.net,male,12/16/2022,ONORUOIZA,AFTERNOON,13:30,22:30,Operations,Team Lead,AGENT,false,ACTIVE,male,FullTime,220950,OG220950,61922dd6258184bec83103b4
+CHRISTOPHER,ODEY,odey.nkpe@outsourceglobal.net,male,12/13/2022,NKPE,AFTERNOON,13:30,22:30,Operations,Team Lead,AGENT,false,ACTIVE,male,FullTime,221050,OG221050,61922dd6258184bec83103b4
+RUTH,AJAKO,ajako.ruth@outsourceglobal.net,female,12/13/2022,OZAVIZE,AFTERNOON,13:30,22:00,Operations,Team Lead,AGENT,false,ACTIVE,female,FullTime,221150,OG221150,61922dd6258184bec83103b4
+ABDULQAWIYYU,HAMEED,adeiza.hameed@outsourceglobal.net,male,12/13/2022,ADEIZA,AFTERNOON,13:30,22:00,Operations,Team Lead,AGENT,false,ACTIVE,male,FullTime,221350,OG221350,61922dd6258184bec83103b4
