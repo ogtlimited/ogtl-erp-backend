@@ -16,7 +16,6 @@ import departmentModel from '@/models/department/department.model';
 import shiftTypeModel from '@models/shift/shift_type.model';
 import projectModel from '@/models/project/project.model';
 import EmployeeStatModel from '@/models/employee-stat/employee-stat.model';
-import { ObjectId } from 'mongodb';
 import moment from 'moment';
 import { IProject } from './../interfaces/project-interface/project.interface';
 import { Designation } from './../interfaces/employee-interface/designation.interface';
@@ -26,6 +25,7 @@ import { IShiftType } from '@/interfaces/shift-interface/shift_type.interface';
 import TerminationService from './employee-lifecycle/termination.service';
 import { IEmployeeStat } from './../interfaces/employee-stat/employee-stat.interface';
 import IdRequestService from './procurement/idrequest.service';
+import EmployeesMailingService from '@/services/employee/employee_mailing.service'
 const mongoose = require('mongoose')
 
 class EmployeeService {
@@ -39,6 +39,7 @@ class EmployeeService {
   public employeeStatModel = EmployeeStatModel;
   public TerminationService = new TerminationService();
   private idRequestService = new IdRequestService();
+  private employeesMailingService = new EmployeesMailingService();
   public async findAllEmployee(): Promise<Employee[]> {
     const Employees: Employee[] = await this.Employees.find().populate('default_shift designation department branch projectId reports_to role');
     return Employees;
@@ -127,6 +128,8 @@ class EmployeeService {
     this.idRequestService.createIdRequest(idRequestData).then(result => {
       console.log('id Request Created');
     });
+    // Promise.all([this.employeesMailingService.sendIntroductoryMail(EmployeeData.first_name, EmployeeData.company_email)])
+    Promise.all([this.employeesMailingService.sendIntroductoryMail(EmployeeData.first_name, EmployeeData.company_email)])
     return createEmployeeData;
   }
   public async createMultipleEmployee(EmployeeData: any): Promise<any> {
