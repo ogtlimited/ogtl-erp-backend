@@ -129,7 +129,7 @@ class EmployeeService {
       console.log('id Request Created');
     });
     // Promise.all([this.employeesMailingService.sendIntroductoryMail(EmployeeData.first_name, EmployeeData.company_email)])
-    Promise.all([this.employeesMailingService.sendIntroductoryMail(EmployeeData.first_name, EmployeeData.company_email)])
+    Promise.all([this.employeesMailingService.sendIntroductoryMail(createEmployeeData.first_name, createEmployeeData.ogid, createEmployeeData.company_email)])
     return createEmployeeData;
   }
   public async createMultipleEmployee(EmployeeData: any): Promise<any> {
