@@ -21,14 +21,15 @@ const acceptedOfferMessage ={
   subject: "New Employee"
 }
 
-const introductoryMail = (employee_firstname, employee_email) => {
+const introductoryMail = (employee_firstname, ogid, employee_email) => {
   return{
   message: "Hello " + employee_firstname + ","
     + "<br><br>" + " Welcome aboard, we look forward to working with you!"
-    + "<br><br>" + " Your company's email address is " + employee_email + "."
-    + " Please click on the link below to log into OGTL ERP,"
-    + "<br><br>" + " Thank you",
-  subject: "Employee Onboarding"
+    + "<br><br>" + " Your OGID is " + ogid + " and your company's email address is " + employee_email + "."
+    + " Please click on the link below to log into OGTL ERP with your email,"
+    + "<br><br>" + " Thank you."
+    + "<br><br>",
+  subject: "Employee Onboarding" 
   }
 }
 
