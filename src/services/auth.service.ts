@@ -12,6 +12,8 @@ import { Employee } from '@interfaces/employee-interface/employee.interface';
 
 import { isEmpty } from '@utils/util';
 import projectModel from "@models/project/project.model";
+const csv = require('csv-parser');
+const fs = require('fs');
 
 class AuthService {
   private Employees = EmployeeModel;
@@ -271,6 +273,36 @@ class AuthService {
 
   public createCookie(tokenData: TokenData): string {
     return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`;
+  }
+
+  public async importEmployees(){
+    const results = []
+    try {
+      await fs.createReadStream('src/imports/csvs/new_employees.csv')
+      .pipe(csv())
+      .on('data', async function (data) {
+        const employeesExists = await EmployeeModel.findOne({company_email: data.company_email}, {company_email:1})
+        if (!employeesExists){
+          data.status = 'active'
+          delete data.reports_to
+          delete data.department
+          delete data.projectId
+          delete data.isAdmin
+          delete data.default_shift
+          delete data.designation
+          console.log(data.company_email);
+          await EmployeeModel.create(data)
+        }
+        return results.push(data);
+      })
+      .on('end', function () {
+        console.log(results);
+        return "results";
+      });
+      return "inserting records"
+    } catch (error) {
+        console.log(error);
+    }
   }
 }
 

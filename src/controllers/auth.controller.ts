@@ -32,6 +32,15 @@ class AuthController {
       next(error);
     }
   };
+
+  public ingest_employees = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    try {
+      const result = await this.authService.importEmployees();
+      res.status(200).json({ data: result});
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default AuthController;
