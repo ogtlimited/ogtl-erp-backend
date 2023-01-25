@@ -42,10 +42,9 @@ class EmployeeService {
   private idRequestService = new IdRequestService();
   private employeesMailingService = new EmployeesMailingService();
   private employeeFiltrationService = new EmployeeFiltrationService();
-  public async findAllEmployee(query): Promise<Employee[]> {
-    let matchBy = {}
-    const employees = this.employeeFiltrationService.getAllEmployeesHelperMethod(matchBy, query, this.Employees)
-    return employees;
+  public async findAllEmployee(): Promise<Employee[]> {
+    const Employees: Employee[] = await this.Employees.find().populate('default_shift designation department branch projectId reports_to role');
+    return Employees;
   }
   public async EmployeeCount(): Promise<any> {
     const count: number = await this.Employees.find({status: "active"}).count();
@@ -292,6 +291,11 @@ class EmployeeService {
     if (!deleteEmployeeById) throw new HttpException(409, "You're not Employee");
 
     return deleteEmployeeById;
+  }
+  public async getAllPaginatedEmployees(query): Promise<Employee[]> {
+    let matchBy = {}
+    const employees = this.employeeFiltrationService.getAllEmployeesHelperMethod(matchBy, query, this.Employees)
+    return employees;
   }
   private generateOGID() {
     return 'OG' + Math.floor(1000 + Math.random() * 9000);
