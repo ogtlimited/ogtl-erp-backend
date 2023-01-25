@@ -25,7 +25,8 @@ import { IShiftType } from '@/interfaces/shift-interface/shift_type.interface';
 import TerminationService from './employee-lifecycle/termination.service';
 import { IEmployeeStat } from './../interfaces/employee-stat/employee-stat.interface';
 import IdRequestService from './procurement/idrequest.service';
-import EmployeesMailingService from '@/services/employee/employee_mailing.service'
+import EmployeesMailingService from '@/services/employee/employee_mailing.service';
+import EmployeeFiltrationService from '@/services/employee_filtration.service';
 const mongoose = require('mongoose')
 
 class EmployeeService {
@@ -40,9 +41,11 @@ class EmployeeService {
   public TerminationService = new TerminationService();
   private idRequestService = new IdRequestService();
   private employeesMailingService = new EmployeesMailingService();
-  public async findAllEmployee(): Promise<Employee[]> {
-    const Employees: Employee[] = await this.Employees.find().populate('default_shift designation department branch projectId reports_to role');
-    return Employees;
+  private employeeFiltrationService = new EmployeeFiltrationService();
+  public async findAllEmployee(query): Promise<Employee[]> {
+    let matchBy = {}
+    const employees = this.employeeFiltrationService.getAllEmployeesHelperMethod(matchBy, query, this.Employees)
+    return employees;
   }
   public async EmployeeCount(): Promise<any> {
     const count: number = await this.Employees.find({status: "active"}).count();
