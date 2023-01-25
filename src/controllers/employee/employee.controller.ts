@@ -10,8 +10,7 @@ class EmployeesController {
 
   public getEmployees = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const findAllEmployeesData: Employee[] = await this.EmployeeService.findAllEmployee();
-
+      const findAllEmployeesData: Employee[] = await this.EmployeeService.findAllEmployee(req.query);
       res.status(200).json({ employees: findAllEmployeesData, message: 'all employees' });
     } catch (error) {
       next(error);
