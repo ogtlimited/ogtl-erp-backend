@@ -292,7 +292,7 @@ class EmployeeService {
 
     return deleteEmployeeById;
   }
-  public async getAllPaginatedEmployees(query): Promise<Employee[]> {
+  public async getAllEmployeesAndPaginate(query): Promise<Employee[]> {
     let matchBy = {}
     const employees = this.employeeFiltrationService.getAllEmployeesHelperMethod(matchBy, query, this.Employees)
     return employees;
