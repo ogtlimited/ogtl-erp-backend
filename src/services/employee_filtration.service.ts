@@ -148,11 +148,6 @@ class EmployeeFiltrationService {
                     path: "$role",
                     preserveNullAndEmptyArrays: true
                 }
-            },
-            {
-                $sort: {
-                    "createdAt": -1
-                }
             }
         ]
         if (searchQuery.search) {
