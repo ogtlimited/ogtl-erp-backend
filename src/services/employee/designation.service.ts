@@ -42,12 +42,11 @@ class DesignationService{
     public async createDesignation(DesignationData: CreateDesignationDto) : Promise<Designation>{
     if (isEmpty(DesignationData)) throw new HttpException(400, "No data provided");
     const findDesignation: Designation = await this.Designations.findOne({designation: DesignationData.designation});
+    if (findDesignation) throw new HttpException(409, `Designation ${DesignationData.designation} already exists`);
     const data = {
     ...DesignationData,
     slug: slugify(DesignationData.designation)
     }
-    if (findDesignation?.delete === true) await this.Designations.create(data);
-    if (findDesignation) throw new HttpException(409, `Designation ${DesignationData.designation} already exists`);
     const createDesignationData: Designation = await this.Designations.create(data);
     return createDesignationData;
     }
