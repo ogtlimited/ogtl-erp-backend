@@ -58,7 +58,7 @@ class CombineServices {
     const designations = await this.designationS.findAllDesignations()
     const departments = await this.departmentS.findAllDepartments()
     const projects = await this.projectS.findAll();
-    const jobApplicants = await this.jobApplicantS.findAllJobApplicants({})
+    const jobApplicants = await this.jobApplicantS.getJobApplicants({})
     const branches = await this.brancheS.findAllBranches();
     const acceptedJobOffers = await this.acceptedJobOfferS.findAllAcceptedJobOffers()
     const passedApplicants = await this.passedTestApplicants.findAllPassedTests()
@@ -144,7 +144,7 @@ class CombineServices {
     const designations = await this.designationS.findAllDesignations()
     const projects = await this.projectS.findAllNoPopulate();
     const branches = await this.brancheS.findAllBranches();
-    const jobApplicants = await this.jobApplicantS.findAllJobApplicants({})
+    const jobApplicants = await this.jobApplicantS.getJobApplicants({})
     const passedApplicants = await this.passedTestApplicants.findAllPassedTests()
 
     return {
@@ -236,7 +236,7 @@ class CombineServices {
     const jobOpenings = await this.jobOpeningS.findAllJobOpenings()
     const jobOffers = await this.acceptedJobOfferS.findAllAcceptedJobOffers()
     const employees = await this.employeeS.findAllEmployee()
-    const jobApplicants = await this.jobApplicantS.findAllJobApplicants({})
+    const jobApplicants = await this.jobApplicantS.getJobApplicants({})
 
     return {
       totalJobOpenings: jobOpenings.length,
