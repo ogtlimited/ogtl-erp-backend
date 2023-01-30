@@ -24,7 +24,17 @@ class JobApplicantService {
     this.endOfDay.setHours(23, 59, 59, 999);
   }
 
-  //Method for finding all job applicants
+//Method for finding all job applicants without pagination
+  public async findAllJobApplicants(query: any): Promise<IJobApplicant[]> {
+    console.log('ALL JOB APPLICANTS');
+    return this.jobApplicant
+      .find(query)
+      .populate({ path: 'rep_sieving_call', model: 'Employee' })
+      .populate({ path: 'job_opening_id' })
+      .populate({ path: 'default_job_opening_id' });
+  }
+
+  //Method for finding all job applicants and paginate
   public async getJobApplicants(searchQuery:any): Promise<{jobApplicants: IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
     const matchBy:any = {}
     return(
