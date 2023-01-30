@@ -55,13 +55,13 @@ class DesignationService{
     }
     public async updateDesignation(DesignationId:string,DesignationData: UpdateDesignationDto)  : Promise<Designation>{
     if (isEmpty(DesignationData)) throw new HttpException(400, "No data provided");
-    const updateDesignationById: Designation = await this.Designations.findByIdAndUpdate(DesignationId,DesignationData, {new: true});
+    const updateDesignationById: Designation = await this.Designations.findByIdAndUpdate({_id: DesignationId},DesignationData, {new: true});
     if(!updateDesignationById) throw new HttpException(409, "Designation doesn't exist");
         return updateDesignationById;
     } 
     //deletes existing designation
     public async deleteDesignation(DesignationId:string) : Promise<Designation>{
-    const deleteDesignationById : Designation = await this.Designations.findByIdAndUpdate({DesignationId},{
+    const deleteDesignationById : Designation = await this.Designations.findByIdAndUpdate({_id: DesignationId},{
         $set:{
             delete: true
         }
