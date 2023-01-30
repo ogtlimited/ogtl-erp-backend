@@ -46,7 +46,7 @@ class DesignationService{
     ...DesignationData,
     slug: slugify(DesignationData.designation)
     }
-    if (findDesignation.delete === true) await this.Designations.create(data);
+    if (findDesignation?.delete === true) await this.Designations.create(data);
     if (findDesignation) throw new HttpException(409, `Designation ${DesignationData.designation} already exists`);
     const createDesignationData: Designation = await this.Designations.create(data);
     return createDesignationData;
