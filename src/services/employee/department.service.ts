@@ -24,32 +24,24 @@ public async findAllDepartments(): Promise<IDepartment[]>{
  * Returns Departments with the Id given
  */
 
-public async findDepartmentById(DepartmentId:string) : Promise<IDepartment>{
+    public async findDepartmentById(DepartmentId:string) : Promise<IDepartment>{
    
-    //Check if Id is empty
-    if (isEmpty(DepartmentId)) throw new HttpException(400, "No Id provided");
+      //Check if Id is empty
+      if (isEmpty(DepartmentId)) throw new HttpException(400, "No Id provided");
 
-    //find Department with Id given
-    const findDepartment:IDepartment = await this.Departments.findOne({ _id:DepartmentId });
+      //find Department with Id given
+      const findDepartment:IDepartment = await this.Departments.findOne({ _id:DepartmentId });
 
-    if(!findDepartment) throw new HttpException(409, "Department with that Id doesnt exist");
+      if(!findDepartment) throw new HttpException(409, "Department with that Id doesnt exist");
 
-    return findDepartment;
-
-   
+      return findDepartment;
     }
-
-    /**
-     *Creates a new Department 
-     */
-
-
      public async createDepartment(DepartmentData: CreateDepartmentDto) : Promise<IDepartment>{
         
         //Check if data is empty
        if (isEmpty(DepartmentData)) throw new HttpException(400, "No data provided");
 
-       const findDepartment: IDepartment = await this.Departments.findOne({Department: DepartmentData.department});
+       const findDepartment: IDepartment = await this.Departments.findOne({department: DepartmentData.department});
        if(findDepartment) throw new HttpException(409, `Department ${DepartmentData.department} already exists`);
 
        const data = {

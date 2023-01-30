@@ -1,4 +1,4 @@
-import {IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateDesignationDto{
    @IsNotEmpty()
@@ -14,8 +14,8 @@ export class CreateDesignationDto{
    public project_id: string;
 
    @IsOptional()
-   @IsString()
-   public approval_level: string;
+   @IsNumber()
+   public approval_level: number;
 }
 
 export class UpdateDesignationDto{
@@ -35,6 +35,6 @@ export class UpdateDesignationDto{
     public project_id: string;
 
     @IsOptional()
-    @IsString()
-    public approval_level: string;
+    @IsNumber()
+    public approval_level: number;
 }
