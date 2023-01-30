@@ -49,7 +49,7 @@ public async findDepartmentById(DepartmentId:string) : Promise<IDepartment>{
         //Check if data is empty
        if (isEmpty(DepartmentData)) throw new HttpException(400, "No data provided");
 
-       const findDepartment: IDepartment = await this.Departments.findOne({Department: DepartmentData.department});
+       const findDepartment: IDepartment = await this.Departments.findOne({department: DepartmentData.department});
        if(findDepartment) throw new HttpException(409, `Department ${DepartmentData.department} already exists`);
 
        const data = {
