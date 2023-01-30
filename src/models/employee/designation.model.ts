@@ -8,7 +8,6 @@ const designationSchema: Schema = new Schema(
         designation: {
             type: String,
             required: true,
-            unique: true,
           },
         department_id: {
           type: mongoose.Schema.Types.ObjectId,
