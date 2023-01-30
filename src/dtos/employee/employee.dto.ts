@@ -18,6 +18,9 @@ export class CreateEmployeeDto {
   public department: string;
 
   @IsString()
+  public ogid: string;
+
+  @IsString()
   public password: string;
 
   @IsEmail()
