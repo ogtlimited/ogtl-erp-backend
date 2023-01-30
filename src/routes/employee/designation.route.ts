@@ -21,7 +21,7 @@ class DesignationRoute implements Routes {
         this.router.get(`${this.path}`,authMiddleware, this.DesignationController.getDesignations);
         this.router.get(`${this.path}/:id`,authMiddleware, this.DesignationController.getDesignationById);
         this.router.post(`${this.path}`, authMiddleware,validationMiddleware(CreateDesignationDto, 'body'), this.DesignationController.CreateDesignation);
-        this.router.patch(`${this.path}/delete/:id`, authMiddleware, this.DesignationController.deleteDesignation);
+        this.router.patch(`${this.path}/:id`, authMiddleware, this.DesignationController.deleteDesignation);
         this.router.put(`${this.path}/:id`,authMiddleware, validationMiddleware(UpdateDesignationDto, 'body', true), this.DesignationController.updateDesignation);
       }
     }
