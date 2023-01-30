@@ -44,7 +44,7 @@ class DesignationService{
     //Check if data is empty
     if (isEmpty(DesignationData)) throw new HttpException(400, "No data provided");
 
-    const findDesignation: Designation = await this.Designations.findOne({Designation: DesignationData.designation});
+    const findDesignation: Designation = await this.Designations.findOne({designation: DesignationData.designation});
     if(findDesignation) throw new HttpException(409, `Designation ${DesignationData.designation} already exists`);
     const data = {
     ...DesignationData,
