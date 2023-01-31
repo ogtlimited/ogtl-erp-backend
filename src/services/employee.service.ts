@@ -233,7 +233,7 @@ class EmployeeService {
     //   EmployeeData = { ...EmployeeData, password: hashedPassword };
     // }
     // console.log(emp)
-    const updateEmployeeById: Employee = await this.Employees.findByIdAndUpdate(EmployeeId, EmployeeData);
+    const updateEmployeeById: Employee = await this.Employees.findByIdAndUpdate({_id: EmployeeId}, EmployeeData);
     if (!updateEmployeeById) throw new HttpException(409, "You're not Employee");
 
     return updateEmployeeById;

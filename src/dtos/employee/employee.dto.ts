@@ -178,7 +178,9 @@ export class UpdateEmployeeDto {
   @IsOptional()
   @IsArray()
   socialHandle: [];
-
+ 
+  @IsString()
+  public ogid: string;
 
 
 }
