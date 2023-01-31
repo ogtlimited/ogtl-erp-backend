@@ -33,6 +33,10 @@ class JobApplicantService {
       .populate({ path: 'default_job_opening_id' });
   }
 
+  public async getTotalJobApplicants(): Promise<number> {
+    return this.jobApplicant.find({}).countDocuments()
+  }
+
   //Method for finding all job applicants and paginate
   public async getJobApplicants(searchQuery:any): Promise<{jobApplicants: IJobApplicant[]; pagination:IJobApplicantPagination, totalNumberofApplicants:number}> {
     const matchBy:any = {}
