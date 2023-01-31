@@ -26,7 +26,6 @@ class JobApplicantService {
 
 //Method for finding all job applicants without pagination
   public async findAllJobApplicants(query: any): Promise<IJobApplicant[]> {
-    console.log('ALL JOB APPLICANTS');
     return this.jobApplicant
       .find(query)
       .populate({ path: 'rep_sieving_call', model: 'Employee' })
