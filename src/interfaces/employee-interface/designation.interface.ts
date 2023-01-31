@@ -4,5 +4,6 @@ export interface Designation{
     designation: string;
     department_id: string;
     project_id?: string;
-    approval_level: string
+    approval_level: number;
+    delete?: boolean
 }

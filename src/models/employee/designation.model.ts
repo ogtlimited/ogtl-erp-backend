@@ -20,7 +20,7 @@ const designationSchema: Schema = new Schema(
           ref: "Project",
         },
         approval_level: {
-          type: String,
+          type: Number,
           required: true,
         },
         slug: {
