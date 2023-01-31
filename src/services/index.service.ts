@@ -236,13 +236,14 @@ class CombineServices {
     const jobOpenings = await this.jobOpeningS.findAllJobOpenings()
     const jobOffers = await this.acceptedJobOfferS.findAllAcceptedJobOffers()
     const employees = await this.employeeS.findAllEmployee()
-    const jobApplicants = await this.jobApplicantS.getJobApplicants({})
+    const jobApplicants = await this.jobApplicantS.getTotalJobApplicants()
+
 
     return {
       totalJobOpenings: jobOpenings.length,
       totalJobOffers: jobOffers.length,
       totalEmployees: employees.length,
-      totalJobApplicants: jobApplicants.length,
+      totalJobApplicants: jobApplicants,
       jobOpenings
     }
   }
