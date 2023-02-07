@@ -155,9 +155,15 @@ class EmployeeService {
       employeeType: e.employeeType,
       date_of_joining: new Date()
     }));
-    // console.log("formattedEmployeeData",formatted);
-    const employee = await this.Employees.find
-    const createEmployeeData = await this.Employees.insertMany(formatted);
+    const employeesRecord = [];
+    for (let idx = 0; idx < formatted.length; idx++) {
+      const record = formatted[idx]
+      const employeeInfo = await this.Employees.findOne({ company_email: record.company_email })
+      if (!employeeInfo) {
+        employeesRecord.push(record)
+      }
+    }
+    const createEmployeeData = await this.Employees.insertMany(employeesRecord);
     return createEmployeeData;
   }
   public async getDepartment(dept) {
