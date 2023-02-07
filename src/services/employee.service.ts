@@ -135,71 +135,29 @@ class EmployeeService {
   public async createMultipleEmployee(EmployeeData: any): Promise<any> {
     if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
 
-    // const findEmployee: Employee = await this.Employees.findOne({ email: EmployeeData.company_email });
-    // if (findEmployee) throw new HttpException(409, `Your email ${EmployeeData.company_email} already exists`);
-    console.log(EmployeeData);
-    const randomstring = Math.random().toString(36).slice(2);
-    const hashedPassword = await bcrypt.hash(randomstring, 10);
-    const newOgid = this.generateOGID();
-    // if(!EmployeeData.department){
-    //   EmployeeData.department = null;
-    // }
-
-    // const shift: IShiftType = await this.Shift.findOne({ shift_name: { $regex : new RegExp(EmployeeData.default_shift, "i") } });
-    const AllOffices = {};
-    const AllDesignations = {};
-    const AllShifts = {};
-    const dept = await this.Department.find();
-    const project = await this.Project.find();
-    const designations = await this.Designation.find();
-    const shift = await this.Shift.find();
-    // console.log(shift)
-    // console.log(designations)
-    dept.forEach(e => {
-      AllOffices[e.department.toString().toLowerCase()] = e._id;
-    });
-    project.forEach(e => {
-      AllOffices[e.project_name.toString().toLowerCase()] = e._id;
-    });
-    designations.forEach(e => {
-      AllDesignations[e.designation.toString().toLowerCase()] = e._id;
-    });
-    shift.forEach(e => {
-      AllShifts[e.shift_name.toString().toLowerCase()] = e._id;
-    });
-    // console.log('ALL Offices', AllOffices, AllDesignations, AllShifts)
-    // console.log('ALL Offices', AllOffices)
     const formatted = EmployeeData.map((e: any) => ({
       ...e,
       status: 'active',
+      first_name: e.first_name,
+      middle_name: e.middle_name,
+      last_name: e.last_name,
       isAdmin: e.isAdmin === 'true' ? true : false,
-      isTeamLead: e.isTeamLead === 'true' ? true : false,
-      isSupervisor: e.isSupervisor === 'true' ? true : false,
       leaveCount: 0,
-      department: this.notEmpty(e.department) ? AllOffices[e.department.toLowerCase()] : null,
-      designation: this.notEmpty(e.designation) ? AllDesignations[e.designation.toLowerCase()] : null,
-      projectId: this.notEmpty(e.projectId) ? AllOffices[e.projectId.toLowerCase()] : null,
-      company_email: this.notEmpty(e.company_email) ? e.company_email : this.genEmail(e.first_name, e.last_name),
-      default_shift: this.notEmpty(e.default_shift) ? AllShifts[e.default_shift.toLowerCase()] : null,
+      department: this.notEmpty(e.department) ? e?.department : null,
+      designation: this.notEmpty(e.designation) ? e?.designation : null,
+      projectId: null,
+      company_email: e.company_email,
+      default_shift: null,
       reports_to: null,
       branch: null,
       gender: e.gender.toLowerCase(),
-      ogid: this.notEmpty(e.ogid) ? e.ogid : this.generateOGID(),
+      ogid: e.ogid.toUpperCase(),
+      employeeType: e.employeeType,
+      date_of_joining: new Date()
     }));
-    console.log(formatted);
-    console.log('formatted');
-
-    // const idRequestData = {
-    //   employee_id:createEmployeeData._id,
-    //   date: createEmployeeData.created_at,
-    //   notes : "None"
-    // }
-    // this.idRequestService.createIdRequest(idRequestData).then(result=>{
-    //   console.log("id Request Created")
-    // })
-
+    // console.log("formattedEmployeeData",formatted);
+    const employee = await this.Employees.find
     const createEmployeeData = await this.Employees.insertMany(formatted);
-
     return createEmployeeData;
   }
   public async getDepartment(dept) {
