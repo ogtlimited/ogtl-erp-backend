@@ -9,8 +9,8 @@ class EmployeeVerificationController {
   public findEmployeeByOgId = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { ogid } = req.params
-      const employee: Employee[] = await this.EmployeeVerificationService.findEmployeeByOgId(ogid);
-      res.status(200).json({ employee: employee });
+      const employeeDetails: Employee[] = await this.EmployeeVerificationService.findEmployeeByOgId(ogid);
+      res.status(200).json({ employee: employeeDetails });
     } catch (error) {
       next(error);
     }
