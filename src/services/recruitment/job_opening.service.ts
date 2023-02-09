@@ -15,6 +15,10 @@ class JobOpeningService {
  
   //Method for finding all job openings
   public async findAllJobOpenings(): Promise<IJobOpening[]>{
+    return this.jobOpening.find({status: "OPEN"}).populate("designation_id project_id location");
+  }
+
+  public async findAllJobs(): Promise<IJobOpening[]> {
     return this.jobOpening.find().populate("designation_id project_id location");
   }
   //Method for finding all default job openings

@@ -16,6 +16,14 @@ class JobOpeningController {
       next(error);
     }
   };
+  public getAllJobs = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const findAllJobOpenings: IJobOpening[] = await this.jobOpeningService.findAllJobs();
+      res.status(200).json({ data: findAllJobOpenings, totalJobOpenings: findAllJobOpenings.length, message: 'All job openings' });
+    } catch (error) {
+      next(error);
+    }
+  };
   //Method for returning all job openings
   public getDefaultJobOpenings = async (req: Request, res: Response, next: NextFunction) => {
     try {
