@@ -25,6 +25,12 @@ export class CreatePersonalDetailsDto{
         public place_of_issue: string;
 
     @IsString()
+        public state_of_origin: string;
+
+    @IsString()
+        public phone_number: string;
+
+    @IsString()
         public marital_status: string;
 
     @IsString()

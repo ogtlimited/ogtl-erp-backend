@@ -35,6 +35,12 @@ const personalDetailsSchema: Schema = new Schema(
         place_of_issue: {
             type: String,
         },
+        state_of_origin: {
+            type: String,
+        },
+        phone_number: {
+            type: String,
+        },
         marital_status: {
             type: String,
             default: null,
