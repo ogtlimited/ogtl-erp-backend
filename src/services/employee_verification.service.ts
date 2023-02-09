@@ -10,26 +10,24 @@ import projectModel from '@models/project/project.model';
 class EmployeeVerificationService {
   private Employees = EmployeeModel;
   private PersonalDetailModel = PersonalDetailModel;
-  private DesignationModel = DesignationModel;
-  private projectModel = projectModel;
   public async findEmployeeByOgId(ogid): Promise<any> {
-    const employee: Employee = await this.Employees.findOne({ ogid });
-    const role = employee.designation ? await this.DesignationModel.findById({ _id:employee?.designation }) : null
-    const campaign = employee.projectId? await this.projectModel.findById({ _id: employee?.projectId }) : null
+    const employee = await this.Employees.findOne({ ogid })
+      .populate('designation')
+      .populate('projectId');
     const personalDetails = await this.PersonalDetailModel.findOne({ employee_id: employee?._id  })
     return {
       PictureUrl: employee.image,
       StaffUniqueId: employee.ogid,
       Email: employee.company_email,
       FullName: this.formatFullname(employee, employee.first_name, employee.middle_name, employee.last_name),
-      // PhoneNumber: "Phone Number",
+      PhoneNumber: personalDetails.phone_number ? personalDetails.phone_number : null,
       Gender: employee.gender,
       MaritalStatus: personalDetails.marital_status,
       DateOfBirth: personalDetails.date_of_birth,
-      // StateOfOrigin: "State of Origin",
+      StateOfOrigin: personalDetails.state ? personalDetails.state : null,
       StartDate: new Date(employee.date_of_joining),
-      Campaign: campaign? campaign.project_name : null,
-      Role: role ? role.designation : null
+      Campaign: employee.projectId ? employee.projectId.project_name : null,
+      Role: employee.designation ? employee.designation.designation : null
     };
   }
 

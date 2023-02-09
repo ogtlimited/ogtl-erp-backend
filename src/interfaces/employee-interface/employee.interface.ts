@@ -7,7 +7,7 @@ export interface Employee {
     company_email: string
     department: any;
     password: string;
-    designation: string;
+    designation?: string;
     reports_to:string;
     first_name: string;
     last_name: string;
