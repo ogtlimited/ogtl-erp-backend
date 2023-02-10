@@ -1,10 +1,7 @@
 /* eslint-disable prettier/prettier */
 
-import { Employee } from '@interfaces/employee-interface/employee.interface';
 import EmployeeModel from '@models/employee/employee.model';
 import PersonalDetailModel from '@models/employee/personal-details.model';
-import DesignationModel from '@models/employee/designation.model';
-import projectModel from '@models/project/project.model';
 
 
 class EmployeeVerificationService {
