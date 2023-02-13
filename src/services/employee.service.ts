@@ -93,7 +93,7 @@ class EmployeeService {
   public async findEmployeeById(EmployeeId: string): Promise<Employee> {
     if (isEmpty(EmployeeId)) throw new HttpException(400, "You're not EmployeeId");
 
-    const findEmployee: Employee = await this.Employees.findOne({ _id: EmployeeId }).populate(
+    const findEmployee = await this.Employees.findOne({ _id: EmployeeId }).populate(
       'default_shift department designation branch projectId reports_to role',
     );
     if (!findEmployee) throw new HttpException(409, "You're not Employee");
