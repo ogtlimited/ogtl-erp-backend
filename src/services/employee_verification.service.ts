@@ -10,7 +10,8 @@ class EmployeeVerificationService {
   public async findEmployeeByOgId(ogid): Promise<any> {
     const employee = await this.Employees.findOne({ ogid })
       .populate('designation')
-      .populate('projectId');
+      .populate('projectId')
+      .populate('default_shift');
     const personalDetails = await this.PersonalDetailModel.findOne({ employee_id: employee?._id  })
     return {
       PictureUrl: employee.image,
@@ -24,7 +25,8 @@ class EmployeeVerificationService {
       StateOfOrigin: personalDetails.state ? personalDetails.state : null,
       StartDate: new Date(employee.date_of_joining),
       Campaign: employee.projectId ? employee.projectId.project_name : null,
-      Role: employee.designation ? employee.designation.designation : null
+      Role: employee.designation ? employee.designation.designation : null,
+      Shift: employee.default_shift ? employee.default_shift.slug : null
     };
   }
 
