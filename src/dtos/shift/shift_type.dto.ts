@@ -18,6 +18,14 @@ export class CreateShiftTypeDto {
   @IsString()
   public expectedWorkTime: string;
 
+  @IsOptional()
+  @IsString()
+  public departmentId: string;
+
+  @IsOptional()
+  @IsString()
+  public campaignId: string;
+
 }
 
 export class UpdateShiftTypeDto {
@@ -39,4 +47,12 @@ export class UpdateShiftTypeDto {
   @IsOptional()
   @IsString()
   public expectedWorkTime: string;
+
+  @IsOptional()
+  @IsString()
+  public departmentId: string;
+
+  @IsOptional()
+  @IsString()
+  public campaignId: string;
 }

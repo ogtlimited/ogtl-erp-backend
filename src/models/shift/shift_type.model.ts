@@ -25,6 +25,16 @@ const shiftTypeSchema: Schema = new Schema(
       type: String,
       default: null,
     },
+    campaignId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Project',
+      default: null,
+    },
+    departmentId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Department',
+      default: null,
+    },
   },
   {
     timestamps: true,

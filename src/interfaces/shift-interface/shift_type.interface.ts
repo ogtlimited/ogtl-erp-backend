@@ -5,4 +5,6 @@ export interface IShiftType {
   start_time: string;
   end_time: string;
   expectedWorkTime: string;
+  departmentId: string;
+  campaignId: string;
 }
