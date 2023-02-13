@@ -26,7 +26,8 @@ class EmployeeVerificationService {
       StartDate: new Date(employee.date_of_joining),
       Campaign: employee.projectId ? employee.projectId.project_name : null,
       Role: employee.designation ? employee.designation.designation : null,
-      Shift: employee.default_shift ? employee.default_shift.slug : null
+      ShiftStartTime: employee.default_shift ? employee.default_shift.start_time : null,
+      ShiftEndTime: employee.default_shift ? employee.default_shift.end_time : null
     };
   }
 
