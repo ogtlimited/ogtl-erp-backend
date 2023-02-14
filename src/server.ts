@@ -41,6 +41,7 @@ import BranchRoute from './routes/employee/branch.route';
 import ContactDetailsRoute from './routes/employee/contact-details.route';
 import DesignationRoute from './routes/employee/designation.route';
 import DesignationByDepartmentRoute from './routes/employee/designation_by_departmentId.route';
+import OfficeRoute from './routes/employee/office.route';
 import EducationRoute from './routes/employee/education.route';
 import EmergencyContactRoute from './routes/employee/emergency-contact.route';
 import EmployeeTypeRoute from './routes/employee/employee-type.route';
@@ -155,6 +156,7 @@ const app = new App([
   new ContactDetailsRoute(),
   new DesignationRoute(),
   new DesignationByDepartmentRoute(),
+  new OfficeRoute(),
   new EducationRoute(),
   new EmployeeTypeRoute(),
   new EmergencyContactRoute(),
