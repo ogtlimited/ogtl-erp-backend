@@ -71,7 +71,9 @@ class shiftTypeService {
     const findShiftType: IShiftType = await this.shiftTypes.findOne({ shift_name: shiftTypeData.shift_name });
     if (findShiftType) throw new HttpException(409, `${shiftTypeData.shift_name} already exists`);
     const result = SumHours(shiftTypeData.end_time,shiftTypeData.start_time)
-    if(result < 8) throw new HttpException(409,"Working hours has to be greater than 8");
+    shiftTypeData.expectedWorkTime = result.toString()
+    console.log("result.toString()", result.toString())
+    if(result < 8) throw new HttpException(409,"Working hours has to be greater than 8 hours or greater");
     const shift = {
       ...shiftTypeData,
       slug: slugify(shiftTypeData.shift_name)
