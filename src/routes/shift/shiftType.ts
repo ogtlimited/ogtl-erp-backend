@@ -17,6 +17,7 @@ class ShiftTypeRoute implements Routes {
 
     private initializeRoutes() {
         this.router.get(`${this.path}`,authMiddleware, this.shiftTypeController.getShifts);
+        this.router.get(`${this.path}/office`,authMiddleware, this.shiftTypeController.getshiftTypeBasedOnOffice);
         this.router.get(`${this.path}/:id`,authMiddleware, this.shiftTypeController.getShiftById);
         this.router.post(`${this.path}`,[validationMiddleware(CreateShiftTypeDto, 'body'),authMiddleware], this.shiftTypeController.createShift);
         this.router.patch(`${this.path}/:id`, [validationMiddleware(UpdateShiftTypeDto, 'body', true),authMiddleware], this.shiftTypeController.updateShift);

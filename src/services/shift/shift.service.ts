@@ -98,6 +98,16 @@ class shiftTypeService {
 
     return deleteShiftTypeById;
   }
+  
+  public async getshiftTypeBasedOnOffice(query): Promise<IShiftType[]> {
+    if(query.departmentId){
+      const shiftType: IShiftType[] = await this.shiftTypes.find({ departmentId: query.departmentId });
+      return shiftType
+    }
+    if (query.campaignId) {
+      const shiftType: IShiftType[] = await this.shiftTypes.find({ campaignId: query.campaignId });
+      return shiftType
+    }
+  }
 }
-
 export default shiftTypeService;
