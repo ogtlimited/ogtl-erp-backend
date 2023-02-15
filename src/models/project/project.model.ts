@@ -46,12 +46,10 @@ const projectSchema: Schema = new Schema(
       default: Date.now
     },
     number_of_employees: {
-      type: String,
-      required: true,
+      type: String
     },
     billing_structure: {
       type: String,
-      required: true,
       enum: ['standard', 'per_hour', 'seat', 'per_hour/seat'],
     },
     diallers: {

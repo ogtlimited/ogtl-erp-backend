@@ -29,17 +29,18 @@ export class CreateProjectDto {
   public start_date: Date;
 
   @IsDateString()
+  @IsOptional()
   public end_date: Date;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   public number_of_employees: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   public billing_structure: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   public diallers: string;
 
@@ -50,10 +51,16 @@ export class CreateProjectDto {
   // public status: string;
 
   @IsString()
+  @IsOptional()
   public manager: string;
 
+  @IsOptional()
   @IsString()
   public quality_analyst: string;
+
+  @IsOptional()
+  @IsString()
+  public supervisor: string;
   
   @IsNumber()
   @IsOptional()
@@ -110,6 +117,10 @@ export class UpdateProjectDto {
     @IsOptional()
     @IsString()
     public manager: string;
+
+    @IsOptional()
+    @IsString()
+    public supervisor: string;
 
     @IsOptional()
     @IsString()
