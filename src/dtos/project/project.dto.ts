@@ -34,7 +34,7 @@ export class CreateProjectDto {
 
   @IsOptional()
   @IsString()
-  public number_of_employees: string;
+  public number_of_employees: number;
 
   @IsOptional()
   @IsString()

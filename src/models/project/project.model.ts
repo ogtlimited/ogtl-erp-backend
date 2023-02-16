@@ -46,7 +46,7 @@ const projectSchema: Schema = new Schema(
       default: Date.now
     },
     number_of_employees: {
-      type: String
+      type: Number
     },
     billing_structure: {
       type: String,

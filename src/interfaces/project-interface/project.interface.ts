@@ -8,7 +8,7 @@ export interface IProject {
   hours_of_operation: string;
   start_date: string;
   end_date: string;
-  number_of_employees: string;
+  number_of_employees: number;
   billing_structure: string;
   diallers: string;
   creator: string;
