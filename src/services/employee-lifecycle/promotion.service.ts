@@ -37,7 +37,7 @@ class PromotionService {
   public async createPromotion(data: CreatePromotionDto): Promise<IPromotion> {
     if (isEmpty(data)) throw new HttpException(400, "Bad request");
     //checks if employee exists
-    const findEmployeeById: Employee = await this.employeeModel.findOne({ _id:data.employee }).populate("employee");
+    const findEmployeeById = await this.employeeModel.findOne({ _id:data.employee }).populate("employee");
     if (!findEmployeeById) throw new HttpException(404, 'Employee does not exist!');
     const createdata = await this.promotionModel.create(data);
     if(createdata){

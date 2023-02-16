@@ -37,8 +37,8 @@ class AuthService {
     if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
     console.log('LOGIN ATTEMPT', EmployeeData);
     EmployeeData.company_email = EmployeeData.company_email.toLowerCase()
-    const employee: Employee =  await this.Employees.findOne({ company_email: EmployeeData.company_email }).populate('department designation default_shift projectId role');
-    console.log('AUTH SERVICE', employee)
+    const employee =  await this.Employees.findOne({ company_email: EmployeeData.company_email }).populate('department designation default_shift projectId role');
+  
     
     if (!employee){
       const randomstring = Math.random().toString(36).slice(2);
@@ -255,7 +255,7 @@ class AuthService {
     }
   }
 
-  public async logout(EmployeeData: EmployeeLoginDto): Promise<Employee> {
+  public async logout(EmployeeData): Promise<Employee> {
     if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
 
     const findEmployee: Employee = await this.Employees.findOne({ email: EmployeeData.company_email });
