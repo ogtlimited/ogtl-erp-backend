@@ -14,18 +14,17 @@ class OfficeService {
 
     public async createOffice(body): Promise<IDepartment | IProject> {
         if (isEmpty(body)) throw new HttpException(400, "No data provided");
-        if (body.office_type === "department") {
-            const department: IDepartment = await this.DepartmentService.createDepartment(body)
-            body.departmentId = department._id
-            await this.ShiftService.createshiftType(body)
-            return department
-        }
-        if (body.office_type === "campaign") {
-            const campaign: IProject = await this.ProjectService.create(body)
-            body.campaignId = campaign._id
-            await this.ShiftService.createshiftType(body)
-            return campaign
-        }
+        if (body.office_type === "department"){
+            return await this.createOfficeHelperMethod(body, this.DepartmentService.createDepartment(body))}
+        if (body.office_type === "campaign")  {
+            return await this.createOfficeHelperMethod(body, this.ProjectService.create(body))}
+    }
+    private async createOfficeHelperMethod(body, service){
+        const office_name = await service
+        if (body.office_type === "department") { body.departmentId = office_name._id } 
+        if (body.office_type === "campaign") { body.campaignId = office_name._id } 
+        await this.ShiftService.createshiftType(body)
+        return office_name
     }
 }
 export default OfficeService;

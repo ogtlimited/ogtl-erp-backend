@@ -41,7 +41,6 @@ class shiftTypeService {
   //       const endTime = moment(tomorrow, 'hh:mm a')
   //       const diff = endTime.diff(startTime, 'hours') + remTill12
   //       const diffMinutes = endTime.diff(startTime, 'minutes') % 60
-  //       console.log('DIFF', endTime.diff(startTime, 'hours'), remTill12, shift.start_time)
   //       return {
   //         ...shift?._doc,
   //         expectedWorkTime: diff + ':' + diffMinutes
@@ -72,8 +71,7 @@ class shiftTypeService {
     if (findShiftType) throw new HttpException(409, `${shiftTypeData.shift_name} already exists`);
     const result = SumHours(shiftTypeData.end_time,shiftTypeData.start_time)
     shiftTypeData.expectedWorkTime = result.toString()
-    console.log("result.toString()", result.toString())
-    if(result < 8) throw new HttpException(409,"Working hours has to be greater than 8 hours or greater");
+    if (result < 8) throw new HttpException(409,"Working hours has to be 8 hours or more");
     const shift = {
       ...shiftTypeData,
       slug: slugify(shiftTypeData.shift_name)

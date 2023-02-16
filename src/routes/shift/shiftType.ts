@@ -5,6 +5,8 @@ import validationMiddleware from '@/middlewares/validation.middleware';
 import { Router } from 'express';
 import { CreateShiftTypeDto, UpdateShiftTypeDto } from '@dtos/shift/shift_type.dto';
 import authMiddleware from '@middlewares/auth.middleware';
+import permissionMiddleware from '@/middlewares/permission.middleware';
+
 
 class ShiftTypeRoute implements Routes {
     public path = '/api/shiftType';
@@ -17,7 +19,7 @@ class ShiftTypeRoute implements Routes {
 
     private initializeRoutes() {
         this.router.get(`${this.path}`,authMiddleware, this.shiftTypeController.getShifts);
-        this.router.get(`${this.path}/office`,authMiddleware, this.shiftTypeController.getshiftTypeBasedOnOffice);
+        this.router.get(`${this.path}/office`,[authMiddleware,permissionMiddleware("HR")], this.shiftTypeController.getshiftTypeBasedOnOffice);
         this.router.get(`${this.path}/:id`,authMiddleware, this.shiftTypeController.getShiftById);
         this.router.post(`${this.path}`,[validationMiddleware(CreateShiftTypeDto, 'body'),authMiddleware], this.shiftTypeController.createShift);
         this.router.patch(`${this.path}/:id`, [validationMiddleware(UpdateShiftTypeDto, 'body', true),authMiddleware], this.shiftTypeController.updateShift);
