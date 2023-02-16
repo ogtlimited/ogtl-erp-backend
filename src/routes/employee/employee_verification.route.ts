@@ -5,7 +5,7 @@ import EmployeeVerificationController from '@/controllers/employee/employee_veri
 import authMiddleware from '@/middlewares/auth.middleware';
 
 class EmployeeVerificationRoute implements Routes {
-  public path = '/employee-verification';
+  public path = '/api/employee-verification';
   public router = Router();
   public employeeVerificationController = new EmployeeVerificationController();
 
