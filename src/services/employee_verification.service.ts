@@ -2,15 +2,19 @@
 
 import EmployeeModel from '@models/employee/employee.model';
 import PersonalDetailModel from '@models/employee/personal-details.model';
+import { HttpException } from '@exceptions/HttpException';
+
 
 
 class EmployeeVerificationService {
   private Employees = EmployeeModel;
   private PersonalDetailModel = PersonalDetailModel;
   public async findEmployeeByOgId(ogid): Promise<any> {
+    // if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
     const employee = await this.Employees.findOne({ ogid })
       .populate('designation')
       .populate('default_shift');
+    if (!employee) throw new HttpException(404, "Record Not Found");
     const personalDetails = await this.PersonalDetailModel.findOne({ employee_id: employee?._id  })
     return {
       PictureUrl: employee.image,
