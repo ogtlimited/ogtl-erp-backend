@@ -41,7 +41,6 @@ class shiftTypeService {
   //       const endTime = moment(tomorrow, 'hh:mm a')
   //       const diff = endTime.diff(startTime, 'hours') + remTill12
   //       const diffMinutes = endTime.diff(startTime, 'minutes') % 60
-  //       console.log('DIFF', endTime.diff(startTime, 'hours'), remTill12, shift.start_time)
   //       return {
   //         ...shift?._doc,
   //         expectedWorkTime: diff + ':' + diffMinutes
@@ -71,7 +70,8 @@ class shiftTypeService {
     const findShiftType: IShiftType = await this.shiftTypes.findOne({ shift_name: shiftTypeData.shift_name });
     if (findShiftType) throw new HttpException(409, `${shiftTypeData.shift_name} already exists`);
     const result = SumHours(shiftTypeData.end_time,shiftTypeData.start_time)
-    if(result < 8) throw new HttpException(409,"Working hours has to be greater than 8");
+    shiftTypeData.expectedWorkTime = result.toString()
+    if (result < 8) throw new HttpException(409,"Working hours has to be 8 hours or more");
     const shift = {
       ...shiftTypeData,
       slug: slugify(shiftTypeData.shift_name)
@@ -86,7 +86,7 @@ class shiftTypeService {
       const findShiftType: IShiftType = await this.shiftTypes.findOne({ _id: shiftTypeData._id });
       if (findShiftType && findShiftType._id != shiftTypeId) throw new HttpException(409, `${shiftTypeData.shift_name} already exists`);
     }
-    const updateShiftTypeById: IShiftType = await this.shiftTypes.findByIdAndUpdate(shiftTypeId,  shiftTypeData ,{new:true});
+    const updateShiftTypeById: IShiftType = await this.shiftTypes.findByIdAndUpdate({_id: shiftTypeId},  shiftTypeData ,{new:true});
     if (!updateShiftTypeById) throw new HttpException(409, "shift does not exist");
 
     return updateShiftTypeById;
@@ -98,6 +98,16 @@ class shiftTypeService {
 
     return deleteShiftTypeById;
   }
+  
+  public async getshiftTypeBasedOnOffice(query): Promise<IShiftType[]> {
+    if(query.departmentId){
+      const shiftType: IShiftType[] = await this.shiftTypes.find({ departmentId: query.departmentId });
+      return shiftType
+    }
+    if (query.campaignId) {
+      const shiftType: IShiftType[] = await this.shiftTypes.find({ campaignId: query.campaignId });
+      return shiftType
+    }
+  }
 }
-
 export default shiftTypeService;
