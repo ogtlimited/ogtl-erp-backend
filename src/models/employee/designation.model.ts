@@ -15,7 +15,7 @@ const designationSchema: Schema = new Schema(
           required: true,
           ref: "Department",
         },
-        project_id: {
+        campaign_id: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Project",
         },
