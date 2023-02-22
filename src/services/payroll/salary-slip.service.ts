@@ -153,7 +153,7 @@ class SalarySlipService {
     if (isEmpty(data)) throw new HttpException(400, 'Bad request');
     const projects = await projectModel.find();
     const records = [];
-    const wahalaPeople = [];
+    const employeesWithIssues = [];
     for (let index = 0; index < projects.length; index++) {
       const project = projects[index];
       // console.log(project);
@@ -173,7 +173,7 @@ class SalarySlipService {
       for (let index = 0; index < employees.length; index++) {
         const employee = employees[index];
         if (employee.salaryStructure_id == null) {
-          wahalaPeople.push(employee);
+          employeesWithIssues.push(employee);
         }
         const salarySlipConstructor: any = {
           employeeId: employee._id,
