@@ -41,10 +41,10 @@ class SalarySlipController {
     }
   };
 
-  public createDepartmentPayroll = async (req: Request, res: Response, next: NextFunction) => {
+  public createDepartmentPayroll = async (req, res: Response, next: NextFunction) => {
     try {
       const newData: CreateSalarySlipDto = req.body;
-      const createdData: ISalarySlip = await this.salarySlipService.createDepartmentPayroll(newData);
+      const createdData: ISalarySlip = await this.salarySlipService.createDepartmentPayroll(newData, req.user.company_email);
       res.status(201).json({ data: createdData});
     } catch (error) {
       console.log(error);
