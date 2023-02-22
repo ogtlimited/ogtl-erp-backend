@@ -17,6 +17,7 @@ class JobOpeningRoute implements Routes{
 
   private initializeRoutes(){
     this.router.get(`${this.path}`,this.jobOpeningController.getJobOpenings);
+    this.router.get(`${this.path}/open-and-closed`,this.jobOpeningController.getAllJobs);
     this.router.get(`${this.path}/defaultJobs`,this.jobOpeningController.getDefaultJobOpenings);
     this.router.get(`${this.path}/:id`,this.jobOpeningController.getJobOpeningById);
     this.router.post(`${this.path}`,[validationMiddleware(CreateJobOpeningDto,'body'),authMiddleware],this.jobOpeningController.createJobOpening);

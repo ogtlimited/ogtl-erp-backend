@@ -176,6 +176,6 @@ employeeSchema.post('delete', function (doc) {
   new NotificationHelper(self.constructor.modelName, 'DELETE').exec();
 });
 
-const EmployeeModel = model<Employee & Document>('Employee', employeeSchema);
+const EmployeeModel = model('Employee', employeeSchema);
 
 export default EmployeeModel;

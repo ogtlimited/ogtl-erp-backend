@@ -16,7 +16,6 @@ import departmentModel from '@/models/department/department.model';
 import shiftTypeModel from '@models/shift/shift_type.model';
 import projectModel from '@/models/project/project.model';
 import EmployeeStatModel from '@/models/employee-stat/employee-stat.model';
-import { ObjectId } from 'mongodb';
 import moment from 'moment';
 import { IProject } from './../interfaces/project-interface/project.interface';
 import { Designation } from './../interfaces/employee-interface/designation.interface';
@@ -26,6 +25,8 @@ import { IShiftType } from '@/interfaces/shift-interface/shift_type.interface';
 import TerminationService from './employee-lifecycle/termination.service';
 import { IEmployeeStat } from './../interfaces/employee-stat/employee-stat.interface';
 import IdRequestService from './procurement/idrequest.service';
+import EmployeesMailingService from '@/services/employee/employee_mailing.service';
+import EmployeeFiltrationService from '@/services/employee_filtration.service';
 const mongoose = require('mongoose')
 
 class EmployeeService {
@@ -39,6 +40,8 @@ class EmployeeService {
   public employeeStatModel = EmployeeStatModel;
   public TerminationService = new TerminationService();
   private idRequestService = new IdRequestService();
+  private employeesMailingService = new EmployeesMailingService();
+  private employeeFiltrationService = new EmployeeFiltrationService();
   public async findAllEmployee(): Promise<Employee[]> {
     const Employees: Employee[] = await this.Employees.find().populate('default_shift designation department branch projectId reports_to role');
     return Employees;
@@ -90,7 +93,7 @@ class EmployeeService {
   public async findEmployeeById(EmployeeId: string): Promise<Employee> {
     if (isEmpty(EmployeeId)) throw new HttpException(400, "You're not EmployeeId");
 
-    const findEmployee: Employee = await this.Employees.findOne({ _id: EmployeeId }).populate(
+    const findEmployee = await this.Employees.findOne({ _id: EmployeeId }).populate(
       'default_shift department designation branch projectId reports_to role',
     );
     if (!findEmployee) throw new HttpException(409, "You're not Employee");
@@ -105,7 +108,8 @@ class EmployeeService {
     // if (findEmployee) throw new HttpException(409, `Your email ${EmployeeData.company_email} already exists`);
     const randomstring = Math.random().toString(36).slice(2);
     const hashedPassword = await bcrypt.hash(randomstring, 10);
-    const newOgid = this.generateOGID();
+    // const newOgid = this.generateOGID();
+    const newOgid = EmployeeData.ogid.toUpperCase();
     if (!EmployeeData.department) EmployeeData.department = null;
     if (!EmployeeData.projectId) EmployeeData.projectId = null;
     if (!EmployeeData.default_shift) EmployeeData.default_shift = null;
@@ -113,8 +117,6 @@ class EmployeeService {
     const endOfyear = moment().endOf('year');
     const duration = Math.abs(moment(dateOfJoining).diff(endOfyear, 'months', true)).toFixed(0);
     EmployeeData.leaveCount = Number(duration) * 2;
-    // console.log(dateOfJoining, endOfyear, duration)
-    // console.log(endOfyear)
     console.log(EmployeeData['leaveCount']);
     const employee: Employee = await this.Employees.findOne({company_email: EmployeeData.company_email})
     if (employee) throw new HttpException(409, 'Employee already exist');
@@ -127,76 +129,41 @@ class EmployeeService {
     this.idRequestService.createIdRequest(idRequestData).then(result => {
       console.log('id Request Created');
     });
+    // Promise.all([this.employeesMailingService.sendIntroductoryMail(createEmployeeData.first_name, createEmployeeData.ogid, createEmployeeData.company_email)])
     return createEmployeeData;
   }
   public async createMultipleEmployee(EmployeeData: any): Promise<any> {
     if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
 
-    // const findEmployee: Employee = await this.Employees.findOne({ email: EmployeeData.company_email });
-    // if (findEmployee) throw new HttpException(409, `Your email ${EmployeeData.company_email} already exists`);
-    console.log(EmployeeData);
-    const randomstring = Math.random().toString(36).slice(2);
-    const hashedPassword = await bcrypt.hash(randomstring, 10);
-    const newOgid = this.generateOGID();
-    // if(!EmployeeData.department){
-    //   EmployeeData.department = null;
-    // }
-
-    // const shift: IShiftType = await this.Shift.findOne({ shift_name: { $regex : new RegExp(EmployeeData.default_shift, "i") } });
-    const AllOffices = {};
-    const AllDesignations = {};
-    const AllShifts = {};
-    const dept = await this.Department.find();
-    const project = await this.Project.find();
-    const designations = await this.Designation.find();
-    const shift = await this.Shift.find();
-    // console.log(shift)
-    // console.log(designations)
-    dept.forEach(e => {
-      AllOffices[e.department.toString().toLowerCase()] = e._id;
-    });
-    project.forEach(e => {
-      AllOffices[e.project_name.toString().toLowerCase()] = e._id;
-    });
-    designations.forEach(e => {
-      AllDesignations[e.designation.toString().toLowerCase()] = e._id;
-    });
-    shift.forEach(e => {
-      AllShifts[e.shift_name.toString().toLowerCase()] = e._id;
-    });
-    // console.log('ALL Offices', AllOffices, AllDesignations, AllShifts)
-    // console.log('ALL Offices', AllOffices)
     const formatted = EmployeeData.map((e: any) => ({
       ...e,
       status: 'active',
+      first_name: e.first_name,
+      middle_name: e.middle_name,
+      last_name: e.last_name,
       isAdmin: e.isAdmin === 'true' ? true : false,
-      isTeamLead: e.isTeamLead === 'true' ? true : false,
-      isSupervisor: e.isSupervisor === 'true' ? true : false,
       leaveCount: 0,
-      department: this.notEmpty(e.department) ? AllOffices[e.department.toLowerCase()] : null,
-      designation: this.notEmpty(e.designation) ? AllDesignations[e.designation.toLowerCase()] : null,
-      projectId: this.notEmpty(e.projectId) ? AllOffices[e.projectId.toLowerCase()] : null,
-      company_email: this.notEmpty(e.company_email) ? e.company_email : this.genEmail(e.first_name, e.last_name),
-      default_shift: this.notEmpty(e.default_shift) ? AllShifts[e.default_shift.toLowerCase()] : null,
+      department: this.notEmpty(e.department) ? e?.department : null,
+      designation: this.notEmpty(e.designation) ? e?.designation : null,
+      projectId: null,
+      company_email: e.company_email,
+      default_shift: null,
       reports_to: null,
       branch: null,
       gender: e.gender.toLowerCase(),
-      ogid: this.notEmpty(e.ogid) ? e.ogid : this.generateOGID(),
+      ogid: e.ogid.toUpperCase(),
+      employeeType: e.employeeType,
+      date_of_joining: new Date()
     }));
-    console.log(formatted);
-    console.log('formatted');
-
-    // const idRequestData = {
-    //   employee_id:createEmployeeData._id,
-    //   date: createEmployeeData.created_at,
-    //   notes : "None"
-    // }
-    // this.idRequestService.createIdRequest(idRequestData).then(result=>{
-    //   console.log("id Request Created")
-    // })
-
-    const createEmployeeData = await this.Employees.insertMany(formatted);
-
+    const employeesRecord = [];
+    for (let idx = 0; idx < formatted.length; idx++) {
+      const record = formatted[idx]
+      const employeeInfo = await this.Employees.findOne({ company_email: record.company_email })
+      if (!employeeInfo) {
+        employeesRecord.push(record)
+      }
+    }
+    const createEmployeeData = await this.Employees.insertMany(employeesRecord);
     return createEmployeeData;
   }
   public async getDepartment(dept) {
@@ -230,7 +197,7 @@ class EmployeeService {
     //   EmployeeData = { ...EmployeeData, password: hashedPassword };
     // }
     // console.log(emp)
-    const updateEmployeeById: Employee = await this.Employees.findByIdAndUpdate(EmployeeId, EmployeeData);
+    const updateEmployeeById: Employee = await this.Employees.findByIdAndUpdate({_id: EmployeeId}, EmployeeData);
     if (!updateEmployeeById) throw new HttpException(409, "You're not Employee");
 
     return updateEmployeeById;
@@ -286,6 +253,11 @@ class EmployeeService {
     if (!deleteEmployeeById) throw new HttpException(409, "You're not Employee");
 
     return deleteEmployeeById;
+  }
+  public async getAllEmployeesAndPaginate(query): Promise<Employee[]> {
+    let matchBy = {}
+    const employees = this.employeeFiltrationService.getAllEmployeesHelperMethod(matchBy, query, this.Employees)
+    return employees;
   }
   private generateOGID() {
     return 'OG' + Math.floor(1000 + Math.random() * 9000);
