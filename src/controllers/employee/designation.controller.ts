@@ -71,5 +71,14 @@ class DesignationController {
       next(error);
     }
   };
+
+  public getDesignationBasedOnOffice = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const designation: Designation[] = await this.DesignationService.getDesignationBasedOnOffice(req.query);
+      res.status(200).json({ data: designation });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 export default DesignationController;

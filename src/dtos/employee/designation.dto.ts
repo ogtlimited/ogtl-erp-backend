@@ -5,13 +5,13 @@ export class CreateDesignationDto{
    @IsString()
    public designation: string;
 
-   @IsNotEmpty()
+   @IsOptional()
    @IsString()
    public department_id: string;
 
    @IsOptional()
    @IsString()
-   public project_id: string;
+   public campaign_id: string;
 
    @IsOptional()
    @IsNumber()
@@ -26,13 +26,13 @@ export class UpdateDesignationDto{
     @IsString()
     public designation: string;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     public department_id: string;
 
     @IsOptional()
     @IsString()
-    public project_id: string;
+    public campaign_id: string;
 
     @IsOptional()
     @IsNumber()
