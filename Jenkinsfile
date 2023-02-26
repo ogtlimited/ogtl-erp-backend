@@ -5,5 +5,6 @@ Microservice(
         repo: 'ogtl-erp-backend',
         url: 'ogtl-erp-backend',
         deployment: 'erp-test',
-        image_repository: 'ogtl-erp'
+        image_repository: 'ogtl-erp',
+        deployment_directory: 'erp'
     )
