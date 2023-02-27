@@ -60,7 +60,7 @@ class EmployeesController {
       const EmployeeData: any = req.body;
       const createEmployeeData = await this.EmployeeService.createMultipleEmployee(EmployeeData);
 
-      res.status(201).json({ data: createEmployeeData, message: 'created' });
+      res.status(201).json({ data: createEmployeeData, message: 'Successfully Added' });
     } catch (error) {
       console.log(error);
       next(error);
