@@ -61,6 +61,14 @@ class ShiftTypeController {
       next(error);
     }
   };
+  public getshiftTypeBasedOnOffice = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const shiftData = await this.shiftService.getshiftTypeBasedOnOffice(req.query);
+      res.status(200).json({ shiftData});
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default ShiftTypeController;

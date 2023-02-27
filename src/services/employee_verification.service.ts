@@ -13,13 +13,18 @@ class EmployeeVerificationService {
     // if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
     const employee = await this.Employees.findOne({ ogid })
       .populate('designation')
+      .populate('department')
+      .populate('projectId')
       .populate('default_shift');
     if (!employee) throw new HttpException(404, "Record Not Found");
     const personalDetails = await this.PersonalDetailModel.findOne({ employee_id: employee?._id  })
+    // return employee
     return {
       PictureUrl: employee.image,
       StaffUniqueId: employee.ogid,
       Email: employee.company_email,
+      campaign: employee.projectId ? employee.projectId.tilte : null,
+      department: employee.department ? employee.department.department : null ,
       FullName: this.formatFullname(employee, employee.first_name, employee.middle_name, employee.last_name),
       PhoneNumber: personalDetails ? personalDetails.phone_number : null,
       Gender: employee.gender,
