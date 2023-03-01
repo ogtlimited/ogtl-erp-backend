@@ -1,0 +1,19 @@
+{
+    "env": "production",
+    "dbConfig": {
+        "host": "mouse.db.elephantsql.com",
+        "user": "vkoevvvc",
+        "password": "YG4i8v6D-poCbfJK8RYKW01nCGntayV6",
+        "database": "vkoevvvc"
+    },
+    "secretKey": "secretKey",
+    "log": {
+        "format": "combined",
+        "dir": "../logs"
+    },
+    "cors": {
+        "origin": "your.domain.com",
+        "credentials": true
+    }
+}
+
