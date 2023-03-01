@@ -20,8 +20,6 @@ const updateEmployeesReportsTo = async () => {
     const employeesInfo = []
     let arraysOfLeadsEmails = []
     let arraysOfEmployeesEmails = []
-    let arraysOfEmployeesIds = []
-    let mappedData = []
     try {
         fs.createReadStream("./src/utils/seeder/reports_to.csv")
             .pipe(csv())
@@ -57,9 +55,6 @@ const updateEmployeesReportsTo = async () => {
                             }
                         }
                     )}
-              
-                console.log(employeesDetails)
-                // console.log(leadsDetails[0]._id)
                 }
             );
         
@@ -67,7 +62,5 @@ const updateEmployeesReportsTo = async () => {
     catch (error) {
         console.log(error.message);
     }
-    // find employees whose company_email is in reports_to
-     // find employees whose company_email === company_email and update reports_to:_id
 };
  updateEmployeesReportsTo()
