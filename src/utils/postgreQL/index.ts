@@ -1,11 +1,12 @@
 import config from 'config';
 import { join } from 'path';
-import { DataSource } from 'typeorm';
 import { dbConfig } from './db.interface';
 import { Staff } from './staff.entity';
 import { AttendanceInfo } from './attendance_info.entity';  
+import { ConnectionOptions } from 'typeorm';
 
-const dataSource = new DataSource({
+
+export const dbConnection: ConnectionOptions = {
     type: 'postgres',
     port: 5432,
     host: 'localhost',
@@ -17,6 +18,6 @@ const dataSource = new DataSource({
     // migrations: [join(__dirname, '../**/*.migration{.ts,.js}')],
     // subscribers: [join(__dirname, '../**/*.subscriber{.ts,.js}')],
 
-});
+};
 
-export default dataSource
+// export default dataSource

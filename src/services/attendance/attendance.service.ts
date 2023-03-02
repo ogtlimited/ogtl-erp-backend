@@ -10,7 +10,6 @@ import attendanceModel  from '@models/attendance/attendance.model';
 import employeeModel  from '@models/employee/employee.model';
 import { Staff } from '@/utils/postgreQL/staff.entity';
 import { AttendanceInfo } from '@/utils/postgreQL/attendance_info.entity';
-import dataSource from '@/utils/postgreQL';
 // import deductionModel  from '@models/payroll/deduction.model';
 import { isEmpty } from '@utils/util';
 import {getWorkTime}  from '@/utils/attendanceCalculator';
@@ -22,9 +21,10 @@ import moment = require('moment');
 import EmployeeModel from '@models/employee/employee.model';
 import applicationModel from '@/models/leave/application.model';
 import employeesSalaryModel from "@models/payroll/employees-salary";
+import { EntityRepository, Repository } from 'typeorm';
 
-
-class AttendanceTypeService {
+@EntityRepository()
+class AttendanceTypeService extends Repository<Staff> {
   private attendanceTypes = attendanceModel;
 
   private leaveModel = applicationModel;
@@ -112,8 +112,8 @@ class AttendanceTypeService {
   }
 
   public async findAllExternalDatabaseAttendance(): Promise<any> {
-    const staffAttendance = dataSource.getRepository(AttendanceInfo)
-    return await staffAttendance.find()
+    const staffAttendance = AttendanceInfo.find()
+    return await staffAttendance
   }
 
   public async bulkAttendanceUpload(attendanceTypeData): Promise<any> {

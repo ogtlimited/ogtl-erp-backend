@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { AttendanceInfo } from './attendance_info.entity';
 
 
