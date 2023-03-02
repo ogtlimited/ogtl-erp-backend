@@ -37,6 +37,7 @@ import EmployeeService from "./services/employee.service";
 const fs = require('fs')
 import EmailService from '@/utils/email.service';
 import { leadsLeaveNotificationMessage, birthdayMessage } from '@/utils/message';
+import AttendanceTypeService from './services/attendance/attendance.service';
 
 const path = require('path')
 if (process.env.NODE_ENV !== "production") {
@@ -324,6 +325,10 @@ class App {
           }
         })
       }
+    })
+
+    const attendanceCronJob = cron.schedule('0 */24 * * *', async function () {
+      const attendanceService = new AttendanceTypeService
     })
     leadsLeaveApplicationActionReminderForEmergencyLeaves.start()
     leadsLeaveApplicationActionReminderForNonEmergencyLeaves.start()
