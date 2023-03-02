@@ -8,8 +8,9 @@ import {
 } from '@/interfaces/attendance-interface/attendance-interface';
 import attendanceModel  from '@models/attendance/attendance.model';
 import employeeModel  from '@models/employee/employee.model';
-import { Staff } from '@/utils/postgreQL/entities/staff.entity';
-import { AttendanceInfo } from '@/utils/postgreQL/entities/attendance_info.entity';
+import { Staff } from '@/utils/postgreQL/staff.entity';
+import { AttendanceInfo } from '@/utils/postgreQL/attendance_info.entity';
+import dataSource from '@/utils/postgreQL';
 // import deductionModel  from '@models/payroll/deduction.model';
 import { isEmpty } from '@utils/util';
 import {getWorkTime}  from '@/utils/attendanceCalculator';
@@ -111,8 +112,8 @@ class AttendanceTypeService {
   }
 
   public async findAllExternalDatabaseAttendance(): Promise<any> {
-    const staffAttendance = await AttendanceInfo.find()
-    return staffAttendance
+    const staffAttendance = dataSource.getRepository(AttendanceInfo)
+    return await staffAttendance.find()
   }
 
   public async bulkAttendanceUpload(attendanceTypeData): Promise<any> {
