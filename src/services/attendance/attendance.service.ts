@@ -8,6 +8,8 @@ import {
 } from '@/interfaces/attendance-interface/attendance-interface';
 import attendanceModel  from '@models/attendance/attendance.model';
 import employeeModel  from '@models/employee/employee.model';
+import { Staff } from '@/utils/postgreQL/entities/staff.entity';
+import { AttendanceInfo } from '@/utils/postgreQL/entities/attendance_info.entity';
 // import deductionModel  from '@models/payroll/deduction.model';
 import { isEmpty } from '@utils/util';
 import {getWorkTime}  from '@/utils/attendanceCalculator';
@@ -106,6 +108,11 @@ class AttendanceTypeService {
     const findAttendanceType: IAttendance = await this.attendanceTypes.findOne({ _id: attendanceId });
     if (!findAttendanceType) throw new HttpException(404, "no record found");
     return findAttendanceType;
+  }
+
+  public async findAllExternalDatabaseAttendance(): Promise<any> {
+    const staffAttendance = await AttendanceInfo.find()
+    return staffAttendance
   }
 
   public async bulkAttendanceUpload(attendanceTypeData): Promise<any> {
