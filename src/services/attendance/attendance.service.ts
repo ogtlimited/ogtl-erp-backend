@@ -21,10 +21,11 @@ import moment = require('moment');
 import EmployeeModel from '@models/employee/employee.model';
 import applicationModel from '@/models/leave/application.model';
 import employeesSalaryModel from "@models/payroll/employees-salary";
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Repository, getRepository, getConnection } from 'typeorm';
+
 
 @EntityRepository()
-class AttendanceTypeService extends Repository<Staff> {
+class AttendanceTypeService extends Repository<AttendanceInfo> {
   private attendanceTypes = attendanceModel;
 
   private leaveModel = applicationModel;
@@ -112,8 +113,8 @@ class AttendanceTypeService extends Repository<Staff> {
   }
 
   public async findAllExternalDatabaseAttendance(): Promise<any> {
-    const staffAttendance = AttendanceInfo.find()
-    return await staffAttendance
+    const staff = await getRepository(AttendanceInfo).find({relations: ['staff']})
+    return  staff
   }
 
   public async bulkAttendanceUpload(attendanceTypeData): Promise<any> {
@@ -125,7 +126,7 @@ class AttendanceTypeService extends Repository<Staff> {
     // return attendanceTypeData
 
     for(const employeeData of attendanceTypeData.attendances){
-      // console.log(employeeData)
+      // console.log("employeeData", employeeData)
       const result = await this.generatePossibleDeductions(employeeData.ogid, employeeData, latenessDeduction, ncnsDeduction)
       const attendanceConstructor: ICreateAttendance = AttendanceTypeService.attendanceData(employeeData, result);
 
@@ -147,6 +148,54 @@ class AttendanceTypeService extends Repository<Staff> {
     await deductionModel.insertMany(employeesDeductions);
     await attendanceModel.insertMany(employeesAttendance)
     return {employeesDeductions, employeesAttendance}
+  }
+
+  public async uploadMultipleAttendanceRecord(): Promise<any> {
+    const attendance = await this.findAllExternalDatabaseAttendance()
+    const employeesDeductions = []
+    const employeesAttendance = []
+    const latenessDeduction = await deductionTypeModel.findOne({ title: "lateness" })
+    const ncnsDeduction = await deductionTypeModel.findOne({ title: "NCNS" })
+
+    const formatted = await Promise.all(attendance.map(async(e: any) => {
+      const workTimeResult: any = getWorkTime("2021-12-10T10:00:09.126+00:00", "2021-12-14T17:49:09.126+00:00", "10:00");
+      const ogid = e?.staff?.StaffUniqueId 
+      const employee = await EmployeeModel.findOne({ogid: ogid})
+      e.ClockIn = "2021-12-10T10:00:09.126+00:00";
+      e.ClockOut = "2021-12-14T17:49:09.126+00:00"
+
+      return {
+      ...e,
+      ogid: e.staff.StaffUniqueId,
+      clockInTime: e.ClockIn,
+      clockOutTime: e.ClockOut,
+      employeeId: employee?._id,
+      totalHours: workTimeResult?.hoursWorked,
+      totalMinutes: workTimeResult?.minutesWorked,
+      shiftTypeId: employee ? employee.default_shift :null,
+      
+    }}));
+    for (const employeeData of formatted) {
+      const result = await this.generatePossibleDeductions(employeeData.ogid, employeeData, latenessDeduction, ncnsDeduction)
+      const attendanceConstructor: ICreateAttendance = AttendanceTypeService.attendanceData(employeeData, result);
+      if (result?.departmentId != undefined) {
+        attendanceConstructor.departmentId = result.departmentId
+      }
+      if (result?.projectId != undefined) {
+        attendanceConstructor.projectId = result.projectId
+      }
+      employeesAttendance.push(attendanceConstructor)
+
+      if (result?.employeesDeductions.length == 0) {
+        continue
+      }
+
+      employeesDeductions.push(...result?.employeesDeductions)
+
+    }
+        await deductionModel.insertMany(employeesDeductions);
+        await attendanceModel.insertMany(employeesAttendance)
+        return { employeesDeductions, employeesAttendance }
   }
 
   public async createAttendanceType(user, attendanceTypeData: ICreateAttendance): Promise<any> {
@@ -184,7 +233,7 @@ class AttendanceTypeService extends Repository<Staff> {
     if(attendanceRecord.clockOutTime){
       throw new HttpException(400, "already clocked out!");
     }
-    attendanceRecord = attendanceRecord.toObject()
+    attendanceRecord = attendanceRecord?.toObject()
     const workTimeResult: any = await getWorkTime(attendanceRecord.clockInTime, attendanceData.clockOutTime, attendanceRecord.shiftTypeId.start_time);
     attendanceRecord.hoursWorked = workTimeResult.hoursWorked
     attendanceRecord.minutesWorked = workTimeResult.minutesWorked
@@ -211,13 +260,13 @@ class AttendanceTypeService extends Repository<Staff> {
 
   private static attendanceData(employeeData, result: IPossibleDeductons): ICreateAttendance {
     return {
-      clockInTime : employeeData.clockInTime,
-      clockOutTime : employeeData.clockOutTime,
-      employeeId : result.employeeId,
-      hoursWorked : result.totalWorkHours,
-      minutesWorked : result.minutesWorked,
-      shiftTypeId : result.shiftTypeId._id,
-      ogId : result.ogId
+      clockInTime : employeeData?.clockInTime,
+      clockOutTime : employeeData?.clockOutTime,
+      employeeId : result?.employeeId,
+      hoursWorked : result?.totalWorkHours,
+      minutesWorked : result?.minutesWorked,
+      shiftTypeId : result?.shiftTypeId?._id,
+      ogId : result?.ogId
     }
   }
 
@@ -245,11 +294,10 @@ class AttendanceTypeService extends Repository<Staff> {
         },
       })
 
-      console.log(employee, ogid, employee._id, "employee ---------------------------->1")
-      let employeeSalary: any = await employeesSalaryModel.findOne({employeeId: employee._id})
-      employee = employee.toObject();
-      employeeSalary = employeeSalary.toObject()
-      employee.employeeSalary = employeeSalary
+      let employeeSalary: any = await employeesSalaryModel.findOne({employeeId: employee?._id})
+      employee = employee?.toObject();
+      employeeSalary = employeeSalary?.toObject()
+      employee.employeeSalary = employeeSalary ? employeeSalary : null
 
 
       // const empHours = moment(attendanceRecord.clockInTime).subtract(1, 'hour').format("HH:mm")
@@ -262,15 +310,15 @@ class AttendanceTypeService extends Repository<Staff> {
       // console.log(attendanceRecord == null, "attendance record null check")
       if (!attendanceRecord) {
         const empLeave = await this.leaveModel.findOne({
-          employee_id: employee._id,
+          employee_id: employee?._id,
           from_date: {'$lte': new Date(moment().format('YYYY-MM-DD')).toISOString()},
           to_date:{'$gte': new Date(moment().format('YYYY-MM-DD')).toISOString()}
         })
 
         if(!empLeave){
-          deductionAmount = ncnsDeduction.percentage * employee.employeeSalary.monthlySalary;
-          deductionsConstructor.employeeId= employee._id;
-          deductionsConstructor.deductionTypeId= ncnsDeduction._id;
+          deductionAmount = employee.employeeSalary ? ncnsDeduction.percentage * employee?.employeeSalary?.monthlySalary : 0;
+          deductionsConstructor.employeeId= employee?._id;
+          deductionsConstructor.deductionTypeId= ncnsDeduction?._id;
           deductionsConstructor.amount= deductionAmount;
           deductionsConstructor.description = "NCNS"
           employeesDeductions.push(deductionsConstructor)
@@ -279,9 +327,9 @@ class AttendanceTypeService extends Repository<Staff> {
 
       else if (attendanceRecord.clockOutTime ==  null) {
         // console.log(attendanceRecord == null, "attendance record clock out time check");
-        deductionAmount = ncnsDeduction.percentage * employee.employeeSalary.monthlySalary;
-        deductionsConstructor.employeeId= employee._id;
-        deductionsConstructor.deductionTypeId= ncnsDeduction._id;
+        deductionAmount = employee.employeeSalary ? ncnsDeduction.percentage * employee?.employeeSalary?.monthlySalary : 0;
+        deductionsConstructor.employeeId= employee?._id;
+        deductionsConstructor.deductionTypeId= ncnsDeduction?._id;
         deductionsConstructor.amount= deductionAmount;
         deductionsConstructor.description = "NCNS(no clock out)"
         employeesDeductions.push(deductionsConstructor)
@@ -291,21 +339,19 @@ class AttendanceTypeService extends Repository<Staff> {
       else if(attendanceRecord.clockInTime && attendanceRecord.clockOutTime){
 
         if(employeeLateness > 0) {
-          deductionAmount = (latenessDeduction.percentage * employee.employeeSalary.monthlySalary) * employeeLateness;
-          // console.log(employeeLateness, deductionAmount, "emp hours  ---------------------->>>>")
-          latenessConstructor.employeeId= employee._id
-          latenessConstructor.deductionTypeId= latenessDeduction._id
+          deductionAmount = employee.employeeSalary ? (latenessDeduction.percentage * employee?.employeeSalary?.monthlySalary) * employeeLateness : 0;
+          latenessConstructor.employeeId= employee?._id
+          latenessConstructor.deductionTypeId= latenessDeduction?._id
           latenessConstructor.amount= deductionAmount
           latenessConstructor.description = "lateness"
           employeesDeductions.push(latenessConstructor)
-          // console.log(employeesDeductions, "employee is late")
         }
 
         //incomplete hours
         if (parseInt(attendanceRecord.totalHours) < expectedWorkHours) {
           const workTimeDeficit = expectedWorkHours - attendanceRecord.totalHours
-          deductionAmount = Math.floor(((employee.employeeSalary.monthlySalary/22)/expectedWorkHours)) * workTimeDeficit;
-          deductionsConstructor.employeeId= employee._id
+          deductionAmount = employee.employeeSalary ? Math.floor(((employee?.employeeSalary?.monthlySalary/22)/expectedWorkHours)) * workTimeDeficit : 0;
+          deductionsConstructor.employeeId= employee?._id
           deductionsConstructor.description= "Incomplete Hours"
           deductionsConstructor.amount= deductionAmount
           employeesDeductions.push(deductionsConstructor)
@@ -318,7 +364,7 @@ class AttendanceTypeService extends Repository<Staff> {
         employeeId: employee._id,
         totalWorkHours: attendanceRecord.totalHours,
         minutesWorked: employeeTimeData.minutesWorked,
-        departmentId: employee.departmentId,
+        departmentId: employee?.departmentId,
         projectId: employee.projectId,
         shiftTypeId: employee.default_shift,
         ogId: employee.ogid

@@ -1,31 +1,25 @@
 /* eslint-disable prettier/prettier */
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn, createConnection } from 'typeorm';
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToMany,OneToOne, ManyToOne, JoinColumn, createConnection } from 'typeorm';
 import { Staff } from './staff.entity';
 
 
-@Entity()
+@Entity({ name: "AttendanceInfo" })
 export class AttendanceInfo extends BaseEntity {
     @PrimaryGeneratedColumn("uuid")
     Id: number;
 
     @Column()
-    // @IsNotEmpty()
-    StaffId: string;
-
-    @Column()
-    // @IsNotEmpty()
     Date: Date;
 
-    @Column()
-    // @IsNotEmpty()
+    @Column('time without time zone')
     ClockIn: Date;
 
-    @Column()
-    // @IsNotEmpty()
+    @Column('time without time zone')
     ClockOut: Date;
 
-    @OneToMany(() => Staff, staff => staff.employee)
-    staff: Staff[];
+    @ManyToOne(() => Staff, staff => staff.attendanceInfo)
+    @JoinColumn({name: "StaffId"})
+    staff: Staff;
 
 
 }

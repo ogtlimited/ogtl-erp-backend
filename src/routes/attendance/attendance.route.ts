@@ -23,11 +23,12 @@ class AttendanceRoute implements Routes {
     private initializeRoutes() {
         // this.router.get(`${this.path}`, this.AttendanceController.getAttendances);
         this.router.get(`${this.path}`,[authMiddleware], this.AttendanceController.getDepartmentAttendance);
-        this.router.get(`${this.path}/staff`, [authMiddleware], this.AttendanceController.findAllExternalDatabaseAttendance);
+        this.router.get(`${this.path}/from-postgres`, [authMiddleware], this.AttendanceController.findAllExternalDatabaseAttendance);
         this.router.get(`${this.path}/employee/:ogId`,[authMiddleware], this.AttendanceController.getEmployeeAttendance);
         this.router.get(`${this.path}/:id`,[authMiddleware], this.AttendanceController.getAttendanceById);
         this.router.post(`${this.path}`,[authMiddleware, validationMiddleware(CreateAttendanceDto, 'body')], this.AttendanceController.createAttendance);
         this.router.post(`${this.path}/bulk`,[authMiddleware], this.AttendanceController.CreateBulkAttendance);
+        this.router.post(`${this.path}/postgresdb-bulk-upload`,[authMiddleware], this.AttendanceController.uploadMultipleAttendanceRecord);
         this.router.patch(`${this.path}`, [authMiddleware, validationMiddleware(UpdateAttendanceDto, 'body')], this.AttendanceController.updateAttendance);
     }
   }
