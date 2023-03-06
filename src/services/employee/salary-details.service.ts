@@ -5,6 +5,7 @@ import { SalaryDetail } from '@/interfaces/employee-interface/salary-details.int
 import { CreateSalaryDetailsDto, UpdateSalaryDetailsDto } from '@/dtos/employee/salary-details.dto';
 import SalaryDetailsModel from '@models/employee/salary-details.model';
 import json from './temp.json';
+import EmployeeModel from '@/models/employee/employee.model';
 
 class SalaryDetailsService {
   public SalaryDetails = SalaryDetailsModel;
@@ -53,9 +54,22 @@ class SalaryDetailsService {
     return this.SalaryDetails.find().sort({ created_at: -1 });
   }
 
-  /**
-   *Returns the Salary details with the Id given
-   */
+  public async uploadBulkSalaryDetails(salaryDetailsData: any): Promise<any> {
+    if (isEmpty(salaryDetailsData)) throw new HttpException(400, "No details provided");
+    const salaryRecords = [];
+    for (let i = 0; i < salaryDetailsData.length; i++) {
+      const employee_details = await EmployeeModel.findOne({ company_email: salaryDetailsData[i].company_email })
+      if (!employee_details) throw new HttpException(404, `${salaryDetailsData[i].company_email } Record not found on ERP`);
+      salaryDetailsData[i].employee_id = employee_details._id
+      const record = salaryDetailsData[i]
+      const employeeSalary = await this.SalaryDetails.findOne({ employee_id: employee_details._id})
+      if (!employeeSalary) {
+        salaryRecords.push(record)
+      }
+    }
+    const createEmployeeData = await this.SalaryDetails.insertMany(salaryRecords);
+    return createEmployeeData;
+  }
 
   public async findSalaryDetailsById(SalaryDetailsId: string): Promise<SalaryDetail> {
     //Check if Id is empty
@@ -74,12 +88,10 @@ class SalaryDetailsService {
     const findSalaryDetails: SalaryDetail = await this.SalaryDetails.findOne({ employee_id: SalaryDetailData.employee_id });
 
     if (findSalaryDetails) {
-      console.log('findSalaryDetails', findSalaryDetails);
       const updateSalaryDetailsData: SalaryDetail = await this.SalaryDetails.findByIdAndUpdate(SalaryDetailData._id, SalaryDetailData, { new: true });
       if (!updateSalaryDetailsData) throw new HttpException(409, 'details could not be updated');
       return updateSalaryDetailsData;
     } else {
-      console.log('SalaryDetailData');
       return await this.SalaryDetails.create(SalaryDetailData);
     }
   }

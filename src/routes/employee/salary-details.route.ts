@@ -5,6 +5,8 @@ import validationMiddleware from '@middlewares/validation.middleware';
 import { CreateSalaryDetailsDto, UpdateSalaryDetailsDto } from '@/dtos/employee/salary-details.dto';
 import SalaryDetailsController from '@/controllers/employee/salary-details.controller';
 import authMiddleware from '@/middlewares/auth.middleware';
+import permissionMiddleware from '@/middlewares/permission.middleware';
+
 
 class SalaryDetailsRoute implements Routes {
   public path = '/SalaryDetails';
@@ -25,8 +27,8 @@ class SalaryDetailsRoute implements Routes {
     );
     this.router.post(
       `${this.path}/bulk-upload`,
-      [authMiddleware],
-      this.SalaryDetailsController.CreateBulkCreateSalaryDetails,
+      [authMiddleware, permissionMiddleware("HR")],
+      this.SalaryDetailsController.uploadBulkSalaryDetails,
     );
     this.router.put(
       `${this.path}/:id`,
