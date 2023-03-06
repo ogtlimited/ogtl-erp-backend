@@ -157,7 +157,7 @@ class LeaveApplicationService {
       console.log(error);
     }
   }
-  public async updateAllLeaveCount(){
+  public async updateAllLeaveCount(): Promise<any>{
     return EmployeeModel.updateMany({}, {$inc : {'leaveCount' : 2}});
   }
   public async deleteLeaveapplication(LeaveapplicationId: string): Promise<ILeaveApplication> {
