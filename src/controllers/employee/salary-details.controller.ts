@@ -103,6 +103,15 @@ class SalaryDetailsController {
       next(error);
     }
   };
+  public uploadBulkSalaryDetails = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const salaryDetailsData: SalaryDetail = await this.SalaryDetailsService.uploadBulkSalaryDetails(req.body);
+      res.status(200).json({ data: salaryDetailsData, message: 'ContactDetails succesfully created' });
+    } catch (error) {
+      next(error);
+      
+    }
+  };
 
   //update SalaryDetails
   public updateSalaryDetails = async (req: Request, res: Response, next: NextFunction) => {
