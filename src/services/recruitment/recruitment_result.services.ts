@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import recruitmentResultModel from '@/models/recruitment/recruitment_result.model';
+import RecruitmentResultFiltrationService from './recruitment_result_pagination.service';
 import { IRecruitmentResult } from '@/interfaces/recruitment/recruitment_result.interface';
 import { isEmpty } from '@utils/util';
 import { HttpException } from '@exceptions/HttpException';
@@ -7,11 +8,15 @@ import { CreateRecruitmentResultDto, UpdateRecruitmentResultDto } from '@/dtos/r
 
 class RecruitmentResultServices {
   public recruitmentResult = recruitmentResultModel;
+  public recruitmentResultFiltrationService = new RecruitmentResultFiltrationService()
 
   //Method for finding all recruitmentResults
   public async findAllRecruitmentResults(query: any): Promise<IRecruitmentResult[]>{
+    let matchBy = {}
+    const recruitment_results = this.recruitmentResultFiltrationService.getAllRecruitmentResultHelperMethod(matchBy, query, this.recruitmentResult)
+    return recruitment_results;
     // return this.recruitmentResult.find(query).populate('job_applicant_id hr_user ');
-    return  this.recruitmentResult.find(query).populate({path:'job_applicant_id hr',populate:{path:'job_opening_id'}})
+    // return  this.recruitmentResult.find(query).populate({path:'job_applicant_id hr',populate:{path:'job_opening_id'}})
   }
 
   //Method for finding all recruitmentResults where applicants have undergone soft skills and passed

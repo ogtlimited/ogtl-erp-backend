@@ -71,6 +71,9 @@ class RecruitmentResultFiltrationService {
                     $match: {
                         $or: [
                             { "interviewer": { $regex: searchQuery.search, $options: "i" } },
+                            { "job_applicant_id.first_name": { $regex: searchQuery.search, $options: "i" } },
+                            { "job_applicant_id.last_name": { $regex: searchQuery.search, $options: "i" } },
+                            { "job_applicant_id.middle_name": { $regex: searchQuery.search, $options: "i" } },
                         ]
                     }
                 }
