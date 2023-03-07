@@ -12,7 +12,7 @@ import { Staff } from '@/utils/postgreQL/staff.entity';
 import { AttendanceInfo } from '@/utils/postgreQL/attendance_info.entity';
 // import deductionModel  from '@models/payroll/deduction.model';
 import { isEmpty } from '@utils/util';
-import {getWorkTime}  from '@/utils/attendanceCalculator';
+import {calculateLateness}  from '@/utils/attendanceCalculator';
 import {ObjectId} from 'mongodb'
 import { attendanceofficeQueryGenerator} from '@/utils/payrollUtil';
 import deductionModel from '@/models/payroll/deduction.model';
@@ -160,9 +160,6 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
       const ogid = e?.staff?.StaffUniqueId
       const employee = await EmployeeModel.findOne({ ogid: ogid })
       const workedTimeResult = this.getWorkTime(e.ClockIn, e.ClockOut)
-      console.log("clockInHours", workedTimeResult.hoursWorked)
-      console.log("clockInMinutes", workedTimeResult.minutesWorked)
-
       return {
       ...e,
       ogid: e.staff.StaffUniqueId,
@@ -192,9 +189,9 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
       employeesDeductions.push(...result?.employeesDeductions)
 
     }
-        // await deductionModel.insertMany(employeesDeductions);
-        // await attendanceModel.insertMany(employeesAttendance)
-        // return { employeesDeductions, employeesAttendance }
+        await deductionModel.insertMany(employeesDeductions);
+        await attendanceModel.insertMany(employeesAttendance)
+        return { employeesDeductions, employeesAttendance }
   }
 
   public async createAttendanceType(user, attendanceTypeData: ICreateAttendance): Promise<any> {
@@ -233,7 +230,7 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
       throw new HttpException(400, "already clocked out!");
     }
     attendanceRecord = attendanceRecord?.toObject()
-    const workTimeResult: any = await getWorkTime(attendanceRecord.clockInTime, attendanceData.clockOutTime, attendanceRecord.shiftTypeId.start_time);
+    const workTimeResult: any = this.getWorkTime(attendanceRecord.clockInTime, attendanceData.clockOutTime);
     attendanceRecord.hoursWorked = workTimeResult.hoursWorked
     attendanceRecord.minutesWorked = workTimeResult.minutesWorked
     attendanceRecord.clockOutTime = attendanceData.clockOutTime
@@ -303,8 +300,10 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
       const resumptionTime = employee.default_shift['start_time']
       const workTime = employee.default_shift.expectedWorkTime.split(":")
       const expectedWorkHours = parseInt(workTime[0])
-      const employeeTimeData = getWorkTime(attendanceRecord.clockInTime, attendanceRecord.clockOutTime, resumptionTime)
-      const employeeLateness: number =  parseInt(String(employeeTimeData.timeDeductions));
+      const employeeTimeData = this.getWorkTime(attendanceRecord.clockInTime, attendanceRecord.clockOutTime)
+      let timeDeductions = calculateLateness(attendanceRecord.clockInTime, attendanceRecord.clockOutTime);
+      timeDeductions = Math.floor(timeDeductions);
+      const employeeLateness: number =  parseInt(String(timeDeductions));
 
       // console.log(attendanceRecord == null, "attendance record null check")
       if (!attendanceRecord) {
@@ -381,7 +380,7 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
     const clockOutMinutes = clockOut.split(":")[1]
     let hoursWorked;
     let minutesWorked;
-    if (parseInt(clockInHours, 10) > 12) {
+    if (parseInt(clockInHours, 10) > parseInt(clockOutHours, 10)) {
       hoursWorked = parseInt("24:00:00", 10) - parseInt(clockInHours, 10) + parseInt(clockOutHours, 10)
       minutesWorked = clockOutMinutes - clockInMinutes
       if (minutesWorked < 0) {
@@ -389,7 +388,7 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
         minutesWorked = 60 + minutesWorked
       }
     }
-    else if (parseInt(clockInHours, 10) <= 12) {
+    else if (parseInt(clockInHours, 10) <= parseInt(clockInHours, 10)) {
       hoursWorked = parseInt(clockOutHours, 10) - parseInt(clockInHours, 10)
       minutesWorked = clockOutMinutes - clockInMinutes
       if (minutesWorked < 0) {
