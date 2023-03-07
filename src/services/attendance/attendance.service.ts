@@ -149,7 +149,6 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
     await attendanceModel.insertMany(employeesAttendance)
     return {employeesDeductions, employeesAttendance}
   }
-
   public async uploadMultipleAttendanceRecord(): Promise<any> {
     const attendance = await this.findAllExternalDatabaseAttendance()
     const employeesDeductions = []
@@ -158,11 +157,11 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
     const ncnsDeduction = await deductionTypeModel.findOne({ title: "NCNS" })
 
     const formatted = await Promise.all(attendance.map(async(e: any) => {
-      const workTimeResult: any = getWorkTime("2021-12-10T10:00:09.126+00:00", "2021-12-14T17:49:09.126+00:00", "10:00");
-      const ogid = e?.staff?.StaffUniqueId 
-      const employee = await EmployeeModel.findOne({ogid: ogid})
-      e.ClockIn = "2021-12-10T10:00:09.126+00:00";
-      e.ClockOut = "2021-12-14T17:49:09.126+00:00"
+      const ogid = e?.staff?.StaffUniqueId
+      const employee = await EmployeeModel.findOne({ ogid: ogid })
+      const workedTimeResult = this.getWorkTime(e.ClockIn, e.ClockOut)
+      console.log("clockInHours", workedTimeResult.hoursWorked)
+      console.log("clockInMinutes", workedTimeResult.minutesWorked)
 
       return {
       ...e,
@@ -170,8 +169,8 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
       clockInTime: e.ClockIn,
       clockOutTime: e.ClockOut,
       employeeId: employee?._id,
-      totalHours: workTimeResult?.hoursWorked,
-      totalMinutes: workTimeResult?.minutesWorked,
+      totalHours: workedTimeResult?.hoursWorked,
+      totalMinutes: workedTimeResult?.minutesWorked,
       shiftTypeId: employee ? employee.default_shift :null,
       
     }}));
@@ -193,9 +192,9 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
       employeesDeductions.push(...result?.employeesDeductions)
 
     }
-        await deductionModel.insertMany(employeesDeductions);
-        await attendanceModel.insertMany(employeesAttendance)
-        return { employeesDeductions, employeesAttendance }
+        // await deductionModel.insertMany(employeesDeductions);
+        // await attendanceModel.insertMany(employeesAttendance)
+        // return { employeesDeductions, employeesAttendance }
   }
 
   public async createAttendanceType(user, attendanceTypeData: ICreateAttendance): Promise<any> {
@@ -372,6 +371,35 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
 
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  private getWorkTime(clockIn, clockOut) {
+    const clockInHours = clockIn.split(":")[0]
+    const clockInMinutes = clockIn.split(":")[1]
+    const clockOutHours = clockOut.split(":")[0]
+    const clockOutMinutes = clockOut.split(":")[1]
+    let hoursWorked;
+    let minutesWorked;
+    if (parseInt(clockInHours, 10) > 12) {
+      hoursWorked = parseInt("24:00:00", 10) - parseInt(clockInHours, 10) + parseInt(clockOutHours, 10)
+      minutesWorked = clockOutMinutes - clockInMinutes
+      if (minutesWorked < 0) {
+        hoursWorked = hoursWorked - 1
+        minutesWorked = 60 + minutesWorked
+      }
+    }
+    else if (parseInt(clockInHours, 10) <= 12) {
+      hoursWorked = parseInt(clockOutHours, 10) - parseInt(clockInHours, 10)
+      minutesWorked = clockOutMinutes - clockInMinutes
+      if (minutesWorked < 0) {
+        hoursWorked = hoursWorked - 1
+        minutesWorked = 60 + minutesWorked
+      }
+    }
+    return {
+      hoursWorked,
+      minutesWorked
     }
   }
 
