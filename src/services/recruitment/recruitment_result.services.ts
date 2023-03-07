@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import recruitmentResultModel from '@/models/recruitment/recruitment_result.model';
+import jobApplicantModel from '@/models/recruitment/job_applicant.model';
 import RecruitmentResultFiltrationService from './recruitment_result_pagination.service';
 import { IRecruitmentResult } from '@/interfaces/recruitment/recruitment_result.interface';
 import { isEmpty } from '@utils/util';
@@ -8,6 +9,7 @@ import { CreateRecruitmentResultDto, UpdateRecruitmentResultDto } from '@/dtos/r
 
 class RecruitmentResultServices {
   public recruitmentResult = recruitmentResultModel;
+  public jobApplicantModel = jobApplicantModel;
   public recruitmentResultFiltrationService = new RecruitmentResultFiltrationService()
 
   //Method for finding all recruitmentResults
@@ -43,6 +45,8 @@ class RecruitmentResultServices {
     const recruitmentRecords = [];
     for (let i = 0; i < RecruitmentData.length; i++) {
       const record = RecruitmentData[i]
+      const jobApplicant = await this.jobApplicantModel.findOne({ email_address: RecruitmentData.email_address })
+      RecruitmentData.job_applicant_id = jobApplicant._id
       const recordExist = await this.recruitmentResult.findOne({ job_applicant_id: record._id })
       if (!recordExist) {
         recruitmentRecords.push(record)
