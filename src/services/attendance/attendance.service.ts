@@ -141,6 +141,10 @@ class AttendanceTypeService {
     return {employeesDeductions, employeesAttendance}
   }
 
+  public async employeesRecordsFromTimeAndAttendance(records): Promise<any> {
+    return `you sent ${records.length} `
+  }
+
   public async createAttendanceType(user, attendanceTypeData: ICreateAttendance): Promise<any> {
         if (isEmpty(attendanceTypeData)) throw new HttpException(400, "Bad request");
         const startTime = moment().add(1, 'hour')

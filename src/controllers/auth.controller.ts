@@ -6,9 +6,11 @@ import { RequestWithUser } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
 import AuthService from '@services/auth.service';
 import { EmployeeLoginDto } from '@/dtos/employee/employee.dto';
+import ImportService from '@/services/import/import.service';
 
 class AuthController {
   public authService = new AuthService();
+  public importService = new ImportService();
 
   public logIn = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -35,7 +37,7 @@ class AuthController {
 
   public ingest_employees = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-      const result = await this.authService.importEmployees();
+      const result = await this.importService.importleaves();
       res.status(200).json({ data: result});
     } catch (error) {
       next(error);
