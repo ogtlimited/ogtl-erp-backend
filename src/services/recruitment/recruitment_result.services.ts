@@ -40,14 +40,15 @@ class RecruitmentResultServices {
     return await this.recruitmentResult.create(recruitmentResultData);
   }
 
-  public async uploadBulkRecruitmentResults(RecruitmentData: any): Promise<any> {
+  public async uploadBulkRecruitmentResults(RecruitmentData: any, user): Promise<any> {
     if (isEmpty(RecruitmentData)) throw new HttpException(400, "No details provided");
     const recruitmentRecords = [];
     for (let i = 0; i < RecruitmentData.length; i++) {
       const record = RecruitmentData[i]
-      const jobApplicant = await this.jobApplicantModel.findOne({ email_address: RecruitmentData.email_address })
-      RecruitmentData.job_applicant_id = jobApplicant._id
-      const recordExist = await this.recruitmentResult.findOne({ job_applicant_id: record._id })
+      const jobApplicant = await this.jobApplicantModel.findOne({ email_address: record.email_address })
+      record.job_applicant_id = jobApplicant._id
+      record.hr_user = user?._id
+      const recordExist = await this.recruitmentResult.findOne({ job_applicant_id: jobApplicant._id })
       if (!recordExist) {
         recruitmentRecords.push(record)
       }

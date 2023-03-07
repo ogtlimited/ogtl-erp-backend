@@ -21,7 +21,7 @@ class RecruitmentResultRoute implements Routes{
     this.router.get(`${this.path}-passed`,this.recruitmentResultController.getPassedRecruitmentResults);
     this.router.get(`${this.path}/:id`,authMiddleware,this.recruitmentResultController.getRecruitmentResultById);
     this.router.post(`${this.path}`,[validationMiddleware(CreateRecruitmentResultDto,'body'),authMiddleware],this.recruitmentResultController.createRecruitmentResult);
-    this.router.post(`${this.path}/bulk-upload`,[validationMiddleware(CreateRecruitmentResultDto,'body'),authMiddleware],this.recruitmentResultController.uploadBulkRecruitmentResults);
+    this.router.post(`${this.path}/bulk-upload`,authMiddleware,this.recruitmentResultController.uploadBulkRecruitmentResults);
     this.router.patch(`${this.path}/:id`, [validationMiddleware(UpdateRecruitmentResultDto, 'body'),authMiddleware], this.recruitmentResultController.updateRecruitmentResult);
     this.router.delete(`${this.path}/:id`,authMiddleware,this.recruitmentResultController.deleteRecruitmentResult);
 

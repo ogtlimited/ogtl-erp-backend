@@ -83,9 +83,9 @@ class RecruitmentResultController {
     }
   };
 
-  public uploadBulkRecruitmentResults = async (req: Request, res: Response, next: NextFunction) => {
+  public uploadBulkRecruitmentResults = async (req: any, res: Response, next: NextFunction) => {
     try {
-      const recruitmentResults: IRecruitmentResult = await this.recruitmentResultService.uploadBulkRecruitmentResults(req.body);
+      const recruitmentResults: IRecruitmentResult[] = await this.recruitmentResultService.uploadBulkRecruitmentResults(req.body, req.user);
       res.status(200).json({ data: recruitmentResults, message: 'Recruitment results successfully added' });
     }
     catch (error) {
