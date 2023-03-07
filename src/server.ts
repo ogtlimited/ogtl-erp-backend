@@ -57,7 +57,7 @@ import JobOpeningRoute from '@routes/recruitment/jobOpening.route';
 import JobOfferRoute from '@routes/recruitment/jobOffer.route';
 import JobApplicantRoute from '@routes/recruitment/jobApplicant.route';
 import JobApplicantForRepSieversRoute from '@routes/recruitment/job_sievers.route';
-import TestRoute from '@routes/recruitment/test.route';
+import RecruitmentResultRoute from '@/routes/recruitment/recruitment_result.route';
 import WarningLetterRoute from '@routes/pip/warningLetter.route';
 import LoanRoute from '@routes/loan/loan.route';
 import TrainingAttendanceRoute from '@routes/training/training-attendance.route';
@@ -171,7 +171,7 @@ const app = new App([
   new JobOfferRoute(),
   new JobApplicantRoute(),
   new JobApplicantForRepSieversRoute(),
-  new TestRoute(),
+  new RecruitmentResultRoute(),
   new ShiftAssignmentRoute(),
   new WarningLetterRoute(),
   new LoanRoute(),

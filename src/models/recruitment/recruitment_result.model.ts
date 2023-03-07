@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import {model,Schema,Document} from "mongoose"
-import { ITest } from '@interfaces/recruitment/test.interface';
+import { IRecruitmentResult } from '@/interfaces/recruitment/recruitment_result.interface';
 import NotificationHelper from '@utils/helper/notification.helper';
 
 const testSchema: Schema = new Schema({
@@ -143,6 +143,6 @@ testSchema.post('delete', function(doc) {
   new NotificationHelper(self.constructor.modelName, "DELETE").exec()
 });
 
-const testModel = model<ITest & Document>('Test',testSchema)
+const testModel = model<IRecruitmentResult & Document>('Test',testSchema)
 
 export default testModel
