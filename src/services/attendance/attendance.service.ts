@@ -126,7 +126,6 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
     // return attendanceTypeData
 
     for(const employeeData of attendanceTypeData.attendances){
-      // console.log("employeeData", employeeData)
       const result = await this.generatePossibleDeductions(employeeData.ogid, employeeData, latenessDeduction, ncnsDeduction)
       const attendanceConstructor: ICreateAttendance = AttendanceTypeService.attendanceData(employeeData, result);
 
@@ -168,6 +167,7 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
       employeeId: employee?._id,
       totalHours: workedTimeResult?.hoursWorked,
       totalMinutes: workedTimeResult?.minutesWorked,
+      shiftStartTime: e.staff.ShiftStartTime,
       shiftTypeId: employee ? employee.default_shift :null,
       
     }}));
@@ -301,7 +301,7 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
       const workTime = employee.default_shift.expectedWorkTime.split(":")
       const expectedWorkHours = parseInt(workTime[0])
       const employeeTimeData = this.getWorkTime(attendanceRecord.clockInTime, attendanceRecord.clockOutTime)
-      let timeDeductions = calculateLateness(attendanceRecord.clockInTime, attendanceRecord.clockOutTime);
+      let timeDeductions = calculateLateness(attendanceRecord.clockInTime, attendanceRecord.shiftStartTime);
       timeDeductions = Math.floor(timeDeductions);
       const employeeLateness: number =  parseInt(String(timeDeductions));
 
