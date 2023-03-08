@@ -46,7 +46,7 @@ class RecruitmentResultServices {
     for (let i = 0; i < RecruitmentData.length; i++) {
       const record = RecruitmentData[i]
       const jobApplicant = await this.jobApplicantModel.findOne({ email_address: record.email_address })
-      if (!jobApplicant) throw new HttpException(404, `${record.email_address} Record not found on Job Application Table`);
+      if (!jobApplicant) throw new HttpException(404, `${record.email_address} on row number ${i+1} Record not found on Job Application Table`);
       record.status = record.status ? record.status : "Invitation Sent"
       record.job_applicant_id = jobApplicant._id
       record.hr_user = user?._id
