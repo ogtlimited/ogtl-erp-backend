@@ -17,50 +17,34 @@ mongoose
     })
     .catch((error) => console.log("DB Connection Failed", error.message));
 const updateEmployeesReportsTo = async () => {
-    const employeesInfo = []
-    let arraysOfLeadsEmails = []
-    let arraysOfEmployeesEmails = []
     try {
         fs.createReadStream("./src/utils/seeder/reports_to.csv")
             .pipe(csv())
-            .on('data', (data) => {
-                employeesInfo.push(data)
-                arraysOfLeadsEmails = employeesInfo.map(employee => employee.reports_to)
-                arraysOfEmployeesEmails = employeesInfo.map(employee => employee.company_email)
-            
-            })
-            .on('end',async () => {
-                let leadsDetails = []
-                for (let i = 0; i < arraysOfLeadsEmails.length; i++){
-                    records = await EmployeeModel.findOne({
-                        'company_email': arraysOfLeadsEmails[i]
-                });
-                leadsDetails.push(records)
-                }
-
-                let employeesDetails = []
-                for (let i = 0; i < arraysOfEmployeesEmails.length; i++) {
-                    records = await EmployeeModel.findOne({
-                        'company_email': arraysOfEmployeesEmails[i]
-                    });
-                    employeesDetails.push(records)
-                }
-
-                for (let i = 0; i < employeesDetails.length; i++){
-                    await EmployeeModel.findOneAndUpdate(
-                        { _id: employeesDetails[i]?._id},
+            .on('data', async (data) => {
+                const leadsData = await EmployeeModel.findOne({ company_email: data['reports_to'] })
+                if (leadsData){
+                    const employee = await EmployeeModel.findOneAndUpdate(
+                        { company_email: data['company_email'] },
                         {
                             $set: {
-                                reports_to: leadsDetails[i]?._id
+                                reports_to: leadsData._id
                             }
                         }
-                    )}
+                    )
+                    if (!employee){
+                        fs.appendFileSync('./src/utils/seeder/csvs/employees_emails_with_issues.csv', `${data['company_email']}\n`);
+                    }
+                    console.log(employee)
                 }
-            );
-        
+                else{
+                    fs.appendFileSync('./src/utils/seeder/csvs/leads_email_with_issues.csv', `${data['reports_to']}\n`);
+                }
+            })
+            .on('end',async () => {
+            })
         }
     catch (error) {
         console.log(error.message);
     }
 };
- updateEmployeesReportsTo()
+updateEmployeesReportsTo()
