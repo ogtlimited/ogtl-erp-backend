@@ -18,6 +18,8 @@ const testSchema: Schema = new Schema({
   },
   status:{
     type: String,
+    enum: ["Completed", "Assessment Completed", "Invitation Sent"],
+    default: "Invitation Sent"
 
   },
 

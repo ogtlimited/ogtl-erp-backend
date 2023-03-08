@@ -46,6 +46,7 @@ class RecruitmentResultServices {
     for (let i = 0; i < RecruitmentData.length; i++) {
       const record = RecruitmentData[i]
       const jobApplicant = await this.jobApplicantModel.findOne({ email_address: record.email_address })
+      record.status = record.status ? record.status : "Invitation Sent"
       record.job_applicant_id = jobApplicant._id
       record.hr_user = user?._id
       const recordExist = await this.recruitmentResult.findOne({ job_applicant_id: jobApplicant._id })
