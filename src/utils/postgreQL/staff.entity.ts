@@ -26,17 +26,17 @@ export class Staff extends BaseEntity {
     @Column()
     Campaign: string;
 
-    @Column()
-    PhoneNumber: string;
+    // @Column()
+    // PhoneNumber: string;
 
-    @Column()
-    DateOfBirth: Date;
+    // @Column()
+    // DateOfBirth: Date;
 
-    @Column()
-    MaritalStatus: string;
+    // @Column()
+    // MaritalStatus: string;
 
-    @Column()
-    StateOfOrigin: string;
+    // @Column()
+    // StateOfOrigin: string;
 
     @Column()
     Role: string;
