@@ -2,7 +2,7 @@
 
 import { IsString, IsDateString, IsOptional } from 'class-validator';
 
-export class CreateTestDto {
+export class CreateRecruitmentResultDto {
 
 
   @IsString()
@@ -114,7 +114,7 @@ export class CreateTestDto {
 
 }
 
-export class UpdateTestDto {
+export class UpdateRecruitmentResultDto {
   @IsString()
   public _id: string;
 
