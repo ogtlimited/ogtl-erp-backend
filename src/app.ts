@@ -37,6 +37,10 @@ import EmployeeService from "./services/employee.service";
 const fs = require('fs')
 import EmailService from '@/utils/email.service';
 import { leadsLeaveNotificationMessage, birthdayMessage } from '@/utils/message';
+import AttendanceTypeService from './services/attendance/attendance.service';
+import { dbConnection } from '@utils/postgreQL';
+import { createConnection } from 'typeorm';
+
 
 const path = require('path')
 if (process.env.NODE_ENV !== "production") {
@@ -65,6 +69,7 @@ class App {
     this.initializeErrorHandling();
     this.redisConnection();
     this.initializeCron();
+    this.connectToPostgresDatabase();
 
   }
 
@@ -253,6 +258,13 @@ class App {
     this.app.use(errorMiddleware);
   }
 
+  private connectToPostgresDatabase() {
+    createConnection(dbConnection).then(e => {
+      // this.seedDatabase();
+      console.log('COONECTED TO PostgresDB ');
+    });
+  }
+
   private  initializeCron(){
 
     const task = cron.schedule('* 1 * * 1-5', async function() {
@@ -325,11 +337,18 @@ class App {
         })
       }
     })
+
+    const getAttendanceFromPostgresDB = cron.schedule('0 */24 * * *', async function () {
+    // const getAttendanceFromPostgresDB = cron.schedule('*/5 * * * *', async function () {
+      const attendanceService = new AttendanceTypeService
+      attendanceService.uploadMultipleAttendanceRecord()
+    })
     leadsLeaveApplicationActionReminderForEmergencyLeaves.start()
     leadsLeaveApplicationActionReminderForNonEmergencyLeaves.start()
      automatedEmployeesBirthdayMail.start
      employeeStat.start()
      LeaveCountUpdate.start()
+     getAttendanceFromPostgresDB.start()
   }
 }
 
