@@ -69,7 +69,7 @@ class App {
     this.initializeErrorHandling();
     this.redisConnection();
     this.initializeCron();
-    this.connectToPostgresDatabase();
+    // this.connectToPostgresDatabase();
 
   }
 
@@ -258,12 +258,12 @@ class App {
     this.app.use(errorMiddleware);
   }
 
-  private connectToPostgresDatabase() {
-    createConnection(dbConnection).then(e => {
-      // this.seedDatabase();
-      console.log('COONECTED TO PostgresDB ');
-    });
-  }
+  // private connectToPostgresDatabase() {
+  //   createConnection(dbConnection).then(e => {
+  //     // this.seedDatabase();
+  //     console.log('COONECTED TO PostgresDB ');
+  //   });
+  // }
 
   private  initializeCron(){
 
