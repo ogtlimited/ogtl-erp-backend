@@ -108,8 +108,7 @@ class EmployeeService {
     // if (findEmployee) throw new HttpException(409, `Your email ${EmployeeData.company_email} already exists`);
     const randomstring = Math.random().toString(36).slice(2);
     const hashedPassword = await bcrypt.hash(randomstring, 10);
-    // const newOgid = this.generateOGID();
-    const newOgid = EmployeeData.ogid.toUpperCase();
+    const newOgid = await this.automateOGIDGeneration(EmployeeData.department);
     if (!EmployeeData.department) EmployeeData.department = null;
     if (!EmployeeData.projectId) EmployeeData.projectId = null;
     if (!EmployeeData.default_shift) EmployeeData.default_shift = null;
@@ -151,13 +150,13 @@ class EmployeeService {
       reports_to: null,
       branch: null,
       gender: e.gender.toLowerCase(),
-      ogid: e.ogid.toUpperCase(),
       employeeType: e.employeeType,
       date_of_joining: new Date()
     }));
     const employeesRecord = [];
     for (let idx = 0; idx < formatted.length; idx++) {
       const record = formatted[idx]
+      record.ogid = await this.automateOGIDGeneration(record.department, idx)
       const employeeInfo = await this.Employees.findOne({ company_email: record.company_email })
       if (!employeeInfo) {
         employeesRecord.push(record)
@@ -261,6 +260,18 @@ class EmployeeService {
   }
   private generateOGID() {
     return 'OG' + Math.floor(1000 + Math.random() * 9000);
+  }
+  private async automateOGIDGeneration(department_id: string, bulk_upload_increment: number = 0): Promise<any>{
+    const lastEmployeeFromDepartment = await this.Employees.findOne({ department: department_id })
+    .sort({ _id: -1 })
+    .limit(1)
+    const lastEmployeeInDepartmentEmploymentNumber = lastEmployeeFromDepartment.ogid.slice(4, -2) 
+    const employeeEmploymentNumber = Number(lastEmployeeInDepartmentEmploymentNumber) + bulk_upload_increment + 1
+    const formattedEmployeeEmploymentNumber = employeeEmploymentNumber < 10 ? "0" + Number(employeeEmploymentNumber) : Number(employeeEmploymentNumber)
+    const currentWeek = moment().week()
+    const currentYear = moment().format("YY")
+    const ogid = 'OG' + currentYear + formattedEmployeeEmploymentNumber + currentWeek
+    return ogid.toString();
   }
   private notEmpty(str: string) {
     return str.length > 0 ? true : false;
