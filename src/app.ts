@@ -327,7 +327,7 @@ class App {
       }
     })
     const deactivateResigneesERPAccountOnEffectiveDate = cron.schedule('0 */24 * * *', async function () {
-    // const deactivateResigneesERPAccountOnEffectiveDate = cron.schedule('*/5 * * * *', async function () {
+    // const deactivateResigneesERPAccountOnEffectiveDate = cron.schedule('*/3 * * * *', async function () {
       const exitService = new ExitService()
       await exitService.deactivateResigneesERPAccount()
     })

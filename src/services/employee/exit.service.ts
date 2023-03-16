@@ -271,8 +271,6 @@ class ExitService{
       $set: {
         status: "left"
       }
-    },{
-      new: true
     });
   }
 
