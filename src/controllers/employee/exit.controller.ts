@@ -4,6 +4,7 @@ import { CreateExitDto,UpdateExitDto } from '@/dtos/employee/exit.dto';
 import { Exit } from '@/interfaces/employee-interface/exit.interface';
 import ExitService from '@/services/employee/exit.service';
 import {emailTemplate} from '@utils/email';
+import { Employee } from '@/interfaces/employee-interface/employee.interface';
 const { SocketLabsClient } = require('@socketlabs/email');
 const { Socket } = require("@/utils/socket");
 const redis = require('redis');

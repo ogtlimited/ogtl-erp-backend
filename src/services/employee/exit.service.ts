@@ -256,12 +256,26 @@ class ExitService{
     const employees = this.exitfiltrationService.getAllEmployeesHelperMethod(matchBy, query, this.Exits)
     return employees;
   }
-  public async getResigneesByResignationEffectiveDate(query): Promise<Exit[]> {
-    
-    let matchBy = {}
-    const Exits: Exit[] = await this.Exits.find().populate('employee_id');
-    return employees;
+  private async getResigneesIdByResignationEffectiveDate(): Promise<any> {
+    const today = moment().endOf('day')
+    const matchBy = { effective_date: { $lte: today } }
+    const resigneeByEffectiveResignationDate: Exit[] = await this.Exits.find(matchBy);
+    const resigneesIdByEffectiveResignationDate = resigneeByEffectiveResignationDate
+      .map(resignee => resignee.employee_id);
+    return resigneesIdByEffectiveResignationDate;
   }
+  public async deactivateResigneesERPAccount(): Promise<any> {
+    const array_of_resignees_id = await this.getResigneesIdByResignationEffectiveDate()
+    const matchBy = { _id: { $in: array_of_resignees_id }, status: { $ne: "left" } }
+    await this.employeeModel.updateMany(matchBy,{
+      $set: {
+        status: "left"
+      }
+    },{
+      new: true
+    });
+  }
+
 
      //find Exit by Id
 
