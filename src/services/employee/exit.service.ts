@@ -7,6 +7,9 @@ import ExitModel from '@models/employee/exit.model';
 import EmployeeModel from '@models/employee/employee.model';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
 import moment from 'moment';
+import ExitMailService from './exit_mails.service';
+import ExitFiltrationService from './exit.filtration.service';
+
 const exitList = [
     {
       "employee_id": "goodness.peace@outsourceglobal.net",
@@ -238,30 +241,27 @@ const exitList = [
     }
    ]
 class ExitService{
-
     public Exits = ExitModel;
     public employeeModel = EmployeeModel;
-    constructor(){
+    private exitMailService = new ExitMailService()
+    private exitfiltrationService = new ExitFiltrationService()
 
-           
-            console.log(exitList.length)
-    
-        // for (let index = 0; index < exitList.length; index++) {
-        //     try {
-        //         this.createExit(exitList[index])
-                
-        //     } catch (error) {
-        //         console.log(error)
-        //     }
-            
-        // }
-
-    }
     //Returns all Exit details
     public async findAllExit(): Promise<Exit[]>{
         const Exits: Exit[] = await this.Exits.find().populate('employee_id');
         return Exits
     }
+  public async getAllResignationAndPaginate(query): Promise<Exit[]> {
+    let matchBy = {}
+    const employees = this.exitfiltrationService.getAllEmployeesHelperMethod(matchBy, query, this.Exits)
+    return employees;
+  }
+  public async getResigneesByResignationEffectiveDate(query): Promise<Exit[]> {
+    
+    let matchBy = {}
+    const Exits: Exit[] = await this.Exits.find().populate('employee_id');
+    return employees;
+  }
 
      //find Exit by Id
 
@@ -276,58 +276,29 @@ class ExitService{
        return findExit
 
     }
-
-
-    //create new Exit details
-
     public async createExit(ExitData) : Promise<Exit>{
-        if (isEmpty(ExitData)) throw new HttpException(400, "No data provided");
-
-        //check if employee already provided Exit details
-        // const findExit: Exit = await this.Exits.findOne({id: ExitData.employee_id});
-        const findEmployeeById: Employee = await this.employeeModel.findOne({ _id:ExitData.employee_id});
-         console.log(findEmployeeById)
-        if (!findEmployeeById) {
-             //throw new HttpException(404, 'Employee does not exist!')
-             console.log(`employee does not exist ${ExitData.employee_id}`)
-         };
-
-            const date1 = moment(new Date(ExitData.relieving_date))
-            const date2 = moment(new Date(ExitData.resignation_letter_date));
-            const result = date1.diff(date2,"days");
-            // console.log(result);
-
-        // if(findExit) throw new HttpException(409, `Employee ${ExitData.employee_id} already Resigned`);
+      if (isEmpty(ExitData)) throw new HttpException(400, "No data provided");
+      const findEmployeeById: Employee = await this.employeeModel.findOne({ _id:ExitData.employee_id, status:"active"});
+      if (!findEmployeeById) throw new HttpException(404, `employee with ${ExitData.employee_id} does not exist`);
+      const date1 = moment(new Date(ExitData.effective_date))
+        const date2 = moment();
+        const result = date1.diff(date2,"days");
         const days = findEmployeeById.isAdmin ? 28 : 14
-        console.log(days, findEmployeeById.isAdmin, findEmployeeById.company_email,result ) 
-        if(result>=days){
-            console.log('greater')
-            
-                const createExitData = await this.Exits.create({
-                    ...ExitData,
-                    employee_id: findEmployeeById._id
-                });
-                if(createExitData) {
-                    await this.employeeModel.findOneAndUpdate(
-                        {_id: findEmployeeById._id },
-                        {$set : {status:'left'}},
-                        {new : true}
-                    );
-                }
-                return createExitData;
-
-        }
-
-
-          throw new HttpException(409, `Notice days must be greater than ${days} days`);
-
-
-
-
+      if (result >= days) throw new HttpException(409, `Notice days must be greater than ${days} days`);
+      const resignationApplicationExist = await this.Exits.findOne({ employee_id: ExitData.employee_id, default:false });
+      if (resignationApplicationExist) throw new HttpException(409, `Resignation request already exist`);
+      const createExitData = await this.Exits.create(ExitData);
+        // if(createExitData) {
+        //     await this.employeeModel.findOneAndUpdate(
+        //         {_id: findEmployeeById._id },
+        //         {$set : {status:'left'}},
+        //         {new : true}
+        //     );
+        // }
+      Promise.all([this.exitMailService.sendResignationNotification(ExitData, this.employeeModel),
+                  this.exitMailService.sendResignationStatusNotification(ExitData, "sent", this.employeeModel)])
+      return createExitData;
     }
-
-    //Updates Exit Details
-
     public async updateExit(ExitId:string,ExitData:UpdateExitDto):Promise<Exit>{
         if (isEmpty(ExitData)) throw new HttpException(400, "No data provided");
 
@@ -340,19 +311,11 @@ class ExitService{
         if(!updateExitData) throw new HttpException(409, "details could not be updated");
         return updateExitData;
     }
-
-
-    //deletes Exit Details
-
     public async deleteExit(ExitId:string): Promise<Exit>{
         const deleteExitById: Exit = await this.Exits.findByIdAndDelete(ExitId);
         if(!deleteExitById) throw new HttpException(409, "Details don't exist");
         return deleteExitById;
-
-
     }
-
-
 }
 
 export default ExitService;

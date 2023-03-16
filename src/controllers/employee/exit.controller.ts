@@ -24,6 +24,15 @@ class ExitController{
         next(error);
     }
    };
+    public getAllResignationAndPaginate = async  (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const findAllExitsData: Exit[] = await this.ExitService.getAllResignationAndPaginate(req.query);
+        res.status(200).json({data:findAllExitsData});
+    }
+    catch(error){
+        next(error);
+    }
+   };
 
 
    //creates Exit

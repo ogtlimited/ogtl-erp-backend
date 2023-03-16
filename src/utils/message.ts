@@ -173,8 +173,33 @@ const rejectionMessage = {
   subject: "Interview Results"
 }
 
+function resignationNotification(lead_fullname, employees_fullName, ogId, reasons, gender) {
+  const message = "Hello " + lead_fullname + ","
+    + "<br><br>" + employees_fullName + " with OGID " + ogId + " wishes to tender " + gender +  " resignation due to the following reasons:"
+    + "<br><br>" + reasons + "."
+    + "<br><br>" + " Best regards."
+    + "<br><br>"
+  const subject = "Letter of Resignation"
+  return {
+    message,
+    subject
+  }
+}
+
+function resignationStatus(fullname, status) {
+  const status_message = "Hello " + fullname + ","
+    + "<br><br>" + " Your resignation request has been " + status + ". Pending approval from HR"
+    + "<br><br>" + " Best regards."
+    + "<br><br>"
+  const status_subject = "Resignation Status"
+  return {
+    status_message,
+    status_subject
+  }
+}
+
 export { terminationMessage , promotionMessage, OfferMessage,acceptedOfferMessage,rejectionMessage, 
   offerMessageFunc, ticketingMessage,resolvedTicketingMessage,clientAccountActivationNotice, 
   birthdayMessage, leaveApplicationStatusMessage, leadsLeaveNotificationMessage, LeaveRejectionHrNotificationMessage,
   requestForLeaveModification, appealRejectedLeaveMessageToLead, appealRejectedLeaveMessageToTopLead,
-  leaveApplicationRejectionMessage, introductoryMail };
+  leaveApplicationRejectionMessage, introductoryMail, resignationNotification, resignationStatus };
