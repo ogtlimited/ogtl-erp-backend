@@ -296,12 +296,14 @@ class ExitService{
         const date2 = moment();
         const result = date1.diff(date2,"days");
         const days = findEmployeeById.isAdmin ? 28 : 14
-      if (result >= days) throw new HttpException(409, `Notice days must be greater than ${days} days`);
+      if (result >= days) throw new HttpException(409, `Notice days must not be greater than ${days} days`);
       const resignationApplicationExist = await this.Exits.findOne({ employee_id: ExitData.employee_id, default:false });
       if (resignationApplicationExist) throw new HttpException(409, `Resignation request already exist`);
       const createExitData = await this.Exits.create(ExitData);
       Promise.all([this.exitMailService.sendResignationNotificationToLeads(ExitData, this.employeeModel),
-      this.exitMailService.sendResignationNotificationToResignee(ExitData, "sent", this.employeeModel)])
+      this.exitMailService.sendResignationNotificationToResignee(ExitData, "sent", this.employeeModel),
+      this.exitMailService.sendResignationNotificationToHr(ExitData, this.employeeModel)
+    ])
       return createExitData;
     }
     public async updateExit(ExitId:string,ExitData:UpdateExitDto):Promise<Exit>{

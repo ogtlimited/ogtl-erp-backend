@@ -29,6 +29,20 @@ class ExitMailService {
                 EmailService.sendMail("snowdenmoses@gmail.com", "hr@outsourceglobal.com", subject, message, body)
             }
     }
+    public async sendResignationNotificationToHr(exitData, employeeModel) {
+            const employeeDetails = await employeeModel.findOne({ _id: exitData.employee_id })
+            const employeesFirstName = employeeDetails.first_name
+                .charAt(0) + employeeDetails.first_name.toLowerCase().slice(1)
+            const employeesOtherName = employeeDetails.last_name
+                .charAt(0) + employeeDetails.last_name.toLowerCase().slice(1)
+            const employeesFullname = `${employeesFirstName} ${employeesOtherName}`
+            const ogId = employeeDetails.ogid
+            const gender = employeeDetails.gender === "male" ? "his" : "her"
+            const { message, subject } = resignationNotification("Human Resources", employeesFullname, ogId, exitData.reason_for_resignation, gender)
+            const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
+            EmailService.sendMail("snowdenmoses@gmail.com", "hr@outsourceglobal.com", subject, message, body)
+            
+    }
     public async sendResignationNotificationToResignee(ExitData, status, employeeModel) {
         const leaveApplicant = await employeeModel.findOne({ _id: ExitData.employee_id })
         const formattedFirstName = leaveApplicant.first_name.charAt(0) + leaveApplicant.first_name.toLowerCase().slice(1)
