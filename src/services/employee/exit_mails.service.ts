@@ -1,7 +1,7 @@
 import EmailService from '@/utils/email.service';
 import { resignationNotification, resignationStatus } from '@/utils/message';
 class ExitMailService {
-    public async sendResignationNotification(exitData, employeeModel) {
+    public async sendResignationNotificationToLeads(exitData, employeeModel) {
             const employeeDetails = await employeeModel.findOne({ _id: exitData.employee_id })
             const employeesFirstName = employeeDetails.first_name
                 .charAt(0) + employeeDetails.first_name.toLowerCase().slice(1)
@@ -9,22 +9,27 @@ class ExitMailService {
                 .charAt(0) + employeeDetails.last_name.toLowerCase().slice(1)
             const employeesFullname = `${employeesFirstName} ${employeesOtherName}`
             const ogId = employeeDetails.ogid
-            const reports_to = employeeDetails.reports_to
-            const leadsDetails = reports_to ? await employeeModel.findOne({ _id: reports_to }) : null
-            const leadsFirstName = leadsDetails?.first_name
-                .charAt(0) + leadsDetails?.first_name.toLowerCase().slice(1)
-            const leadsOtherName = leadsDetails?.last_name
-                .charAt(0) + leadsDetails?.last_name.toLowerCase().slice(1)
-            const leadsFullname = `${leadsFirstName} ${leadsOtherName}`
-            const leadsEmail = leadsDetails?.company_email
+            let reports_to = employeeDetails.reports_to
             const gender = employeeDetails.gender === "male" ? "his" : "her"
-            // console.log("reports_to", gender)
-            const { message, subject } = resignationNotification(leadsFullname, employeesFullname, ogId, exitData.reason_for_resignation, gender)
-            const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
-            // EmailService.sendMail(leadsEmail, "hr@outsourceglobal.com", subject, message, body)
-            EmailService.sendMail("snowdenmoses@gmail.com", "hr@outsourceglobal.com", subject, message, body)
+            const array_of_reports_to_id = []
+            while (reports_to != null) {
+                array_of_reports_to_id.push(reports_to)
+                const employeeRecord = await employeeModel.findOne({ _id: reports_to })
+                reports_to = employeeRecord.reports_to
+            }
+            for (let i = 0; i < array_of_reports_to_id.length; i++) {
+                const leadsDetails = await employeeModel.findOne({ _id: array_of_reports_to_id[i]})
+                const leadsFirstName = leadsDetails?.first_name
+                    .charAt(0) + leadsDetails?.first_name.toLowerCase().slice(1)
+                const leadsOtherName = leadsDetails?.last_name
+                    .charAt(0) + leadsDetails?.last_name.toLowerCase().slice(1)
+                const leadsFullname = `${leadsFirstName} ${leadsOtherName}`
+                const { message, subject } = resignationNotification(leadsFullname, employeesFullname, ogId, exitData.reason_for_resignation, gender)
+                const body = `<div><h1 style="color:#00c2fa">Outsource Global Technology Limited</h1><br></div>${message}`
+                EmailService.sendMail("snowdenmoses@gmail.com", "hr@outsourceglobal.com", subject, message, body)
+            }
     }
-    public async sendResignationStatusNotification(ExitData, status, employeeModel) {
+    public async sendResignationNotificationToResignee(ExitData, status, employeeModel) {
         const leaveApplicant = await employeeModel.findOne({ _id: ExitData.employee_id })
         const formattedFirstName = leaveApplicant.first_name.charAt(0) + leaveApplicant.first_name.toLowerCase().slice(1)
         const { status_message, status_subject } = resignationStatus(formattedFirstName, status)

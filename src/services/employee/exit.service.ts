@@ -300,15 +300,8 @@ class ExitService{
       const resignationApplicationExist = await this.Exits.findOne({ employee_id: ExitData.employee_id, default:false });
       if (resignationApplicationExist) throw new HttpException(409, `Resignation request already exist`);
       const createExitData = await this.Exits.create(ExitData);
-        // if(createExitData) {
-        //     await this.employeeModel.findOneAndUpdate(
-        //         {_id: findEmployeeById._id },
-        //         {$set : {status:'left'}},
-        //         {new : true}
-        //     );
-        // }
-      Promise.all([this.exitMailService.sendResignationNotification(ExitData, this.employeeModel),
-                  this.exitMailService.sendResignationStatusNotification(ExitData, "sent", this.employeeModel)])
+      Promise.all([this.exitMailService.sendResignationNotificationToLeads(ExitData, this.employeeModel),
+      this.exitMailService.sendResignationNotificationToResignee(ExitData, "sent", this.employeeModel)])
       return createExitData;
     }
     public async updateExit(ExitId:string,ExitData:UpdateExitDto):Promise<Exit>{
