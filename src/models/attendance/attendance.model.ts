@@ -27,10 +27,10 @@ const attendanceSchema: Schema = new Schema(
       ref: "Project"
     },
     clockInTime: {
-      type: Date
+      type: String
     },
     clockOutTime: {
-      type: Date
+      type: String
     },
     hoursWorked:{
       type: Number,

@@ -66,6 +66,7 @@ class App {
     this.initializeErrorHandling();
     this.redisConnection();
     this.initializeCron();
+    // this.connectToPostgresDatabase();
 
   }
 
@@ -254,6 +255,13 @@ class App {
     this.app.use(errorMiddleware);
   }
 
+  // private connectToPostgresDatabase() {
+  //   createConnection(dbConnection).then(e => {
+  //     // this.seedDatabase();
+  //     console.log('COONECTED TO PostgresDB ');
+  //   });
+  // }
+
   private  initializeCron(){
 
     const task = cron.schedule('* 1 * * 1-5', async function() {
@@ -337,7 +345,7 @@ class App {
     employeeStat.start()
     LeaveCountUpdate.start()
     deactivateResigneesERPAccountOnEffectiveDate.start()
-     
+
   }
 }
 

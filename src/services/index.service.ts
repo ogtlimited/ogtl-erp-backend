@@ -16,7 +16,7 @@ import SalaryDetailsService from '@services/employee/salary-details.service';
 import WorkExperienceService from '@services/employee/work-experience.service';
 import BranchService from '@services/employee/branch.service';
 import JobOfferService from '@services/recruitment/job_offer.service';
-import TestServices from '@services/recruitment/test.services';
+import TestServices from '@/services/recruitment/recruitment_result.services';
 import AssetService from './assets/assets.service';
 import PurchaseOrderService from './assets/purchase-order.service';
 import InvoiceService from '@services/invoice/invoice.service';
@@ -61,7 +61,7 @@ class CombineServices {
     const jobApplicants = await this.jobApplicantS.getJobApplicants({})
     const branches = await this.brancheS.findAllBranches();
     const acceptedJobOffers = await this.acceptedJobOfferS.findAllAcceptedJobOffers()
-    const passedApplicants = await this.passedTestApplicants.findAllPassedTests()
+    const passedApplicants = await this.passedTestApplicants.findAllPassedRecruitmentResults()
     const allAssets = await this.Assets.findAllAsset()
     const allPurchaseOrders = await this.PurchaseOrder.findAllPurchaseOrders()
     const clientS = await this.clientS.findAll()
@@ -145,7 +145,7 @@ class CombineServices {
     const projects = await this.projectS.findAllNoPopulate();
     const branches = await this.brancheS.findAllBranches();
     const jobApplicants = await this.jobApplicantS.getJobApplicants({})
-    const passedApplicants = await this.passedTestApplicants.findAllPassedTests()
+    const passedApplicants = await this.passedTestApplicants.findAllPassedRecruitmentResults()
 
     return {
       designations,
