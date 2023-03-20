@@ -10,11 +10,7 @@ const exitSchema: Schema = new Schema(
           required: true,
           ref: "Employee",
           },
-        resignation_letter_date: {
-          type: Date,
-          required:true,
-        },
-        relieving_date: {
+        effective_date: {
           type: Date,
           required:true,
         },
@@ -22,6 +18,11 @@ const exitSchema: Schema = new Schema(
           type: String,
           required:true,
 
+        },
+        deactivated: {
+          type: Boolean,
+          default: false,
+          required: true,
         },
 
     },

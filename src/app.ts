@@ -37,10 +37,7 @@ import EmployeeService from "./services/employee.service";
 const fs = require('fs')
 import EmailService from '@/utils/email.service';
 import { leadsLeaveNotificationMessage, birthdayMessage } from '@/utils/message';
-import AttendanceTypeService from './services/attendance/attendance.service';
-import { dbConnection } from '@utils/postgreQL';
-import { createConnection } from 'typeorm';
-
+import ExitService from './services/employee/exit.service';
 
 const path = require('path')
 if (process.env.NODE_ENV !== "production") {
@@ -337,18 +334,18 @@ class App {
         })
       }
     })
-
-    const getAttendanceFromPostgresDB = cron.schedule('0 */24 * * *', async function () {
-    // const getAttendanceFromPostgresDB = cron.schedule('*/5 * * * *', async function () {
-      const attendanceService = new AttendanceTypeService
-      attendanceService.uploadMultipleAttendanceRecord()
+    const deactivateResigneesERPAccountOnEffectiveDate = cron.schedule('0 */24 * * *', async function () {
+    // const deactivateResigneesERPAccountOnEffectiveDate = cron.schedule('*/3 * * * *', async function () {
+      const exitService = new ExitService()
+      await exitService.deactivateResigneesERPAccount()
     })
     leadsLeaveApplicationActionReminderForEmergencyLeaves.start()
     leadsLeaveApplicationActionReminderForNonEmergencyLeaves.start()
-     automatedEmployeesBirthdayMail.start
-     employeeStat.start()
-     LeaveCountUpdate.start()
-     getAttendanceFromPostgresDB.start()
+    automatedEmployeesBirthdayMail.start
+    employeeStat.start()
+    LeaveCountUpdate.start()
+    deactivateResigneesERPAccountOnEffectiveDate.start()
+
   }
 }
 
