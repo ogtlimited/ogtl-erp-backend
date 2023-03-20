@@ -56,6 +56,14 @@ class LeadsLeaveApplicationController {
       next(error);
     }
   };  
+  public getTotalActiveLeaves = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const totalActiveLeaves: any = await this.leadsLeaveApplicationService.getTotalActiveLeaves(req.user);
+      res.status(200).json({ data: totalActiveLeaves });
+    } catch (error) {
+      next(error);
+    }
+  };  
 }
 
 export default LeadsLeaveApplicationController;

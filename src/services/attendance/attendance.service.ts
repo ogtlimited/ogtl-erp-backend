@@ -8,9 +8,11 @@ import {
 } from '@/interfaces/attendance-interface/attendance-interface';
 import attendanceModel  from '@models/attendance/attendance.model';
 import employeeModel  from '@models/employee/employee.model';
+import { Staff } from '@/utils/postgreQL/staff.entity';
+import { AttendanceInfo } from '@/utils/postgreQL/attendance_info.entity';
 // import deductionModel  from '@models/payroll/deduction.model';
 import { isEmpty } from '@utils/util';
-import {getWorkTime}  from '@/utils/attendanceCalculator';
+import {calculateLateness}  from '@/utils/attendanceCalculator';
 import {ObjectId} from 'mongodb'
 import { attendanceofficeQueryGenerator} from '@/utils/payrollUtil';
 import deductionModel from '@/models/payroll/deduction.model';
@@ -19,9 +21,11 @@ import moment = require('moment');
 import EmployeeModel from '@models/employee/employee.model';
 import applicationModel from '@/models/leave/application.model';
 import employeesSalaryModel from "@models/payroll/employees-salary";
+import { EntityRepository, Repository, getRepository, getConnection } from 'typeorm';
 
 
-class AttendanceTypeService {
+@EntityRepository()
+class AttendanceTypeService extends Repository<AttendanceInfo> {
   private attendanceTypes = attendanceModel;
 
   private leaveModel = applicationModel;
@@ -108,6 +112,11 @@ class AttendanceTypeService {
     return findAttendanceType;
   }
 
+  public async findAllExternalDatabaseAttendance(): Promise<any> {
+    const staff = await getRepository(AttendanceInfo).find({relations: ['staff']})
+    return  staff
+  }
+
   public async bulkAttendanceUpload(attendanceTypeData): Promise<any> {
     const employeesDeductions = []
     const employeesAttendance = []
@@ -117,7 +126,6 @@ class AttendanceTypeService {
     // return attendanceTypeData
 
     for(const employeeData of attendanceTypeData.attendances){
-      // console.log(employeeData)
       const result = await this.generatePossibleDeductions(employeeData.ogid, employeeData, latenessDeduction, ncnsDeduction)
       const attendanceConstructor: ICreateAttendance = AttendanceTypeService.attendanceData(employeeData, result);
 
@@ -139,6 +147,51 @@ class AttendanceTypeService {
     await deductionModel.insertMany(employeesDeductions);
     await attendanceModel.insertMany(employeesAttendance)
     return {employeesDeductions, employeesAttendance}
+  }
+  public async uploadMultipleAttendanceRecord(): Promise<any> {
+    const attendance = await this.findAllExternalDatabaseAttendance()
+    const employeesDeductions = []
+    const employeesAttendance = []
+    const latenessDeduction = await deductionTypeModel.findOne({ title: "lateness" })
+    const ncnsDeduction = await deductionTypeModel.findOne({ title: "NCNS" })
+
+    const formatted = await Promise.all(attendance.map(async(e: any) => {
+      const ogid = e?.staff?.StaffUniqueId
+      const employee = await EmployeeModel.findOne({ ogid: ogid })
+      const workedTimeResult = this.getWorkTime(e.ClockIn, e.ClockOut)
+      return {
+      ...e,
+      ogid: e.staff.StaffUniqueId,
+      clockInTime: e.ClockIn,
+      clockOutTime: e.ClockOut,
+      employeeId: employee?._id,
+      totalHours: workedTimeResult?.hoursWorked,
+      totalMinutes: workedTimeResult?.minutesWorked,
+      shiftStartTime: e.staff.ShiftStartTime,
+      shiftTypeId: employee ? employee.default_shift :null,
+      
+    }}));
+    for (const employeeData of formatted) {
+      const result = await this.generatePossibleDeductions(employeeData.ogid, employeeData, latenessDeduction, ncnsDeduction)
+      const attendanceConstructor: ICreateAttendance = AttendanceTypeService.attendanceData(employeeData, result);
+      if (result?.departmentId != undefined) {
+        attendanceConstructor.departmentId = result.departmentId
+      }
+      if (result?.projectId != undefined) {
+        attendanceConstructor.projectId = result.projectId
+      }
+      employeesAttendance.push(attendanceConstructor)
+
+      if (result?.employeesDeductions.length == 0) {
+        continue
+      }
+
+      employeesDeductions.push(...result?.employeesDeductions)
+
+    }
+        await deductionModel.insertMany(employeesDeductions);
+        await attendanceModel.insertMany(employeesAttendance)
+        return { employeesDeductions, employeesAttendance }
   }
 
   public async createAttendanceType(user, attendanceTypeData: ICreateAttendance): Promise<any> {
@@ -176,8 +229,8 @@ class AttendanceTypeService {
     if(attendanceRecord.clockOutTime){
       throw new HttpException(400, "already clocked out!");
     }
-    attendanceRecord = attendanceRecord.toObject()
-    const workTimeResult: any = await getWorkTime(attendanceRecord.clockInTime, attendanceData.clockOutTime, attendanceRecord.shiftTypeId.start_time);
+    attendanceRecord = attendanceRecord?.toObject()
+    const workTimeResult: any = this.getWorkTime(attendanceRecord.clockInTime, attendanceData.clockOutTime);
     attendanceRecord.hoursWorked = workTimeResult.hoursWorked
     attendanceRecord.minutesWorked = workTimeResult.minutesWorked
     attendanceRecord.clockOutTime = attendanceData.clockOutTime
@@ -203,13 +256,13 @@ class AttendanceTypeService {
 
   private static attendanceData(employeeData, result: IPossibleDeductons): ICreateAttendance {
     return {
-      clockInTime : employeeData.clockInTime,
-      clockOutTime : employeeData.clockOutTime,
-      employeeId : result.employeeId,
-      hoursWorked : result.totalWorkHours,
-      minutesWorked : result.minutesWorked,
-      shiftTypeId : result.shiftTypeId._id,
-      ogId : result.ogId
+      clockInTime : employeeData?.clockInTime,
+      clockOutTime : employeeData?.clockOutTime,
+      employeeId : result?.employeeId,
+      hoursWorked : result?.totalWorkHours,
+      minutesWorked : result?.minutesWorked,
+      shiftTypeId : result?.shiftTypeId?._id,
+      ogId : result?.ogId
     }
   }
 
@@ -237,32 +290,33 @@ class AttendanceTypeService {
         },
       })
 
-      console.log(employee, ogid, employee._id, "employee ---------------------------->1")
-      let employeeSalary: any = await employeesSalaryModel.findOne({employeeId: employee._id})
-      employee = employee.toObject();
-      employeeSalary = employeeSalary.toObject()
-      employee.employeeSalary = employeeSalary
+      let employeeSalary: any = await employeesSalaryModel.findOne({employeeId: employee?._id})
+      employee = employee?.toObject();
+      employeeSalary = employeeSalary?.toObject()
+      employee.employeeSalary = employeeSalary ? employeeSalary : null
 
 
       // const empHours = moment(attendanceRecord.clockInTime).subtract(1, 'hour').format("HH:mm")
       const resumptionTime = employee.default_shift['start_time']
       const workTime = employee.default_shift.expectedWorkTime.split(":")
       const expectedWorkHours = parseInt(workTime[0])
-      const employeeTimeData = getWorkTime(attendanceRecord.clockInTime, attendanceRecord.clockOutTime, resumptionTime)
-      const employeeLateness: number =  parseInt(String(employeeTimeData.timeDeductions));
+      const employeeTimeData = this.getWorkTime(attendanceRecord.clockInTime, attendanceRecord.clockOutTime)
+      let timeDeductions = calculateLateness(attendanceRecord.clockInTime, attendanceRecord.shiftStartTime);
+      timeDeductions = Math.floor(timeDeductions);
+      const employeeLateness: number =  parseInt(String(timeDeductions));
 
       // console.log(attendanceRecord == null, "attendance record null check")
       if (!attendanceRecord) {
         const empLeave = await this.leaveModel.findOne({
-          employee_id: employee._id,
+          employee_id: employee?._id,
           from_date: {'$lte': new Date(moment().format('YYYY-MM-DD')).toISOString()},
           to_date:{'$gte': new Date(moment().format('YYYY-MM-DD')).toISOString()}
         })
 
         if(!empLeave){
-          deductionAmount = ncnsDeduction.percentage * employee.employeeSalary.monthlySalary;
-          deductionsConstructor.employeeId= employee._id;
-          deductionsConstructor.deductionTypeId= ncnsDeduction._id;
+          deductionAmount = employee.employeeSalary ? ncnsDeduction.percentage * employee?.employeeSalary?.monthlySalary : 0;
+          deductionsConstructor.employeeId= employee?._id;
+          deductionsConstructor.deductionTypeId= ncnsDeduction?._id;
           deductionsConstructor.amount= deductionAmount;
           deductionsConstructor.description = "NCNS"
           employeesDeductions.push(deductionsConstructor)
@@ -271,9 +325,9 @@ class AttendanceTypeService {
 
       else if (attendanceRecord.clockOutTime ==  null) {
         // console.log(attendanceRecord == null, "attendance record clock out time check");
-        deductionAmount = ncnsDeduction.percentage * employee.employeeSalary.monthlySalary;
-        deductionsConstructor.employeeId= employee._id;
-        deductionsConstructor.deductionTypeId= ncnsDeduction._id;
+        deductionAmount = employee.employeeSalary ? ncnsDeduction.percentage * employee?.employeeSalary?.monthlySalary : 0;
+        deductionsConstructor.employeeId= employee?._id;
+        deductionsConstructor.deductionTypeId= ncnsDeduction?._id;
         deductionsConstructor.amount= deductionAmount;
         deductionsConstructor.description = "NCNS(no clock out)"
         employeesDeductions.push(deductionsConstructor)
@@ -283,21 +337,19 @@ class AttendanceTypeService {
       else if(attendanceRecord.clockInTime && attendanceRecord.clockOutTime){
 
         if(employeeLateness > 0) {
-          deductionAmount = (latenessDeduction.percentage * employee.employeeSalary.monthlySalary) * employeeLateness;
-          // console.log(employeeLateness, deductionAmount, "emp hours  ---------------------->>>>")
-          latenessConstructor.employeeId= employee._id
-          latenessConstructor.deductionTypeId= latenessDeduction._id
+          deductionAmount = employee.employeeSalary ? (latenessDeduction.percentage * employee?.employeeSalary?.monthlySalary) * employeeLateness : 0;
+          latenessConstructor.employeeId= employee?._id
+          latenessConstructor.deductionTypeId= latenessDeduction?._id
           latenessConstructor.amount= deductionAmount
           latenessConstructor.description = "lateness"
           employeesDeductions.push(latenessConstructor)
-          // console.log(employeesDeductions, "employee is late")
         }
 
         //incomplete hours
         if (parseInt(attendanceRecord.totalHours) < expectedWorkHours) {
           const workTimeDeficit = expectedWorkHours - attendanceRecord.totalHours
-          deductionAmount = Math.floor(((employee.employeeSalary.monthlySalary/22)/expectedWorkHours)) * workTimeDeficit;
-          deductionsConstructor.employeeId= employee._id
+          deductionAmount = employee.employeeSalary ? Math.floor(((employee?.employeeSalary?.monthlySalary/22)/expectedWorkHours)) * workTimeDeficit : 0;
+          deductionsConstructor.employeeId= employee?._id
           deductionsConstructor.description= "Incomplete Hours"
           deductionsConstructor.amount= deductionAmount
           employeesDeductions.push(deductionsConstructor)
@@ -310,7 +362,7 @@ class AttendanceTypeService {
         employeeId: employee._id,
         totalWorkHours: attendanceRecord.totalHours,
         minutesWorked: employeeTimeData.minutesWorked,
-        departmentId: employee.departmentId,
+        departmentId: employee?.departmentId,
         projectId: employee.projectId,
         shiftTypeId: employee.default_shift,
         ogId: employee.ogid
@@ -318,6 +370,35 @@ class AttendanceTypeService {
 
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  private getWorkTime(clockIn, clockOut) {
+    const clockInHours = clockIn.split(":")[0]
+    const clockInMinutes = clockIn.split(":")[1]
+    const clockOutHours = clockOut.split(":")[0]
+    const clockOutMinutes = clockOut.split(":")[1]
+    let hoursWorked;
+    let minutesWorked;
+    if (parseInt(clockInHours, 10) > parseInt(clockOutHours, 10)) {
+      hoursWorked = parseInt("24:00:00", 10) - parseInt(clockInHours, 10) + parseInt(clockOutHours, 10)
+      minutesWorked = clockOutMinutes - clockInMinutes
+      if (minutesWorked < 0) {
+        hoursWorked = hoursWorked - 1
+        minutesWorked = 60 + minutesWorked
+      }
+    }
+    else if (parseInt(clockInHours, 10) <= parseInt(clockInHours, 10)) {
+      hoursWorked = parseInt(clockOutHours, 10) - parseInt(clockInHours, 10)
+      minutesWorked = clockOutMinutes - clockInMinutes
+      if (minutesWorked < 0) {
+        hoursWorked = hoursWorked - 1
+        minutesWorked = 60 + minutesWorked
+      }
+    }
+    return {
+      hoursWorked,
+      minutesWorked
     }
   }
 

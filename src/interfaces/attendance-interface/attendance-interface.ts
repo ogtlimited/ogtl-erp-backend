@@ -31,6 +31,7 @@ export interface ICreateAttendance {
   totalHours?: any
   hoursWorked?: number
   minutesWorked?:Number
+  shiftStartTime?: string
 }
 
 export interface IAttendanceDeduction{

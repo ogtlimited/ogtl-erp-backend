@@ -67,6 +67,17 @@ class DesignationService{
     return deleteDesignationById;
     }
 
+    public async getDesignationBasedOnOffice(query): Promise<Designation[]> {
+        if (query.department_id) {
+            const designation: Designation[] = await this.Designations.find({ department_id: query.department_id });
+            return designation
+        }
+        if (query.campaign_id) {
+            const designation: Designation[] = await this.Designations.find({ campaign_id: query.campaign_id });
+            return designation
+        }
+    }
+
 }
 
 export default DesignationService;

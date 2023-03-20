@@ -13,6 +13,7 @@ import { IDepartment } from '@/interfaces/employee-interface/department.interfac
 import EmployeeModel from '@models/employee/employee.model';
 import { ILeaveApprovalLevel } from '@/interfaces/leave-interface/leave_approval_level.interface';
 import { Request } from 'express';
+import moment from 'moment';
 
 class LeadsLeaveApplicationService {
   public application = applicationModel;
@@ -112,6 +113,14 @@ class LeadsLeaveApplicationService {
     let matchBy = { leave_approver: user._id, hr_stage: { $ne: true }, isAppealled: true, status: "pending", list_of_approvers: { $ne: user_id } }
     const leaveApplications = await this.filtrationService.getLeaveApplicationsHelperMethod(matchBy, query, this.application)
     return leaveApplications;
+  }
+
+  public async getTotalActiveLeaves(user: Employee): Promise<any> {
+    const today = moment().endOf('day')
+    const user_id = user._id.toString()
+    let matchBy = { list_of_approvers: { $eq: user_id }, status: "approved", to_date: { $gte: today }}
+    const totalLeaveApplications = await this.application.find(matchBy)
+    return totalLeaveApplications.length;
   }
   private async getDepartmentHighestLeaveApprovalLevel(user: Employee): Promise<number> {
     const departmentRecord: IDepartment = await this.departmentModel.findOne({ _id: user.department })
