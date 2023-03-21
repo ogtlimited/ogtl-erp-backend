@@ -265,10 +265,17 @@ class EmployeeService {
     const lastEmployeeFromDepartment = await this.Employees.findOne({ department: department_id })
     .sort({ _id: -1 })
     .limit(1)
-    const lastEmployeeInDepartmentEmploymentNumber = lastEmployeeFromDepartment.ogid.slice(4, -2) 
-    const employeeEmploymentNumber = Number(lastEmployeeInDepartmentEmploymentNumber) + bulk_upload_increment + 1
-    const formattedEmployeeEmploymentNumber = employeeEmploymentNumber < 10 ? "0" + Number(employeeEmploymentNumber) : Number(employeeEmploymentNumber)
     const currentWeek = moment().week()
+    const lastEmployeeInDepartmentEmploymentWeek = moment(lastEmployeeFromDepartment.createdAt).week()
+    const lastEmployeeInDepartmentEmploymentNumber = lastEmployeeFromDepartment.ogid.slice(4, -2) 
+    let employeeEmploymentNumber = Number(lastEmployeeInDepartmentEmploymentNumber) + bulk_upload_increment + 1
+    if (currentWeek === lastEmployeeInDepartmentEmploymentWeek) {
+      employeeEmploymentNumber = employeeEmploymentNumber
+    }
+    else{
+      employeeEmploymentNumber = 1
+    }
+    const formattedEmployeeEmploymentNumber = employeeEmploymentNumber < 10 ? "0" + Number(employeeEmploymentNumber) : Number(employeeEmploymentNumber)
     const currentYear = moment().format("YY")
     const ogid = 'OG' + currentYear + formattedEmployeeEmploymentNumber + currentWeek
     return ogid.toString();
