@@ -269,7 +269,7 @@ class EmployeeService {
       const lastEmployeeInAdminEmploymentNumber = lastEmployeeInAdmin.ogid.slice(2)
       let employeeEmploymentNumber = Number(lastEmployeeInAdminEmploymentNumber) + bulk_upload_increment + 1
       const ogid = 'OG' + employeeEmploymentNumber
-      return ogid.toString();
+      return ogid.toString().replace(/ /g, '');
     }
     else {
       const lastNonAdminEmployee = await this.Employees.findOne({ isAdmin: false })
@@ -288,7 +288,7 @@ class EmployeeService {
       const formattedEmployeeEmploymentNumber = employeeEmploymentNumber < 10 ? "0" + Number(employeeEmploymentNumber) : Number(employeeEmploymentNumber)
       const currentYear = moment().format("YY")
       const ogid = 'OG' + currentYear + formattedEmployeeEmploymentNumber + currentWeek
-      return ogid.toString().trim;
+      return ogid.toString().replace(/ /g, '');
     }
    
   
