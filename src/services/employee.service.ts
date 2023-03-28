@@ -108,8 +108,7 @@ class EmployeeService {
     // if (findEmployee) throw new HttpException(409, `Your email ${EmployeeData.company_email} already exists`);
     const randomstring = Math.random().toString(36).slice(2);
     const hashedPassword = await bcrypt.hash(randomstring, 10);
-    // const newOgid = this.generateOGID();
-    const newOgid = EmployeeData.ogid.toUpperCase();
+    const newOgid = await this.automateOGIDGeneration(EmployeeData.isAdmin);
     if (!EmployeeData.department) EmployeeData.department = null;
     if (!EmployeeData.projectId) EmployeeData.projectId = null;
     if (!EmployeeData.default_shift) EmployeeData.default_shift = null;
@@ -151,13 +150,13 @@ class EmployeeService {
       reports_to: null,
       branch: null,
       gender: e.gender.toLowerCase(),
-      ogid: e.ogid.toUpperCase(),
       employeeType: e.employeeType,
       date_of_joining: new Date()
     }));
     const employeesRecord = [];
     for (let idx = 0; idx < formatted.length; idx++) {
       const record = formatted[idx]
+      record.ogid = await this.automateOGIDGeneration(record.isAdmin, idx)
       const employeeInfo = await this.Employees.findOne({ company_email: record.company_email })
       if (!employeeInfo) {
         employeesRecord.push(record)
@@ -261,6 +260,38 @@ class EmployeeService {
   }
   private generateOGID() {
     return 'OG' + Math.floor(1000 + Math.random() * 9000);
+  }
+  private async automateOGIDGeneration(isAdmin: Boolean, bulk_upload_increment: number = 0): Promise<any>{
+    if (isAdmin){
+      const lastEmployeeInAdmin = await this.Employees.findOne({ isAdmin: true })
+        .sort({ _id: -1 })
+        .limit(1)
+      const lastEmployeeInAdminEmploymentNumber = lastEmployeeInAdmin.ogid.slice(2)
+      let employeeEmploymentNumber = Number(lastEmployeeInAdminEmploymentNumber) + bulk_upload_increment + 1
+      const ogid = 'OG' + employeeEmploymentNumber
+      return ogid.toString().replace(/ /g, '');
+    }
+    else {
+      const lastNonAdminEmployee = await this.Employees.findOne({ isAdmin: false })
+        .sort({ _id: -1 })
+        .limit(1)
+      const currentWeek = moment().week()
+      const lastNonAdminEmployeeEmploymentWeek = moment(lastNonAdminEmployee.createdAt).week()
+      const lastNonAdminEmployeeEmploymentNumber = lastNonAdminEmployee.ogid.slice(4, -2)
+      let employeeEmploymentNumber = Number(lastNonAdminEmployeeEmploymentNumber) + bulk_upload_increment + 1
+      if (currentWeek === lastNonAdminEmployeeEmploymentWeek) {
+        employeeEmploymentNumber = employeeEmploymentNumber
+      }
+      else {
+        employeeEmploymentNumber = 1
+      }
+      const formattedEmployeeEmploymentNumber = employeeEmploymentNumber < 10 ? "0" + Number(employeeEmploymentNumber) : Number(employeeEmploymentNumber)
+      const currentYear = moment().format("YY")
+      const ogid = 'OG' + currentYear + formattedEmployeeEmploymentNumber + currentWeek
+      return ogid.toString().replace(/ /g, '');
+    }
+   
+  
   }
   private notEmpty(str: string) {
     return str.length > 0 ? true : false;

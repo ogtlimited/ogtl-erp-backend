@@ -18,6 +18,7 @@ export class CreateEmployeeDto {
   public department: string;
 
   @IsString()
+  @IsOptional()
   public ogid: string;
 
   @IsString()
