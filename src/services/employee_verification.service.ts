@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 
 import EmployeeModel from '@models/employee/employee.model';
-import ShiftModel from '@/models/shift/shift.model';
+import EmployeeShiftModel from '@/models/shift/employee_shift.model';
 import PersonalDetailModel from '@models/employee/personal-details.model';
 import { HttpException } from '@exceptions/HttpException';
 import {_} from "lodash"
@@ -10,7 +10,7 @@ import {_} from "lodash"
 
 class EmployeeVerificationService {
   private Employees = EmployeeModel;
-  private shiftTypeModel = ShiftModel;
+  private employeeShiftModel = EmployeeShiftModel;
   private PersonalDetailModel = PersonalDetailModel;
   public async findEmployeeByOgId(ogid): Promise<any> {
     // if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
@@ -18,14 +18,7 @@ class EmployeeVerificationService {
       .populate('designation')
       .populate('department')
       .populate('projectId');
-    const shifts = await this.shiftTypeModel.find({ ogid });
-    const stringifiedShift = {}
-    shifts.map(shift => {
-      const newObtj = {
-        [shift.day_of_the_week]: _.omit(shift, ['day'])
-      }
-      Object.assign(stringifiedShift, newObtj)
-    })
+    const shifts = await this.employeeShiftModel.find({ ogid });
     if (!employee) throw new HttpException(404, "Record Not Found");
     const personalDetails = await this.PersonalDetailModel.findOne({ employee_id: employee?._id  })
     return {
@@ -42,7 +35,7 @@ class EmployeeVerificationService {
       StateOfOrigin: personalDetails ? personalDetails.state : null,
       StartDate: new Date(employee.date_of_joining),
       Role: employee.designation ? employee.designation.designation : null,
-      Shifts: shifts ? stringifiedShift : null,
+      Shifts: shifts.length != 0 ? shifts : null,
     };
   }
 
