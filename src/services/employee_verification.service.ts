@@ -14,11 +14,10 @@ class EmployeeVerificationService {
     const employee = await this.Employees.findOne({ ogid })
       .populate('designation')
       .populate('department')
-      .populate('projectId')
-      .populate('default_shift');
+      .populate('projectId');
+    const shifts = await this.shift.find({ ogid });
     if (!employee) throw new HttpException(404, "Record Not Found");
     const personalDetails = await this.PersonalDetailModel.findOne({ employee_id: employee?._id  })
-    // return employee
     return {
       PictureUrl: employee.image,
       StaffUniqueId: employee.ogid,
@@ -33,8 +32,7 @@ class EmployeeVerificationService {
       StateOfOrigin: personalDetails ? personalDetails.state : null,
       StartDate: new Date(employee.date_of_joining),
       Role: employee.designation ? employee.designation.designation : null,
-      ShiftStartTime: employee.default_shift ? employee.default_shift.start_time : null,
-      ShiftEndTime: employee.default_shift ? employee.default_shift.end_time : null
+      Shifts: shifts ? shifts : null,
     };
   }
 
