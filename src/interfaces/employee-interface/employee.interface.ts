@@ -3,6 +3,7 @@ export interface Employee {
     _id: string;
     ogid: string;
     date_of_joining: string;
+    default_shift: string;
     company_email: string
     department: any;
     password: string;

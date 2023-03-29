@@ -11,6 +11,9 @@ export class CreateEmployeeDto {
   public date_of_joining: string;
 
   @IsString()
+  public default_shift: string;
+
+  @IsString()
   @IsOptional()
   public department: string;
 
