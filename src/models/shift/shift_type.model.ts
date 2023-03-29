@@ -27,7 +27,7 @@ const shiftTypeSchema: Schema = new Schema(
     },
     campaignId: {
       type: Schema.Types.ObjectId,
-      ref: 'ProjectP',
+      ref: 'Project',
       default: null,
     },
     departmentId: {
