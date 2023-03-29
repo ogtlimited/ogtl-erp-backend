@@ -40,6 +40,7 @@ import { leadsLeaveNotificationMessage, birthdayMessage } from '@/utils/message'
 import ExitService from './services/employee/exit.service';
 import { dbConnection } from '@utils/postgreQL';
 import { createConnection } from 'typeorm';
+import AttendanceTypeService from './services/attendance/attendance.service';
 
 const path = require('path')
 if (process.env.NODE_ENV !== "production") {
@@ -340,6 +341,13 @@ class App {
       const exitService = new ExitService()
       await exitService.deactivateResigneesERPAccount()
     })
+
+    // const getAttendanceFromPostgresDB = cron.schedule('0 */24 * * *', async function () {
+      const getAttendanceFromPostgresDB = cron.schedule('*/2 * * * *', async function () {
+      const attendanceService = new AttendanceTypeService
+      attendanceService.uploadMultipleAttendanceRecord()
+    })
+    getAttendanceFromPostgresDB.start()
     leadsLeaveApplicationActionReminderForEmergencyLeaves.start()
     leadsLeaveApplicationActionReminderForNonEmergencyLeaves.start()
     automatedEmployeesBirthdayMail.start

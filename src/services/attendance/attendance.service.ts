@@ -113,7 +113,12 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
   }
 
   public async findAllExternalDatabaseAttendance(): Promise<any> {
-    const staff = await getRepository(AttendanceInfo).find({relations: ['staff']})
+    const staff = await getRepository(AttendanceInfo).find({
+      relations: ['staff'],
+      where:{
+        Date: moment(new Date()).format("yy-MM-DD")
+      }
+  })
     return  staff
   }
 
