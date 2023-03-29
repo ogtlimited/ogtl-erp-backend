@@ -18,11 +18,6 @@ const employeeSchema: Schema = new Schema({
     type: Date,
     required: true,
   },
-  default_shift: {
-    type: Schema.Types.ObjectId,
-    ref: 'ShiftType',
-    default: null,
-  },
   department: {
     type: Schema.Types.ObjectId,
     ref: 'Department',
