@@ -4,11 +4,11 @@ import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
 export class CreateShiftDto {
     @IsNotEmpty()
     @IsString()
-    public start_time: string;
+    public start: string;
 
     @IsNotEmpty()
     @IsString()
-    public end_time: string;
+    public end: string;
 
     @IsOptional()
     @IsString()
@@ -22,11 +22,11 @@ export class UpdateShiftDto {
 
     @IsOptional()
     @IsString()
-    public start_time: string;
+    public start: string;
 
     @IsOptional()
     @IsString()
-    public end_time: string;
+    public end: string;
 
     @IsOptional()
     @IsString()

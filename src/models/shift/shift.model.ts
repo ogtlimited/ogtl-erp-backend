@@ -4,11 +4,11 @@ import { model, Schema, Document } from 'mongoose';
 
 const shiftsSchema: Schema = new Schema(
     {
-        start_time: {
+        start: {
             type: String,
             default: null,
         },
-        end_time: {
+        end: {
             type: String,
             default: null,
         },
@@ -19,7 +19,7 @@ const shiftsSchema: Schema = new Schema(
         },
         day_of_week: {
             type: String,
-            enum: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+            enum: ["mon", "tue", "wed", "thur", "fri", "sat", "sun"]
         }
     },
     {
