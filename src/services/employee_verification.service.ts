@@ -4,6 +4,7 @@ import EmployeeModel from '@models/employee/employee.model';
 import ShiftModel from '@/models/shift/shift.model';
 import PersonalDetailModel from '@models/employee/personal-details.model';
 import { HttpException } from '@exceptions/HttpException';
+import {_} from "lodash"
 
 
 
@@ -18,10 +19,12 @@ class EmployeeVerificationService {
       .populate('department')
       .populate('projectId');
     const shifts = await this.shiftTypeModel.find({ ogid });
-    const formatShift = shifts.map(shift=>{
-      return{
-        [shift.day_of_the_week]: shift
+    const stringifiedShift = {}
+    shifts.map(shift => {
+      const newObtj = {
+        [shift.day_of_the_week]: _.omit(shift, ['day'])
       }
+      Object.assign(stringifiedShift, newObtj)
     })
     if (!employee) throw new HttpException(404, "Record Not Found");
     const personalDetails = await this.PersonalDetailModel.findOne({ employee_id: employee?._id  })
@@ -39,7 +42,7 @@ class EmployeeVerificationService {
       StateOfOrigin: personalDetails ? personalDetails.state : null,
       StartDate: new Date(employee.date_of_joining),
       Role: employee.designation ? employee.designation.designation : null,
-      Shifts: shifts ? formatShift : null,
+      Shifts: shifts ? stringifiedShift : null,
     };
   }
 
