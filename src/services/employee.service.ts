@@ -111,7 +111,6 @@ class EmployeeService {
     const newOgid = await this.automateOGIDGeneration(EmployeeData.isAdmin);
     if (!EmployeeData.department) EmployeeData.department = null;
     if (!EmployeeData.projectId) EmployeeData.projectId = null;
-    if (!EmployeeData.default_shift) EmployeeData.default_shift = null;
     const dateOfJoining = moment(EmployeeData['date_of_joining']).add(1, 'M');
     const endOfyear = moment().endOf('year');
     const duration = Math.abs(moment(dateOfJoining).diff(endOfyear, 'months', true)).toFixed(0);
@@ -146,7 +145,6 @@ class EmployeeService {
       designation: this.notEmpty(e.designation) ? e?.designation : null,
       projectId: null,
       company_email: e.company_email,
-      default_shift: null,
       reports_to: null,
       branch: null,
       gender: e.gender.toLowerCase(),
