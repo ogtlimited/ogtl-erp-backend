@@ -22,8 +22,8 @@ class EmployeeShiftService {
 
     public async createEmployeeShift(shiftData: CreateEmployeeShiftDto): Promise<IEmployeeShift> {
         if (isEmpty(shiftData)) throw new HttpException(400, "Bad request");
-        const findShift: IEmployeeShift = await this.employeeShiftModel.findOne({ ogid: shiftData.ogid });
-        if (findShift) throw new HttpException(409, `shift belonging to ${shiftData.ogid} already exists`);
+        const findShift: IEmployeeShift = await this.employeeShiftModel.findOne({ day: shiftData.day });
+        if (findShift) throw new HttpException(409, `shift has already been created for this day`);
         const result = SumHours(shiftData.end, shiftData.start)
         shiftData.expectedWorkTime = result.toString()
         if (result < 8) throw new HttpException(409, "Working hours has to be 8 hours or more");

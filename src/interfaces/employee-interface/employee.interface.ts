@@ -1,8 +1,10 @@
 /* eslint-disable prettier/prettier */
+import { IEmployeeShift } from "../shift-interface/employee_shift.interface";
 export interface Employee {
     _id: string;
     ogid: string;
     date_of_joining: string;
+    shifts: IEmployeeShift[];
     default_shift: string;
     company_email: string
     department: any;

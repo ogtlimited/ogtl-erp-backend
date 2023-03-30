@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
 import { Type } from 'class-transformer';
+import { IEmployeeShift } from '@/interfaces/shift-interface/employee_shift.interface';
 import { IsEmail, IsString, IsBoolean, IsNumber, IsDateString, IsOptional, ValidateNested, IsArray } from 'class-validator';
 
 export class CreateEmployeeDto {
@@ -12,6 +13,9 @@ export class CreateEmployeeDto {
 
   @IsString()
   public default_shift: string;
+  
+  @IsOptional()
+  public shifts: IEmployeeShift[];
 
   @IsString()
   @IsOptional()

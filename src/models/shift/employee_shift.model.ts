@@ -21,6 +21,11 @@ const employeeShiftsSchema: Schema = new Schema(
             ref: 'Project',
             default: null,
         },
+        departmentID: {
+            type: Schema.Types.ObjectId,
+            ref: 'Department',
+            default: null,
+        },
         expectedWorkTime: {
             type: String,
             default: null,

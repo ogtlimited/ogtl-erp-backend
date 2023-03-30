@@ -5,5 +5,6 @@ export interface IEmployeeShift {
     day: string;
     expectedWorkTime: string;
     campaignID: string;
+    departmentID: string;
     ogid: string;
 }

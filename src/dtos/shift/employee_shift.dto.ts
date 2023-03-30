@@ -9,10 +9,6 @@ export class CreateEmployeeShiftDto {
     @IsNotEmpty()
     @IsString()
     public day: string;
-   
-    @IsNotEmpty()
-    @IsString()
-    public ogid: string;
 
     @IsOptional()
     @IsString()
@@ -25,6 +21,10 @@ export class CreateEmployeeShiftDto {
     @IsOptional()
     @IsString()
     public campaignID: string;
+
+    @IsOptional()
+    @IsString()
+    public departmentID: string;
 
 }
 
@@ -43,10 +43,6 @@ export class UpdateEmployeeShiftDto {
     @IsOptional()
     @IsString()
     public campaignID: string;
-
-    @IsOptional()
-    @IsString()
-    public ogid: string;
 
     @IsOptional()
     @IsString()

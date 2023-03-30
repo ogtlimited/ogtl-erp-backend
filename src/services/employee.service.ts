@@ -11,6 +11,8 @@ import {
 import { HttpException } from '@exceptions/HttpException';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
 import EmployeeModel from '@models/employee/employee.model';
+import EmployeeShiftModel from '@models/shift/employee_shift.model';
+import EmployeeShiftService from '@services/shift/employee_shift.service';
 import DesignationModel from '@models/employee/designation.model';
 import departmentModel from '@/models/department/department.model';
 import shiftTypeModel from '@models/shift/shift_type.model';
@@ -27,12 +29,14 @@ import { IEmployeeStat } from './../interfaces/employee-stat/employee-stat.inter
 import IdRequestService from './procurement/idrequest.service';
 import EmployeesMailingService from '@/services/employee/employee_mailing.service';
 import EmployeeFiltrationService from '@/services/employee_filtration.service';
+import { IEmployeeShift } from '@/interfaces/shift-interface/employee_shift.interface';
 const mongoose = require('mongoose')
 
 class EmployeeService {
   // eslint-disable-next-line prettier/prettier
   private MAX_LIMIT:number = 50;
   public Employees = EmployeeModel;
+  public employeeShiftService = new EmployeeShiftService();
   public Department = departmentModel;
   public Designation = DesignationModel;
   public Project = projectModel;
@@ -103,9 +107,6 @@ class EmployeeService {
 
   public async createEmployee(EmployeeData: CreateEmployeeDto): Promise<any> {
     if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
-
-    // const findEmployee: Employee = await this.Employees.findOne({ email: EmployeeData.company_email });
-    // if (findEmployee) throw new HttpException(409, `Your email ${EmployeeData.company_email} already exists`);
     const randomstring = Math.random().toString(36).slice(2);
     const hashedPassword = await bcrypt.hash(randomstring, 10);
     const newOgid = await this.automateOGIDGeneration(EmployeeData.isAdmin);
@@ -127,6 +128,7 @@ class EmployeeService {
     this.idRequestService.createIdRequest(idRequestData).then(result => {
       console.log('id Request Created');
     });
+    this.createEmployeeShift(EmployeeData, createEmployeeData.ogid)
     // Promise.all([this.employeesMailingService.sendIntroductoryMail(createEmployeeData.first_name, createEmployeeData.ogid, createEmployeeData.company_email)])
     return createEmployeeData;
   }
@@ -705,6 +707,14 @@ private async getDesignationsByGenderHelperMethod(matchBy: any): Promise<any>{
       }  
 ]);
 return {designationsByGender}
+}
+private async createEmployeeShift(EmployeeData, ogid): Promise<any>{
+for (let i = 0; i < EmployeeData.shifts.length; i++) {
+  EmployeeData.shifts[i].ogid = ogid
+  EmployeeData.shifts[i].departmentID = EmployeeData?.department ? EmployeeData.department : null
+  EmployeeData.shifts[i].campaignID = EmployeeData?.projectId ? EmployeeData.projectId : null
+  await this.employeeShiftService.createEmployeeShift(EmployeeData.shifts[i])
+}
 }
 
 }
