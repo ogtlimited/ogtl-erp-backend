@@ -11,8 +11,8 @@ export class CreateEmployeeDto {
   @IsDateString()
   public date_of_joining: string;
 
-  @IsString()
-  public default_shift: string;
+  // @IsString()
+  // public default_shift: string;
   
   @IsOptional()
   public shifts: IEmployeeShift[];
@@ -96,9 +96,9 @@ export class UpdateEmployeeDto {
   @IsEmail()
   public company_email: string;
 
-  @IsOptional()
-  @IsString()
-  public default_shift: string;
+  // @IsOptional()
+  // @IsString()
+  // public default_shift: string;
 
   @IsOptional()
   @IsString()
@@ -215,9 +215,9 @@ export class EmployeeLoginDto {
   @IsString()
   public date_of_joining: string;
 
-  @IsOptional()
-  @IsString()
-  public default_shift: string;
+  // @IsOptional()
+  // @IsString()
+  // public default_shift: string;
 
   @IsString()
   @IsOptional()
