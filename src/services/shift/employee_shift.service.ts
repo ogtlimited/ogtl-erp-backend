@@ -20,14 +20,14 @@ class EmployeeShiftService {
         return findEmployeeShift;
     }
 
-    public async createEmployeeShift(shiftData: CreateEmployeeShiftDto): Promise<IEmployeeShift> {
+    public async createEmployeeShift(shiftData: IEmployeeShift): Promise<IEmployeeShift> {
         if (isEmpty(shiftData)) throw new HttpException(400, "Bad request");
-        const findShift: IEmployeeShift = await this.employeeShiftModel.findOne({ day: shiftData.day });
-        if (findShift) throw new HttpException(409, `shift has already been created for this day`);
-        const result = SumHours(shiftData.end, shiftData.start)
-        shiftData.expectedWorkTime = result.toString()
-        if (result < 8) throw new HttpException(409, "Working hours has to be 8 hours or more");
-        return await this.employeeShiftModel.create(shiftData);
+        const findShift: IEmployeeShift = await this.employeeShiftModel.findOne({ day: shiftData.day, ogid: shiftData.ogid });
+        if (!findShift) {
+            const result = SumHours(shiftData.end, shiftData.start)
+            shiftData.expectedWorkTime = result ? result.toString() : null
+            return await this.employeeShiftModel.create(shiftData);
+        }
     }
 
     public async updateEmployeeShift(shiftData: UpdateEmployeeShiftDto[]): Promise<IEmployeeShift[]> {

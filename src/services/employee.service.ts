@@ -11,7 +11,6 @@ import {
 import { HttpException } from '@exceptions/HttpException';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
 import EmployeeModel from '@models/employee/employee.model';
-import EmployeeShiftModel from '@models/shift/employee_shift.model';
 import EmployeeShiftService from '@services/shift/employee_shift.service';
 import DesignationModel from '@models/employee/designation.model';
 import departmentModel from '@/models/department/department.model';
@@ -128,7 +127,7 @@ class EmployeeService {
     this.idRequestService.createIdRequest(idRequestData).then(result => {
       console.log('id Request Created');
     });
-    this.createEmployeeShift(EmployeeData, createEmployeeData.ogid)
+    this.createEmployeeShiftHelperMethod(EmployeeData, createEmployeeData.ogid)
     // Promise.all([this.employeesMailingService.sendIntroductoryMail(createEmployeeData.first_name, createEmployeeData.ogid, createEmployeeData.company_email)])
     return createEmployeeData;
   }
@@ -708,13 +707,18 @@ private async getDesignationsByGenderHelperMethod(matchBy: any): Promise<any>{
 ]);
 return {designationsByGender}
 }
-private async createEmployeeShift(EmployeeData, ogid): Promise<any>{
-for (let i = 0; i < EmployeeData.shifts.length; i++) {
-  EmployeeData.shifts[i].ogid = ogid
-  EmployeeData.shifts[i].departmentID = EmployeeData?.department ? EmployeeData.department : null
-  EmployeeData.shifts[i].campaignID = EmployeeData?.projectId ? EmployeeData.projectId : null
-  await this.employeeShiftService.createEmployeeShift(EmployeeData.shifts[i])
-}
+  private async createEmployeeShiftHelperMethod(EmployeeData, ogid): Promise<any>{
+  try{
+    for (let i = 0; i < EmployeeData.shifts.length; i++) {
+      EmployeeData.shifts[i].ogid = ogid
+      EmployeeData.shifts[i].departmentID = EmployeeData?.department ? EmployeeData.department : null
+      EmployeeData.shifts[i].campaignID = EmployeeData?.projectId ? EmployeeData.projectId : null
+      await this.employeeShiftService.createEmployeeShift(EmployeeData.shifts[i])
+    }
+  }catch(error){
+    console.log(error)
+  }
+
 }
 
 }
