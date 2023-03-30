@@ -30,11 +30,16 @@ class EmployeeShiftService {
         return await this.employeeShiftModel.create(shiftData);
     }
 
-    public async updateEmployeeShift(employeeShiftId: string, shiftData: UpdateEmployeeShiftDto): Promise<IEmployeeShift> {
-        if (isEmpty(shiftData)) throw new HttpException(400, "Bad request");
-        const updateEmployeeShiftById: IEmployeeShift = await this.employeeShiftModel.findByIdAndUpdate({ _id: employeeShiftId }, shiftData, { new: true });
+    public async updateEmployeeShift(shiftData: UpdateEmployeeShiftDto[]): Promise<IEmployeeShift[]> {
+        if (shiftData.length==0) throw new HttpException(400, "Bad request");
+        let updateEmployeeShiftById: IEmployeeShift[] = []
+        for(let i = 0; i < shiftData.length; i++){
+            const updatedEmployeeShift = await this.employeeShiftModel
+                .findByIdAndUpdate({ _id: shiftData[i]._id }, shiftData[i], {new: true})
+            updateEmployeeShiftById.push(updatedEmployeeShift);
+        }
         if (!updateEmployeeShiftById) throw new HttpException(409, "shift does not exist");
-        return updateEmployeeShiftById;
+        return updateEmployeeShiftById
     }
     public async deleteEmployeeShift(employeeShiftId: string): Promise<IEmployeeShift> {
         const deletedShift: IEmployeeShift = await this.employeeShiftModel.findByIdAndDelete(employeeShiftId);

@@ -29,6 +29,7 @@ export class CreateEmployeeShiftDto {
 }
 
 export class UpdateEmployeeShiftDto {
+    @IsOptional()
     @IsString()
     public _id: string;
 
