@@ -36,7 +36,7 @@ class EmployeeShiftController {
     public updateEmployeesShift = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const shiftData: UpdateEmployeeShiftDto[] = req.body;
-            const updatedshift: IEmployeeShift = await this.employeeShiftService.updateEmployeeShift(shiftData);
+            const updatedshift: IEmployeeShift[] = await this.employeeShiftService.updateEmployeeShift(shiftData);
             res.status(200).json({ data: updatedshift });
         } catch (error) {
             next(error);
