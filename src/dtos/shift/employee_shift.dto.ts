@@ -56,4 +56,12 @@ export class UpdateEmployeeShiftDto {
     @IsOptional()
     @IsString()
     public day: string;
+
+    @IsOptional()
+    @IsString()
+    public expectedWorkTime: string;
+
+    @IsOptional()
+    @IsString()
+    public off: boolean;
 }

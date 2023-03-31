@@ -57,6 +57,10 @@ class EmployeeShiftService {
         if (shiftData.length==0) throw new HttpException(400, "Bad request");
         let updateEmployeeShiftById: IEmployeeShift[] = []
         for(let i = 0; i < shiftData.length; i++){
+            shiftData[i].end = shiftData[i].off ? null : shiftData[i].end;
+            shiftData[i].start = shiftData[i].off ? null : shiftData[i].start;
+            const result = SumHours(shiftData[i].end, shiftData[i].start)
+            shiftData[i].expectedWorkTime = result ? result.toString() : null
             const updatedEmployeeShift = await this.employeeShiftModel
                 .findByIdAndUpdate({ _id: shiftData[i]._id }, shiftData[i], {new: true})
             updateEmployeeShiftById.push(updatedEmployeeShift);
