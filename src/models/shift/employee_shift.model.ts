@@ -32,7 +32,11 @@ const employeeShiftsSchema: Schema = new Schema(
         },
         day: {
             type: String,
-            enum: ["mon", "tue", "wed", "thur", "fri", "sat", "sun","off"]
+            enum: ["mon", "tue", "wed", "thur", "fri", "sat", "sun"]
+        },
+        off: {
+            type: Boolean,
+            default: false
         }
     },
     {

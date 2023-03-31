@@ -25,6 +25,10 @@ export class CreateEmployeeShiftDto {
     @IsOptional()
     @IsString()
     public departmentID: string;
+    
+    @IsOptional()
+    @IsString()
+    public off: boolean;
 
 }
 

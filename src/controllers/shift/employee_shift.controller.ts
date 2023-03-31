@@ -24,15 +24,25 @@ class EmployeeShiftController {
             next(error);
         }
     };
-    public createEmployeeShift = async (req: Request, res: Response, next: NextFunction) => {
+
+    public getEmployeeShiftOGID = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const shiftData: CreateEmployeeShiftDto = req.body;
-            const createshiftData: IEmployeeShift = await this.employeeShiftService.createEmployeeShift(shiftData);
-            res.status(201).json({ data: createshiftData });
+            const ogid: string = req.params.ogid;
+            const findshift: IEmployeeShift[] = await this.employeeShiftService.findEmployeeShiftByOGID(ogid);
+            res.status(200).json({ data: findshift });
         } catch (error) {
             next(error);
         }
     };
+    // public createEmployeeShift = async (req: Request, res: Response, next: NextFunction) => {
+    //     try {
+    //         const shiftData: CreateEmployeeShiftDto = req.body;
+    //         const createshiftData: IEmployeeShift = await this.employeeShiftService.createEmployeeShift(shiftData);
+    //         res.status(201).json({ data: createshiftData });
+    //     } catch (error) {
+    //         next(error);
+    //     }
+    // };
     public updateEmployeesShift = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const shiftData: UpdateEmployeeShiftDto[] = req.body;

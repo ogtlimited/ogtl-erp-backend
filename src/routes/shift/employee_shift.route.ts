@@ -18,8 +18,9 @@ class EmployeeShiftRoute implements Routes {
     private initializeRoutes() {
         this.router.get(`${this.path}`, authMiddleware, this.employeeShiftController.getEmployeesShifts);
         this.router.get(`${this.path}/office`, [authMiddleware, permissionMiddleware("HR")], this.employeeShiftController.getshiftTypeBasedOnOffice);
-        this.router.get(`${this.path}/:id`, authMiddleware, this.employeeShiftController.getEmployeeShiftById);
-        this.router.post(`${this.path}`, [validationMiddleware(CreateEmployeeShiftDto, 'body'), authMiddleware], this.employeeShiftController.createEmployeeShift);
+        // this.router.get(`${this.path}/:id`, authMiddleware, this.employeeShiftController.getEmployeeShiftById);
+        this.router.get(`${this.path}/:ogid`, authMiddleware, this.employeeShiftController.getEmployeeShiftOGID);
+        // this.router.post(`${this.path}`, [validationMiddleware(CreateEmployeeShiftDto, 'body'), authMiddleware], this.employeeShiftController.createEmployeeShift);
         this.router.patch(`${this.path}`, [authMiddleware], this.employeeShiftController.updateEmployeesShift);
         this.router.delete(`${this.path}/:id`, authMiddleware, this.employeeShiftController.deleteEmployeeShift);
     }

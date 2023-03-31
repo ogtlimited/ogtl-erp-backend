@@ -7,4 +7,5 @@ export interface IEmployeeShift {
     campaignID: string;
     departmentID: string;
     ogid: string;
+    off: boolean;
 }

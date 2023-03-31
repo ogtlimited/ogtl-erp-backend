@@ -20,10 +20,18 @@ class EmployeeShiftService {
         return findEmployeeShift;
     }
 
+    public async findEmployeeShiftByOGID(ogid: string): Promise<IEmployeeShift[]> {
+        if (isEmpty(ogid)) throw new HttpException(400, "No shift Id provided");
+        const findEmployeeShift: IEmployeeShift[] = await this.employeeShiftModel.find({ ogid: ogid });
+        return findEmployeeShift;
+    }
+
     public async createEmployeeShift(shiftData: IEmployeeShift): Promise<IEmployeeShift> {
         if (isEmpty(shiftData)) throw new HttpException(400, "Bad request");
         const findShift: IEmployeeShift = await this.employeeShiftModel.findOne({ day: shiftData.day, ogid: shiftData.ogid });
         if (!findShift) {
+            shiftData.end = shiftData.off != false ? shiftData.end : null;
+            shiftData.start = shiftData.off != false ? shiftData.start : null;
             const result = SumHours(shiftData.end, shiftData.start)
             shiftData.expectedWorkTime = result ? result.toString() : null
             return await this.employeeShiftModel.create(shiftData);
