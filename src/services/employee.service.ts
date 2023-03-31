@@ -713,7 +713,7 @@ return {designationsByGender}
       EmployeeData.shifts[i].ogid = ogid
       EmployeeData.shifts[i].departmentID = EmployeeData?.department ? EmployeeData.department : null
       EmployeeData.shifts[i].campaignID = EmployeeData?.projectId ? EmployeeData.projectId : null
-      await this.employeeShiftService.createEmployeeShift(EmployeeData.shifts[i])
+      await this.employeeShiftService.createNewEmployeeShift(EmployeeData.shifts[i])
     }
   }catch(error){
     console.log(error)

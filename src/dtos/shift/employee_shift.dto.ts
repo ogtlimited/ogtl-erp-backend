@@ -30,6 +30,10 @@ export class CreateEmployeeShiftDto {
     @IsString()
     public off: boolean;
 
+    @IsOptional()
+    @IsString()
+    public ogid: string;
+
 }
 
 export class UpdateEmployeeShiftDto {

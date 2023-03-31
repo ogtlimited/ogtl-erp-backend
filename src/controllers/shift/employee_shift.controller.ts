@@ -34,15 +34,15 @@ class EmployeeShiftController {
             next(error);
         }
     };
-    // public createEmployeeShift = async (req: Request, res: Response, next: NextFunction) => {
-    //     try {
-    //         const shiftData: CreateEmployeeShiftDto = req.body;
-    //         const createshiftData: IEmployeeShift = await this.employeeShiftService.createEmployeeShift(shiftData);
-    //         res.status(201).json({ data: createshiftData });
-    //     } catch (error) {
-    //         next(error);
-    //     }
-    // };
+    public createExistingEmployeesShift = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const shiftData: CreateEmployeeShiftDto[] = req.body;
+            const newShiftData: IEmployeeShift[] = await this.employeeShiftService.createExistingEmployeesShift(shiftData);
+            res.status(201).json({ data: newShiftData });
+        } catch (error) {
+            next(error);
+        }
+    };
     public updateEmployeesShift = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const shiftData: UpdateEmployeeShiftDto[] = req.body;

@@ -26,15 +26,29 @@ class EmployeeShiftService {
         return findEmployeeShift;
     }
 
-    public async createEmployeeShift(shiftData: IEmployeeShift): Promise<IEmployeeShift> {
+    public async createNewEmployeeShift(shiftData: IEmployeeShift): Promise<IEmployeeShift> {
         if (isEmpty(shiftData)) throw new HttpException(400, "Bad request");
         const findShift: IEmployeeShift = await this.employeeShiftModel.findOne({ day: shiftData.day, ogid: shiftData.ogid });
         if (!findShift) {
-            shiftData.end = shiftData.off != false ? shiftData.end : null;
-            shiftData.start = shiftData.off != false ? shiftData.start : null;
+            shiftData.end = shiftData.off == false ? shiftData.end : null;
+            shiftData.start = shiftData.off == false ? shiftData.start : null;
             const result = SumHours(shiftData.end, shiftData.start)
             shiftData.expectedWorkTime = result ? result.toString() : null
             return await this.employeeShiftModel.create(shiftData);
+        }
+    }
+    public async createExistingEmployeesShift(shiftData: IEmployeeShift[]): Promise<IEmployeeShift[]> {
+        if (shiftData.length == 0) throw new HttpException(400, "Bad request");
+        for (let i = 0; i < shiftData.length; i++){
+            const findShift: IEmployeeShift = await this.employeeShiftModel.findOne({ day: shiftData[i].day, ogid: shiftData[i].ogid });
+            if (!findShift) {
+                shiftData[i].end = shiftData[i].off == false ? shiftData[i].end : null;
+                shiftData[i].start = shiftData[i].off == false ? shiftData[i].start : null;
+                const result = SumHours(shiftData[i].end, shiftData[i].start)
+                console.log("result", result)
+                shiftData[i].expectedWorkTime = result ? result.toString() : null
+                return await this.employeeShiftModel.create(shiftData);
+            }
         }
     }
 
