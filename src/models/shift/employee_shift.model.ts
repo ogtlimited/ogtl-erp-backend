@@ -37,6 +37,14 @@ const employeeShiftsSchema: Schema = new Schema(
         off: {
             type: Boolean,
             default: false
+        },
+        huddles: {
+            type: Boolean,
+            default: false
+        },
+        huddleTime: {
+            type: String,
+            default: null,
         }
     },
     {

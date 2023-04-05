@@ -5,8 +5,14 @@ import { IEmployeeShift } from '@interfaces/shift-interface/employee_shift.inter
 import EmployeeShiftModel from '@models/shift/employee_shift.model';
 import { isEmpty } from '@utils/util';
 import { SumHours } from '@utils/calculateTimeDifference';
+import EmployeeModel from '@/models/employee/employee.model';
+import CampaignModel from '@/models/project/project.model';
+const fs = require("fs")
+const csv = require('csv-parser')
 class EmployeeShiftService {
     public employeeShiftModel = EmployeeShiftModel;
+    public employeeModel = EmployeeModel;
+    public campaignModel = CampaignModel;
     constructor() {
     }
 
@@ -82,6 +88,55 @@ class EmployeeShiftService {
             const shift: IEmployeeShift[] = await this.employeeShiftModel.find({ campaignId: query.campaignId });
             return shift
         }
+    }
+    public async createEmployeesShiftFromCsvFile(): Promise<any> {
+        fs.createReadStream("./src/services/shift/csv_files/Sterling_shift.csv")
+            .pipe(csv())
+            .on('data', async (data) => {
+                const days = ["mon","tue","wed","thur","fri","sat","sun"]
+                const start = data['Shift (Mon - fri)'].split('-')[0].trim()
+                const end = data['Shift (Mon - fri)'].split('-')[1].trim()
+                const huddles = data['Huddles'] ? data['Huddles'].split(':')[0].trim() : false
+                const huddleTime = data['Huddles'] ? data['Huddles'].split(':')[1].trim() : null
+                const campaign = await this.campaignModel.findOne({ project_name: data['Campaign'] })
+                const employee = await this.employeeModel.findOne({ company_email: data['Employee email'] })
+                if(!employee){
+                    fs.appendFileSync('./src/services/shift/csv_files/employees_emails_with_issues.csv', `${data['Employee email']}\n`);
+                }
+                if (employee){
+                    for (let i = 0; i < days.length; i++){
+                        const formattedData = {
+                            start: start,
+                            end: end,
+                            day: days[i],
+                            ogid: employee ? employee.ogid : null,
+                            campaignID: campaign ? campaign._id : null,
+                            departmentID: employee ? employee.department : null,
+                            huddles: huddles ? true : false,
+                            huddleTime: huddleTime,
+                        }
+                        const result = SumHours(formattedData.end, formattedData.start)
+                        formattedData['expectedWorkTime'] = result ? result.toString() : null
+                        if (formattedData.day == "sat" || formattedData.day == "sun"){
+                            formattedData.start = null
+                            formattedData.end = null
+                            formattedData.end = null
+                            formattedData['expectedWorkTime'] = null
+                            formattedData.huddles = false
+                            formattedData.huddleTime = null
+                        }
+                        const employeeShift = await this.employeeShiftModel.findOne({ ogid: formattedData?.ogid, day: formattedData.day })
+                        if(!employeeShift){
+                            const shift = await this.employeeShiftModel.create(formattedData)
+                        }
+                        console.log("formattedData", formattedData)
+                        // return formattedData
+                    } 
+                }
+            })
+            .on('end', async () => {
+                console.log("Completed!!!")
+            })
     }
 }
 export default EmployeeShiftService;

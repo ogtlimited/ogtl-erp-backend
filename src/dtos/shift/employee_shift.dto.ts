@@ -33,6 +33,14 @@ export class CreateEmployeeShiftDto {
     @IsOptional()
     @IsString()
     public ogid: string;
+    
+    @IsOptional()
+    @IsString()
+    public huddles: boolean;
+    
+    @IsOptional()
+    @IsString()
+    public huddleTime: string;
 
 }
 
@@ -64,4 +72,12 @@ export class UpdateEmployeeShiftDto {
     @IsOptional()
     @IsString()
     public off: boolean;
+
+    @IsOptional()
+    @IsString()
+    public huddles: boolean;
+
+    @IsOptional()
+    @IsString()
+    public huddleTime: string;
 }
