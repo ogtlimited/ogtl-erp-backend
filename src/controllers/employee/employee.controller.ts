@@ -197,6 +197,14 @@ class EmployeesController {
       next(error);
     }
   }
+  public getReporteesForLeads = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const employees: Employee[] = await this.EmployeeService.getReporteesForLeads(req.query, req.user);
+      res.status(200).json({ data: employees });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default EmployeesController;

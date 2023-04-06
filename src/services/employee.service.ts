@@ -29,6 +29,7 @@ import IdRequestService from './procurement/idrequest.service';
 import EmployeesMailingService from '@/services/employee/employee_mailing.service';
 import EmployeeFiltrationService from '@/services/employee_filtration.service';
 import { IEmployeeShift } from '@/interfaces/shift-interface/employee_shift.interface';
+import { userInfo } from 'os';
 const mongoose = require('mongoose')
 
 class EmployeeService {
@@ -521,6 +522,13 @@ private async getEmployeesByGenderHelperMethod(matchBy,searchQuery:any): Promise
         this.getEmployeesByDepartmentHelperMethod(matchBy, searchQuery)
       )
    }
+  public async getReporteesForLeads(query: any, user: Employee): Promise<Employee[]> {
+    let matchBy = {
+      reports_to : user._id
+    }
+    const employees  = this.employeeFiltrationService.getAllEmployeesHelperMethod(matchBy, query, this.Employees)
+    return employees;
+  }
   private async getEmployeesByDepartmentHelperMethod(matchBy,searchQuery:any): Promise<any> {
     const page = parseInt(searchQuery?.page) || 1;
     let limit: number;
