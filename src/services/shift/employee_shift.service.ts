@@ -90,12 +90,14 @@ class EmployeeShiftService {
         }
     }
     public async createEmployeesShiftFromCsvFile(): Promise<any> {
-        fs.createReadStream("./src/services/shift/csv_files/Sterling_shift.csv")
+        fs.createReadStream("./src/services/shift/csv_files/Gomoney_shift.csv")
             .pipe(csv())
             .on('data', async (data) => {
                 const days = ["mon","tue","wed","thur","fri","sat","sun"]
-                const start = data['Shift (Mon - fri)'].split('-')[0].trim()
-                const end = data['Shift (Mon - fri)'].split('-')[1].trim()
+                // start and end time for uniform shift
+                // const start = data['Shift (Mon - fri)'].split('-')[0].trim()
+                // const end = data['Shift (Mon - fri)'].split('-')[1].trim()
+                const fluctuating_shift_days = data['Shift (Mon - fri)'].split(',')
                 const huddles = data['Huddles'] ? data['Huddles'].split(':')[0].trim() : false
                 const huddleTime = data['Huddles'] ? data['Huddles'].split(':')[1].trim() : null
                 const campaign = await this.campaignModel.findOne({ project_name: data['Campaign'] })
@@ -105,6 +107,9 @@ class EmployeeShiftService {
                 }
                 if (employee){
                     for (let i = 0; i < days.length; i++){
+                        // start and end time for fluctuating shift
+                        const start = fluctuating_shift_days[i] ? fluctuating_shift_days[i]?.split("-")[0].trim() : null
+                        const end = fluctuating_shift_days[i] ? fluctuating_shift_days[i]?.split("-")[1].trim() : null
                         const formattedData = {
                             start: start,
                             end: end,
@@ -130,8 +135,8 @@ class EmployeeShiftService {
                             const shift = await this.employeeShiftModel.create(formattedData)
                         }
                         console.log("formattedData", formattedData)
-                        // return formattedData
                     } 
+                  
                 }
             })
             .on('end', async () => {
