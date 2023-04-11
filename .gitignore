@@ -129,3 +129,4 @@ src/services/scaffold.service.ts
 dev.env
 *.env
 *.env
+*.csv
