@@ -1,24 +1,33 @@
 /* eslint-disable prettier/prettier */
 
 import EmployeeModel from '@models/employee/employee.model';
+import EmployeeShiftModel from '@/models/shift/employee_shift.model';
 import PersonalDetailModel from '@models/employee/personal-details.model';
 import { HttpException } from '@exceptions/HttpException';
+import {_} from "lodash"
 
 
 
 class EmployeeVerificationService {
   private Employees = EmployeeModel;
+  private employeeShiftModel = EmployeeShiftModel;
   private PersonalDetailModel = PersonalDetailModel;
   public async findEmployeeByOgId(ogid): Promise<any> {
     // if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
     const employee = await this.Employees.findOne({ ogid })
       .populate('designation')
       .populate('department')
-      .populate('projectId')
-      .populate('default_shift');
+      .populate('projectId');
+    const shifts = await this.employeeShiftModel.find({ ogid });
+    const formattedShift = shifts.map(shift=>{
+      return {
+        day: shift.day,
+        start: shift.start,
+        end: shift.end
+      }
+    })
     if (!employee) throw new HttpException(404, "Record Not Found");
     const personalDetails = await this.PersonalDetailModel.findOne({ employee_id: employee?._id  })
-    // return employee
     return {
       PictureUrl: employee.image,
       StaffUniqueId: employee.ogid,
@@ -33,8 +42,7 @@ class EmployeeVerificationService {
       StateOfOrigin: personalDetails ? personalDetails.state : null,
       StartDate: new Date(employee.date_of_joining),
       Role: employee.designation ? employee.designation.designation : null,
-      ShiftStartTime: employee.default_shift ? employee.default_shift.start_time : null,
-      ShiftEndTime: employee.default_shift ? employee.default_shift.end_time : null
+      Shifts: shifts.length != 0 ? formattedShift : null,
     };
   }
 

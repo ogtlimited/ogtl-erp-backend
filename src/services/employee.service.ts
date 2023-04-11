@@ -11,6 +11,7 @@ import {
 import { HttpException } from '@exceptions/HttpException';
 import { Employee } from '@interfaces/employee-interface/employee.interface';
 import EmployeeModel from '@models/employee/employee.model';
+import EmployeeShiftService from '@services/shift/employee_shift.service';
 import DesignationModel from '@models/employee/designation.model';
 import departmentModel from '@/models/department/department.model';
 import shiftTypeModel from '@models/shift/shift_type.model';
@@ -27,12 +28,15 @@ import { IEmployeeStat } from './../interfaces/employee-stat/employee-stat.inter
 import IdRequestService from './procurement/idrequest.service';
 import EmployeesMailingService from '@/services/employee/employee_mailing.service';
 import EmployeeFiltrationService from '@/services/employee_filtration.service';
+import { IEmployeeShift } from '@/interfaces/shift-interface/employee_shift.interface';
+import { userInfo } from 'os';
 const mongoose = require('mongoose')
 
 class EmployeeService {
   // eslint-disable-next-line prettier/prettier
   private MAX_LIMIT:number = 50;
   public Employees = EmployeeModel;
+  public employeeShiftService = new EmployeeShiftService();
   public Department = departmentModel;
   public Designation = DesignationModel;
   public Project = projectModel;
@@ -103,16 +107,11 @@ class EmployeeService {
 
   public async createEmployee(EmployeeData: CreateEmployeeDto): Promise<any> {
     if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
-
-    // const findEmployee: Employee = await this.Employees.findOne({ email: EmployeeData.company_email });
-    // if (findEmployee) throw new HttpException(409, `Your email ${EmployeeData.company_email} already exists`);
     const randomstring = Math.random().toString(36).slice(2);
     const hashedPassword = await bcrypt.hash(randomstring, 10);
-    // const newOgid = this.generateOGID();
-    const newOgid = EmployeeData.ogid.toUpperCase();
+    const newOgid = await this.automateOGIDGeneration(EmployeeData.isAdmin);
     if (!EmployeeData.department) EmployeeData.department = null;
     if (!EmployeeData.projectId) EmployeeData.projectId = null;
-    if (!EmployeeData.default_shift) EmployeeData.default_shift = null;
     const dateOfJoining = moment(EmployeeData['date_of_joining']).add(1, 'M');
     const endOfyear = moment().endOf('year');
     const duration = Math.abs(moment(dateOfJoining).diff(endOfyear, 'months', true)).toFixed(0);
@@ -129,6 +128,7 @@ class EmployeeService {
     this.idRequestService.createIdRequest(idRequestData).then(result => {
       console.log('id Request Created');
     });
+    this.createEmployeeShiftHelperMethod(EmployeeData, createEmployeeData.ogid)
     // Promise.all([this.employeesMailingService.sendIntroductoryMail(createEmployeeData.first_name, createEmployeeData.ogid, createEmployeeData.company_email)])
     return createEmployeeData;
   }
@@ -147,17 +147,16 @@ class EmployeeService {
       designation: this.notEmpty(e.designation) ? e?.designation : null,
       projectId: null,
       company_email: e.company_email,
-      default_shift: null,
       reports_to: null,
       branch: null,
       gender: e.gender.toLowerCase(),
-      ogid: e.ogid.toUpperCase(),
       employeeType: e.employeeType,
       date_of_joining: new Date()
     }));
     const employeesRecord = [];
     for (let idx = 0; idx < formatted.length; idx++) {
       const record = formatted[idx]
+      record.ogid = await this.automateOGIDGeneration(record.isAdmin, idx)
       const employeeInfo = await this.Employees.findOne({ company_email: record.company_email })
       if (!employeeInfo) {
         employeesRecord.push(record)
@@ -261,6 +260,38 @@ class EmployeeService {
   }
   private generateOGID() {
     return 'OG' + Math.floor(1000 + Math.random() * 9000);
+  }
+  private async automateOGIDGeneration(isAdmin: Boolean, bulk_upload_increment: number = 0): Promise<any>{
+    if (isAdmin){
+      const lastEmployeeInAdmin = await this.Employees.findOne({ isAdmin: true })
+        .sort({ _id: -1 })
+        .limit(1)
+      const lastEmployeeInAdminEmploymentNumber = lastEmployeeInAdmin.ogid.slice(2)
+      let employeeEmploymentNumber = Number(lastEmployeeInAdminEmploymentNumber) + bulk_upload_increment + 1
+      const ogid = 'OG' + employeeEmploymentNumber
+      return ogid.toString().replace(/ /g, '');
+    }
+    else {
+      const lastNonAdminEmployee = await this.Employees.findOne({ isAdmin: false })
+        .sort({ _id: -1 })
+        .limit(1)
+      const currentWeek = moment().week()
+      const lastNonAdminEmployeeEmploymentWeek = moment(lastNonAdminEmployee.createdAt).week()
+      const lastNonAdminEmployeeEmploymentNumber = lastNonAdminEmployee.ogid.slice(4, -2)
+      let employeeEmploymentNumber = Number(lastNonAdminEmployeeEmploymentNumber) + bulk_upload_increment + 1
+      if (currentWeek === lastNonAdminEmployeeEmploymentWeek) {
+        employeeEmploymentNumber = employeeEmploymentNumber
+      }
+      else {
+        employeeEmploymentNumber = 1
+      }
+      const formattedEmployeeEmploymentNumber = employeeEmploymentNumber < 10 ? "0" + Number(employeeEmploymentNumber) : Number(employeeEmploymentNumber)
+      const currentYear = moment().format("YY")
+      const ogid = 'OG' + currentYear + formattedEmployeeEmploymentNumber + currentWeek
+      return ogid.toString().replace(/ /g, '');
+    }
+   
+  
   }
   private notEmpty(str: string) {
     return str.length > 0 ? true : false;
@@ -491,6 +522,13 @@ private async getEmployeesByGenderHelperMethod(matchBy,searchQuery:any): Promise
         this.getEmployeesByDepartmentHelperMethod(matchBy, searchQuery)
       )
    }
+  public async getReporteesForLeads(query: any, user: Employee): Promise<Employee[]> {
+    let matchBy = {
+      reports_to : user._id
+    }
+    const employees  = this.employeeFiltrationService.getAllEmployeesHelperMethod(matchBy, query, this.Employees)
+    return employees;
+  }
   private async getEmployeesByDepartmentHelperMethod(matchBy,searchQuery:any): Promise<any> {
     const page = parseInt(searchQuery?.page) || 1;
     let limit: number;
@@ -676,6 +714,19 @@ private async getDesignationsByGenderHelperMethod(matchBy: any): Promise<any>{
       }  
 ]);
 return {designationsByGender}
+}
+  private async createEmployeeShiftHelperMethod(EmployeeData, ogid): Promise<any>{
+  try{
+    for (let i = 0; i < EmployeeData.shifts.length; i++) {
+      EmployeeData.shifts[i].ogid = ogid
+      EmployeeData.shifts[i].departmentID = EmployeeData?.department ? EmployeeData.department : null
+      EmployeeData.shifts[i].campaignID = EmployeeData?.projectId ? EmployeeData.projectId : null
+      await this.employeeShiftService.createNewEmployeeShift(EmployeeData.shifts[i])
+    }
+  }catch(error){
+    console.log(error)
+  }
+
 }
 
 }

@@ -4,6 +4,7 @@ import { CreateExitDto,UpdateExitDto } from '@/dtos/employee/exit.dto';
 import { Exit } from '@/interfaces/employee-interface/exit.interface';
 import ExitService from '@/services/employee/exit.service';
 import {emailTemplate} from '@utils/email';
+import { Employee } from '@/interfaces/employee-interface/employee.interface';
 const { SocketLabsClient } = require('@socketlabs/email');
 const { Socket } = require("@/utils/socket");
 const redis = require('redis');
@@ -19,6 +20,15 @@ class ExitController{
         const findAllExitsData: Exit[] = await this.ExitService.findAllExit();
          
         res.status(200).json({data:findAllExitsData,numExits:findAllExitsData.length, message:"All Exits"});
+    }
+    catch(error){
+        next(error);
+    }
+   };
+    public getAllResignationAndPaginate = async  (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const findAllExitsData: Exit[] = await this.ExitService.getAllResignationAndPaginate(req.query);
+        res.status(200).json({data:findAllExitsData});
     }
     catch(error){
         next(error);

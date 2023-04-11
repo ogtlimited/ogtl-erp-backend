@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-export interface ITest {
+export interface IRecruitmentResult {
   _id: string;
 
   job_applicant_id: string;

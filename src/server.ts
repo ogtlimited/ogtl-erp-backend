@@ -18,6 +18,7 @@ import DepartmentEmployeesRoute from '@routes/dashboard/hr/department_employees_
 import EmployeesGenderDesignation from '@/routes/dashboard/hr/employees_gender_designation.route';
 import DepartmentGenderCountRoute from '@routes/dashboard/hr/department_employees_gender_count.route';
 import ShiftTypeRoute from './routes/shift/shiftType';
+import EmployeeShiftRoute from './routes/shift/employee_shift.route';
 import AttendanceRoute from './routes/attendance/attendance.route';
 import IncentiveRoute from './routes/payroll/incentive.route';
 import SalaryStructureRoute from './routes/payroll/salary-structure.route';
@@ -57,7 +58,7 @@ import JobOpeningRoute from '@routes/recruitment/jobOpening.route';
 import JobOfferRoute from '@routes/recruitment/jobOffer.route';
 import JobApplicantRoute from '@routes/recruitment/jobApplicant.route';
 import JobApplicantForRepSieversRoute from '@routes/recruitment/job_sievers.route';
-import TestRoute from '@routes/recruitment/test.route';
+import RecruitmentResultRoute from '@/routes/recruitment/recruitment_result.route';
 import WarningLetterRoute from '@routes/pip/warningLetter.route';
 import LoanRoute from '@routes/loan/loan.route';
 import TrainingAttendanceRoute from '@routes/training/training-attendance.route';
@@ -134,6 +135,7 @@ const app = new App([
   new DepartmentEmployeesRoute(),
   new EmployeesGenderDesignation(),
   new ShiftTypeRoute(),
+  new EmployeeShiftRoute(),
   new AttendanceRoute(),
   new IncentiveRoute(),
   new SalaryStructureRoute(),
@@ -171,7 +173,7 @@ const app = new App([
   new JobOfferRoute(),
   new JobApplicantRoute(),
   new JobApplicantForRepSieversRoute(),
-  new TestRoute(),
+  new RecruitmentResultRoute(),
   new ShiftAssignmentRoute(),
   new WarningLetterRoute(),
   new LoanRoute(),
