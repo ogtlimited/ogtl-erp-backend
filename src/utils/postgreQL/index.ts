@@ -9,10 +9,10 @@ import { ConnectionOptions } from 'typeorm';
 export const dbConnection: ConnectionOptions = {
     type: 'postgres',
     port: 5432,
-    host: 'postgrest-test.cyf3kadl3aci.eu-west-2.rds.amazonaws.com',
+    host: process.env.POSTGRES_HOST,
     username: 'postgres',
-    password: "qiyAj3wUj3NtWgaeON6M",
-    database: 'ogtl_attendance',
+    password: process.env.POSTGRES_PASSWORD,
+    database: process.env.POSTGRES_DATABASE,
     logging: ['error'],
     entities: [join(__dirname, '/../**/*.entity{.ts,.js}')]
 };
