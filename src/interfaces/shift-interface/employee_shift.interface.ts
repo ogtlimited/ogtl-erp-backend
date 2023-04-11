@@ -8,4 +8,6 @@ export interface IEmployeeShift {
     departmentID: string;
     ogid: string;
     off: boolean;
+    huddles?: boolean;
+    huddleTime?: string;
 }

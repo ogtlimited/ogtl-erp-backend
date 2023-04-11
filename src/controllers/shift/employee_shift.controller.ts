@@ -69,5 +69,13 @@ class EmployeeShiftController {
             next(error);
         }
     };
+    public createEmployeesShiftFromCsvFile = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const shiftData = await this.employeeShiftService.createEmployeesShiftFromCsvFile();
+            res.status(200).json({ shiftData });
+        } catch (error) {
+            next(error);
+        }
+    };
 }
 export default EmployeeShiftController;
