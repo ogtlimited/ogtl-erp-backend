@@ -39,6 +39,10 @@ const attendanceSchema: Schema = new Schema(
     minutesWorked:{
       type: Number,
       default: 0
+    },
+    added_by: {
+      type: Schema.Types.ObjectId,
+      ref: "Employee"
     }
   },
   {

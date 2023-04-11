@@ -32,6 +32,7 @@ export interface ICreateAttendance {
   hoursWorked?: number
   minutesWorked?:Number
   shiftStartTime?: string
+  added_by?: string
 }
 
 export interface IAttendanceDeduction{
@@ -48,7 +49,7 @@ export interface IPossibleDeductons{
   departmentId?: string,
   projectId?: string,
   shiftTypeId?: IShiftType,
-  ogId?: string
+  ogId?: string,
 }
 
 interface IShiftType{

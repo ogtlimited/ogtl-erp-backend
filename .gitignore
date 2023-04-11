@@ -129,4 +129,6 @@ src/services/scaffold.service.ts
 dev.env
 *.env
 *.env
+*.csv
+=======
 src/utils/seeder/foreign_campaigns.csv
