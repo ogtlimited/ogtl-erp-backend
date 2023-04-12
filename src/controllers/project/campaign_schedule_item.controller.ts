@@ -17,7 +17,7 @@ class CampaignScheduleItemController {
     };
     public updateCampaignScheduleItem = async (req: any, res: Response, next: NextFunction) => {
         try {
-            const { campaignScheduleItemId } = req.param
+            const { campaignScheduleItemId } = req.params
             const campaignScheduleItem: ICampaignScheduleItem = await this.campaignScheduleItemService.updateCampaignScheduleItem(req.body, campaignScheduleItemId);
             res.status(200).json({ data: campaignScheduleItem });
         } catch (error) {
@@ -26,7 +26,7 @@ class CampaignScheduleItemController {
     };
     public deleteCampaignScheduleItem = async (req: any, res: Response, next: NextFunction) => {
         try {
-            const { campaignScheduleId } = req.param
+            const { campaignScheduleId } = req.params
             const campaignScheduleItem: ICampaignScheduleItem = await this.campaignScheduleItemService.deleteCampaignScheduleItem(campaignScheduleId);
             res.status(200).json({ data: campaignScheduleItem });
         } catch (error) {
