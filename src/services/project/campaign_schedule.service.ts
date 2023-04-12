@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 
 import campaignScheduleModel from '@/models/project/campaign_schedule.model';
+import campaignScheduleItemModel from '@/models/project/campaign_schedule_item.model';
 import { ICampaignSchedule } from '@/interfaces/project-interface/campaign_schedule.interface';
 import { CampaignScheduleDto, UpdateCampaignScheduleDto } from '@/dtos/project/campaign_schedule.dto';
 import { HttpException } from '@exceptions/HttpException';
@@ -9,6 +10,7 @@ import { isEmpty } from '@utils/util';
 
 class CampaignScheduleService {
     private campaignScheduleModel = campaignScheduleModel;
+    private campaignScheduleItemModel = campaignScheduleItemModel;
 
     public async findAllCampaignSchedule(): Promise<ICampaignSchedule[]> {
         const campaignSchedules: ICampaignSchedule[] = await this.campaignScheduleModel
@@ -18,21 +20,21 @@ class CampaignScheduleService {
         .populate("department")
         return campaignSchedules;
     }
-    public async findCampaignScheduleByOwnersId(ownerID: string): Promise<ICampaignSchedule> {
-        const campaignSchedule: ICampaignSchedule = await this.campaignScheduleModel
-        .findOne({_id: ownerID})
+    public async findCampaignScheduleByOwnersId(ownerID: string): Promise<ICampaignSchedule[]> {
+        const campaignSchedules: ICampaignSchedule[] = await this.campaignScheduleModel
+        .find({owner: ownerID})
         .populate("owner")
         .populate("campaign")
         .populate("department")
-        return campaignSchedule;
+        return campaignSchedules;
     }
-    public async createCampaignSchedule(payload: CampaignScheduleDto, userId): Promise<ICampaignSchedule> {
+    public async createCampaignSchedule(payload: CampaignScheduleDto, user): Promise<ICampaignSchedule> {
         if (isEmpty(payload)) throw new HttpException(400, "Bad request");
         const formatPayload = {
             ...payload,
-            owner: userId,
-            department: payload.department ? payload.department : null,
-            campaign: payload.campaign ? payload.campaign : null
+            owner: user._id,
+            department: user.department ? user.department : null,
+            campaign: user.projectId ? user.projectId : null
         }
         const campaignSchedule: ICampaignSchedule = await this.campaignScheduleModel.create(formatPayload);
         this.createCampaignScheduleItemsHelperMethod(payload, campaignSchedule._id)
@@ -53,9 +55,9 @@ class CampaignScheduleService {
     }
     private async createCampaignScheduleItemsHelperMethod(campaignScheduleData, campaign_schedule): Promise<any> {
         try {
-            for (let i = 0; i < campaignScheduleData?.campaignSheduleItems.length; i++) {
-                campaignScheduleData.campaign_schedule_items[i].campaign_schedule = campaign_schedule
-                await this.campaignScheduleModel.create(campaignScheduleData.campaign_schedule_items[i])
+            for (let i = 0; i < campaignScheduleData?.campaign_schedule_items.length; i++) {
+                campaignScheduleData.campaign_schedule_items[i]["campaign_schedule"] = campaign_schedule
+                await this.campaignScheduleItemModel.create(campaignScheduleData.campaign_schedule_items[i])
             }
         } catch (error) {
             console.log(error)
