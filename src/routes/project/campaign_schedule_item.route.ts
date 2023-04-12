@@ -6,7 +6,7 @@ import { UpdateCampaignScheduleItemDto } from '@/dtos/project/campaign_schedule_
 import CampaignScheduleItemController from '@/controllers/project/campaign_schedule_item.controller';
 import authMiddleware from '@middlewares/auth.middleware';
 
-class CampaignScheduleRoute implements Routes {
+class CampaignScheduleItemRoute implements Routes {
     public path = '/campaign-schedule-items';
     public router = Router();
     public campaignScheduleItemController = new CampaignScheduleItemController();
@@ -22,4 +22,4 @@ class CampaignScheduleRoute implements Routes {
     }
 }
 
-export default CampaignScheduleRoute;
+export default CampaignScheduleItemRoute;
