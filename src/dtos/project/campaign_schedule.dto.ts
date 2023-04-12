@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsArray } from 'class-validator';
+import { ICampaignScheduleItem } from '@/interfaces/project-interface/campaign_schedule_item.interface';
 
 export class CampaignScheduleDto {
     @IsNotEmpty()
@@ -7,32 +8,12 @@ export class CampaignScheduleDto {
     public title: string;
 
     @IsNotEmpty()
-    @IsString()
-    public owner: string;
-
-    @IsNotEmpty()
-    @IsString()
-    public campaign: string;
-
-    @IsNotEmpty()
-    @IsString()
-    public department: string;
+    @IsArray()
+    campaign_schedule_items: ICampaignScheduleItem[]
 }
 
 export class UpdateCampaignScheduleDto {
     @IsOptional()
     @IsString()
     public title: string;
-
-    @IsOptional()
-    @IsString()
-    public owner: string;
-
-    @IsOptional()
-    @IsString()
-    public campaign: string;
-
-    @IsOptional()
-    @IsString()
-    public department: string;
 }
