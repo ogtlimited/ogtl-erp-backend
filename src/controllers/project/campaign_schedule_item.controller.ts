@@ -27,7 +27,7 @@ class CampaignScheduleItemController {
     public updateCampaignScheduleItem = async (req: any, res: Response, next: NextFunction) => {
         try {
             const { campaignScheduleItemId } = req.params
-            const campaignScheduleItem: ICampaignScheduleItem = await this.campaignScheduleItemService.updateCampaignScheduleItem(req.body, campaignScheduleItemId);
+            const campaignScheduleItem: ICampaignScheduleItem[] = await this.campaignScheduleItemService.updateCampaignScheduleItem(req.body);
             res.status(200).json({ data: campaignScheduleItem });
         } catch (error) {
             next(error);
