@@ -15,6 +15,10 @@ export class CampaignScheduleItemDto {
 export class UpdateCampaignScheduleItemDto {
     @IsOptional()
     @IsString()
+    public _id: string;
+    
+    @IsOptional()
+    @IsString()
     public day: string;
 
     @IsOptional()
