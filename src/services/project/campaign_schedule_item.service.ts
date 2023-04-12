@@ -22,12 +22,15 @@ class CampaignScheduleItemService {
             .populate("campaign_schedule")
         return campaignScheduleItems;
     }
-    public async updateCampaignScheduleItem(payload: UpdateCampaignScheduleItemDto, campaignScheduleItemId: string): Promise<ICampaignScheduleItem> {
+    public async updateCampaignScheduleItem(payload: UpdateCampaignScheduleItemDto[]): Promise<ICampaignScheduleItem[]> {
         if (isEmpty(payload)) throw new HttpException(400, "Bad request");
-        const campaignScheduleItem = await this.campaignScheduleItemModel.findOne({ _id: campaignScheduleItemId });
-        if (!campaignScheduleItem) throw new HttpException(409, "campaign schedule item not found");
-        const updateCampaignScheduleItem: ICampaignScheduleItem = await this.campaignScheduleItemModel.findByIdAndUpdate({ _id: campaignScheduleItemId }, payload, { new: true });
-        return updateCampaignScheduleItem;
+        let updateCampaignScheduleItemById: ICampaignScheduleItem[] = []
+        for (let i = 0; i < payload?.length; i++) {
+            const updatedcampaignScheduleItem = await this.campaignScheduleItemModel
+                .findByIdAndUpdate({ _id: payload[i]._id }, payload[i], { new: true })
+            updateCampaignScheduleItemById.push(updatedcampaignScheduleItem);
+        }
+        return updateCampaignScheduleItemById;   
     }
     public async deleteCampaignScheduleItem(campaignScheduleItemId: string): Promise<ICampaignScheduleItem> {
         const campaignScheduleItemExist: ICampaignScheduleItem = await this.campaignScheduleItemModel.findOne({ _id: campaignScheduleItemId });
