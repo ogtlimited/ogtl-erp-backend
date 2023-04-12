@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsBoolean } from 'class-validator';
 
 export class CampaignScheduleItemDto {
     @IsNotEmpty()
@@ -7,7 +7,7 @@ export class CampaignScheduleItemDto {
     public day: string;
 
     @IsNotEmpty()
-    @IsString()
+    @IsBoolean()
     public off: boolean;
 
 }
@@ -18,6 +18,6 @@ export class UpdateCampaignScheduleItemDto {
     public day: string;
 
     @IsOptional()
-    @IsString()
+    @IsBoolean()
     public off: boolean;
 }
