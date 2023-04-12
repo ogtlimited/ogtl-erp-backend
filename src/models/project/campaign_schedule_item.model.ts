@@ -14,7 +14,7 @@ const campaignScheduleItemSchema: Schema = new Schema(
         },
         campaign_schedule: {
             type: Schema.Types.ObjectId,
-            ref: 'CampaignSchedule',
+            ref: 'campaignschedule',
             default: null
         }
     },
