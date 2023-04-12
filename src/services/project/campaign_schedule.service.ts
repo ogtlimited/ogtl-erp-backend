@@ -42,7 +42,9 @@ class CampaignScheduleService {
     }
     public async updateCampaignSchedule(payload: UpdateCampaignScheduleDto, campaignScheduleId: string): Promise<ICampaignSchedule> {
         if (isEmpty(payload)) throw new HttpException(400, "Bad request");
-        const campaignSchedule = await this.campaignScheduleModel.findOne({_id: campaignScheduleId});
+        const campaignSchedule = await this.campaignScheduleModel.findById({_id: campaignScheduleId});
+        console.log("campaignSchedule", campaignSchedule)
+        console.log("campaignScheduleId", campaignScheduleId)
         if (!campaignSchedule) throw new HttpException(409, "campaign schedule not found");
         const updateCampaignSchedule: ICampaignSchedule = await this.campaignScheduleModel.findByIdAndUpdate({ _id: campaignScheduleId }, payload, { new: true });
         return updateCampaignSchedule;
