@@ -6,11 +6,13 @@ import { ICampaignSchedule } from '@/interfaces/project-interface/campaign_sched
 import { CampaignScheduleDto, UpdateCampaignScheduleDto } from '@/dtos/project/campaign_schedule.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
+import CampaignScheduleItemService from './campaign_schedule_item.service';
 
 
 class CampaignScheduleService {
     private campaignScheduleModel = campaignScheduleModel;
     private campaignScheduleItemModel = campaignScheduleItemModel;
+    private campaignScheduleItemService = new CampaignScheduleItemService();
 
     public async findAllCampaignSchedule(): Promise<ICampaignSchedule[]> {
         const campaignSchedules: ICampaignSchedule[] = await this.campaignScheduleModel
