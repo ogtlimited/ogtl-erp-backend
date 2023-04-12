@@ -15,6 +15,15 @@ class CampaignScheduleItemController {
             next(error);
         }
     };
+    public findAllCampaignScheduleItemsBelongingToACampaignSchedule = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { campaignScheduleId } = req.params
+            const campaignScheduleItems: ICampaignScheduleItem[] = await this.campaignScheduleItemService.findAllCampaignScheduleItemsBelongingToACampaignSchedule(campaignScheduleId);
+            res.status(200).json({ data: campaignScheduleItems });
+        } catch (error) {
+            next(error);
+        }
+    };
     public updateCampaignScheduleItem = async (req: any, res: Response, next: NextFunction) => {
         try {
             const { campaignScheduleItemId } = req.params
