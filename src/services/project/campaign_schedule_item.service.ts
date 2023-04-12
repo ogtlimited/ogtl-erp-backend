@@ -16,6 +16,12 @@ class CampaignScheduleItemService {
             .populate("campaign_schedule")
         return campaignScheduleItems;
     }
+    public async findAllCampaignScheduleItemsBelongingToACampaignSchedule(campaignScheduleId): Promise<ICampaignScheduleItem[]> {
+        const campaignScheduleItems: ICampaignScheduleItem[] = await this.campaignScheduleItemModel
+            .find({ campaign_schedule: campaignScheduleId })
+            .populate("campaign_schedule")
+        return campaignScheduleItems;
+    }
     public async updateCampaignScheduleItem(payload: UpdateCampaignScheduleItemDto, campaignScheduleItemId: string): Promise<ICampaignScheduleItem> {
         if (isEmpty(payload)) throw new HttpException(400, "Bad request");
         const campaignScheduleItem = await this.campaignScheduleItemModel.findOne({ _id: campaignScheduleItemId });
