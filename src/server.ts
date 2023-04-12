@@ -76,6 +76,7 @@ import ClientAccountDeactivationRoute from './routes/project/client_account_deac
 import ResetDefaultClientAccountPasswordRoute from './routes/project/client_account_reset_default_password.route';
 import AssetAssignmentRoute from '@/routes/assets/asset-assignment.route';
 import ProjectRoute from '@routes/project/project.route';
+import CampaignScheduleRoute from './routes/project/campaign_schedule.route';
 import documentRoute from '@routes/project/document.route';
 import JobDocumentRoute from '@routes/recruitment/document.route';
 
@@ -181,6 +182,7 @@ const app = new App([
   new LoanApplicationRoute(),
 
   new ProjectRoute(),
+  new CampaignScheduleRoute(),
   new ClientRoute(),
   new ClientAccountRoute(),
   new ClientProjectsRoute(),
