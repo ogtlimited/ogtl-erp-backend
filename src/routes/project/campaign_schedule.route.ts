@@ -17,7 +17,7 @@ class CampaignScheduleRoute implements Routes {
         this.router.get(`${this.path}`,  authMiddleware, this.campaignScheduleController.findAllCampaignSchedule);
         this.router.get(`${this.path}/owner`,  authMiddleware, this.campaignScheduleController.findCampaignScheduleByOwnersId);
         this.router.post(`${this.path}`, [validationMiddleware(CampaignScheduleDto, 'body'), authMiddleware], this.campaignScheduleController.createCampaignSchedule);
-        this.router.put(`${this.path}/:campaignScheduleId`, [validationMiddleware(UpdateCampaignScheduleDto, 'body'), authMiddleware], this.campaignScheduleController.updateCampaignSchedule);
+        this.router.patch(`${this.path}/:campaignScheduleId`, [validationMiddleware(UpdateCampaignScheduleDto, 'body'), authMiddleware], this.campaignScheduleController.updateCampaignSchedule);
         this.router.delete(`${this.path}/:campaignScheduleId`, authMiddleware, this.campaignScheduleController.deleteCampaignSchedule);
     }
 }
