@@ -10,6 +10,21 @@ export class CampaignScheduleItemDto {
     @IsBoolean()
     public off: boolean;
 
+    @IsNotEmpty()
+    @IsString()
+    public start: string;
+
+    @IsNotEmpty()
+    @IsString()
+    public end: string;
+
+    @IsOptional()
+    @IsBoolean()
+    public huddles: boolean;
+
+    @IsOptional()
+    @IsString()
+    public huddleTime: string;
 }
 
 export class UpdateCampaignScheduleItemDto {
@@ -24,4 +39,20 @@ export class UpdateCampaignScheduleItemDto {
     @IsOptional()
     @IsBoolean()
     public off: boolean;
+
+    @IsOptional()
+    @IsString()
+    public start: string;
+
+    @IsOptional()
+    @IsString()
+    public end: string;
+
+    @IsOptional()
+    @IsBoolean()
+    public huddles: boolean;
+
+    @IsOptional()
+    @IsString()
+    public huddleTime: string;
 }
