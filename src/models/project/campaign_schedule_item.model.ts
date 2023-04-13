@@ -12,6 +12,22 @@ const campaignScheduleItemSchema: Schema = new Schema(
             type: Boolean,
             default: false,
         },
+        start: {
+            type: String,
+            default: null,
+        },
+        end: {
+            type: String,
+            default: null,
+        },
+        huddles: {
+            type: Boolean,
+            default: false
+        },
+        huddleTime: {
+            type: String,
+            default: null,
+        },
         campaign_schedule: {
             type: Schema.Types.ObjectId,
             ref: 'campaignschedule',
