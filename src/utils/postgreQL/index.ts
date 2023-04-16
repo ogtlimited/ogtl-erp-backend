@@ -1,23 +1,19 @@
 import config from 'config';
+import { dirname } from 'path';
 import { join } from 'path';
 import { dbConfig } from './db.interface';
-import { Staff } from './staff.entity';
-import { AttendanceInfo } from './attendance_info.entity';  
 import { ConnectionOptions } from 'typeorm';
+const path = require('path')
+require("dotenv").config({ path: dirname(module.paths[1]) + "/.env" });
 
 
 export const dbConnection: ConnectionOptions = {
     type: 'postgres',
     port: 5432,
-    host: 'localhost',
+    host: process.env.POSTGRES_HOST,
     username: 'postgres',
-    password: "root",
-    database: 'ogtl_attendance',
+    password: process.env.POSTGRES_PASSWORD,
+    database: process.env.POSTGRES_DATABASE,
     logging: ['error'],
-    entities: [join(__dirname, '/../**/*.entity{.ts,.js}')],
-    // migrations: [join(__dirname, '../**/*.migration{.ts,.js}')],
-    // subscribers: [join(__dirname, '../**/*.subscriber{.ts,.js}')],
-
+    entities: [join(__dirname, '/../**/*.entity{.ts,.js}')]
 };
-
-// export default dataSource

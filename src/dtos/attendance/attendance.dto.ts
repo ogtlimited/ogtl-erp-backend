@@ -1,15 +1,26 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 
-import {IsArray, IsDateString, IsOptional, IsString} from 'class-validator';
+import {IsArray, IsDateString, IsNotEmpty, IsNumber, IsOptional, IsString} from 'class-validator';
 
 export class CreateAttendanceDto {
-  @IsDateString()
+  @IsString()
   public clockInTime: string;
+
+  @IsOptional()
+  @IsString()
+  public clockOutTime: string;
 
   @IsString()
   @IsOptional()
   public departmentId: string;
+  
+  @IsString()
+  @IsNotEmpty()
+  public shiftTypeId: string;
+
+  @IsString()
+  public employeeId: string;
 
   @IsString()
   @IsOptional()

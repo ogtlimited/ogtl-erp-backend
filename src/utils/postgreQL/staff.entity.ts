@@ -27,18 +27,6 @@ export class Staff extends BaseEntity {
     Campaign: string;
 
     @Column()
-    PhoneNumber: string;
-
-    @Column()
-    DateOfBirth: Date;
-
-    @Column()
-    MaritalStatus: string;
-
-    @Column()
-    StateOfOrigin: string;
-
-    @Column()
     Role: string;
 
     @Column()
@@ -46,12 +34,6 @@ export class Staff extends BaseEntity {
 
     @Column()
     IsActive: boolean;
-
-    @Column('time without time zone')
-    ShiftEndTime: Date;
-
-    @Column('time without time zone')
-    ShiftStartTime: Date;
 
     @OneToMany(() => AttendanceInfo, attendanceInfo => attendanceInfo.staff)
     attendanceInfo: AttendanceInfo[];

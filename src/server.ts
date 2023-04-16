@@ -18,6 +18,7 @@ import DepartmentEmployeesRoute from '@routes/dashboard/hr/department_employees_
 import EmployeesGenderDesignation from '@/routes/dashboard/hr/employees_gender_designation.route';
 import DepartmentGenderCountRoute from '@routes/dashboard/hr/department_employees_gender_count.route';
 import ShiftTypeRoute from './routes/shift/shiftType';
+import EmployeeShiftRoute from './routes/shift/employee_shift.route';
 import AttendanceRoute from './routes/attendance/attendance.route';
 import IncentiveRoute from './routes/payroll/incentive.route';
 import SalaryStructureRoute from './routes/payroll/salary-structure.route';
@@ -75,6 +76,8 @@ import ClientAccountDeactivationRoute from './routes/project/client_account_deac
 import ResetDefaultClientAccountPasswordRoute from './routes/project/client_account_reset_default_password.route';
 import AssetAssignmentRoute from '@/routes/assets/asset-assignment.route';
 import ProjectRoute from '@routes/project/project.route';
+import CampaignScheduleRoute from './routes/project/campaign_schedule.route';
+import CampaignScheduleItemRoute from './routes/project/campaign_schedule_item.route';
 import documentRoute from '@routes/project/document.route';
 import JobDocumentRoute from '@routes/recruitment/document.route';
 
@@ -134,6 +137,7 @@ const app = new App([
   new DepartmentEmployeesRoute(),
   new EmployeesGenderDesignation(),
   new ShiftTypeRoute(),
+  new EmployeeShiftRoute(),
   new AttendanceRoute(),
   new IncentiveRoute(),
   new SalaryStructureRoute(),
@@ -179,6 +183,8 @@ const app = new App([
   new LoanApplicationRoute(),
 
   new ProjectRoute(),
+  new CampaignScheduleRoute(),
+  new CampaignScheduleItemRoute(),
   new ClientRoute(),
   new ClientAccountRoute(),
   new ClientProjectsRoute(),

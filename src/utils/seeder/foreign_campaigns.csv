@@ -1,0 +1,17 @@
+project_name,shift_start,shift_end,type,status,"March 13- November 5, 2023","November 5-March 10, 2024",Comments
+Health & Wellness,1:30pm,11:00pm,foreign,open,1:30pm-11:00pm,2:30pm-12:00am,"Exist, but has different time"
+CS Live,1:30pm,10:30pm,foreign,open,1:30pm-10:30pm,2:30pm-11:30pm,Does not exist
+CS Docs,1:30pm,10:30pm,foreign,open,1:30pm-10:30pm,,Does not exist
+Fin Ops,1:30pm,10:30pm,foreign,open,1:30pm-10:30pm,,"Exist, but has different time"
+Legal Ops,1:30pm,10:30pm,foreign,open,1:30pm-10:30pm,,Does not exist
+CS Appeals,1:30pm,10:30pm,foreign,open,1:30-10:30pm,,Does not exist
+Myself Health,1:30pm,10:30pm,foreign,open,1:30pm-10:30pm,,Does not exist
+Medical Records,1:30pm,10:30pm,foreign,open,1:30pm-10:00pm,,Does not exist
+EMR,1:30pm,10:30pm,foreign,open,1:30pm-10:30pm,,"Exist, same time"
+Canvassing,1:30pm,10:30pm,foreign,open,1:30pm-10:30pm,,"Exist, same time"
+Benefits,1:30pm,10:30pm,foreign,open,1:30pm-10:30pm,,Does not exist
+QA,2:00pm,10:00pm,domestic,open,,,
+uLesson,9:00am,6:00pm,domestic,open,,,
+MR Campaign,2:00pm,10:00pm,domestic,open,,,
+Parkway,9:00am,5:00pm,foreign,open,,,
+gomoney,9:00am,5:00pm,domestic,open,,,
