@@ -123,37 +123,37 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
     return  staff
   }
 
-  public async bulkAttendanceUpload(attendanceTypeData): Promise<any> {
-    const employeesDeductions = []
-    const employeesAttendance = []
-    const latenessDeduction = await deductionTypeModel.findOne({title:"lateness"})
-    const ncnsDeduction = await deductionTypeModel.findOne({title:"NCNS"})
+  // public async bulkAttendanceUpload(attendanceTypeData): Promise<any> {
+  //   const employeesDeductions = []
+  //   const employeesAttendance = []
+  //   const latenessDeduction = await deductionTypeModel.findOne({title:"lateness"})
+  //   const ncnsDeduction = await deductionTypeModel.findOne({title:"NCNS"})
 
-    // return attendanceTypeData
+  //   // return attendanceTypeData
 
-    for(const employeeData of attendanceTypeData.attendances){
-      const result = await this.generatePossibleDeductions(employeeData.ogid, employeeData, latenessDeduction, ncnsDeduction)
-      const attendanceConstructor: ICreateAttendance = AttendanceTypeService.attendanceData(employeeData, result);
+  //   for(const employeeData of attendanceTypeData.attendances){
+  //     const result = await this.generatePossibleDeductions(employeeData.ogid, employeeData, latenessDeduction, ncnsDeduction)
+  //     const attendanceConstructor: ICreateAttendance = AttendanceTypeService.attendanceData(employeeData, result);
 
-      if (result.departmentId != undefined){
-        attendanceConstructor.departmentId = result.departmentId
-      }
-      if (result.projectId != undefined){
-        attendanceConstructor.projectId = result.projectId
-      }
-      employeesAttendance.push(attendanceConstructor)
+  //     if (result.departmentId != undefined){
+  //       attendanceConstructor.departmentId = result.departmentId
+  //     }
+  //     if (result.projectId != undefined){
+  //       attendanceConstructor.projectId = result.projectId
+  //     }
+  //     employeesAttendance.push(attendanceConstructor)
 
-      if (result.employeesDeductions.length == 0){
-        continue
-      }
-      employeesDeductions.push(...result.employeesDeductions)
+  //     if (result.employeesDeductions.length == 0){
+  //       continue
+  //     }
+  //     employeesDeductions.push(...result.employeesDeductions)
 
-    }
+  //   }
 
-    await deductionModel.insertMany(employeesDeductions);
-    await attendanceModel.insertMany(employeesAttendance)
-    return {employeesDeductions, employeesAttendance}
-  }
+  //   await deductionModel.insertMany(employeesDeductions);
+  //   await attendanceModel.insertMany(employeesAttendance)
+  //   return {employeesDeductions, employeesAttendance}
+  // }
   public async uploadMultipleAttendanceRecord(): Promise<any> {
     const attendance = await this.findAllExternalDatabaseAttendance()
     const employeesDeductions = []
