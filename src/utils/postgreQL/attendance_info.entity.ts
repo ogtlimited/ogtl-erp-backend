@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToMany,OneToOne, ManyToOne, JoinColumn, createConnection } from 'typeorm';
+import { ShiftTime } from './shift_time.entity';
 import { Staff } from './staff.entity';
 
 
@@ -20,6 +21,10 @@ export class AttendanceInfo extends BaseEntity {
     @ManyToOne(() => Staff, staff => staff.attendanceInfo)
     @JoinColumn({name: "StaffId"})
     staff: Staff;
+   
+    @OneToOne(() => ShiftTime)
+    @JoinColumn({name: "StaffId"})
+    shifttime: ShiftTime;
 
 
 }
