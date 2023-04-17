@@ -18,6 +18,7 @@ import DepartmentEmployeesRoute from '@routes/dashboard/hr/department_employees_
 import EmployeesGenderDesignation from '@/routes/dashboard/hr/employees_gender_designation.route';
 import DepartmentGenderCountRoute from '@routes/dashboard/hr/department_employees_gender_count.route';
 import ShiftTypeRoute from './routes/shift/shiftType';
+import EmployeeShiftRoute from './routes/shift/employee_shift.route';
 import AttendanceRoute from './routes/attendance/attendance.route';
 import IncentiveRoute from './routes/payroll/incentive.route';
 import SalaryStructureRoute from './routes/payroll/salary-structure.route';
@@ -134,6 +135,7 @@ const app = new App([
   new DepartmentEmployeesRoute(),
   new EmployeesGenderDesignation(),
   new ShiftTypeRoute(),
+  new EmployeeShiftRoute(),
   new AttendanceRoute(),
   new IncentiveRoute(),
   new SalaryStructureRoute(),

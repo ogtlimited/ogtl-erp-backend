@@ -1,0 +1,147 @@
+/* eslint-disable prettier/prettier */
+import { CreateEmployeeShiftDto, UpdateEmployeeShiftDto } from '@dtos/shift/employee_shift.dto';
+import { HttpException } from '@exceptions/HttpException';
+import { IEmployeeShift } from '@interfaces/shift-interface/employee_shift.interface';
+import EmployeeShiftModel from '@models/shift/employee_shift.model';
+import { isEmpty } from '@utils/util';
+import { SumHours } from '@utils/calculateTimeDifference';
+import EmployeeModel from '@/models/employee/employee.model';
+import CampaignModel from '@/models/project/project.model';
+const fs = require("fs")
+const csv = require('csv-parser')
+class EmployeeShiftService {
+    public employeeShiftModel = EmployeeShiftModel;
+    public employeeModel = EmployeeModel;
+    public campaignModel = CampaignModel;
+    constructor() {
+    }
+
+    public async findAllEmployeesShift(): Promise<IEmployeeShift[]> {
+        return this.employeeShiftModel.find()
+    }
+    public async findEmployeeShiftById(employeeShiftId: string): Promise<IEmployeeShift> {
+        if (isEmpty(employeeShiftId)) throw new HttpException(400, "No shift Id provided");
+        const findEmployeeShift: IEmployeeShift = await this.employeeShiftModel.findOne({ _id: employeeShiftId });
+        if (!findEmployeeShift) throw new HttpException(409, "You're not shiftType");
+        return findEmployeeShift;
+    }
+
+    public async findEmployeeShiftByOGID(ogid: string): Promise<IEmployeeShift[]> {
+        if (isEmpty(ogid)) throw new HttpException(400, "No shift Id provided");
+        const findEmployeeShift: IEmployeeShift[] = await this.employeeShiftModel.find({ ogid: ogid });
+        return findEmployeeShift;
+    }
+
+    public async createNewEmployeeShift(shiftData: IEmployeeShift): Promise<IEmployeeShift> {
+        if (isEmpty(shiftData)) throw new HttpException(400, "Bad request");
+        const findShift: IEmployeeShift = await this.employeeShiftModel.findOne({ day: shiftData.day, ogid: shiftData.ogid });
+        if (!findShift) {
+            shiftData.end = shiftData.off ?  null : shiftData.end;
+            shiftData.start = shiftData.off ? null : shiftData.start;
+            const result = SumHours(shiftData.end, shiftData.start)
+            shiftData.expectedWorkTime = result ? result.toString() : null
+            return await this.employeeShiftModel.create(shiftData);
+        }
+    }
+    public async createExistingEmployeesShift(shiftData: IEmployeeShift[]): Promise<IEmployeeShift[]> {
+        if (shiftData.length == 0) throw new HttpException(400, "Bad request");
+        const newShifts: IEmployeeShift[] = []
+        for (let i = 0; i < shiftData.length; i++){
+            const findShift: IEmployeeShift = await this.employeeShiftModel.findOne({ day: shiftData[i].day, ogid: shiftData[i].ogid });
+            if (!findShift) {
+                shiftData[i].end = shiftData[i].off ? null : shiftData[i].end;
+                shiftData[i].start = shiftData[i].off ? null : shiftData[i].start;
+                const result = SumHours(shiftData[i].end, shiftData[i].start)
+                shiftData[i].expectedWorkTime = result ? result.toString() : null
+                newShifts.push(await this.employeeShiftModel.create(shiftData[i]));
+            }
+        }
+        return newShifts
+    }
+
+    public async updateEmployeeShift(shiftData: UpdateEmployeeShiftDto[]): Promise<IEmployeeShift[]> {
+        if (shiftData.length==0) throw new HttpException(400, "Bad request");
+        let updateEmployeeShiftById: IEmployeeShift[] = []
+        for(let i = 0; i < shiftData.length; i++){
+            shiftData[i].end = shiftData[i].off ? null : shiftData[i].end;
+            shiftData[i].start = shiftData[i].off ? null : shiftData[i].start;
+            const result = SumHours(shiftData[i].end, shiftData[i].start)
+            shiftData[i].expectedWorkTime = result ? result.toString() : null
+            const updatedEmployeeShift = await this.employeeShiftModel
+                .findByIdAndUpdate({ _id: shiftData[i]._id }, shiftData[i], {new: true})
+            updateEmployeeShiftById.push(updatedEmployeeShift);
+        }
+        if (!updateEmployeeShiftById) throw new HttpException(409, "shift does not exist");
+        return updateEmployeeShiftById
+    }
+    public async deleteEmployeeShift(employeeShiftId: string): Promise<IEmployeeShift> {
+        const deletedShift: IEmployeeShift = await this.employeeShiftModel.findByIdAndDelete(employeeShiftId);
+        if (!deletedShift) throw new HttpException(409, "shift does not exist");
+        return deletedShift;
+    }
+    public async getshiftTypeBasedOnOffice(query): Promise<IEmployeeShift[]> {
+        if (query.departmentId) {
+            const shift: IEmployeeShift[] = await this.employeeShiftModel.find({ departmentId: query.departmentId });
+            return shift
+        }
+        if (query.campaignId) {
+            const shift: IEmployeeShift[] = await this.employeeShiftModel.find({ campaignId: query.campaignId });
+            return shift
+        }
+    }
+    public async createEmployeesShiftFromCsvFile(): Promise<any> {
+        fs.createReadStream("./src/services/shift/csv_files/Gomoney_shift.csv")
+            .pipe(csv())
+            .on('data', async (data) => {
+                const days = ["mon","tue","wed","thur","fri","sat","sun"]
+                // start and end time for uniform shift
+                // const start = data['Shift (Mon - fri)'].split('-')[0].trim()
+                // const end = data['Shift (Mon - fri)'].split('-')[1].trim()
+                const fluctuating_shift_days = data['Shift (Mon - fri)'].split(',')
+                const huddles = data['Huddles'] ? data['Huddles'].split(':')[0].trim() : false
+                const huddleTime = data['Huddles'] ? data['Huddles'].split(':')[1].trim() : null
+                const campaign = await this.campaignModel.findOne({ project_name: data['Campaign'] })
+                const employee = await this.employeeModel.findOne({ company_email: data['Employee email'] })
+                if(!employee){
+                    fs.appendFileSync('./src/services/shift/csv_files/employees_emails_with_issues.csv', `${data['Employee email']}\n`);
+                }
+                if (employee){
+                    for (let i = 0; i < days.length; i++){
+                        // start and end time for fluctuating shift
+                        const start = fluctuating_shift_days[i] ? fluctuating_shift_days[i]?.split("-")[0].trim() : null
+                        const end = fluctuating_shift_days[i] ? fluctuating_shift_days[i]?.split("-")[1].trim() : null
+                        const formattedData = {
+                            start: start,
+                            end: end,
+                            day: days[i],
+                            ogid: employee ? employee.ogid : null,
+                            campaignID: campaign ? campaign._id : null,
+                            departmentID: employee ? employee.department : null,
+                            huddles: huddles ? true : false,
+                            huddleTime: huddleTime,
+                        }
+                        const result = SumHours(formattedData.end, formattedData.start)
+                        formattedData['expectedWorkTime'] = result ? result.toString() : null
+                        if (formattedData.day == "sat" || formattedData.day == "sun"){
+                            formattedData.start = null
+                            formattedData.end = null
+                            formattedData.end = null
+                            formattedData['expectedWorkTime'] = null
+                            formattedData.huddles = false
+                            formattedData.huddleTime = null
+                        }
+                        const employeeShift = await this.employeeShiftModel.findOne({ ogid: formattedData?.ogid, day: formattedData.day })
+                        if(!employeeShift){
+                            const shift = await this.employeeShiftModel.create(formattedData)
+                        }
+                        console.log("formattedData", formattedData)
+                    } 
+                  
+                }
+            })
+            .on('end', async () => {
+                console.log("Completed!!!")
+            })
+    }
+}
+export default EmployeeShiftService;
