@@ -115,9 +115,9 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
   public async findAllExternalDatabaseAttendance(): Promise<any> {
     const staff = await getRepository(AttendanceInfo).find({
       relations: ['staff'],
-      where:{
-        Date: moment(new Date()).format("yy-MM-DD")
-      }
+      // where:{
+      //   Date: moment(new Date()).format("yy-MM-DD")
+      // }
   })
     return  staff
   }
@@ -281,7 +281,7 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
       const deductionsConstructor:any = {}
       const latenessConstructor:any = {}
 
-      let employee:any = await EmployeeModel.findOne({ogid: ogid, status: {$eq: "active"} }, {
+      let employee:any = await EmployeeModel.findOne({ogid: ogid, status: {$eq: "active"}, remote: false }, {
         company_email: 1,
         default_shift:1,
         projectId:1,
