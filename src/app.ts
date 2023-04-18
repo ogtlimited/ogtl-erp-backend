@@ -38,8 +38,7 @@ const fs = require('fs')
 import EmailService from '@/utils/email.service';
 import { leadsLeaveNotificationMessage, birthdayMessage } from '@/utils/message';
 import ExitService from './services/employee/exit.service';
-import { dbConnection } from '@utils/postgreQL';
-import { createConnection } from 'typeorm';
+import { postgresDbConnection } from '@utils/postgreQL';
 import AttendanceTypeService from './services/attendance/attendance.service';
 
 const path = require('path')
@@ -259,7 +258,7 @@ class App {
   }
 
   private connectToPostgresDatabase() {
-    createConnection(dbConnection).then(e => {
+    postgresDbConnection.initialize().then(e => {
       console.log('COONECTED TO PostgresDB ');
     });
   }
@@ -343,7 +342,7 @@ class App {
     })
 
     const getAttendanceFromPostgresDB = cron.schedule('0 */24 * * *', async function () {
-      const attendanceService = new AttendanceTypeService
+      const attendanceService = new AttendanceTypeService()
       attendanceService.uploadMultipleAttendanceRecord()
     })
     getAttendanceFromPostgresDB.start()
