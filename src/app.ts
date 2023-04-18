@@ -342,8 +342,9 @@ class App {
       await exitService.deactivateResigneesERPAccount()
     })
 
-    const getAttendanceFromPostgresDB = cron.schedule('0 */24 * * *', async function () {
-      const attendanceService = new AttendanceTypeService
+    const getAttendanceFromPostgresDB = cron.schedule('0 */23 * * *', async function () {
+    // const getAttendanceFromPostgresDB = cron.schedule('*/2 * * * *', async function () {
+      const attendanceService = new AttendanceTypeService()
       attendanceService.uploadMultipleAttendanceRecord()
     })
     getAttendanceFromPostgresDB.start()

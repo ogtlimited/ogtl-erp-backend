@@ -55,15 +55,15 @@ class AttendanceController {
     }
   };
 
-  public CreateBulkAttendance = async (req, res: Response, next: NextFunction) => {
-    try {
-      const attendanceData = req.body;
-      const createAttendanceData: any = await this.attendanceService.bulkAttendanceUpload(attendanceData);
-      res.status(201).json({ data: createAttendanceData});
-    } catch (error) {
-      next(error);
-    }
-  };
+  // public CreateBulkAttendance = async (req, res: Response, next: NextFunction) => {
+  //   try {
+  //     const attendanceData = req.body;
+  //     const createAttendanceData: any = await this.attendanceService.bulkAttendanceUpload(attendanceData);
+  //     res.status(201).json({ data: createAttendanceData});
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // };
 
   public updateAttendance = async (req, res: Response, next: NextFunction) => {
     try {
@@ -86,7 +86,6 @@ class AttendanceController {
       next(error);
     }
   };
-
   public uploadMultipleAttendanceRecord = async (req, res: Response, next: NextFunction) => {
     try {
       const externalDatabaseAttendance: any = await this.attendanceService.uploadMultipleAttendanceRecord();
