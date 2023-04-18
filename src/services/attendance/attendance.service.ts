@@ -26,8 +26,7 @@ import employeesSalaryModel from "@models/payroll/employees-salary";
 import { Repository } from 'typeorm';
 
 
-// @EntityRepository()
-class AttendanceTypeService extends Repository<AttendanceInfo> {
+class AttendanceTypeService  {
   private attendanceTypes = attendanceModel;
   private shiftTypeModel = shiftTypeModel
   private leaveModel = applicationModel;
@@ -115,12 +114,11 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
   }
 
   public async findAllExternalDatabaseAttendance(): Promise<any> {
-    const staff = await postgresDbConnection.getRepository(AttendanceInfo).find({
-      relations: ['staff'],
-      // where:{
-      //   Date: moment(new Date()).format("yy-MM-DD")
-      // }
-  })
+    const staff = await postgresDbConnection.getRepository(AttendanceInfo)
+      .createQueryBuilder("attendanceInfo")
+      .where("attendanceInfo.Date = :date", { date: moment(new Date()).format("MM-DD-yy") })
+      .getMany()
+
     return  staff
   }
   public async findExternalDatabaseAttendanceByOgId(ogid: string, date: string): Promise<any> {
@@ -128,7 +126,7 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
         .createQueryBuilder("staff")
         .leftJoinAndSelect("staff.attendanceInfo", "attendanceInfo")
         .where("staff.StaffUniqueId = :ogid", { ogid: ogid })
-        .andWhere("attendanceInfo.Date = :date", { date: date })
+          .andWhere("attendanceInfo.Date = :date", { date: date })
         .getOne()
 
     return  staff
