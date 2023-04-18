@@ -102,7 +102,6 @@ class OfficeFiltrationService {
                             { "first_name": { $regex: searchQuery.search, $options: "i" } },
                             { "last_name": { $regex: searchQuery.search, $options: "i" } },
                             { "middle_name": { $regex: searchQuery.search, $options: "i" } },
-                            { "department.department": { $regex: searchQuery.search, $options: "i" } },
                             { "designation.designation": { $regex: searchQuery.search, $options: "i" } }
                         ]
                     }
@@ -113,6 +112,13 @@ class OfficeFiltrationService {
             filtrationQuery.push(
                 {
                     $match: { "status": { $regex: searchQuery.status, $options: "i" } }
+                }
+            )
+        }
+        if (searchQuery.designation) {
+            filtrationQuery.push(
+                {
+                    $match: { "designation.designation": { $regex: searchQuery.designation, $options: "i" } }
                 }
             )
         }
