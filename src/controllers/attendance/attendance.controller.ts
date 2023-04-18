@@ -87,8 +87,7 @@ class AttendanceController {
   };
   public findExternalDatabaseAttendanceByOgId = async (req, res: Response, next: NextFunction) => {
     try {
-      const { ogid, date } = req.query
-      const externalDatabaseAttendance: any = await this.attendanceService.findExternalDatabaseAttendanceByOgId(ogid, date);
+      const externalDatabaseAttendance: any = await this.attendanceService.findExternalDatabaseAttendanceByOgId(req.query);
       res.status(201).json({ data: externalDatabaseAttendance });
     } catch (error) {
       next(error);
