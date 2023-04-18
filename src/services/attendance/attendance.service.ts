@@ -126,7 +126,8 @@ class AttendanceTypeService  {
         .innerJoin("attendanceInfo.staff", "staff")
         .where("staff.StaffUniqueId = :ogid", { ogid: query.ogid })
         .andWhere(`attendanceInfo.Date BETWEEN '${query.from}' AND '${query.to}'`)
-        .skip(Number(query.limit))
+        .orderBy("attendanceInfo.Date", "DESC")
+        .take(query.limit ? Number(query.limit): 10)
         .getMany()
         
     return  staff
