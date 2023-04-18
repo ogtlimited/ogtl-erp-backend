@@ -10,7 +10,8 @@ import attendanceModel  from '@models/attendance/attendance.model';
 import employeeModel  from '@models/employee/employee.model';
 import { Staff } from '@/utils/postgreQL/staff.entity';
 import { AttendanceInfo } from '@/utils/postgreQL/attendance_info.entity';
-// import deductionModel  from '@models/payroll/deduction.model';
+import { DataSource, LessThan } from 'typeorm';
+import { postgresDbConnection } from '@/utils/postgreQL';
 import { isEmpty } from '@utils/util';
 import {calculateLateness}  from '@/utils/attendanceCalculator';
 import {ObjectId} from 'mongodb'
@@ -22,10 +23,10 @@ import EmployeeModel from '@models/employee/employee.model';
 import shiftTypeModel from '@/models/shift/shift_type.model';
 import applicationModel from '@/models/leave/application.model';
 import employeesSalaryModel from "@models/payroll/employees-salary";
-import { EntityRepository, Repository, getRepository, getConnection } from 'typeorm';
+import { Repository } from 'typeorm';
 
 
-@EntityRepository()
+// @EntityRepository()
 class AttendanceTypeService extends Repository<AttendanceInfo> {
   private attendanceTypes = attendanceModel;
   private shiftTypeModel = shiftTypeModel
@@ -114,12 +115,22 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
   }
 
   public async findAllExternalDatabaseAttendance(): Promise<any> {
-    const staff = await getRepository(AttendanceInfo).find({
+    const staff = await postgresDbConnection.getRepository(AttendanceInfo).find({
       relations: ['staff'],
-      where:{
-        Date: moment(new Date()).format("yy-MM-DD")
-      }
+      // where:{
+      //   Date: moment(new Date()).format("yy-MM-DD")
+      // }
   })
+    return  staff
+  }
+  public async findExternalDatabaseAttendanceByOgId(ogid: string, date: string): Promise<any> {
+        const staff = await postgresDbConnection.getRepository(Staff)
+        .createQueryBuilder("staff")
+        .leftJoinAndSelect("staff.attendanceInfo", "attendanceInfo")
+        .where("staff.StaffUniqueId = :ogid", { ogid: ogid })
+        .andWhere("attendanceInfo.Date = :date", { date: date })
+        .getOne()
+
     return  staff
   }
 
