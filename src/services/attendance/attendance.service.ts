@@ -116,19 +116,19 @@ class AttendanceTypeService  {
   public async findAllExternalDatabaseAttendance(): Promise<any> {
     const staff = await postgresDbConnection.getRepository(AttendanceInfo)
       .createQueryBuilder("attendanceInfo")
-      .where("attendanceInfo.Date = :date", { date: moment(new Date()).format("MM-DD-yy") })
+      .where("attendanceInfo.Date = :date", { date: moment(new Date()).format("yy-MM-DD") })
       .getMany()
-
     return  staff
   }
-  public async findExternalDatabaseAttendanceByOgId(ogid: string, date: string): Promise<any> {
-        const staff = await postgresDbConnection.getRepository(Staff)
-        .createQueryBuilder("staff")
-        .leftJoinAndSelect("staff.attendanceInfo", "attendanceInfo")
-        .where("staff.StaffUniqueId = :ogid", { ogid: ogid })
-          .andWhere("attendanceInfo.Date = :date", { date: date })
-        .getOne()
-
+  public async findExternalDatabaseAttendanceByOgId(query): Promise<any> {
+        const staff = await postgresDbConnection.getRepository(AttendanceInfo)
+          .createQueryBuilder("attendanceInfo")
+        .innerJoin("attendanceInfo.staff", "staff")
+        .where("staff.StaffUniqueId = :ogid", { ogid: query.ogid })
+        .andWhere(`attendanceInfo.Date BETWEEN '${query.from}' AND '${query.to}'`)
+        .skip(Number(query.limit))
+        .getMany()
+        
     return  staff
   }
 
