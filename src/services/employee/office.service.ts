@@ -28,13 +28,12 @@ class OfficeService {
     public async findEmployeesByOffice(query): Promise< Employee[] > {
         if (query.department) {
             const employees: Employee[] = await this.officeFiltrationService
-                .getAllEmployeesHelperMethod({ department: new ObjectId(query.department) }, query, this.employeeModel)
-            // console.log("departmentID", `${query.department}` )
+            .getAllEmployeesHelperMethod({ department: new ObjectId(query.department) }, query, this.employeeModel)
             return employees
         }
         if (query.campaign)  {
             const employees: Employee[] = await this.officeFiltrationService
-            .getAllEmployeesHelperMethod({ projectId: query.campaign }, query, this.employeeModel)
+            .getAllEmployeesHelperMethod({ projectId: new ObjectId(query.campaign) }, query, this.employeeModel)
             return employees
         }
     }
