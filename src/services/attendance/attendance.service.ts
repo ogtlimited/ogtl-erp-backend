@@ -119,6 +119,7 @@ class AttendanceTypeService  {
   public async findAllExternalDatabaseAttendance(): Promise<any> {
     const staff = await postgresDbConnection.getRepository(AttendanceInfo)
       .createQueryBuilder("attendanceInfo")
+      .leftJoinAndSelect("attendanceInfo.staff", "staff")
       .where("attendanceInfo.Date = :date", { date: moment(new Date()).format("yy-MM-DD") })
       .getMany()
     return  staff
