@@ -36,7 +36,7 @@ export class Staff extends BaseEntity {
     @Column()
     IsActive: boolean;
 
-    @OneToMany(() => AttendanceInfo, attendanceInfo => attendanceInfo.staff)
+    @OneToMany(() => AttendanceInfo, attendanceInfo => attendanceInfo.staff, {cascade: true, eager: true})
     attendanceInfo: AttendanceInfo[];
    
     @OneToMany(() => ShiftTime, shifttime => shifttime.staff)

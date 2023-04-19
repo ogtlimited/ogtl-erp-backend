@@ -82,7 +82,14 @@ class AttendanceController {
       const externalDatabaseAttendance: any = await this.attendanceService.findAllExternalDatabaseAttendance();
       res.status(201).json({ data: externalDatabaseAttendance });
     } catch (error) {
-      console.log(error, 'ERROR')
+      next(error);
+    }
+  };
+  public findExternalDatabaseAttendanceByOgId = async (req, res: Response, next: NextFunction) => {
+    try {
+      const externalDatabaseAttendance: any = await this.attendanceService.findExternalDatabaseAttendanceByOgId(req.query);
+      res.status(201).json({ data: externalDatabaseAttendance });
+    } catch (error) {
       next(error);
     }
   };

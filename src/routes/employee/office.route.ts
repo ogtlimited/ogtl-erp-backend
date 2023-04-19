@@ -14,7 +14,8 @@ class OfficeRoute implements Routes {
         this.initializeRoutes();
     }
     private initializeRoutes() {
-        this.router.post(`${this.path}`, [authMiddleware, permissionMiddleware('HR')],this.OfficeController.createOffice);
+        this.router.get(`${this.path}/employees`, [authMiddleware, permissionMiddleware('HR')], this.OfficeController.findEmployeesByOffice);
+        this.router.post(`${this.path}`, [authMiddleware, permissionMiddleware('HR')], this.OfficeController.createOffice);
     }
 }
 export default OfficeRoute;

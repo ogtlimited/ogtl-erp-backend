@@ -24,6 +24,7 @@ class AttendanceRoute implements Routes {
         // this.router.get(`${this.path}`, this.AttendanceController.getAttendances);
         this.router.get(`${this.path}`,[authMiddleware], this.AttendanceController.getDepartmentAttendance);
         this.router.get(`${this.path}/from-postgres`, [authMiddleware], this.AttendanceController.findAllExternalDatabaseAttendance);
+        this.router.get(`${this.path}/from-postgres/for-hr`, [authMiddleware], this.AttendanceController.findExternalDatabaseAttendanceByOgId);
         this.router.get(`${this.path}/employee/:ogId`,[authMiddleware], this.AttendanceController.getEmployeeAttendance);
         this.router.get(`${this.path}/:id`,[authMiddleware], this.AttendanceController.getAttendanceById);
         this.router.post(`${this.path}`,[authMiddleware, validationMiddleware(CreateAttendanceDto, 'body')], this.AttendanceController.createAttendance);

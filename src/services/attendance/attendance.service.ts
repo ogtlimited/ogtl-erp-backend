@@ -9,6 +9,7 @@ import {
 import attendanceModel  from '@models/attendance/attendance.model';
 import employeeModel  from '@models/employee/employee.model';
 import { AttendanceInfo } from '@/utils/postgreQL/attendance_info.entity';
+import { postgresDbConnection } from '@/utils/postgreQL';
 import { ShiftTime } from '@/utils/postgreQL/shift_time.entity';
 import { Staff } from '@/utils/postgreQL/staff.entity';
 // import deductionModel  from '@models/payroll/deduction.model';
@@ -23,12 +24,11 @@ import EmployeeModel from '@models/employee/employee.model';
 import shiftTypeModel from '@/models/shift/shift_type.model';
 import applicationModel from '@/models/leave/application.model';
 import employeesSalaryModel from "@models/payroll/employees-salary";
-import { EntityRepository, Repository, getRepository, getConnection } from 'typeorm';
+import { Repository } from 'typeorm';
 import employeeShiftsModel from '@/models/shift/employee_shift.model';
 
 
-@EntityRepository()
-class AttendanceTypeService extends Repository<AttendanceInfo> {
+class AttendanceTypeService  {
   private attendanceTypes = attendanceModel;
   private shiftTypeModel = shiftTypeModel
   private leaveModel = applicationModel;
@@ -117,12 +117,22 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
   }
 
   public async findAllExternalDatabaseAttendance(): Promise<any> {
-    const staff = await getRepository(AttendanceInfo).find({
-      relations: ['staff'],
-      where:{
-        Date: moment(new Date()).format("yy-MM-DD")
-      }
-  })
+    const staff = await postgresDbConnection.getRepository(AttendanceInfo)
+      .createQueryBuilder("attendanceInfo")
+      .where("attendanceInfo.Date = :date", { date: moment(new Date()).format("yy-MM-DD") })
+      .getMany()
+    return  staff
+  }
+  public async findExternalDatabaseAttendanceByOgId(query): Promise<any> {
+        const staff = await postgresDbConnection.getRepository(AttendanceInfo)
+          .createQueryBuilder("attendanceInfo")
+        .innerJoin("attendanceInfo.staff", "staff")
+        .where("staff.StaffUniqueId = :ogid", { ogid: query.ogid })
+        .andWhere(`attendanceInfo.Date BETWEEN '${query.from}' AND '${query.to}'`)
+        .orderBy("attendanceInfo.Date", "DESC")
+        .take(query.limit ? Number(query.limit): 10)
+        .getMany()
+        
     return  staff
   }
   
