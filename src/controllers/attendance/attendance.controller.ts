@@ -55,15 +55,15 @@ class AttendanceController {
     }
   };
 
-  public CreateBulkAttendance = async (req, res: Response, next: NextFunction) => {
-    try {
-      const attendanceData = req.body;
-      const createAttendanceData: any = await this.attendanceService.bulkAttendanceUpload(attendanceData);
-      res.status(201).json({ data: createAttendanceData});
-    } catch (error) {
-      next(error);
-    }
-  };
+  // public CreateBulkAttendance = async (req, res: Response, next: NextFunction) => {
+  //   try {
+  //     const attendanceData = req.body;
+  //     const createAttendanceData: any = await this.attendanceService.bulkAttendanceUpload(attendanceData);
+  //     res.status(201).json({ data: createAttendanceData});
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // };
 
   public updateAttendance = async (req, res: Response, next: NextFunction) => {
     try {
@@ -82,11 +82,17 @@ class AttendanceController {
       const externalDatabaseAttendance: any = await this.attendanceService.findAllExternalDatabaseAttendance();
       res.status(201).json({ data: externalDatabaseAttendance });
     } catch (error) {
-      console.log(error, 'ERROR')
       next(error);
     }
   };
-
+  public findExternalDatabaseAttendanceByOgId = async (req, res: Response, next: NextFunction) => {
+    try {
+      const externalDatabaseAttendance: any = await this.attendanceService.findExternalDatabaseAttendanceByOgId(req.query);
+      res.status(201).json({ data: externalDatabaseAttendance });
+    } catch (error) {
+      next(error);
+    }
+  };
   public uploadMultipleAttendanceRecord = async (req, res: Response, next: NextFunction) => {
     try {
       const externalDatabaseAttendance: any = await this.attendanceService.uploadMultipleAttendanceRecord();

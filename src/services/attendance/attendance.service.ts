@@ -8,8 +8,10 @@ import {
 } from '@/interfaces/attendance-interface/attendance-interface';
 import attendanceModel  from '@models/attendance/attendance.model';
 import employeeModel  from '@models/employee/employee.model';
-import { Staff } from '@/utils/postgreQL/staff.entity';
 import { AttendanceInfo } from '@/utils/postgreQL/attendance_info.entity';
+import { postgresDbConnection } from '@/utils/postgreQL';
+import { ShiftTime } from '@/utils/postgreQL/shift_time.entity';
+import { Staff } from '@/utils/postgreQL/staff.entity';
 // import deductionModel  from '@models/payroll/deduction.model';
 import { isEmpty } from '@utils/util';
 import {calculateLateness}  from '@/utils/attendanceCalculator';
@@ -22,14 +24,15 @@ import EmployeeModel from '@models/employee/employee.model';
 import shiftTypeModel from '@/models/shift/shift_type.model';
 import applicationModel from '@/models/leave/application.model';
 import employeesSalaryModel from "@models/payroll/employees-salary";
-import { EntityRepository, Repository, getRepository, getConnection } from 'typeorm';
+import { Repository } from 'typeorm';
+import employeeShiftsModel from '@/models/shift/employee_shift.model';
 
 
-@EntityRepository()
-class AttendanceTypeService extends Repository<AttendanceInfo> {
+class AttendanceTypeService  {
   private attendanceTypes = attendanceModel;
   private shiftTypeModel = shiftTypeModel
   private leaveModel = applicationModel;
+  private employeeShiftsModel = employeeShiftsModel;
 
   public async findAllDepartmentAttendance(query): Promise<any> {
     const payload = []
@@ -114,56 +117,69 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
   }
 
   public async findAllExternalDatabaseAttendance(): Promise<any> {
-    const staff = await getRepository(AttendanceInfo).find({
-      relations: ['staff'],
-      where:{
-        Date: moment(new Date()).format("yy-MM-DD")
-      }
-  })
+    const staff = await postgresDbConnection.getRepository(AttendanceInfo)
+      .createQueryBuilder("attendanceInfo")
+      .leftJoinAndSelect("attendanceInfo.staff", "staff")
+      .where("attendanceInfo.Date = :date", { date: moment(new Date()).format("yy-MM-DD") })
+      .getMany()
     return  staff
   }
-
-  public async bulkAttendanceUpload(attendanceTypeData): Promise<any> {
-    const employeesDeductions = []
-    const employeesAttendance = []
-    const latenessDeduction = await deductionTypeModel.findOne({title:"lateness"})
-    const ncnsDeduction = await deductionTypeModel.findOne({title:"NCNS"})
-
-    // return attendanceTypeData
-
-    for(const employeeData of attendanceTypeData.attendances){
-      const result = await this.generatePossibleDeductions(employeeData.ogid, employeeData, latenessDeduction, ncnsDeduction)
-      const attendanceConstructor: ICreateAttendance = AttendanceTypeService.attendanceData(employeeData, result);
-
-      if (result.departmentId != undefined){
-        attendanceConstructor.departmentId = result.departmentId
-      }
-      if (result.projectId != undefined){
-        attendanceConstructor.projectId = result.projectId
-      }
-      employeesAttendance.push(attendanceConstructor)
-
-      if (result.employeesDeductions.length == 0){
-        continue
-      }
-      employeesDeductions.push(...result.employeesDeductions)
-
-    }
-
-    await deductionModel.insertMany(employeesDeductions);
-    await attendanceModel.insertMany(employeesAttendance)
-    return {employeesDeductions, employeesAttendance}
+  public async findExternalDatabaseAttendanceByOgId(query): Promise<any> {
+        const staff = await postgresDbConnection.getRepository(AttendanceInfo)
+          .createQueryBuilder("attendanceInfo")
+        .innerJoin("attendanceInfo.staff", "staff")
+        .where("staff.StaffUniqueId = :ogid", { ogid: query.ogid })
+        .andWhere(`attendanceInfo.Date BETWEEN '${query.from}' AND '${query.to}'`)
+        .orderBy("attendanceInfo.Date", "DESC")
+        .take(query.limit ? Number(query.limit): 10)
+        .getMany()
+        
+    return  staff
   }
+  
+  // public async bulkAttendanceUpload(attendanceTypeData): Promise<any> {
+  //   const employeesDeductions = []
+  //   const employeesAttendance = []
+  //   const latenessDeduction = await deductionTypeModel.findOne({title:"lateness"})
+  //   const ncnsDeduction = await deductionTypeModel.findOne({title:"NCNS"})
+
+  //   // return attendanceTypeData
+
+  //   for(const employeeData of attendanceTypeData.attendances){
+  //     const result = await this.generatePossibleDeductions(employeeData.ogid, employeeData, latenessDeduction, ncnsDeduction)
+  //     const attendanceConstructor: ICreateAttendance = AttendanceTypeService.attendanceData(employeeData, result);
+
+  //     if (result.departmentId != undefined){
+  //       attendanceConstructor.departmentId = result.departmentId
+  //     }
+  //     if (result.projectId != undefined){
+  //       attendanceConstructor.projectId = result.projectId
+  //     }
+  //     employeesAttendance.push(attendanceConstructor)
+
+  //     if (result.employeesDeductions.length == 0){
+  //       continue
+  //     }
+  //     employeesDeductions.push(...result.employeesDeductions)
+
+  //   }
+
+  //   await deductionModel.insertMany(employeesDeductions);
+  //   await attendanceModel.insertMany(employeesAttendance)
+  //   return {employeesDeductions, employeesAttendance}
+  // }
   public async uploadMultipleAttendanceRecord(): Promise<any> {
     const attendance = await this.findAllExternalDatabaseAttendance()
     const employeesDeductions = []
     const employeesAttendance = []
     const latenessDeduction = await deductionTypeModel.findOne({ title: "lateness" })
     const ncnsDeduction = await deductionTypeModel.findOne({ title: "NCNS" })
+    const day = moment(new Date()).format("ddd").toLowerCase()
 
     const formatted = await Promise.all(attendance.map(async(e: any) => {
       const ogid = e?.staff?.StaffUniqueId
       const employee = await EmployeeModel.findOne({ ogid: ogid })
+      const employeeShiftRecord = await this.employeeShiftsModel.findOne({ ogid: ogid, day: day})
       const workedTimeResult = this.getWorkTime(e.ClockIn, e.ClockOut)
       return {
       ...e,
@@ -173,11 +189,12 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
       employeeId: employee?._id,
       totalHours: workedTimeResult ? workedTimeResult?.hoursWorked : 0,
       totalMinutes: workedTimeResult ? workedTimeResult?.minutesWorked : 0,
-      shiftStartTime: e.staff.ShiftStartTime,
-      shiftTypeId: employee ? employee?.default_shift :null,
+      shiftStartTime: employeeShiftRecord ? employeeShiftRecord.start : null,
+      shiftTypeId: employeeShiftRecord ? employeeShiftRecord?._id :null,
       
     }}));
     for (const employeeData of formatted) {
+      console.log("employeeData", employeeData)
       const result = await this.generatePossibleDeductions(employeeData.ogid, employeeData, latenessDeduction, ncnsDeduction)
       const attendanceConstructor: ICreateAttendance = AttendanceTypeService.attendanceData(employeeData, result);
       if (result?.departmentId != undefined) {
@@ -306,8 +323,9 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
       let deductionAmount = 0
       const deductionsConstructor:any = {}
       const latenessConstructor:any = {}
+      const day = moment(new Date()).format("ddd").toLowerCase()
 
-      let employee:any = await EmployeeModel.findOne({ogid: ogid, status: {$eq: "active"} }, {
+      let employee:any = await EmployeeModel.findOne({ogid: ogid, status: {$eq: "active"}, remote: false }, {
         company_email: 1,
         default_shift:1,
         projectId:1,
@@ -320,6 +338,8 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
           expectedWorkTime:1
         },
       })
+
+      let employeeShiftRecord = await this.employeeShiftsModel.findOne({ ogid: ogid, day: day })
 
       if (employee){
         let employeeSalary: any = await employeesSalaryModel.findOne({ employeeId: employee?._id })
@@ -398,7 +418,7 @@ class AttendanceTypeService extends Repository<AttendanceInfo> {
         minutesWorked: employeeTimeData ? employeeTimeData?.minutesWorked : 0,
         departmentId: employee?.departmentId,
         projectId: employee?.projectId,
-        shiftTypeId: employee?.default_shift,
+        shiftTypeId: employeeShiftRecord?._id,
         ogId: employee?.ogid
       }
 

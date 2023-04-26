@@ -4,13 +4,19 @@ import { isEmpty } from '@utils/util';
 import DepartmentService from '@services/employee/department.service';
 import ProjectService from '@services/project/project.service';
 import ShiftService from '@services/shift/shift.service';
+import EmployeeModel from '@/models/employee/employee.model';
+import OfficeFiltrationService from './office_filtration.service';
 import { IDepartment } from '@/interfaces/employee-interface/department.interface';
 import { IProject } from '@/interfaces/project-interface/project.interface';
+import { Employee } from '@/interfaces/employee-interface/employee.interface';
+const { ObjectId } = require('mongodb');
 
 class OfficeService {
-    public DepartmentService = new DepartmentService()
-    public ProjectService = new ProjectService()
-    public ShiftService = new ShiftService()
+    private DepartmentService = new DepartmentService()
+    private ProjectService = new ProjectService()
+    private ShiftService = new ShiftService()
+    private officeFiltrationService = new OfficeFiltrationService()
+    private employeeModel = EmployeeModel
 
     public async createOffice(body): Promise<IDepartment | IProject> {
         if (isEmpty(body)) throw new HttpException(400, "No data provided");
@@ -18,6 +24,18 @@ class OfficeService {
             return await this.createOfficeHelperMethod(body, this.DepartmentService.createDepartment(body))}
         if (body.office_type === "campaign")  {
             return await this.createOfficeHelperMethod(body, this.ProjectService.create(body))}
+    }
+    public async findEmployeesByOffice(query): Promise< Employee[] > {
+        if (query.department) {
+            const employees: Employee[] = await this.officeFiltrationService
+            .getAllEmployeesHelperMethod({ department: new ObjectId(query.department) }, query, this.employeeModel)
+            return employees
+        }
+        if (query.campaign)  {
+            const employees: Employee[] = await this.officeFiltrationService
+            .getAllEmployeesHelperMethod({ projectId: new ObjectId(query.campaign) }, query, this.employeeModel)
+            return employees
+        }
     }
     private async createOfficeHelperMethod(body, service){
         const office_name = await service
