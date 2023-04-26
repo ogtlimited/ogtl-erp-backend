@@ -313,14 +313,14 @@ class AttendanceTypeService  {
       const details = await Promise.all(staff.map(async (singleStaff)=> singleStaff.StaffUniqueId))
       let matchBy = { ogid: {$in: details} }
       const employees = await this.employeeFiltrationService.getAllEmployeesHelperMethod(matchBy, query, EmployeeModel)
-      let updatedEmployee = [...employees]
+      let updatedEmployee = [{ pagination: employees.pagination }, { totalEmployees: employees.totalEmployees } ]
       for(let i = 0; i < employees.employees.length; i++){
         const employeeShift = await this.employeeShiftsModel.find({ ogid: employees.employees[i].ogid })
         const shiftStatus = employeeShift?.length > 0 ? true : false
         employees.employees[i].shiftStatus = shiftStatus
         updatedEmployee.push(employees.employees[i])
       }
-      
+
     return updatedEmployee
   }
 
