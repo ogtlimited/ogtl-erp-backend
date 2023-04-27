@@ -26,6 +26,8 @@ import applicationModel from '@/models/leave/application.model';
 import employeesSalaryModel from "@models/payroll/employees-salary";
 import { Repository } from 'typeorm';
 import employeeShiftsModel from '@/models/shift/employee_shift.model';
+import EmployeeFiltrationService from '@/services/employee_filtration.service';
+
 
 
 class AttendanceTypeService  {
@@ -33,6 +35,7 @@ class AttendanceTypeService  {
   private shiftTypeModel = shiftTypeModel
   private leaveModel = applicationModel;
   private employeeShiftsModel = employeeShiftsModel;
+  private employeeFiltrationService = new EmployeeFiltrationService();
 
   public async findAllDepartmentAttendance(query): Promise<any> {
     const payload = []
@@ -300,6 +303,27 @@ class AttendanceTypeService  {
      await deductionModel.create({employeeId: attendanceRecord.employeeId, deductionTypeId: deductionType._id, amount: deductionAmount })
     }
     return updateRecord;
+  }
+
+  public async findCapturedEmployeesOnBiometricDatabaseAndThereShiftStatus(query): Promise<any> {
+    const staff = await postgresDbConnection.getRepository(Staff)
+      .createQueryBuilder("staff")
+      .getMany()
+      
+      const details = await Promise.all(staff.map(async (singleStaff)=> singleStaff.StaffUniqueId))
+      let matchBy = { ogid: {$in: details} }
+      const employees = await this.employeeFiltrationService.getAllEmployeesHelperMethod(matchBy, query, EmployeeModel)
+      let updatedEmployeesData = {employees:[]}
+      updatedEmployeesData['pagination'] = employees.pagination
+      updatedEmployeesData['totalEmployees'] =  employees.totalEmployees 
+      for(let i = 0; i < employees.employees.length; i++){
+        const employeeShift = await this.employeeShiftsModel.find({ ogid: employees.employees[i].ogid })
+        const shiftStatus = employeeShift?.length > 0 ? true : false
+        employees.employees[i].shiftStatus = shiftStatus
+        updatedEmployeesData.employees.push(employees.employees[i])
+      }
+
+    return updatedEmployeesData
   }
 
   private static attendanceData(employeeData, result: IPossibleDeductons): ICreateAttendance {
