@@ -123,7 +123,7 @@ class AttendanceTypeService  {
     const staff = await postgresDbConnection.getRepository(AttendanceInfo)
       .createQueryBuilder("attendanceInfo")
       .leftJoinAndSelect("attendanceInfo.staff", "staff")
-      .where("attendanceInfo.Date = :date", { date: moment(new Date()).format("yy-MM-DD") })
+      .where("attendanceInfo.Date = :date", { date: moment(new Date()).subtract(1, 'days').format("yy-MM-DD") })
       .getMany()
     return  staff
   }
@@ -177,7 +177,7 @@ class AttendanceTypeService  {
     const employeesAttendance = []
     const latenessDeduction = await deductionTypeModel.findOne({ title: "lateness" })
     const ncnsDeduction = await deductionTypeModel.findOne({ title: "NCNS" })
-    const day = moment(new Date()).format("ddd").toLowerCase()
+    const day = moment(new Date()).subtract(1, 'd').format("ddd").toLowerCase()
 
     const formatted = await Promise.all(attendance.map(async(e: any) => {
       const ogid = e?.staff?.StaffUniqueId
@@ -347,7 +347,7 @@ class AttendanceTypeService  {
       let deductionAmount = 0
       const deductionsConstructor:any = {}
       const latenessConstructor:any = {}
-      const day = moment(new Date()).format("ddd").toLowerCase()
+      const day = moment(new Date()).subtract(1, 'd').format("ddd").toLowerCase()
 
       let employee:any = await EmployeeModel.findOne({ogid: ogid, status: {$eq: "active"}, remote: false }, {
         company_email: 1,
