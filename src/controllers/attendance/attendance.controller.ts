@@ -98,7 +98,14 @@ class AttendanceController {
       const externalDatabaseAttendance: any = await this.attendanceService.uploadMultipleAttendanceRecord();
       res.status(201).json({ data: externalDatabaseAttendance });
     } catch (error) {
-      console.log(error, 'ERROR')
+      next(error);
+    }
+  };
+  public findCapturedEmployeesOnBiometricDatabaseAndThereShiftStatus = async (req, res: Response, next: NextFunction) => {
+    try {
+      const staff: any = await this.attendanceService.findCapturedEmployeesOnBiometricDatabaseAndThereShiftStatus(req.query);
+      res.status(201).json({ staff });
+    } catch (error) {
       next(error);
     }
   };
