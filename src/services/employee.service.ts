@@ -524,7 +524,7 @@ private async getEmployeesByGenderHelperMethod(matchBy,searchQuery:any): Promise
    }
   public async getReporteesForLeads(query: any, user: Employee): Promise<Employee[]> {
     let matchBy = {
-      reports_to : user._id
+      reports_to: user._id
     }
     const employees  = this.employeeFiltrationService.getAllEmployeesHelperMethod(matchBy, query, this.Employees)
     return employees;
