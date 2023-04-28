@@ -68,7 +68,7 @@ class App {
     this.initializeErrorHandling();
     this.redisConnection();
     this.initializeCron();
-    this.connectToPostgresDatabase();
+    // this.connectToPostgresDatabase();
 
   }
 
