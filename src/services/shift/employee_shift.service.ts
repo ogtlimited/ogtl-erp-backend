@@ -47,10 +47,13 @@ class EmployeeShiftService {
         if (shiftData.length == 0) throw new HttpException(400, "Bad request");
         const newShifts: IEmployeeShift[] = []
         for (let i = 0; i < shiftData.length; i++){
+            const employeeDetails = await this.employeeModel.findOne({ ogid: shiftData[i].ogid })
             const findShift: IEmployeeShift = await this.employeeShiftModel.findOne({ day: shiftData[i].day, ogid: shiftData[i].ogid });
             if (!findShift) {
                 shiftData[i].end = shiftData[i].off ? null : shiftData[i].end;
                 shiftData[i].start = shiftData[i].off ? null : shiftData[i].start;
+                shiftData[i].departmentID = employeeDetails.department ? employeeDetails.department : null;
+                shiftData[i].campaignID = employeeDetails.projectId ? employeeDetails.projectId : null;
                 const result = SumHours(shiftData[i].end, shiftData[i].start)
                 shiftData[i].expectedWorkTime = result ? result.toString() : null
                 newShifts.push(await this.employeeShiftModel.create(shiftData[i]));
