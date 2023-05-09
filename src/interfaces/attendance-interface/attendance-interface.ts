@@ -5,6 +5,7 @@ export interface IAttendance {
     employeeId: string | Object | Array<Object>;
     shiftTypeId: string;
     statusId: string;
+    reason?: string;
 }
 
 export interface IAttendanceCreatedResponse {
@@ -33,6 +34,7 @@ export interface ICreateAttendance {
   minutesWorked?:Number
   shiftStartTime?: string
   added_by?: string
+  reason?: string
 }
 
 export interface IAttendanceDeduction{
