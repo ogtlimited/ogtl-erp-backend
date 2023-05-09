@@ -220,6 +220,27 @@ class AttendanceTypeService  {
         return { employeesDeductions, employeesAttendance }
   }
 
+  public async createManualAttendanceToPostgresQL(ogId): Promise<any> {
+    const staff = await postgresDbConnection.getRepository(Staff)
+      .createQueryBuilder("staff")
+      .where({ StaffUniqueId: ogid })
+      .getOne()
+    console.log("staff", staff)
+
+    for (let i = 0; i < formattedUpdatedShift.length; i++) {
+      await postgresDbConnection.getRepository(ShiftTime)
+        .createQueryBuilder()
+        .update(ShiftTime)
+        .set({
+          StartTime: formattedUpdatedShift[i].start,
+          EndTime: formattedUpdatedShift[i].end,
+        })
+        .where({ StaffId: staff.Id })
+        .andWhere({ DayOfTheWeek: formattedUpdatedShift[i].day })
+        .execute()
+    }
+  }
+
   public async createAttendanceType(user, attendanceTypeData: ICreateAttendance): Promise<any> {
         const employeesDeductions = []
         const employeesAttendance = []
