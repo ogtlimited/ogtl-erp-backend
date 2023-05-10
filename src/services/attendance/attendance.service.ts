@@ -29,6 +29,7 @@ import employeeShiftsModel from '@/models/shift/employee_shift.model';
 import EmployeeFiltrationService from '@/services/employee_filtration.service';
 import ManualAttendanceService from './manual_attendance.service';
 import { uuid } from 'uuidv4';
+import { ManualAttendanceDto } from '@/dtos/attendance/manual_attendance.dto';
 
 
 
@@ -230,7 +231,7 @@ class AttendanceTypeService  {
       .where({ StaffUniqueId: reqBody.ogId })
       .getOne()
 
-    if(!staff) throw new HttpException(404, "Staff not found")
+    if(!staff) throw new HttpException(404, "Staff not enrolled on biometrics")
 
     const formatedAttendanceData ={
       ClockIn: reqBody?.clockInTime,
@@ -247,9 +248,9 @@ class AttendanceTypeService  {
       .values(formatedAttendanceData)
       .execute()
 
-    const manualAttendanceDetails = {
+    const manualAttendanceDetails: ManualAttendanceDto = {
       ogId: reqBody?.ogId,
-      attendance_id: createdAttendance?.identifiers[0]?.Id,
+      attendance_id_from_external_db: createdAttendance?.identifiers[0]?.Id,
       clockInTime: reqBody?.clockInTime,
       clockOutTime: reqBody?.clockOutTime,
       departmentId: employeeDetailsFromERP.department ? employeeDetailsFromERP.department : null,
