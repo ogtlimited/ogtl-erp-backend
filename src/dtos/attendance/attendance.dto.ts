@@ -30,6 +30,23 @@ export class CreateAttendanceDto {
   @IsOptional()
   public reason: string;
 }
+export class CreateManualAttendanceDto {
+  @IsString()
+  public ClockIn: string;
+  
+  @IsString()
+  public ClockOut: string;
+
+  @IsString()
+  public ogid: string;
+
+  @IsString()
+  public reason: string;
+
+  @IsString()
+  @IsOptional()
+  public Date: string;
+}
 
 
 export class CreateBulkAttendanceDto {
