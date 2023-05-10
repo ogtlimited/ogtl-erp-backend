@@ -28,6 +28,7 @@ class AttendanceRoute implements Routes {
         this.router.get(`${this.path}/captured-biometrics`, [authMiddleware], this.AttendanceController.findCapturedEmployeesOnBiometricDatabaseAndThereShiftStatus);
         this.router.get(`${this.path}/employee/:ogId`,[authMiddleware], this.AttendanceController.getEmployeeAttendance);
         this.router.get(`${this.path}/:id`,[authMiddleware], this.AttendanceController.getAttendanceById);
+        this.router.post(`${this.path}/manual-attendance`,authMiddleware, this.AttendanceController.createManualAttendanceToPostgresQL);
         this.router.post(`${this.path}`,[authMiddleware, validationMiddleware(CreateAttendanceDto, 'body')], this.AttendanceController.createAttendance);
         this.router.post(`${this.path}/postgresdb-bulk-upload`,[authMiddleware], this.AttendanceController.uploadMultipleAttendanceRecord);
         this.router.patch(`${this.path}`, [authMiddleware, validationMiddleware(UpdateAttendanceDto, 'body')], this.AttendanceController.updateAttendance);
