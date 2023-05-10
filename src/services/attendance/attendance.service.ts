@@ -251,8 +251,8 @@ class AttendanceTypeService  {
     const manualAttendanceDetails: ManualAttendanceDto = {
       ogId: reqBody?.ogid,
       attendance_id_from_external_db: createdAttendance?.identifiers[0]?.Id,
-      clockInTime: reqBody?.clockInTime,
-      clockOutTime: reqBody?.clockOutTime,
+      clockInTime: reqBody?.clockIn,
+      clockOutTime: reqBody?.clockOut,
       departmentId: employeeDetailsFromERP.department ? employeeDetailsFromERP.department : null,
       campaignId: employeeDetailsFromERP.projectId ? employeeDetailsFromERP.projectId : null,
       reason: reqBody?.reason
