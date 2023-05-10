@@ -227,19 +227,20 @@ class AttendanceTypeService  {
 
   public async createManualAttendanceToPostgresQL(reqBody: CreateManualAttendanceDto): Promise<any> {
     const employeeDetailsFromERP = await EmployeeModel.findOne({ogid: reqBody.ogid})
-    const staff = await postgresDbConnection.getRepository(Staff)
+    const staffDetails = await postgresDbConnection.getRepository(Staff)
       .createQueryBuilder("staff")
       .where({ StaffUniqueId: reqBody.ogid })
       .getOne()
 
-    if(!staff) throw new HttpException(404, "Staff not enrolled on biometrics")
+    if (!staffDetails) throw new HttpException(404, "Staff not enrolled on biometrics")
 
-    const formatedAttendanceData ={
+    
+    const formatedAttendanceData: any ={
       ClockIn: reqBody.ClockIn,
       ClockOut: reqBody.ClockOut,
       Status: 1,
       Date: moment(new Date()).format("yy-MM-DD"),
-      staff: staff?.Id,
+      staff: staffDetails?.Id,
       Id: uuid()
     }
     const createdAttendance = await postgresDbConnection.getRepository(AttendanceInfo)
