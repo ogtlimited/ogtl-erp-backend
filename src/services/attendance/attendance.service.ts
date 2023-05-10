@@ -225,10 +225,10 @@ class AttendanceTypeService  {
   }
 
   public async createManualAttendanceToPostgresQL(reqBody): Promise<any> {
-    const employeeDetailsFromERP = await EmployeeModel.findOne({ogid: reqBody.ogId})
+    const employeeDetailsFromERP = await EmployeeModel.findOne({ogid: reqBody.ogid})
     const staff = await postgresDbConnection.getRepository(Staff)
       .createQueryBuilder("staff")
-      .where({ StaffUniqueId: reqBody.ogId })
+      .where({ StaffUniqueId: reqBody.ogid })
       .getOne()
 
     if(!staff) throw new HttpException(404, "Staff not enrolled on biometrics")
@@ -249,7 +249,7 @@ class AttendanceTypeService  {
       .execute()
 
     const manualAttendanceDetails: ManualAttendanceDto = {
-      ogId: reqBody?.ogId,
+      ogId: reqBody?.ogid,
       attendance_id_from_external_db: createdAttendance?.identifiers[0]?.Id,
       clockInTime: reqBody?.clockInTime,
       clockOutTime: reqBody?.clockOutTime,
