@@ -27,6 +27,7 @@ import employeesSalaryModel from "@models/payroll/employees-salary";
 import { Repository } from 'typeorm';
 import employeeShiftsModel from '@/models/shift/employee_shift.model';
 import EmployeeFiltrationService from '@/services/employee_filtration.service';
+import { uuid } from 'uuidv4';
 
 
 
@@ -220,25 +221,35 @@ class AttendanceTypeService  {
         return { employeesDeductions, employeesAttendance }
   }
 
-  public async createManualAttendanceToPostgresQL(ogId): Promise<any> {
+  public async createManualAttendanceToPostgresQL(reqBody): Promise<any> {
+    const attendanceData = {
+      ogId: "OG220250",
+      date: moment(new Date()).format("yy-MM-DD"),
+      clockInTime: "07:39:07",
+      clockOutTime: "17:00:19",
+      status: 1
+    }
     const staff = await postgresDbConnection.getRepository(Staff)
       .createQueryBuilder("staff")
-      .where({ StaffUniqueId: ogid })
+      .where({ StaffUniqueId: attendanceData.ogId })
       .getOne()
-    console.log("staff", staff)
 
-    for (let i = 0; i < formattedUpdatedShift.length; i++) {
-      await postgresDbConnection.getRepository(ShiftTime)
-        .createQueryBuilder()
-        .update(ShiftTime)
-        .set({
-          StartTime: formattedUpdatedShift[i].start,
-          EndTime: formattedUpdatedShift[i].end,
-        })
-        .where({ StaffId: staff.Id })
-        .andWhere({ DayOfTheWeek: formattedUpdatedShift[i].day })
-        .execute()
+    if(!staff) throw new HttpException(404, "Staff not found")
+
+    const formatedAttendanceData ={
+      ClockIn: attendanceData.clockInTime,
+      ClockOut: attendanceData.clockOutTime,
+      Status: 1,
+      Date: attendanceData.date,
+      staff: staff.Id,
+      Id: uuid()
     }
+    await postgresDbConnection.getRepository(AttendanceInfo)
+      .createQueryBuilder()
+      .insert()
+      .into(AttendanceInfo)
+      .values(formatedAttendanceData)
+      .execute()
   }
 
   public async createAttendanceType(user, attendanceTypeData: ICreateAttendance): Promise<any> {
