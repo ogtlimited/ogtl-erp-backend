@@ -234,8 +234,8 @@ class AttendanceTypeService  {
     if(!staff) throw new HttpException(404, "Staff not enrolled on biometrics")
 
     const formatedAttendanceData ={
-      ClockIn: reqBody?.clockInTime,
-      ClockOut: reqBody?.clockOutTime,
+      ClockIn: reqBody?.clockIn,
+      ClockOut: reqBody?.clockOut,
       Status: 1,
       Date: moment(new Date()).format("yy-MM-DD"),
       staff: staff?.Id,
