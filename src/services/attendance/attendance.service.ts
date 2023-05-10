@@ -27,9 +27,10 @@ import employeesSalaryModel from "@models/payroll/employees-salary";
 import { Repository } from 'typeorm';
 import employeeShiftsModel from '@/models/shift/employee_shift.model';
 import EmployeeFiltrationService from '@/services/employee_filtration.service';
-import ManualAttendanceService from './manual_attendance.service';
+import ManualAttendanceDetailsService from './manual_attendance_details.service';
 import { uuid } from 'uuidv4';
-import { ManualAttendanceDto } from '@/dtos/attendance/manual_attendance.dto';
+import { ManualAttendanceDetailsDto } from '@/dtos/attendance/manual_attendance_details.dto';
+import { CreateManualAttendanceDto } from '@/dtos/attendance/attendance.dto';
 
 
 
@@ -39,7 +40,7 @@ class AttendanceTypeService  {
   private leaveModel = applicationModel;
   private employeeShiftsModel = employeeShiftsModel;
   private employeeFiltrationService = new EmployeeFiltrationService();
-  private manualAttendanceService = new ManualAttendanceService()
+  private manualAttendanceDetailsService = new ManualAttendanceDetailsService()
 
   public async findAllDepartmentAttendance(query): Promise<any> {
     const payload = []
@@ -224,7 +225,7 @@ class AttendanceTypeService  {
         return { employeesDeductions, employeesAttendance }
   }
 
-  public async createManualAttendanceToPostgresQL(reqBody): Promise<any> {
+  public async createManualAttendanceToPostgresQL(reqBody: CreateManualAttendanceDto): Promise<any> {
     const employeeDetailsFromERP = await EmployeeModel.findOne({ogid: reqBody.ogid})
     const staff = await postgresDbConnection.getRepository(Staff)
       .createQueryBuilder("staff")
@@ -234,8 +235,8 @@ class AttendanceTypeService  {
     if(!staff) throw new HttpException(404, "Staff not enrolled on biometrics")
 
     const formatedAttendanceData ={
-      ClockIn: reqBody?.ClockIn,
-      ClockOut: reqBody?.ClockOut,
+      ClockIn: reqBody.ClockIn,
+      ClockOut: reqBody.ClockOut,
       Status: 1,
       Date: moment(new Date()).format("yy-MM-DD"),
       staff: staff?.Id,
@@ -247,17 +248,19 @@ class AttendanceTypeService  {
       .into(AttendanceInfo)
       .values(formatedAttendanceData)
       .execute()
-
-    const manualAttendanceDetails: ManualAttendanceDto = {
-      ogId: reqBody?.ogid,
+    
+    if (!createdAttendance) throw new HttpException(409, "Attendance not created")
+    
+    const manualAttendanceDetails: ManualAttendanceDetailsDto = {
+      ogid: reqBody.ogid,
       attendance_id_from_external_db: createdAttendance?.identifiers[0]?.Id,
-      clockInTime: reqBody?.ClockIn,
-      clockOutTime: reqBody?.ClockOut,
+      ClockIn: reqBody.ClockIn,
+      ClockOut: reqBody.ClockOut,
       departmentId: employeeDetailsFromERP.department ? employeeDetailsFromERP.department : null,
       campaignId: employeeDetailsFromERP.projectId ? employeeDetailsFromERP.projectId : null,
-      reason: reqBody?.reason
+      reason: reqBody.reason
     }
-    const manualAttendance = await this.manualAttendanceService.createManualAttendanceDetails(manualAttendanceDetails)
+    const manualAttendance = await this.manualAttendanceDetailsService.createManualAttendanceDetails(manualAttendanceDetails)
     return manualAttendance
   }
 
