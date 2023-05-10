@@ -27,6 +27,7 @@ import employeesSalaryModel from "@models/payroll/employees-salary";
 import { Repository } from 'typeorm';
 import employeeShiftsModel from '@/models/shift/employee_shift.model';
 import EmployeeFiltrationService from '@/services/employee_filtration.service';
+import ManualAttendanceService from './manual_attendance.service';
 import { uuid } from 'uuidv4';
 
 
@@ -37,6 +38,7 @@ class AttendanceTypeService  {
   private leaveModel = applicationModel;
   private employeeShiftsModel = employeeShiftsModel;
   private employeeFiltrationService = new EmployeeFiltrationService();
+  private manualAttendanceService = new ManualAttendanceService()
 
   public async findAllDepartmentAttendance(query): Promise<any> {
     const payload = []
@@ -222,34 +224,40 @@ class AttendanceTypeService  {
   }
 
   public async createManualAttendanceToPostgresQL(reqBody): Promise<any> {
-    const attendanceData = {
-      ogId: "OG220250",
-      date: moment(new Date()).format("yy-MM-DD"),
-      clockInTime: "07:39:07",
-      clockOutTime: "17:00:19",
-      status: 1
-    }
+    const employeeDetailsFromERP = await EmployeeModel.findOne({ogid: reqBody.ogId})
     const staff = await postgresDbConnection.getRepository(Staff)
       .createQueryBuilder("staff")
-      .where({ StaffUniqueId: attendanceData.ogId })
+      .where({ StaffUniqueId: reqBody.ogId })
       .getOne()
 
     if(!staff) throw new HttpException(404, "Staff not found")
 
     const formatedAttendanceData ={
-      ClockIn: attendanceData.clockInTime,
-      ClockOut: attendanceData.clockOutTime,
+      ClockIn: reqBody?.clockInTime,
+      ClockOut: reqBody?.clockOutTime,
       Status: 1,
-      Date: attendanceData.date,
-      staff: staff.Id,
+      Date: moment(new Date()).format("yy-MM-DD"),
+      staff: staff?.Id,
       Id: uuid()
     }
-    await postgresDbConnection.getRepository(AttendanceInfo)
+    const createdAttendance = await postgresDbConnection.getRepository(AttendanceInfo)
       .createQueryBuilder()
       .insert()
       .into(AttendanceInfo)
       .values(formatedAttendanceData)
       .execute()
+
+    const manualAttendanceDetails = {
+      ogId: reqBody?.ogId,
+      attendance_id: createdAttendance?.identifiers[0]?.Id,
+      clockInTime: reqBody?.clockInTime,
+      clockOutTime: reqBody?.clockOutTime,
+      departmentId: employeeDetailsFromERP.department ? employeeDetailsFromERP.department : null,
+      campaignId: employeeDetailsFromERP.projectId ? employeeDetailsFromERP.projectId : null,
+      reason: reqBody?.reason
+    }
+    const manualAttendance = await this.manualAttendanceService.createManualAttendanceDetails(manualAttendanceDetails)
+    return manualAttendance
   }
 
   public async createAttendanceType(user, attendanceTypeData: ICreateAttendance): Promise<any> {
