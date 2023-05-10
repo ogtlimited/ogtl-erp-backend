@@ -5,6 +5,9 @@ import { IsArray, IsDateString, IsNotEmpty, IsNumber, IsOptional, IsString } fro
 
 export class ManualAttendanceDto {
     @IsString()
+    public ogId: string;
+
+    @IsString()
     public clockInTime: string;
 
     @IsOptional()
