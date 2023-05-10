@@ -234,8 +234,8 @@ class AttendanceTypeService  {
     if(!staff) throw new HttpException(404, "Staff not enrolled on biometrics")
 
     const formatedAttendanceData ={
-      ClockIn: reqBody?.clockIn,
-      ClockOut: reqBody?.clockOut,
+      ClockIn: reqBody?.ClockIn,
+      ClockOut: reqBody?.ClockOut,
       Status: 1,
       Date: moment(new Date()).format("yy-MM-DD"),
       staff: staff?.Id,
@@ -251,8 +251,8 @@ class AttendanceTypeService  {
     const manualAttendanceDetails: ManualAttendanceDto = {
       ogId: reqBody?.ogid,
       attendance_id_from_external_db: createdAttendance?.identifiers[0]?.Id,
-      clockInTime: reqBody?.clockIn,
-      clockOutTime: reqBody?.clockOut,
+      clockInTime: reqBody?.ClockIn,
+      clockOutTime: reqBody?.ClockOut,
       departmentId: employeeDetailsFromERP.department ? employeeDetailsFromERP.department : null,
       campaignId: employeeDetailsFromERP.projectId ? employeeDetailsFromERP.projectId : null,
       reason: reqBody?.reason
