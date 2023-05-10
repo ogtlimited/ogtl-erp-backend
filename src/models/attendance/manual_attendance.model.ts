@@ -8,7 +8,7 @@ const ManualAttendanceSchema: Schema = new Schema(
             type: String,
             required: true,
         },
-        attendance_id: {
+        attendance_id_from_external_db: {
             type: String,
             required: true,
         },
@@ -35,5 +35,5 @@ const ManualAttendanceSchema: Schema = new Schema(
     },
 );
 
-const manualAttendanceModel = model('manualAttendances', ManualAttendanceSchema);
+const manualAttendanceModel = model('manualAttendancedetails', ManualAttendanceSchema);
 export default manualAttendanceModel;
