@@ -7,7 +7,7 @@ import { Staff } from './staff.entity';
 @Entity({ name: "AttendanceInfo" })
 export class AttendanceInfo extends BaseEntity {
     @PrimaryGeneratedColumn("uuid")
-    Id: number;
+    Id: string;
 
     @Column()
     Date: Date;
