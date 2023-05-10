@@ -17,7 +17,7 @@ export class ManualAttendanceDto {
 
     @IsString()
     @IsNotEmpty()
-    public attendance_id: string;
+    public attendance_id_from_external_db: string;
 
     @IsString()
     @IsOptional()
