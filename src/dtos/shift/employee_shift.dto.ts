@@ -80,4 +80,8 @@ export class UpdateEmployeeShiftDto {
     @IsOptional()
     @IsString()
     public huddleTime: string;
+   
+    // For the purpose of external database
+    @IsString()
+    public ogid: string;
 }
