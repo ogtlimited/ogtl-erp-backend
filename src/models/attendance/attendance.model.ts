@@ -43,6 +43,9 @@ const attendanceSchema: Schema = new Schema(
     added_by: {
       type: Schema.Types.ObjectId,
       ref: "Employee"
+    },
+    reason: {
+      type: String
     }
   },
   {

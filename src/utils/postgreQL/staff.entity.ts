@@ -7,7 +7,7 @@ import { ShiftTime } from './shift_time.entity';
 @Entity({name: "Staff"})
 export class Staff extends BaseEntity {
     @PrimaryGeneratedColumn("uuid")
-    Id: number;
+    Id: string;
 
     @Column()
     StaffUniqueId: string;

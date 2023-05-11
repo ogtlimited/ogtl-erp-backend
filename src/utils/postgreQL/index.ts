@@ -11,7 +11,7 @@ export const postgresDbConnection = new DataSource({
     type: 'postgres',
     port: 5432,
     host: process.env.POSTGRES_HOST,
-    username: 'postgres',
+    username: process.env.POSTGRES_USERNAME,
     password: process.env.POSTGRES_PASSWORD,
     database: process.env.POSTGRES_DATABASE,
     logging: ['error'],
