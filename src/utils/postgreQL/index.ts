@@ -1,7 +1,6 @@
 import config from 'config';
 import { dirname } from 'path';
 import { join } from 'path';
-import { dbConfig } from './db.interface';
 import { DataSource } from 'typeorm';
 const path = require('path')
 require("dotenv").config({ path: dirname(module.paths[1]) + "/.env" });
