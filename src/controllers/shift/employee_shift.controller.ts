@@ -77,5 +77,13 @@ class EmployeeShiftController {
             next(error);
         }
     };
+    public getShiftTimeFromExternalDatabase = async (req, res: Response, next: NextFunction) => {
+        try {
+            const updatedStaffShiftTime: any = await this.employeeShiftService.getShiftTimeFromExternalDatabase(req.query);
+            res.status(201).json({ updatedStaffShiftTime });
+        } catch (error) {
+            next(error);
+        }
+    };
 }
 export default EmployeeShiftController;

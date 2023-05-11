@@ -25,7 +25,29 @@ export class CreateAttendanceDto {
   @IsString()
   @IsOptional()
   public projectId: string;
+
+  @IsString()
+  @IsOptional()
+  public reason: string;
 }
+export class CreateManualAttendanceDto {
+  @IsString()
+  public ClockIn: string;
+  
+  @IsString()
+  public ClockOut: string;
+
+  @IsString()
+  public ogid: string;
+
+  @IsString()
+  public reason: string;
+
+  @IsString()
+  @IsOptional()
+  public Date: string;
+}
+
 
 export class CreateBulkAttendanceDto {
   @IsArray()
@@ -38,4 +60,8 @@ export class UpdateAttendanceDto {
 
   @IsDateString()
   public clockOutTime: string;
+
+  @IsString()
+  @IsOptional()
+  public reason: string;
 }

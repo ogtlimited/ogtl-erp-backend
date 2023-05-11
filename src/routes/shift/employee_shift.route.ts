@@ -19,6 +19,7 @@ class EmployeeShiftRoute implements Routes {
         this.router.get(`${this.path}`, authMiddleware, this.employeeShiftController.getEmployeesShifts);
         this.router.get(`${this.path}/office`, [authMiddleware, permissionMiddleware("HR")], this.employeeShiftController.getshiftTypeBasedOnOffice);
         // this.router.get(`${this.path}/:id`, authMiddleware, this.employeeShiftController.getEmployeeShiftById);
+        this.router.get(`${this.path}/external-database`, authMiddleware, this.employeeShiftController.getShiftTimeFromExternalDatabase);
         this.router.get(`${this.path}/:ogid`, authMiddleware, this.employeeShiftController.getEmployeeShiftOGID);
         this.router.post(`${this.path}`, [authMiddleware], this.employeeShiftController.createExistingEmployeesShift);
         this.router.post(`${this.path}/from-csv`, [authMiddleware], this.employeeShiftController.createEmployeesShiftFromCsvFile);

@@ -109,6 +109,14 @@ class AttendanceController {
       next(error);
     }
   };
+  public createManualAttendanceToPostgresQL = async (req, res: Response, next: NextFunction) => {
+    try {
+      const attendanceRecord: any = await this.attendanceService.createManualAttendanceToPostgresQL(req.body);
+      res.status(201).json({ attendanceRecord });
+    } catch (error) {
+      next(error);
+    }
+  };
 
 }
 
