@@ -7,6 +7,9 @@ import { isEmpty } from '@utils/util';
 import { SumHours } from '@utils/calculateTimeDifference';
 import EmployeeModel from '@/models/employee/employee.model';
 import CampaignModel from '@/models/project/project.model';
+import { postgresDbConnection } from '@/utils/postgreQL';
+import { ShiftTime } from '@/utils/postgreQL/shift_time.entity';
+import { Staff } from '@/utils/postgreQL/staff.entity';
 const fs = require("fs")
 const csv = require('csv-parser')
 class EmployeeShiftService {
@@ -64,6 +67,7 @@ class EmployeeShiftService {
 
     public async updateEmployeeShift(shiftData: UpdateEmployeeShiftDto[]): Promise<IEmployeeShift[]> {
         if (shiftData.length==0) throw new HttpException(400, "Bad request");
+        const ogId = shiftData[0].ogid
         let updateEmployeeShiftById: IEmployeeShift[] = []
         for(let i = 0; i < shiftData.length; i++){
             shiftData[i].end = shiftData[i].off ? null : shiftData[i].end;
@@ -75,8 +79,45 @@ class EmployeeShiftService {
             updateEmployeeShiftById.push(updatedEmployeeShift);
         }
         if (!updateEmployeeShiftById) throw new HttpException(409, "shift does not exist");
+        await this.updateEmployeeShiftTimeOnExternalDatabase(ogId, shiftData)
         return updateEmployeeShiftById
     }
+
+    public async updateEmployeeShiftTimeOnExternalDatabase(ogid, updatedShift): Promise<any> {
+        const days_of_the_week = { mon: 1, tue: 2, wed: 3, thur: 4, fri: 5, sat: 6, sun: 7 }
+        const formattedUpdatedShift = updatedShift.map(data => {
+            data.day = days_of_the_week[data.day]
+            return data
+        })
+        const staff = await postgresDbConnection.getRepository(Staff)
+            .createQueryBuilder("staff")
+            .where({ StaffUniqueId: ogid })
+            .getOne()
+            console.log("staff",staff)
+
+        for (let i = 0; i < formattedUpdatedShift.length; i++) {
+                await postgresDbConnection.getRepository(ShiftTime)
+                .createQueryBuilder()
+                .update(ShiftTime)
+                .set({
+                    StartTime: formattedUpdatedShift[i].start,
+                    EndTime: formattedUpdatedShift[i].end,
+                    })
+                .where({ StaffId: staff.Id })
+                .andWhere({ DayOfTheWeek: formattedUpdatedShift[i].day })
+                .execute()
+        }
+    }
+
+    public async getShiftTimeFromExternalDatabase(query): Promise<any> {
+        const shiftTime = await postgresDbConnection.getRepository(ShiftTime)
+            .createQueryBuilder("shifttime")
+            .innerJoin("shifttime.staff", "staff")
+            .where("staff.StaffUniqueId = :ogid", { ogid: query.ogid })
+            .getMany()
+        return shiftTime
+    }
+
     public async deleteEmployeeShift(employeeShiftId: string): Promise<IEmployeeShift> {
         const deletedShift: IEmployeeShift = await this.employeeShiftModel.findByIdAndDelete(employeeShiftId);
         if (!deletedShift) throw new HttpException(409, "shift does not exist");
