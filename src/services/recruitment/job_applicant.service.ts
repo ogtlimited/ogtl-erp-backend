@@ -75,7 +75,7 @@ class JobApplicantService {
 
   //Method for creating job applicant
   public async createJobApplicant(jobApplicantData: CreateJobApplicantDto): Promise<any> {
-    //check if no job applicant data is empty
+    // check if no job applicant data is empty
     if (isEmpty(jobApplicantData)) throw new HttpException(400, 'Bad request');
     const jobkey = jobApplicantData.job_opening_id ? 'job_opening_id' : 'default_job_opening_id';
     const applicant = await this.jobApplicant.find({
@@ -84,10 +84,7 @@ class JobApplicantService {
     });
 
     if (applicant.length > 0) throw new HttpException(409, 'You already applied for this position');
-    const employees = await EmployeeModel.find({ isRepSiever: true }).select('sievedApplicationCount');
-    employees.sort(function (a, b) {
-      return a.sievedApplicationCount - b.sievedApplicationCount;
-    });
+    const employees = await EmployeeModel.find({ isRepSiever: true, status: "active" }).sort({ updatedAt: 1});
     const min = employees[0];
     const jobApplicant = { ...jobApplicantData, rep_sieving_call: min._id };
     await EmployeeModel.findOneAndUpdate(
