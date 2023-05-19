@@ -103,7 +103,7 @@ class EmployeeShiftService {
                     StartTime: formattedUpdatedShift[i].start,
                     EndTime: formattedUpdatedShift[i].end,
                     })
-                .where({ StaffId: staff.Id })
+                .where({ StaffId: staff?.Id })
                 .andWhere({ DayOfTheWeek: formattedUpdatedShift[i].day })
                 .execute()
         }
