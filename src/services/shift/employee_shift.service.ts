@@ -94,7 +94,8 @@ class EmployeeShiftService {
             .where({ StaffUniqueId: ogid })
             .getOne()
             console.log("staff",staff)
-
+            
+        if(staff?.Id){
         for (let i = 0; i < formattedUpdatedShift.length; i++) {
                 await postgresDbConnection.getRepository(ShiftTime)
                 .createQueryBuilder()
@@ -107,6 +108,7 @@ class EmployeeShiftService {
                 .andWhere({ DayOfTheWeek: formattedUpdatedShift[i].day })
                 .execute()
         }
+    }
     }
 
     public async getShiftTimeFromExternalDatabase(query): Promise<any> {
