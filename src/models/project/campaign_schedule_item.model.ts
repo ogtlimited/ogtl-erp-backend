@@ -6,7 +6,7 @@ const campaignScheduleItemSchema: Schema = new Schema(
     {
         day: {
             type: String,
-            enum: ["mon", "tue", "wed", "thur", "fri", "sat", "sun"]
+            enum: ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
         },
         off: {
             type: Boolean,

@@ -10,6 +10,7 @@ import CampaignModel from '@/models/project/project.model';
 import { postgresDbConnection } from '@/utils/postgreQL';
 import { ShiftTime } from '@/utils/postgreQL/shift_time.entity';
 import { Staff } from '@/utils/postgreQL/staff.entity';
+import { uuid } from 'uuidv4';
 const fs = require("fs")
 const csv = require('csv-parser')
 class EmployeeShiftService {
@@ -43,6 +44,7 @@ class EmployeeShiftService {
             shiftData.start = shiftData.off ? null : shiftData.start;
             const result = SumHours(shiftData.end, shiftData.start)
             shiftData.expectedWorkTime = result ? result.toString() : null
+            await this.addOrUpdateEmployeeShiftTimeToExternalDatabase(shiftData)
             return await this.employeeShiftModel.create(shiftData);
         }
     }
@@ -62,12 +64,12 @@ class EmployeeShiftService {
                 newShifts.push(await this.employeeShiftModel.create(shiftData[i]));
             }
         }
+        await this.addOrUpdateEmployeeShiftTimeToExternalDatabase(shiftData)
         return newShifts
     }
 
     public async updateEmployeeShift(shiftData: UpdateEmployeeShiftDto[]): Promise<IEmployeeShift[]> {
         if (shiftData.length==0) throw new HttpException(400, "Bad request");
-        const ogId = shiftData[0].ogid
         let updateEmployeeShiftById: IEmployeeShift[] = []
         for(let i = 0; i < shiftData.length; i++){
             shiftData[i].end = shiftData[i].off ? null : shiftData[i].end;
@@ -79,36 +81,8 @@ class EmployeeShiftService {
             updateEmployeeShiftById.push(updatedEmployeeShift);
         }
         if (!updateEmployeeShiftById) throw new HttpException(409, "shift does not exist");
-        await this.updateEmployeeShiftTimeOnExternalDatabase(ogId, shiftData)
+        await this.addOrUpdateEmployeeShiftTimeToExternalDatabase(shiftData)
         return updateEmployeeShiftById
-    }
-
-    public async updateEmployeeShiftTimeOnExternalDatabase(ogid, updatedShift): Promise<any> {
-        const days_of_the_week = { mon: 1, tue: 2, wed: 3, thur: 4, fri: 5, sat: 6, sun: 7 }
-        const formattedUpdatedShift = updatedShift.map(data => {
-            data.day = days_of_the_week[data.day]
-            return data
-        })
-        const staff = await postgresDbConnection.getRepository(Staff)
-            .createQueryBuilder("staff")
-            .where({ StaffUniqueId: ogid })
-            .getOne()
-            console.log("staff",staff)
-            
-        if(staff?.Id){
-        for (let i = 0; i < formattedUpdatedShift.length; i++) {
-                await postgresDbConnection.getRepository(ShiftTime)
-                .createQueryBuilder()
-                .update(ShiftTime)
-                .set({
-                    StartTime: formattedUpdatedShift[i].start,
-                    EndTime: formattedUpdatedShift[i].end,
-                    })
-                .where({ StaffId: staff?.Id })
-                .andWhere({ DayOfTheWeek: formattedUpdatedShift[i].day })
-                .execute()
-        }
-    }
     }
 
     public async getShiftTimeFromExternalDatabase(query): Promise<any> {
@@ -139,7 +113,7 @@ class EmployeeShiftService {
         fs.createReadStream("./src/services/shift/csv_files/Gomoney_shift.csv")
             .pipe(csv())
             .on('data', async (data) => {
-                const days = ["mon","tue","wed","thur","fri","sat","sun"]
+                const days = ["mon","tue","wed","thu","fri","sat","sun"]
                 // start and end time for uniform shift
                 // const start = data['Shift (Mon - fri)'].split('-')[0].trim()
                 // const end = data['Shift (Mon - fri)'].split('-')[1].trim()
@@ -179,6 +153,7 @@ class EmployeeShiftService {
                         const employeeShift = await this.employeeShiftModel.findOne({ ogid: formattedData?.ogid, day: formattedData.day })
                         if(!employeeShift){
                             const shift = await this.employeeShiftModel.create(formattedData)
+                            await this.addOrUpdateEmployeeShiftTimeToExternalDatabase(formattedData)
                         }
                         console.log("formattedData", formattedData)
                     } 
@@ -188,6 +163,57 @@ class EmployeeShiftService {
             .on('end', async () => {
                 console.log("Completed!!!")
             })
+    }
+
+    private async addOrUpdateEmployeeShiftTimeToExternalDatabase(shiftData): Promise<any> {
+        const days_of_the_week = { mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6, sun: 7 }
+        const formattedShiftData = shiftData.map(data => {
+            data.day = days_of_the_week[data.day]
+            return data
+        })
+        const staff = await postgresDbConnection.getRepository(Staff)
+            .createQueryBuilder("staff")
+            .where({ StaffUniqueId: shiftData[0].ogid })
+            .getOne()
+
+        if (staff) {
+            for (let i = 0; i < formattedShiftData.length; i++) {
+                const shiftTimeExist = await postgresDbConnection.getRepository(ShiftTime)
+                    .createQueryBuilder()
+                    .where({ StaffId: staff?.Id })
+                    .andWhere({ DayOfTheWeek: formattedShiftData[i].day })
+                    .getOne()
+
+                if (!shiftTimeExist) {
+                    const formatedShiftTimeData: any = {
+                        Id: uuid(),
+                        StaffId: staff?.Id,
+                        DayOfTheWeek: Number(formattedShiftData[i].day),
+                        StartTime: formattedShiftData[i].start,
+                        EndTime: formattedShiftData[i].end,
+                    }
+                    await postgresDbConnection.getRepository(ShiftTime)
+                        .createQueryBuilder()
+                        .insert()
+                        .into(ShiftTime)
+                        .values(formatedShiftTimeData)
+                        .execute()
+                }
+                else if (shiftTimeExist) {
+                    await postgresDbConnection.getRepository(ShiftTime)
+                        .createQueryBuilder()
+                        .update(ShiftTime)
+                        .set({
+                            StartTime: formattedShiftData[i].start,
+                            EndTime: formattedShiftData[i].end,
+                        })
+                        .where({ StaffId: staff?.Id })
+                        .andWhere({ DayOfTheWeek: formattedShiftData[i].day })
+                        .execute()
+                }
+
+            }
+        }
     }
 }
 export default EmployeeShiftService;
