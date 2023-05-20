@@ -18,6 +18,9 @@ export class AttendanceInfo extends BaseEntity {
     @Column('time without time zone')
     ClockOut: Date;
 
+    @Column()
+    Status: number;
+
     @ManyToOne(() => Staff, staff => staff.attendanceInfo)
     @JoinColumn({name: "StaffId"})
     staff: Staff;

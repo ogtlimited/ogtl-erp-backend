@@ -185,7 +185,7 @@ class EmployeeService {
 
   public async updateEmployee(EmployeeId: string, EmployeeData: UpdateEmployeeDto): Promise<Employee> {
     if (isEmpty(EmployeeData)) throw new HttpException(400, 'EmployeeData is absent');
-
+    EmployeeData.ogid = EmployeeData.ogid.replace(/ /g, '')
     if (EmployeeData.company_email) {
       const findEmployee: Employee = await this.Employees.findOne({ company_email: EmployeeData.company_email });
       if (findEmployee && findEmployee._id != EmployeeId) throw new HttpException(409, `You're email ${EmployeeData.company_email} already exists`);
