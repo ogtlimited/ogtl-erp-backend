@@ -113,7 +113,7 @@ class EmployeeShiftService {
         fs.createReadStream("./src/services/shift/csv_files/Gomoney_shift.csv")
             .pipe(csv())
             .on('data', async (data) => {
-                const days = ["mon","tue","wed","thur","fri","sat","sun"]
+                const days = ["mon","tue","wed","thu","fri","sat","sun"]
                 // start and end time for uniform shift
                 // const start = data['Shift (Mon - fri)'].split('-')[0].trim()
                 // const end = data['Shift (Mon - fri)'].split('-')[1].trim()
