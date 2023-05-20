@@ -187,7 +187,7 @@ class EmployeeShiftService {
                 if (!shiftTimeExist) {
                     const formatedShiftTimeData: any = {
                         Id: uuid(),
-                        StaffId: "e22c4370-bbcf-4c4e-813c-46deee5d7d88",
+                        StaffId: staff?.Id,
                         DayOfTheWeek: Number(formattedShiftData[i].day),
                         StartTime: formattedShiftData[i].start,
                         EndTime: formattedShiftData[i].end,
