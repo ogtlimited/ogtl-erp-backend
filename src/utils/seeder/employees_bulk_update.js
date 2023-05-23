@@ -32,12 +32,12 @@ const updateEmployeesReportsTo = async () => {
                         }
                     )
                     if (!employee){
-                        fs.appendFileSync('./src/utils/seeder/csvs/employees_emails_with_issues.csv', `${data['company_email']}\n`);
+                        fs.appendFileSync('./src/utils/seeder/csv/employees_emails_with_issues.csv', `${data['company_email']}\n`);
                     }
                     console.log(employee)
                 }
                 else{
-                    fs.appendFileSync('./src/utils/seeder/csvs/leads_email_with_issues.csv', `${data['reports_to']}\n`);
+                    fs.appendFileSync('./src/utils/seeder/csv/leads_email_with_issues.csv', `${data['reports_to']}\n`);
                 }
             })
             .on('end',async () => {
@@ -49,11 +49,11 @@ const updateEmployeesReportsTo = async () => {
 };
 const updateEmployeesIsLeadership = async () => {
     try {
-        fs.createReadStream("./src/utils/seeder/reports_to.csv")
+        fs.createReadStream("./src/utils/seeder/csv/leaders.csv")
             .pipe(csv())
             .on('data', async (data) => {
                     const employee = await EmployeeModel.findOneAndUpdate(
-                        { company_email: data['company_email'] },
+                        { company_email: data['OG EMAIL'] },
                         {
                             $set: {
                                 isLeadership: true
@@ -61,7 +61,7 @@ const updateEmployeesIsLeadership = async () => {
                         }
                     )
                     if (!employee){
-                        fs.appendFileSync('./src/utils/seeder/csvs/employees_emails_with_issues.csv', `${data['company_email']}\n`);
+                        fs.appendFileSync('./src/utils/seeder/csv/employees_emails_with_issues.csv', `${data['OG EMAIL']}\n`);
                     }
                 }
             )
