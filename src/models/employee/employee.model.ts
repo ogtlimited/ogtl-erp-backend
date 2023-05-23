@@ -76,6 +76,10 @@ const employeeSchema: Schema = new Schema({
     type: Boolean,
     default: false,
   },
+  isLeadership: {
+    type: Boolean,
+    default: false,
+  },
   isExpatriate: {
     type: Boolean,
     default: false,
