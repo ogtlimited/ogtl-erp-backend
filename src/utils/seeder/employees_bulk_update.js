@@ -47,4 +47,30 @@ const updateEmployeesReportsTo = async () => {
         console.log(error.message);
     }
 };
-updateEmployeesReportsTo()
+const updateEmployeesIsLeadership = async () => {
+    try {
+        fs.createReadStream("./src/utils/seeder/reports_to.csv")
+            .pipe(csv())
+            .on('data', async (data) => {
+                    const employee = await EmployeeModel.findOneAndUpdate(
+                        { company_email: data['company_email'] },
+                        {
+                            $set: {
+                                isLeadership: true
+                            }
+                        }
+                    )
+                    if (!employee){
+                        fs.appendFileSync('./src/utils/seeder/csvs/employees_emails_with_issues.csv', `${data['company_email']}\n`);
+                    }
+                }
+            )
+            .on('end',async () => {
+            })
+        }
+    catch (error) {
+        console.log(error.message);
+    }
+};
+updateEmployeesIsLeadership()
+// updateEmployeesReportsTo()
