@@ -199,7 +199,16 @@ class EmployeesController {
   }
   public getReporteesForLeads = async (req: any, res: Response, next: NextFunction) => {
     try {
-      const employees: Employee[] = await this.EmployeeService.getReporteesForLeads(req.query, req.user);
+      const { userId } = req.params
+      const employees: Employee[] = await this.EmployeeService.getReporteesForLeads(req.query, userId);
+      res.status(200).json({ data: employees });
+    } catch (error) {
+      next(error);
+    }
+  }
+  public getAllLeads = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const employees: Employee[] = await this.EmployeeService.getAllLeads(req.query);
       res.status(200).json({ data: employees });
     } catch (error) {
       next(error);
