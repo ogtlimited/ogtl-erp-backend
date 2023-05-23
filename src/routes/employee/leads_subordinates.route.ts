@@ -17,7 +17,8 @@ class LeadsSubordinatesRoute implements Routes {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}/subordinates`, authMiddleware, this.employeesController.getReporteesForLeads);
+        this.router.get(`${this.path}`, authMiddleware, this.employeesController.getAllLeads);
+        this.router.get(`${this.path}/subordinates/:userId`, authMiddleware, this.employeesController.getReporteesForLeads);
         }
 }
 
