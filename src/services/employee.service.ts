@@ -522,11 +522,18 @@ private async getEmployeesByGenderHelperMethod(matchBy,searchQuery:any): Promise
         this.getEmployeesByDepartmentHelperMethod(matchBy, searchQuery)
       )
    }
-  public async getReporteesForLeads(query: any, user: Employee): Promise<Employee[]> {
+  public async getReporteesForLeads(query: any, userId: string): Promise<Employee[]> {
     let matchBy = {
-      reports_to: user._id
+      reports_to: mongoose.Types.ObjectId(userId)
     }
-    const employees  = this.employeeFiltrationService.getAllEmployeesHelperMethod(matchBy, query, this.Employees)
+    const employees  = await this.employeeFiltrationService.getAllEmployeesHelperMethod(matchBy, query, this.Employees)
+    return employees;
+  }
+  public async getAllLeads(query: any): Promise<Employee[]> {
+    let matchBy = {
+      isLeadership: true
+    }
+    const employees  = await this.employeeFiltrationService.getAllEmployeesHelperMethod(matchBy, query, this.Employees)
     return employees;
   }
   private async getEmployeesByDepartmentHelperMethod(matchBy,searchQuery:any): Promise<any> {

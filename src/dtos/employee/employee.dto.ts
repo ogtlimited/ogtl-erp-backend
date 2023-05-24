@@ -71,6 +71,10 @@ export class CreateEmployeeDto {
   @IsBoolean()
   public isLeaverApprover: boolean;
 
+  @IsOptional()
+  @IsBoolean()
+  public isLeadership: boolean;
+
   @IsString()
   public employeeType: string;
 

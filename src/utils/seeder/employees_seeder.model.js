@@ -119,6 +119,10 @@ const {Schema, model} = require("mongoose");
       type: Boolean,
       default: false,
     },
+    isLeadership: {
+      type: Boolean,
+      default: false,
+    },
     sievedApplicationCount: {
       type: Number,
       default: 0,
