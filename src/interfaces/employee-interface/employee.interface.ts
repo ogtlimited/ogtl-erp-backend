@@ -25,6 +25,7 @@ export interface Employee {
     isInPIP: boolean
     isAdmin: boolean
     remote: boolean
+    isLeadership: boolean
     isTeamLead: boolean
     isSupervisor: boolean
     leaveCount: number,
