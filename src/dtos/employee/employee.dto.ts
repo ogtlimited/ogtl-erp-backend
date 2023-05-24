@@ -80,6 +80,9 @@ export class CreateEmployeeDto {
   @IsOptional()
   leaveCount: number;
 
+  @IsBoolean()
+  public remote: boolean;
+
   @IsOptional()
   socialHandle: {};
 
@@ -119,6 +122,9 @@ export class UpdateEmployeeDto {
   @IsOptional()
   @IsBoolean()
   public isAdmin: boolean;
+
+  @IsBoolean()
+  public remote: boolean;
 
   @IsOptional()
   @IsString()
