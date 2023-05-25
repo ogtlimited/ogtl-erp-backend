@@ -123,6 +123,10 @@ const {Schema, model} = require("mongoose");
       type: Boolean,
       default: false,
     },
+    strictAttendance: {
+      type: Boolean,
+      default: true,
+    },
     sievedApplicationCount: {
       type: Number,
       default: 0,
