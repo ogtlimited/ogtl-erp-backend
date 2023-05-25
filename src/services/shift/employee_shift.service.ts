@@ -109,6 +109,7 @@ class EmployeeShiftService {
         }
     }
     public async createEmployeesShiftFromCsvFile(): Promise<any> {
+        const arrayOfShift = []
         fs.createReadStream("./src/services/shift/csv_files/sdteamfull.csv")
             .pipe(csv())
             .on('data', async (data) => {
@@ -148,8 +149,78 @@ class EmployeeShiftService {
                         if(!employeeShift){
                             const shift = await this.employeeShiftModel.create(formattedData)
                         }
+                        arrayOfShift.push(formattedData)
                         console.log("formattedData", formattedData)
                     }
+                    if (arrayOfShift.length != null) await this.addOrUpdateEmployeeShiftTimeToExternalDatabase(arrayOfShift)
+
+                }
+            })
+            .on('end', async () => {
+                console.log("Completed!!!")
+            })
+    }
+    public async updateEmployeesShiftFromCsvFile(): Promise<any> {
+        const arrayOfShift = []
+        fs.createReadStream("./src/services/shift/csv_files/sdteam_mod.csv")
+            .pipe(csv())
+            .on('data', async (data) => {
+                const days = ["mon","tue","wed","thu","fri","sat","sun"]
+                const start = data['Shift (Mon - fri)'].split('-')[0].trim()
+                const end = data['Shift (Mon - fri)'].split('-')[1].trim()
+                const huddles = data['Huddles'] ? data['Huddles'].split(':')[0].trim() : false
+                const huddleTime = data['Huddles'] ? data['Huddles'].split(':')[1].trim() : null
+                const campaign = await this.campaignModel.findOne({ project_name: data['Campaign'] })
+                const employee = await this.employeeModel.findOne({ company_email: data['Employee email'] })
+                if(!employee){
+                    fs.appendFileSync('./src/services/shift/csv_files/employees_emails_with_issues.csv', `${data['Employee email']}\n`);
+                }
+                if (employee){
+                    for (let i = 0; i < days.length; i++){
+                        const formattedData = {
+                            start: start,
+                            end: end,
+                            day: days[i],
+                            ogid: employee ? employee.ogid : null,
+                            campaignID: campaign ? campaign._id : null,
+                            departmentID: employee ? employee.department : null,
+                            huddles: huddles ? true : false,
+                            huddleTime: huddleTime,
+                            expectedWorkTime: null,
+                            off: false
+                        }
+                        const result = SumHours(formattedData.end, formattedData.start)
+                        formattedData.expectedWorkTime = result ? result.toString() : null
+                        if (formattedData.day == "sat" || formattedData.day == "sun"){
+                            formattedData.start = null
+                            formattedData.end = null
+                            formattedData.end = null
+                            formattedData.expectedWorkTime = null
+                            formattedData.huddles = false
+                            formattedData.huddleTime = null
+                        }
+                        formattedData.off = true
+                        if (formattedData?.start && formattedData?.end) formattedData.off = false
+                        const employeeShift = await this.employeeShiftModel.findOne({ ogid: formattedData?.ogid, day: formattedData.day })
+                        if (!employeeShift) throw new HttpException(404, "No Shift was found")
+                        if(employeeShift){
+                            await this.employeeShiftModel.findOneAndUpdate({ ogid: formattedData?.ogid, day: formattedData?.day },{
+                                $set:{
+                                    start: formattedData.start,
+                                    end: formattedData.end,
+                                    expectedWorkTime: formattedData.expectedWorkTime,
+                                    day: formattedData.day,
+                                    huddles: formattedData.huddles,
+                                    huddleTime: formattedData.huddleTime,
+                                    off: formattedData.off
+                                 }
+                            }, { new: true })
+                        }
+
+                        arrayOfShift.push(formattedData)
+                        console.log("formattedData", formattedData) 
+                    }
+                    if (arrayOfShift.length != null) await this.addOrUpdateEmployeeShiftTimeToExternalDatabase(arrayOfShift)
                 }
             })
             .on('end', async () => {
