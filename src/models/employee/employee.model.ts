@@ -80,6 +80,10 @@ const employeeSchema: Schema = new Schema({
     type: Boolean,
     default: false,
   },
+  strictAttendance: {
+    type: Boolean,
+    default: true,
+  },
   isExpatriate: {
     type: Boolean,
     default: false,
