@@ -44,7 +44,6 @@ class EmployeeShiftService {
             shiftData.start = shiftData.off ? null : shiftData.start;
             const result = SumHours(shiftData.end, shiftData.start)
             shiftData.expectedWorkTime = result ? result.toString() : null
-            await this.addOrUpdateEmployeeShiftTimeToExternalDatabase(shiftData)
             return await this.employeeShiftModel.create(shiftData);
         }
     }
@@ -208,7 +207,7 @@ class EmployeeShiftService {
             })
     }
 
-    private async addOrUpdateEmployeeShiftTimeToExternalDatabase(shiftData): Promise<any> {
+    public async addOrUpdateEmployeeShiftTimeToExternalDatabase(shiftData): Promise<any> {
         const days_of_the_week = { mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6, sun: 7 }
         const formattedShiftData = shiftData.map(data => {
             data.day = days_of_the_week[data.day]
