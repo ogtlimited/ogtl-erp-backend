@@ -88,6 +88,10 @@ export class CreateEmployeeDto {
   public remote: boolean;
 
   @IsOptional()
+  @IsBoolean()
+  public strictAttendance: boolean;
+
+  @IsOptional()
   socialHandle: {};
 
 
@@ -129,6 +133,10 @@ export class UpdateEmployeeDto {
 
   @IsBoolean()
   public remote: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  public strictAttendance: boolean;
 
   @IsOptional()
   @IsString()
