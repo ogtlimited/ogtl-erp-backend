@@ -1,17 +1,7 @@
 /* eslint-disable prettier/prettier */
-const nodemailer = require("nodemailer");
 const { SocketLabsClient } = require('@socketlabs/email');
 import Email from "@models/notification/email.model";
 
-// let transporter = nodemailer.createTransport({
-//     host: "smtp.gmail.com.email",
-//     port: 465,
-//     secure: true, // true for 465, false for other ports
-//     auth: {
-//         user: process.env.EMAIL_LOGIN, // generated ethereal user
-//         pass: process.env.EMAIL_PASSWORD // generated ethereal password
-//     },
-//   });
 const campaignCreationEmail = (email, body) => {
   const from = 'ceo@outsourceglobal.com'
   const to = email
