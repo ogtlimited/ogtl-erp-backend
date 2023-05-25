@@ -26,6 +26,7 @@ export interface Employee {
     isAdmin: boolean
     remote: boolean
     isLeadership: boolean
+    strictAttendance: boolean
     isTeamLead: boolean
     isSupervisor: boolean
     leaveCount: number,
