@@ -71,6 +71,10 @@ export class CreateEmployeeDto {
   @IsBoolean()
   public isLeaverApprover: boolean;
 
+  @IsOptional()
+  @IsBoolean()
+  public isLeadership: boolean;
+
   @IsString()
   public employeeType: string;
 
@@ -79,6 +83,13 @@ export class CreateEmployeeDto {
 
   @IsOptional()
   leaveCount: number;
+
+  @IsBoolean()
+  public remote: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  public strictAttendance: boolean;
 
   @IsOptional()
   socialHandle: {};
@@ -119,6 +130,13 @@ export class UpdateEmployeeDto {
   @IsOptional()
   @IsBoolean()
   public isAdmin: boolean;
+
+  @IsBoolean()
+  public remote: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  public strictAttendance: boolean;
 
   @IsOptional()
   @IsString()

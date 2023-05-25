@@ -29,20 +29,21 @@ class EmployeeVerificationService {
     if (!employee) throw new HttpException(404, "Record Not Found");
     const personalDetails = await this.PersonalDetailModel.findOne({ employee_id: employee?._id  })
     return {
-      PictureUrl: employee.image,
+      PictureUrl: employee?.image,
       StaffUniqueId: employee.ogid,
       Email: employee.company_email,
       campaign: employee.projectId ? employee.projectId.tilte : null,
       department: employee.department ? employee.department.department : null ,
       FullName: this.formatFullname(employee, employee.first_name, employee.middle_name, employee.last_name),
       PhoneNumber: personalDetails ? personalDetails.phone_number : null,
-      Gender: employee.gender,
+      Gender: employee?.gender,
       MaritalStatus: personalDetails ? personalDetails.marital_status : null,
       DateOfBirth: personalDetails ? personalDetails.date_of_birth : null,
       StateOfOrigin: personalDetails ? personalDetails.state : null,
       StartDate: new Date(employee.date_of_joining),
       Role: employee.designation ? employee.designation.designation : null,
       Shifts: shifts.length != 0 ? formattedShift : null,
+      StrictAttendance: employee?.strictAttendance
     };
   }
 

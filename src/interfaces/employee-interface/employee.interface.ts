@@ -24,6 +24,9 @@ export interface Employee {
     warningCount: number;
     isInPIP: boolean
     isAdmin: boolean
+    remote: boolean
+    isLeadership: boolean
+    strictAttendance: boolean
     isTeamLead: boolean
     isSupervisor: boolean
     leaveCount: number,

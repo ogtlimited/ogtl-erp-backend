@@ -112,6 +112,14 @@ class EmployeeService {
     const newOgid = await this.automateOGIDGeneration(EmployeeData.isAdmin);
     if (!EmployeeData.department) EmployeeData.department = null;
     if (!EmployeeData.projectId) EmployeeData.projectId = null;
+    const department = await this.Department.findById(EmployeeData?.department)
+    const campaign = await this.Project.findById(EmployeeData?.projectId)
+    if (department?.department == "IT" 
+      || department?.department == "Software Development" 
+      || department?.department === "Facility"
+      || campaign?.project_name === "Legal"){
+        EmployeeData.strictAttendance = false
+      }
     const dateOfJoining = moment(EmployeeData['date_of_joining']).add(1, 'M');
     const endOfyear = moment().endOf('year');
     const duration = Math.abs(moment(dateOfJoining).diff(endOfyear, 'months', true)).toFixed(0);
@@ -128,7 +136,7 @@ class EmployeeService {
     this.idRequestService.createIdRequest(idRequestData).then(result => {
       console.log('id Request Created');
     });
-    this.createEmployeeShiftHelperMethod(EmployeeData, createEmployeeData.ogid)
+    await this.createEmployeeShiftHelperMethod(EmployeeData, createEmployeeData.ogid)
     // Promise.all([this.employeesMailingService.sendIntroductoryMail(createEmployeeData.first_name, createEmployeeData.ogid, createEmployeeData.company_email)])
     return createEmployeeData;
   }
@@ -196,6 +204,14 @@ class EmployeeService {
     //   EmployeeData = { ...EmployeeData, password: hashedPassword };
     // }
     // console.log(emp)
+    const department = await this.Department.findById(EmployeeData?.department)
+    const campaign = await this.Project.findById(EmployeeData?.projectId)
+    if (department?.department == "IT"
+      || department?.department == "Software Development"
+      || department?.department == "Facility"
+      || campaign?.project_name == "Legal") {
+      EmployeeData.strictAttendance = false
+    }
     const updateEmployeeById: Employee = await this.Employees.findByIdAndUpdate({_id: EmployeeId}, EmployeeData);
     if (!updateEmployeeById) throw new HttpException(409, "You're not Employee");
 
@@ -522,11 +538,18 @@ private async getEmployeesByGenderHelperMethod(matchBy,searchQuery:any): Promise
         this.getEmployeesByDepartmentHelperMethod(matchBy, searchQuery)
       )
    }
-  public async getReporteesForLeads(query: any, user: Employee): Promise<Employee[]> {
+  public async getReporteesForLeads(query: any, userId: string): Promise<Employee[]> {
     let matchBy = {
-      reports_to: user._id
+      reports_to: mongoose.Types.ObjectId(userId)
     }
-    const employees  = this.employeeFiltrationService.getAllEmployeesHelperMethod(matchBy, query, this.Employees)
+    const employees  = await this.employeeFiltrationService.getAllEmployeesHelperMethod(matchBy, query, this.Employees)
+    return employees;
+  }
+  public async getAllLeads(query: any): Promise<Employee[]> {
+    let matchBy = {
+      isLeadership: true
+    }
+    const employees  = await this.employeeFiltrationService.getAllEmployeesHelperMethod(matchBy, query, this.Employees)
     return employees;
   }
   private async getEmployeesByDepartmentHelperMethod(matchBy,searchQuery:any): Promise<any> {
@@ -715,18 +738,22 @@ private async getDesignationsByGenderHelperMethod(matchBy: any): Promise<any>{
 ]);
 return {designationsByGender}
 }
-  private async createEmployeeShiftHelperMethod(EmployeeData, ogid): Promise<any>{
-  try{
-    for (let i = 0; i < EmployeeData.shifts.length; i++) {
-      EmployeeData.shifts[i].ogid = ogid
-      EmployeeData.shifts[i].departmentID = EmployeeData?.department ? EmployeeData.department : null
-      EmployeeData.shifts[i].campaignID = EmployeeData?.projectId ? EmployeeData.projectId : null
-      await this.employeeShiftService.createNewEmployeeShift(EmployeeData.shifts[i])
+  private async createEmployeeShiftHelperMethod(EmployeeData, ogid): Promise<any>{ 
+    EmployeeData.shifts.map(data => {
+      data.ogid = ogid
+      return data
+    })
+    try{
+      for (let i = 0; i < EmployeeData.shifts.length; i++) {
+        EmployeeData.shifts[i].departmentID = EmployeeData?.department ? EmployeeData.department : null
+        EmployeeData.shifts[i].campaignID = EmployeeData?.projectId ? EmployeeData.projectId : null
+        await this.employeeShiftService.createNewEmployeeShift(EmployeeData.shifts[i])
+      } 
+      await this.employeeShiftService.addOrUpdateEmployeeShiftTimeToExternalDatabase(EmployeeData.shifts)
     }
-  }catch(error){
-    console.log(error)
-  }
-
+    catch(error){
+      console.log(error)
+    }
 }
 
 }
