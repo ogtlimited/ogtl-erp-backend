@@ -72,5 +72,31 @@ const updateEmployeesIsLeadership = async () => {
         console.log(error.message);
     }
 };
-updateEmployeesIsLeadership()
+const updateEmployeesStrictAttendance = async () => {
+    try {
+        fs.createReadStream("./src/utils/seeder/csv/leaders.csv")
+            .pipe(csv())
+            .on('data', async (data) => {
+                    const employee = await EmployeeModel.findOneAndUpdate(
+                        { company_email: data['OG EMAIL'] },
+                        {
+                            $set: {
+                                strictAttendance: false
+                            }
+                        }
+                    )
+                    if (!employee){
+                        fs.appendFileSync('./src/utils/seeder/csv/employees_emails_with_issues.csv', `${data['OG EMAIL']}\n`);
+                    }
+                }
+            )
+            .on('end',async () => {
+            })
+        }
+    catch (error) {
+        console.log(error.message);
+    }
+};
+updateEmployeesStrictAttendance()
+// updateEmployeesIsLeadership()
 // updateEmployeesReportsTo()
