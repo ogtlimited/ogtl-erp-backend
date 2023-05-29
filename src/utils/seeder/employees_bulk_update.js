@@ -78,7 +78,7 @@ const updateEmployeesStrictAttendance = async () => {
             .pipe(csv())
             .on('data', async (data) => {
                     const employee = await EmployeeModel.findOneAndUpdate(
-                        { company_email: data['OG EMAIL'] },
+                        { company_email: data['Employee email'] },
                         {
                             $set: {
                                 strictAttendance: false
