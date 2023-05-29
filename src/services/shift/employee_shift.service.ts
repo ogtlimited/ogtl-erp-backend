@@ -109,8 +109,8 @@ class EmployeeShiftService {
         }
     }
     public async createEmployeesShiftFromCsvFile(): Promise<any> {
-        const arrayOfShift = []
-        fs.createReadStream("./src/services/shift/csv_files/sdteamfull.csv")
+        let arrayOfShift = []
+        fs.createReadStream("./src/services/shift/csv_files/nonStrictShift.csv")
             .pipe(csv())
             .on('data', async (data) => {
                 const days = ["mon","tue","wed","thu","fri","sat","sun"]
@@ -153,7 +153,7 @@ class EmployeeShiftService {
                         console.log("formattedData", formattedData)
                     }
                     if (arrayOfShift.length != null) await this.addOrUpdateEmployeeShiftTimeToExternalDatabase(arrayOfShift)
-
+                    arrayOfShift = []
                 }
             })
             .on('end', async () => {
@@ -161,8 +161,8 @@ class EmployeeShiftService {
             })
     }
     public async updateEmployeesShiftFromCsvFile(): Promise<any> {
-        const arrayOfShift = []
-        fs.createReadStream("./src/services/shift/csv_files/sdteam_mod.csv")
+        let arrayOfShift = []
+        fs.createReadStream("./src/services/shift/csv_files/nonStrictShift.csv")
             .pipe(csv())
             .on('data', async (data) => {
                 const days = ["mon","tue","wed","thu","fri","sat","sun"]
@@ -221,6 +221,7 @@ class EmployeeShiftService {
                         console.log("formattedData", formattedData) 
                     }
                     if (arrayOfShift.length != null) await this.addOrUpdateEmployeeShiftTimeToExternalDatabase(arrayOfShift)
+                    arrayOfShift = []
                 }
             })
             .on('end', async () => {
