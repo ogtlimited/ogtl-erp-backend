@@ -110,7 +110,7 @@ class EmployeeShiftService {
     }
     public async createEmployeesShiftFromCsvFile(): Promise<any> {
         let arrayOfShift = []
-        fs.createReadStream("./src/services/shift/csv_files/nonStrictShift.csv")
+        fs.createReadStream("./src/services/shift/csv_files/sdteamfull.csv")
             .pipe(csv())
             .on('data', async (data) => {
                 const days = ["mon","tue","wed","thu","fri","sat","sun"]
