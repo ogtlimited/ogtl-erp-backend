@@ -123,6 +123,10 @@ const {Schema, model} = require("mongoose");
       type: Boolean,
       default: false,
     },
+    leaveApprovalLevel: {
+      type: Number,
+      default: 0,
+    },
     sievedApplicationCount: {
       type: Number,
       default: 0,
