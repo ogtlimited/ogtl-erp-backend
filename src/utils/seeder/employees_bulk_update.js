@@ -74,7 +74,7 @@ const updateEmployeesIsLeadership = async () => {
 };
 const updateEmployeesStrictAttendance = async () => {
     try {
-        fs.createReadStream("./src/utils/seeder/csv/leaders.csv")
+        fs.createReadStream("./src/utils/seeder/csv/nonStrictShift.csv")
             .pipe(csv())
             .on('data', async (data) => {
                     const employee = await EmployeeModel.findOneAndUpdate(
@@ -86,7 +86,7 @@ const updateEmployeesStrictAttendance = async () => {
                         }
                     )
                     if (!employee){
-                        fs.appendFileSync('./src/utils/seeder/csv/employees_emails_with_issues.csv', `${data['OG EMAIL']}\n`);
+                        fs.appendFileSync('./src/utils/seeder/csv/employees_emails_with_issues.csv', `${data['Employee email']}\n`);
                     }
                 }
             )
