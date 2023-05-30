@@ -6,6 +6,7 @@ const csv = require('csv-parser')
 const fs = require('fs')
 const results = [];
 const EmployeeModel = require("./employees_seeder.model")
+const campaignModel = require("./campaign_seeder.model")
 dotenv.config({ path: dirname + "../../.env" });
 
 mongoose
@@ -71,6 +72,35 @@ const updateEmployeesIsLeadership = async () => {
     catch (error) {
         console.log(error.message);
     }
+}
+const updateEmployeesCampaign = async () => {
+    try {
+        fs.createReadStream("./src/utils/seeder/csv/EMR.csv")
+            .pipe(csv())
+            .on('data', async (data) => {
+                    const campaign = await campaignModel.findOne({ project_name: data['Campaign'] })
+                    const employee = await EmployeeModel.findOneAndUpdate(
+                        { ogid: data['OG ID'] },
+                        {
+                            $set: {
+                                projectId: campaign.id,
+                                leaveApprovalLevel: data['DESIGNATION'] === 'Supervisor' ? 2 : data['DESIGNATION'] === 'Team Lead' ? 1 : 0,
+                                leaveCount: 8
+                            }
+                        }
+                    )
+                    if (!employee){
+                        fs.appendFileSync('./src/utils/seeder/csv/employees_emails_with_issues.csv', `${data['OG ID']}\n`);
+                    }
+                }
+            )
+            .on('end',async () => {
+            })
+        }
+    catch (error) {
+        console.log(error.message);
+    }
 };
-updateEmployeesIsLeadership()
+// updateEmployeesIsLeadership()
+updateEmployeesCampaign()
 // updateEmployeesReportsTo()
