@@ -123,6 +123,10 @@ const {Schema, model} = require("mongoose");
       type: Boolean,
       default: false,
     },
+    leaveApprovalLevel: {
+      type: Number,
+      default: 0,
+    },
     strictAttendance: {
       type: Boolean,
       default: true,
@@ -139,7 +143,6 @@ const {Schema, model} = require("mongoose");
       type: Boolean,
       default: false,
     },
-  
     socialHandle: {
       type: Object,
       default: {},
