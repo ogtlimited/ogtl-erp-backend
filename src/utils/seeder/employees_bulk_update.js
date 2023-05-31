@@ -101,6 +101,32 @@ const updateEmployeesCampaign = async () => {
         console.log(error.message);
     }
 };
+const updateEmployeesStrictAttendance = async () => {
+    try {
+        fs.createReadStream("./src/utils/seeder/csv/nonStrictShift.csv")
+            .pipe(csv())
+            .on('data', async (data) => {
+                    const employee = await EmployeeModel.findOneAndUpdate(
+                        { company_email: data['Employee email'] },
+                        {
+                            $set: {
+                                strictAttendance: false
+                            }
+                        }
+                    )
+                    if (!employee){
+                        fs.appendFileSync('./src/utils/seeder/csv/employees_emails_with_issues.csv', `${data['Employee email']}\n`);
+                    }
+                }
+            )
+            .on('end',async () => {
+            })
+        }
+    catch (error) {
+        console.log(error.message);
+    }
+};
+// updateEmployeesStrictAttendance()
 // updateEmployeesIsLeadership()
-updateEmployeesCampaign()
 // updateEmployeesReportsTo()
+updateEmployeesCampaign()
