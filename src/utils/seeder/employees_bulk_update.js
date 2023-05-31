@@ -75,7 +75,7 @@ const updateEmployeesIsLeadership = async () => {
 }
 const updateEmployeesCampaign = async () => {
     try {
-        fs.createReadStream("./src/utils/seeder/csv/EMR.csv")
+        fs.createReadStream("./src/utils/seeder/csv/Flutterwave.csv")
             .pipe(csv())
             .on('data', async (data) => {
                     const campaign = await campaignModel.findOne({ project_name: data['Campaign'] })
