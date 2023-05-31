@@ -342,8 +342,8 @@ class App {
     })
 
 
-    const getAttendanceFromPostgresDB = cron.schedule('0 */23 * * *', async function () {
-    // const getAttendanceFromPostgresDB = cron.schedule('*/2 * * * *', async function () {
+    const getAttendanceFromPostgresDB = cron.schedule('0 23 * * *', async function () {
+    // const getAttendanceFromPostgresDB = cron.schedule('*/5 * * * *', async function () {
       const attendanceService = new AttendanceTypeService()
       attendanceService.uploadMultipleAttendanceRecord()
     })
