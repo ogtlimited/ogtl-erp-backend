@@ -9,18 +9,18 @@ import { LeaveApprovalLevelDto } from '@/dtos/Leave/leave_approval_level.dto';
 import LeaveApprovalLevelController from '@/controllers/Leave/leave_approval_level.controller';
 
 
-class LeaveApprovalLevelRoute implements Routes {
-  public path = '/leave-approval-level';
-  public router = Router();
-  public leaveApprovalLevelController = new LeaveApprovalLevelController();
+// class LeaveApprovalLevelRoute implements Routes {
+//   public path = '/leave-approval-level';
+//   public router = Router();
+//   public leaveApprovalLevelController = new LeaveApprovalLevelController();
 
-  constructor() {
-    this.initializeRoutes();
-  }
-  private initializeRoutes() {
-    this.router.get(`${this.path}`, [authMiddleware], this.leaveApprovalLevelController.findAllLeaveApprovalLevels);
-    this.router.get(`${this.path}/:leaveApprovalLevelId`, [authMiddleware], this.leaveApprovalLevelController.findLeaveApprovalLevelById);
-    this.router.post(`${this.path}`, [validationMiddleware(LeaveApprovalLevelDto, 'body'),authMiddleware], this.leaveApprovalLevelController.createLeaveApprovalLevel);
-  }
-}
-export default LeaveApprovalLevelRoute;
+//   constructor() {
+//     this.initializeRoutes();
+//   }
+//   private initializeRoutes() {
+//     this.router.get(`${this.path}`, [authMiddleware], this.leaveApprovalLevelController.findAllLeaveApprovalLevels);
+//     this.router.get(`${this.path}/:leaveApprovalLevelId`, [authMiddleware], this.leaveApprovalLevelController.findLeaveApprovalLevelById);
+//     this.router.post(`${this.path}`, [validationMiddleware(LeaveApprovalLevelDto, 'body'),authMiddleware], this.leaveApprovalLevelController.createLeaveApprovalLevel);
+//   }
+// }
+// export default LeaveApprovalLevelRoute;

@@ -9,7 +9,7 @@ class LeaveApprovalLevelController {
   public leaveApprovalLevelService = new LeaveApprovalLevelService();
   public createLeaveApprovalLevel = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const leaveApprovalLevel: LeaveApprovalLevelDto = await this.leaveApprovalLevelService.createLeaveApprovalLevel(req.body);
+      const leaveApprovalLevel = await this.leaveApprovalLevelService.createLeaveApprovalLevel(req.body);
       res.status(200).json({ data: leaveApprovalLevel});
     } catch (error) {
       next(error);

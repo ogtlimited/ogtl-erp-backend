@@ -34,13 +34,9 @@ import TransferRoute from './routes/employee-lifecycle/transfers.route';
 import LeaveAllocationRoute from './routes/leave/allocation.route';
 import LeaveApplicationRoute from './routes/leave/application.route';
 import LeadsLeaveApplicationsRoute from './routes/leave/leads/leads_leave_applications.route';
-import LeaveApprovalLevelRoute from './routes/leave/leave_approval_levels.route';
 import HrLeaveApplicationsRoute from './routes/leave/hr_leave_applications.route';
 import LeadsLeaveRejectionRoute from './routes/leave/leads/leads_leave_rejection.route';
 import LeadsLeaveApprovalRoute from './routes/leave/leads/leads_leave_approval.route';
-// import LeaveTypeRoutes from './routes/leave/leave-type.route';
-// import LeavePeriodRoute from './routes/leave/period.route';
-// import LeavePolicyRoutes from './routes/leave/policy.route';
 import BranchRoute from './routes/employee/branch.route';
 import ContactDetailsRoute from './routes/employee/contact-details.route';
 import DesignationRoute from './routes/employee/designation.route';
@@ -155,7 +151,6 @@ const app = new App([
   new LeaveAllocationRoute(),
   new LeaveApplicationRoute(),
   new LeadsLeaveApplicationsRoute(),
-  new LeaveApprovalLevelRoute(),
   new HrLeaveApplicationsRoute(),
   new LeadsLeaveRejectionRoute(),
   new LeadsLeaveApprovalRoute(),
