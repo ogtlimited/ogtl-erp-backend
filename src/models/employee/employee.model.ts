@@ -84,6 +84,10 @@ const employeeSchema: Schema = new Schema({
     type: Boolean,
     default: true,
   },
+  leaveApprovalLevel: {
+    type: Number,
+    default: 0,
+  },
   isExpatriate: {
     type: Boolean,
     default: false,
