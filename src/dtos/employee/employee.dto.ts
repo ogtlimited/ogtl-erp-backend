@@ -92,6 +92,10 @@ export class CreateEmployeeDto {
   public strictAttendance: boolean;
 
   @IsOptional()
+  @IsNumber()
+  public leaveApprovalLevel: number;
+
+  @IsOptional()
   socialHandle: {};
 
 
@@ -137,6 +141,10 @@ export class UpdateEmployeeDto {
   @IsOptional()
   @IsBoolean()
   public strictAttendance: boolean;
+
+  @IsOptional()
+  @IsNumber()
+  public leaveApprovalLevel: number;
 
   @IsOptional()
   @IsString()

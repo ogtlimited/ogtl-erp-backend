@@ -85,5 +85,13 @@ class EmployeeShiftController {
             next(error);
         }
     };
+    public updateEmployeesShiftFromCsvFile = async (req, res: Response, next: NextFunction) => {
+        try {
+            const updatedStaffShiftTime: any = await this.employeeShiftService.updateEmployeesShiftFromCsvFile();
+            res.status(201).json({ updatedStaffShiftTime });
+        } catch (error) {
+            next(error);
+        }
+    };
 }
 export default EmployeeShiftController;
