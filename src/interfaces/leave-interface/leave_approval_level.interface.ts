@@ -1,5 +1,5 @@
 export interface ILeaveApprovalLevel{
     designation_id: string;
-    approval_level: number;
+    leaveApprovalLevel: number;
     department_id: string;
 }
