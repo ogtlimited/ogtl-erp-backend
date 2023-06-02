@@ -256,14 +256,14 @@ class LeaveApplicationService {
     const officeHighestApprovalLevel = office?.leave_approval_level
     let currentLeaveApprover = leaveapplication?.first_approver
     const applicantApprovalLevel = leaveapplication.employee_id.leaveApprovalLevel
-    let leaveProgressObj = {}
-    while (currentLeaveApprover !== null && applicantApprovalLevel != officeHighestApprovalLevel) {
-      leaveProgressObj[currentLeaveApprover?.first_name] = currentLeaveApprover?._id
-      if (currentLeaveApprover.leaveApprovalLevel === officeHighestApprovalLevel) break
-      const findEmployee = await this.employeeModel.findById({ _id: currentLeaveApprover.reports_to })
+    let leaveApproversObj = {}
+    while (currentLeaveApprover !== null && applicantApprovalLevel !== officeHighestApprovalLevel) {
+      leaveApproversObj[currentLeaveApprover?.first_name] = currentLeaveApprover?._id
+      if (currentLeaveApprover.leaveApprovalLevel === officeHighestApprovalLevel || currentLeaveApprover.reports_to === null) break
+      const findEmployee = await this.employeeModel.findById({ id: currentLeaveApprover?.reports_to })
       currentLeaveApprover = findEmployee
     }
-    return leaveProgressObj;
+    return leaveApproversObj;
   }
   private async validateLeaveDay(date: Date, employee_project_id: string): Promise<boolean> {
     const valid_status = "pending"  
