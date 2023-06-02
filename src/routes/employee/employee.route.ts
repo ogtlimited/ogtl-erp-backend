@@ -19,6 +19,7 @@ class EmployeesRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, authMiddleware, this.employeesController.getEmployees);
+    this.router.get(`${this.path}/leave-count/:ogid`, authMiddleware, this.employeesController.findEmployeeLeaveCountByOgId);
     this.router.get(`${this.path}/paginated-employees`, authMiddleware, this.employeesController.getAllEmployeesAndPaginate);
     this.router.get(`${this.path}/leads/subordinates`, authMiddleware, this.employeesController.getReporteesForLeads);
     this.router.get(`${this.path}/gender/:gender`, authMiddleware, this.employeesController.getEmployeesByGender);
@@ -30,6 +31,7 @@ class EmployeesRoute implements Routes {
     this.router.get(`${this.path}/all/team-leads`, authMiddleware, this.employeesController.teamLeads);
     this.router.post(`${this.path}`, validationMiddleware(CreateEmployeeDto, 'body'), this.employeesController.createEmployee);
     this.router.post(`${this.path}/bulk-upload`, this.employeesController.createMultipleEmployee);
+    this.router.patch(`${this.path}/leave-count/:ogid`, authMiddleware, this.employeesController.updateEmployeeLeaveCountByOgId);
     this.router.put(`${this.path}/:id`, validationMiddleware(UpdateEmployeeDto, 'body', true), this.employeesController.updateEmployee);
     this.router.put(
       `${this.path}/update-role/:id`,
