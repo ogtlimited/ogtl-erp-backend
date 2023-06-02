@@ -105,6 +105,22 @@ class EmployeeService {
     return findEmployee;
   }
 
+  public async findEmployeeLeaveCountByOgId(ogid: string): Promise<Employee> {
+    if (isEmpty(ogid)) throw new HttpException(400, "OGID is empty");
+    const findEmployee = await this.Employees.findOne({ ogid }).select({ "leaveCount": 1, "_id":0});
+    if (!findEmployee) throw new HttpException(404, "Employee Not Found");
+    return findEmployee;
+  }
+  public async updateEmployeeLeaveCountByOgId(ogid: string, reqBody): Promise<Employee> {
+    if (isEmpty(ogid)) throw new HttpException(400, "OGID is empty");
+    const findEmployee = await this.Employees.findOneAndUpdate({ ogid },{
+      $set:{
+        leaveCount: reqBody.leaveCount
+      }
+    });
+    return findEmployee;
+  }
+
   public async createEmployee(EmployeeData: CreateEmployeeDto): Promise<any> {
     if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
     const randomstring = Math.random().toString(36).slice(2);
