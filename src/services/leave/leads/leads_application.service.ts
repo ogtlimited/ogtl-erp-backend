@@ -81,15 +81,15 @@ class LeadsLeaveApplicationService {
     return leaveApplication;
   }
   public async getLeadLeaveApprovalLevel(user: Employee): Promise<number>{
-    const usersLeaveApprovalLevel: ILeaveApprovalLevel = await this.employeeModel.findOne({ogid: user?.ogid})
+    const usersLeaveApprovalLevel = await this.employeeModel.findOne({ogid: user?.ogid})
     return usersLeaveApprovalLevel.leaveApprovalLevel
   }
   public async getImmediateSupervisorsLeaveApprovalLevel(user: Employee): Promise<number>{
     const leadLeaveApprovalLevel = await this.getLeadLeaveApprovalLevel(user)
     const departmentHighestLeaveApprovalLevel = await this.getDepartmentHighestLeaveApprovalLevel(user)
     const supervisorsRecord: Employee = await this.employeeModel.findOne({_id: user?.reports_to})
-    const supervisorsLeaveApprovalRecords = await this.employeeModel.findOne({ ogid: user?.ogid })
-    if (supervisorsLeaveApprovalRecords !== null) return supervisorsLeaveApprovalRecords.leaveApprovalLevel
+    const supervisorsLeaveApprovalLevel = supervisorsRecord?.leaveApprovalLevel
+    if (supervisorsLeaveApprovalLevel !== null) return supervisorsLeaveApprovalLevel
     if(leadLeaveApprovalLevel === departmentHighestLeaveApprovalLevel)
     return leadLeaveApprovalLevel
   }

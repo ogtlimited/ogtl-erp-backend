@@ -11,6 +11,7 @@ import LeaveMailingService from '@services/leave/leave_mailing.service';
 import { Employee } from '@/interfaces/employee-interface/employee.interface';
 import EmployeeModel from '@models/employee/employee.model';
 import projectModel from '@/models/project/project.model';
+import departmentModel from '@/models/department/department.model';
 
 class LeaveApplicationService {
   private leaveApplicationModel = applicationModel;
@@ -19,6 +20,7 @@ class LeaveApplicationService {
   private leaveMailingService = new LeaveMailingService();
   private employeeModel = EmployeeModel;
   private project = projectModel;
+  private departmentModel = departmentModel;
 
   public async findAllLeaveapplication(query): Promise<ILeaveApplication[]> {
     const application: ILeaveApplication[] = await this.leaveApplicationModel
@@ -239,14 +241,27 @@ class LeaveApplicationService {
     } 
   }
   private async getAllLeaveAprovers(user): Promise<any> {
-    const leaveapplication: ILeaveApplication = await this.leaveApplicationModel.findOne({ employee_id: user._id }).sort({ createdAt: -1 });
+    const leaveapplication = await this.leaveApplicationModel
+    .findOne({ employee_id: user._id }).sort({ createdAt: -1 })
+      .populate("project_id")
+      .populate("department_id")
+      .populate("first_approver")
+      .populate("employee_id")
     if (!leaveapplication) throw new HttpException(404, 'Leave application not found');
-    let leaveApprover = leaveapplication?.first_approver
+    // const employee = await this.employeeModel.findById({ id: user.id });
+    let office;
+    if (leaveapplication.department_id){
+       office = leaveapplication.department_id
+    }
+    const officeHighestApprovalLevel = office?.leave_approval_level
+    let currentLeaveApprover = leaveapplication?.first_approver
+    const applicantApprovalLevel = leaveapplication.employee_id.leaveApprovalLevel
     let leaveApproversObj = {}
-    while (leaveApprover !== null) {
-      const findEmployee = await this.employeeModel.findOne({ _id: leaveApprover })
-      leaveApprover = findEmployee?.reports_to
-      leaveApproversObj[findEmployee?.first_name] = findEmployee?._id
+    while (currentLeaveApprover !== null && applicantApprovalLevel !== officeHighestApprovalLevel) {
+      leaveApproversObj[currentLeaveApprover?.first_name] = currentLeaveApprover?._id
+      if (currentLeaveApprover.leaveApprovalLevel === officeHighestApprovalLevel || currentLeaveApprover.reports_to === null) break
+      const findEmployee = await this.employeeModel.findById({ id: currentLeaveApprover?.reports_to })
+      currentLeaveApprover = findEmployee
     }
     return leaveApproversObj;
   }

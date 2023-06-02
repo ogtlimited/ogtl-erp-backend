@@ -19,7 +19,6 @@ const applicationSchema : Schema = new Schema (
         },
         department_id: {
             type: mongoose.Schema.Types.ObjectId,
-            required: true,
             ref: "Department",
         },
         leave_type_id:{
