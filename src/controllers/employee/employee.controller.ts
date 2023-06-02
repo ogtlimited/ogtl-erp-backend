@@ -214,6 +214,24 @@ class EmployeesController {
       next(error);
     }
   }
+  public findEmployeeLeaveCountByOgId = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const {ogid} = req.params
+      const employee: Employee = await this.EmployeeService.findEmployeeLeaveCountByOgId(ogid);
+      res.status(200).json({ data: employee });
+    } catch (error) {
+      next(error);
+    }
+  }
+  public updateEmployeeLeaveCountByOgId = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const {ogid} = req.params
+      const employee: Employee = await this.EmployeeService.updateEmployeeLeaveCountByOgId(ogid, req.body);
+      res.status(200).json({ message: "Updated Successfully"});
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default EmployeesController;
