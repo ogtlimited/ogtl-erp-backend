@@ -5,6 +5,7 @@ import { HttpException } from '@exceptions/HttpException';
 import applicationModel from '@/models/leave/application.model';
 import leaveApprovalLevelModel from '@/models/leave/leave_approval_level.model';
 import departmentModel from '@/models/department/department.model';
+import projectModel from '@/models/project/project.model';
 import EmployeeService from '@services/employee.service';
 import LeaveFiltrationService from '@/services/leave/leave_filtration.service';
 import LeaveMailingService from '@services/leave/leave_mailing.service';
@@ -19,6 +20,7 @@ class LeadsLeaveApplicationService {
   public application = applicationModel;
   private leaveApprovalLevelModel = leaveApprovalLevelModel;
   private departmentModel = departmentModel;
+  private projectModel = projectModel;
   public employeeS = new EmployeeService();
   public filtrationService = new LeaveFiltrationService();
   public leaveMailingService = new LeaveMailingService();
@@ -30,7 +32,7 @@ class LeadsLeaveApplicationService {
   return leaveApplications;
   }
   public async approveLeaveApplication(leaveId: String, user: Employee): Promise<ILeaveApplication> {
-    const departmentHighestLeaveApprovalLevel = await this.getDepartmentHighestLeaveApprovalLevel(user)
+    const departmentHighestLeaveApprovalLevel = await this.getOfficeHighestLeaveApprovalLevel(user)
     const leadsApprovalLevel = await this.getLeadLeaveApprovalLevel(user)
     const immediateSupervisorsLeaveApprovalLevel = await this.getImmediateSupervisorsLeaveApprovalLevel(user)
     const leaveApplication = await this.application.findOneAndUpdate(
@@ -86,7 +88,7 @@ class LeadsLeaveApplicationService {
   }
   public async getImmediateSupervisorsLeaveApprovalLevel(user: Employee): Promise<number>{
     const leadLeaveApprovalLevel = await this.getLeadLeaveApprovalLevel(user)
-    const departmentHighestLeaveApprovalLevel = await this.getDepartmentHighestLeaveApprovalLevel(user)
+    const departmentHighestLeaveApprovalLevel = await this.getOfficeHighestLeaveApprovalLevel(user)
     const supervisorsRecord: Employee = await this.employeeModel.findOne({_id: user?.reports_to})
     const supervisorsLeaveApprovalLevel = supervisorsRecord?.leaveApprovalLevel
     if (supervisorsLeaveApprovalLevel !== null) return supervisorsLeaveApprovalLevel
@@ -122,9 +124,17 @@ class LeadsLeaveApplicationService {
     const totalLeaveApplications = await this.application.find(matchBy)
     return totalLeaveApplications.length;
   }
-  private async getDepartmentHighestLeaveApprovalLevel(user: Employee): Promise<number> {
+  private async getOfficeHighestLeaveApprovalLevel(user: Employee): Promise<number> {
     const departmentRecord: IDepartment = await this.departmentModel.findOne({ _id: user.department })
-    return departmentRecord.leave_approval_level
+    const campaignRecord = await this.projectModel.findOne({ _id: user.projectId })
+    let officeHighestApprovalLevel;
+    if (departmentRecord) {
+      officeHighestApprovalLevel = departmentRecord?.leave_approval_level
+    }
+    if (campaignRecord) {
+      officeHighestApprovalLevel = campaignRecord?.leave_approval_level
+    }
+    return officeHighestApprovalLevel
   }
 }
 export default LeadsLeaveApplicationService;
