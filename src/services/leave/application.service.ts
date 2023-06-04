@@ -70,10 +70,9 @@ class LeaveApplicationService {
     newLeaveapplicationData.first_approver = user.reports_to
     newLeaveapplicationData.approval_level = await this.leadsLeaveApplicationService.getImmediateSupervisorsLeaveApprovalLevel(user)
     const leave_type = await this.leaveTypeModel.findOne({ leave_type: /^Emergency Leave$/i})
-    console.log("Leave type id", leave_type._id)
-    console.log("Payload Leave type id", newLeaveapplicationData.leave_type_id)
     const usersLeaveApprovalLevel: number = await this.leadsLeaveApplicationService.getLeadLeaveApprovalLevel(user)
     if(usersLeaveApprovalLevel === newLeaveapplicationData.approval_level) newLeaveapplicationData.hr_stage = true
+    if (user.reports_to === null) newLeaveapplicationData.hr_stage = true
     if (isEmpty(LeaveapplicationData)) throw new HttpException(400, 'Bad request');
     const today = new Date();
     const noticePeriod = today.setDate(today.getDate() + 14);
@@ -253,14 +252,16 @@ class LeaveApplicationService {
     if (leaveapplication.department_id){
        office = leaveapplication.department_id
     }
+    if (leaveapplication.project_id){
+      office = leaveapplication.project_id
+    }
     const officeHighestApprovalLevel = office?.leave_approval_level
     let currentLeaveApprover = leaveapplication?.first_approver
-    const applicantApprovalLevel = leaveapplication.employee_id.leaveApprovalLevel
     let leaveApproversObj = {}
-    while (currentLeaveApprover !== null && applicantApprovalLevel !== officeHighestApprovalLevel) {
+    while (currentLeaveApprover !== null) {
       leaveApproversObj[currentLeaveApprover?.first_name] = currentLeaveApprover?._id
       if (currentLeaveApprover.leaveApprovalLevel === officeHighestApprovalLevel || currentLeaveApprover.reports_to === null) break
-      const findEmployee = await this.employeeModel.findById({ id: currentLeaveApprover?.reports_to })
+      const findEmployee = await this.employeeModel.findById({_id: currentLeaveApprover?.reports_to })
       currentLeaveApprover = findEmployee
     }
     return leaveApproversObj;
