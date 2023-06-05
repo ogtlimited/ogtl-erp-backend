@@ -121,9 +121,9 @@ class EmployeeShiftService {
                 const huddles = data['Huddles'] ? data['Huddles'].split(':')[0].trim() : false
                 const huddleTime = data['Huddles'] ? data['Huddles'].split(':')[1].trim() : null
                 const campaign = await this.campaignModel.findOne({ project_name: data['Campaign'] })
-                const employee = await this.employeeModel.findOne({ company_email: data['Employee email'] })
+                const employee = await this.employeeModel.findOne({ ogid: data['OGID'] })
                 if(!employee){
-                    fs.appendFileSync('./src/services/shift/csv_files/employees_emails_with_issues.csv', `${data['Employee email']}\n`);
+                    fs.appendFileSync('./src/services/shift/csv_files/employees_emails_with_issues.csv', `${data['OGID']}\n`);
                 }
                 if (employee){
                     for (let i = 0; i < days.length; i++){
