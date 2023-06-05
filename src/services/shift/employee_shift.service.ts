@@ -109,8 +109,10 @@ class EmployeeShiftService {
         }
     }
     public async createEmployeesShiftFromCsvFile(): Promise<any> {
+        const csv_path = "./src/services/shift/csv_files/sdteam_mod.csv"
+        await this.deleteManyShift(csv_path)
         let arrayOfShift = []
-        fs.createReadStream("./src/services/shift/csv_files/sdteamfull.csv")
+        fs.createReadStream(csv_path)
             .pipe(csv())
             .on('data', async (data) => {
                 const days = ["mon","tue","wed","thu","fri","sat","sun"]
@@ -328,6 +330,18 @@ class EmployeeShiftService {
 
             }
         }
+    }
+    private async deleteManyShift(csv_path): Promise<any> {
+        fs.createReadStream(csv_path)
+            .pipe(csv())
+            .on('data', async (data) => {
+                const employeeShift = await this.employeeShiftModel.find({ ogid: data['OGID'] })
+                if (employeeShift.length !=0) {
+                    await this.employeeShiftModel.deleteMany({ ogid: data['OGID'] })
+                }
+            })
+            .on('end', async () => {
+            })
     }
 }
 export default EmployeeShiftService;
