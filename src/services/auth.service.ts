@@ -35,41 +35,40 @@ class AuthService {
     // await this.updateProjects()
     console.log("done")
     if (isEmpty(EmployeeData)) throw new HttpException(400, "You're not EmployeeData");
-    console.log('LOGIN ATTEMPT', EmployeeData);
     EmployeeData.company_email = EmployeeData.company_email.toLowerCase()
     const employee =  await this.Employees.findOne({ company_email: EmployeeData.company_email }).populate('department designation default_shift projectId role');
   
     
     if (!employee){
-      const randomstring = Math.random().toString(36).slice(2);
-    const hashedPassword = await bcrypt.hash(randomstring, 10);
-      const newEmployee: any = {
-        company_email: EmployeeData.company_email,
-        date_of_joining: new Date(),
-        employeeType: "FullTime",
-        first_name: EmployeeData.first_name,
-        last_name: EmployeeData.last_name,
-        status: "active",
-        default_shift: null,
-        department: null,
-        password: hashedPassword,
-        designation: null,
-        reports_to: null,
-        gender: "Not Set",
-        image: null,
-        branch:null,
-        projectId:null,
-        ogId : generateOGID(),
-        isAdmin: false,
-        leaveCount: 0,
-      };
+      throw new HttpException(404, "Employee Details not found");
+    //   const randomstring = Math.random().toString(36).slice(2);
+    // const hashedPassword = await bcrypt.hash(randomstring, 10);
+    //   const newEmployee: any = {
+    //     company_email: EmployeeData.company_email,
+    //     date_of_joining: new Date(),
+    //     employeeType: "FullTime",
+    //     first_name: EmployeeData.first_name,
+    //     last_name: EmployeeData.last_name,
+    //     status: "active",
+    //     default_shift: null,
+    //     department: null,
+    //     password: hashedPassword,
+    //     designation: null,
+    //     reports_to: null,
+    //     gender: "Not Set",
+    //     image: null,
+    //     branch:null,
+    //     projectId:null,
+    //     ogId : generateOGID(),
+    //     isAdmin: false,
+    //     leaveCount: 0,
+    //   };
       
-      const createdEmployee = await this.empS.createEmployee(newEmployee)
-      const tokenData = this.createToken(createdEmployee);
-      return { token: tokenData, employee: createdEmployee };
+    //   const createdEmployee = await this.empS.createEmployee(newEmployee)
+    //   const tokenData = this.createToken(createdEmployee);
+    //   return { token: tokenData, employee: createdEmployee };
     }else{
 
-      console.log('AUTH SERVICE',employee)
       // const isPasswordMatching: boolean = await bcrypt.compare(EmployeeData.password, employee.password);
   
       // if (!isPasswordMatching) throw new HttpException(409, "You're password not matching");
