@@ -109,9 +109,8 @@ class EmployeeShiftService {
         }
     }
     public async createEmployeesShiftFromCsvFile(): Promise<any> {
-        const csv_path = "./src/services/shift/csv_files/sdteam_mod.csv"
+        const csv_path = "./src/services/shift/csv_files/nonStrictShift.csv"
         await this.deleteManyShift(csv_path)
-        let arrayOfShift = []
         fs.createReadStream(csv_path)
             .pipe(csv())
             .on('data', async (data) => {
@@ -122,6 +121,7 @@ class EmployeeShiftService {
                 const huddleTime = data['Huddles'] ? data['Huddles'].split(':')[1].trim() : null
                 const campaign = await this.campaignModel.findOne({ project_name: data['Campaign'] })
                 const employee = await this.employeeModel.findOne({ ogid: data['OGID'] })
+                
                 if(!employee){
                     fs.appendFileSync('./src/services/shift/csv_files/employees_emails_with_issues.csv', `${data['OGID']}\n`);
                 }
@@ -151,16 +151,20 @@ class EmployeeShiftService {
                         if(!employeeShift){
                             const shift = await this.employeeShiftModel.create(formattedData)
                         }
-                        arrayOfShift.push(formattedData)
-                        console.log("formattedData", formattedData)
+                        await this.addOrUpdateOneEmployeeShiftTimeToExternalDatabase(formattedData)
+                        console.log("formattedData....")
                     }
-                    if (arrayOfShift.length != null) await this.addOrUpdateEmployeeShiftTimeToExternalDatabase(arrayOfShift)
-                    arrayOfShift = []
+                    
                 }
-            })
-            .on('end', async () => {
+                
+               
+                // if (arrayOfShift.length != null) await this.addOrUpdateEmployeeShiftTimeToExternalDatabase(arrayOfShift)
+            }
+            ).on('end', () => {
+                // console.log("formattedData", arrayOfShift)
                 console.log("Completed!!!")
             })
+        
     }
     public async updateEmployeesShiftFromCsvFile(): Promise<any> {
         let arrayOfShift = []
@@ -281,6 +285,53 @@ class EmployeeShiftService {
             })
     }
 
+
+    public async addOrUpdateOneEmployeeShiftTimeToExternalDatabase(shiftData): Promise<any> {
+        const days_of_the_week = { mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6, sun: 7 }
+
+        shiftData.day = days_of_the_week[shiftData.day]
+        const staff = await postgresDbConnection.getRepository(Staff)
+            .createQueryBuilder("staff")
+            .where({ StaffUniqueId: shiftData.ogid })
+            .getOne()
+
+        if (staff) {
+            const shiftTimeExist = await postgresDbConnection.getRepository(ShiftTime)
+                .createQueryBuilder()
+                .where({ StaffId: staff?.Id })
+                .andWhere({ DayOfTheWeek: shiftData.day })
+                .getOne()
+
+            if (!shiftTimeExist) {
+                const formatedShiftTimeData: any = {
+                    Id: uuid(),
+                    StaffId: staff?.Id,
+                    DayOfTheWeek: Number(shiftData.day),
+                    StartTime: shiftData.start,
+                    EndTime: shiftData.end,
+                }
+                await postgresDbConnection.getRepository(ShiftTime)
+                    .createQueryBuilder()
+                    .insert()
+                    .into(ShiftTime)
+                    .values(formatedShiftTimeData)
+                    .execute()
+            }
+            else if (shiftTimeExist) {
+                await postgresDbConnection.getRepository(ShiftTime)
+                    .createQueryBuilder()
+                    .update(ShiftTime)
+                    .set({
+                        StartTime: shiftData.start,
+                        EndTime: shiftData.end,
+                    })
+                    .where({ StaffId: staff?.Id })
+                    .andWhere({ DayOfTheWeek: shiftData.day })
+                    .execute()
+
+            }
+        }
+    }
     public async addOrUpdateEmployeeShiftTimeToExternalDatabase(shiftData): Promise<any> {
         const days_of_the_week = { mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6, sun: 7 }
         const formattedShiftData = shiftData.map(data => {
