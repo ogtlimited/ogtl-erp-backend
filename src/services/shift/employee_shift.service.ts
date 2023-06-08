@@ -152,13 +152,9 @@ class EmployeeShiftService {
                             const shift = await this.employeeShiftModel.create(formattedData)
                         }
                         await this.addOrUpdateOneEmployeeShiftTimeToExternalDatabase(formattedData)
-                        console.log("formattedData....")
                     }
                     
-                }
-                
-               
-                // if (arrayOfShift.length != null) await this.addOrUpdateEmployeeShiftTimeToExternalDatabase(arrayOfShift)
+                }  
             }
             ).on('end', () => {
                 // console.log("formattedData", arrayOfShift)
